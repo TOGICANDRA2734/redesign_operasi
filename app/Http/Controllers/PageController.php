@@ -152,7 +152,8 @@ class PageController extends Controller
 
         $dataPty = collect(DB::select($subquery));
         
-        return view('pages/dashboard-overview-1', compact('data_detail_OB_prod', 'data_detail_OB_plan', 'data_prod_ob', 'data_plan_ob', 'data_detail_coal_prod', 'data_detail_coal_plan', 'data_prod_coal', 'data_plan_coal', 'data', 'dataPty'));
+        // return view('pages/dashboard-overview-1', compact('data_detail_OB_prod', 'data_detail_OB_plan', 'data_prod_ob', 'data_plan_ob', 'data_detail_coal_prod', 'data_detail_coal_plan', 'data_prod_coal', 'data_plan_coal', 'data', 'dataPty'));
+        return;
     }
 
     /**

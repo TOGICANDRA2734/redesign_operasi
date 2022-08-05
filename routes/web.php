@@ -117,4 +117,8 @@ Route::middleware('auth')->group(function() {
 
     // Kendala
     Route::resource('kendala', KendalaController::class);
+    
+    // Komentar
+    Route::post('/comment/store', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/reply/store', [CommentController::class, 'replyStore'])->name('reply.store');
 });

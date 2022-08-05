@@ -20,32 +20,6 @@ class SideMenu
             'menu-layout' => [
                 'icon' => 'box',
                 'title' => 'Menu Layout',
-                'sub_menu' => [
-                    'side-menu' => [
-                        'icon' => '',
-                        'route_name' => 'dashboard-overview-1',
-                        'params' => [
-                            'layout' => 'side-menu'
-                        ],
-                        'title' => 'Side Menu'
-                    ],
-                    'simple-menu' => [
-                        'icon' => '',
-                        'route_name' => 'dashboard-overview-1',
-                        'params' => [
-                            'layout' => 'simple-menu'
-                        ],
-                        'title' => 'Simple Menu'
-                    ],
-                    'top-menu' => [
-                        'icon' => '',
-                        'route_name' => 'dashboard-overview-1',
-                        'params' => [
-                            'layout' => 'top-menu'
-                        ],
-                        'title' => 'Top Menu'
-                    ]
-                ]
             ],
             'inbox' => [
                 'icon' => 'inbox',
