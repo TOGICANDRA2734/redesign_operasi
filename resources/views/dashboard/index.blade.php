@@ -9,7 +9,7 @@
         <div class="col-span-12">
             <div class="grid grid-cols-12 gap-6">
                 <!-- BEGIN: General Report -->
-                <div class="col-span-12 mt-8">
+                <div class="col-span-12 md:mt-8">
                     <div class="intro-y flex items-center h-10">
                         <h2 class="hidden sm:block text-lg font-medium truncate mr-5">Produksi ({{date('l, d/m/Y', strtotime($data[0]->tgl))}})</h2>
                         <h2 class="block sm:hidden text-lg font-medium truncate mr-5">Produksi ({{date('d/m/Y', strtotime($data[0]->tgl))}})</h2>
@@ -186,8 +186,8 @@
                             <thead>
                                 <tr>
                                     <th rowspan="2" class="whitespace-nowrap">NO</th>
-                                    <th rowspan="2" class="whitespace-nowrap">NOM UNIT</th>
                                     <th rowspan="2" class="text-center whitespace-nowrap">SITE</th>
+                                    <th rowspan="2" class="whitespace-nowrap">NOM UNIT</th>
                                     <th rowspan="2" class="text-center whitespace-nowrap">AVG</th>
                                     <th colspan="13" class="text-center whitespace-nowrap">WAKTU</th>
                                     <th rowspan="2" class="text-center whitespace-nowrap">Jarak</th>
