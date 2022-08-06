@@ -33,23 +33,13 @@
                 <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                     
 
-                    @foreach($period as $dt)
+                    @foreach($period as $key => $dt)
                         <tr class="text-gray-700 dark:text-gray-400">
                             <td class="px-4 py-3 text-center">
-                                {{}}
-                            </td>
-                            
-                            <td class="px-4 py-3 text-center">
+                                {{date('d-m-Y', strtotime($dt))}}
                             </td>
                             <td class="px-4 py-3 text-center">
-                            </td>
-                            
-                            <td class="px-4 py-3 text-center">
-                            </td>
-                            <td class="px-4 py-3 text-center">
-                            </td>
-                            <td class="px-4 py-3 text-center">
-                                
+                            <a class="btn btn-warning text-white"><i class="fa-solid fa-pencil"></i></a>
                             </td>
                         </tr>
                     @endforeach

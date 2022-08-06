@@ -31,33 +31,26 @@ class dataProdController extends Controller
         $statusSite = Auth::user()->kodesite; 
 
         $subquery = "SELECT 
-        IFNULL(B.id,0) id,
-        A.TGL,
-        C.namasite,
-        A.ob OB_PLAN,
-        A.coal COAL_PLAN,
-        IFNULL(B.ob,0) OB_ACTUAL,
-        IFNULL(B.coal,0) COAL_ACTUAL,
-        IFNULL(B.status,0) status
-        FROM pma_dailyprod_PLAN A
-        LEFT JOIN (SELECT * FROM pma_dailyprod_TC WHERE tgl BETWEEN '2022-07-01' AND '2022-07-31' AND kodesite='".$statusSite."' GROUP BY tgl ORDER BY tgl) B
-        ON A.tgl = B.tgl
-        LEFT JOIN site C
-        ON B.kodesite=C.kodesite
-        WHERE A.tgl BETWEEN '2022-07-01' AND '2022-07-31' AND A.kodesite='".$statusSite."'
-        GROUP BY a.tgl
-        ORDER BY a.tgl";
+        IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
+        IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
+        IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
+        IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
+        FROM pma_dailyprod_tc
+        WHERE tgl BETWEEN '2022-07-01' AND '2022-07-31' 
+        GROUP BY tgl";
 
         $data = collect(DB::select($subquery));
+        // dd($data);
 
         $site = DB::table('site')->select('namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
 
-        $begin = new DateTime(date('Y-m-01'));
-        $end = new DateTime(date('Y-m-t'));
+        $begin = new DateTime( Carbon::now()->startOfMonth() );
+        $end   = new DateTime( Carbon::now()->endOfMonth() );
+        $period = [];
 
-        $interval = DateInterval::createFromDateString('1 day');
-        $period = new DatePeriod($begin, $interval, $end);
-
+        for($i = $begin; $i <= $end; $i->modify('+1 day')){
+            $period[] = $i->format("Y-m-d");
+        }
 
         return view('data-prod.index', compact('data', 'site', 'period'));
     }
