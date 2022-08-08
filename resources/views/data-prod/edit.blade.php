@@ -1,7 +1,7 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-    <title>Dashboard - Rubick - Tailwind HTML Admin Template</title>
+<title>Dashboard - Rubick - Tailwind HTML Admin Template</title>
 @endsection
 
 @section('subcontent')
@@ -11,12 +11,13 @@
         Edit Produksi Actual
     </h2>
     <hr class="mb-10">
-    
     <!-- Input Form -->
     <div class="card p-6">
         <div class="grid grid-cols-1 gap-3">
+
+            @foreach($data as $key => $dt)
             <!-- Start Form -->
-            <form action="{{route('data-prod.update', $data[0]->id)}}" method="POST" id="storeDok" class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg  dark:bg-gray-800">
+            <form action="#" method="POST" id="storeDok" class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg  dark:bg-gray-800">
                 @csrf
                 @method('PUT')
                 <div>
@@ -24,7 +25,7 @@
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
                             Tanggal <span class="text-xs text-gray-500">(Month-Day-Year)</span>
                         </span>
-                        <input value="{{old('tgl', $data[0]->tgl)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl" id="tgl">
+                        <input value="{{old('tgl', $dt->tgl)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl" id="tgl">
                     </label>
                     @error('tgl')
                     <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
@@ -41,7 +42,7 @@
                         <select class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
                             <option value="">Pilih</option>
                             @foreach($site as $st)
-                            <option value="{{$st->kodesite}}" {{old('kodesite', $data[0]->kodesite) == $st->kodesite ? 'selected' : ''}}>{{$st->namasite}} - {{$st->lokasi}}</option>
+                            <option value="{{$st->kodesite}}" {{old('kodesite', $dt->kodesite) == $st->kodesite ? 'selected' : ''}}>{{$st->namasite}} - {{$st->lokasi}}</option>
                             @endforeach
                         </select>
                     </label>
@@ -53,12 +54,12 @@
                     </div>
                     @enderror
                 </div>
-                
+
                 <div class="col-span-2">
                     <label class="block mt-1 text-sm">
                         <span class="font-semibold text-gray-700 dark:text-gray-400">Pit</span>
                         <select class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="pit" id="pit">
-                            <option value="{{$data[0]->pit}}">{{$data[0]->pit}}</option>
+                            <option value="{{$dt->pit}}">{{$dt->pit}}</option>
                         </select>
                     </label>
                     @error('pit')
@@ -70,37 +71,82 @@
                     @enderror
                 </div>
 
-                <div>
-                    <label class="block mt-1 text-sm">
-                        <span class="font-semibold text-gray-700 dark:text-gray-400">
-                            Overburden <span class="text-xs text-gray-500">(bcm)</span>
+                <!-- Shift 1 -->
+                <div class="col-span-2 grid grid-cols-2 gap-5">
+                    <div class="grid grid-cols-2 gap-5">
+                        <span class="font-semibold text-gray-700 dark:text-gray-400 block col-span-2">
+                            Shift 1
                         </span>
-                        <input value="{{old('ob', $data[0]->ob)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="ob" id="ob">
-                    </label>
-                    @error('ob')
-                    <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
-                        <div class="px-4 py-2">
-                            <p class="text-gray-600 text-sm">{{ $message }}</p>
+                        <div>
+                            <label class="block mt-1 text-sm">
+                                <span class="font-semibold text-gray-700 dark:text-gray-400">
+                                    Overburden <span class="text-xs text-gray-500">(bcm)</span>
+                                </span>
+                                <input value="{{old('ob', $dataProd[$key]->ob_1)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="ob" id="ob">
+                            </label>
+                            @error('ob')
+                            <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
+                                <div class="px-4 py-2">
+                                    <p class="text-gray-600 text-sm">{{ $message }}</p>
+                                </div>
+                            </div>
+                            @enderror
                         </div>
-                    </div>
-                    @enderror
-                </div>
 
-                <div>
-                    <label class="block mt-1 text-sm">
-                        <span class="font-semibold text-gray-700 dark:text-gray-400">
-                            Coal <span class="text-xs text-gray-500">(mt)</span>
-                        </span>
-                        <input value="{{old('coal', $data[0]->coal)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="coal" id="coal">
-                    </label>
-                    @error('coal')
-                    <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
-                        <div class="px-4 py-2">
-                            <p class="text-gray-600 text-sm">{{ $message }}</p>
+                        <div>
+                            <label class="block mt-1 text-sm">
+                                <span class="font-semibold text-gray-700 dark:text-gray-400">
+                                    Coal <span class="text-xs text-gray-500">(mt)</span>
+                                </span>
+                                <input value="{{old('coal', $dataProd[$key]->coal_1)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="coal" id="coal">
+                            </label>
+                            @error('coal')
+                            <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
+                                <div class="px-4 py-2">
+                                    <p class="text-gray-600 text-sm">{{ $message }}</p>
+                                </div>
+                            </div>
+                            @enderror
                         </div>
                     </div>
-                    @enderror
+                    <div class="grid grid-cols-2 gap-5">
+                        <span class="font-semibold text-gray-700 dark:text-gray-400 block col-span-2">
+                            Shift 2
+                        </span>
+                        <div>
+                            <label class="block mt-1 text-sm">
+                                <span class="font-semibold text-gray-700 dark:text-gray-400">
+                                    Overburden <span class="text-xs text-gray-500">(bcm)</span>
+                                </span>
+                                <input value="{{old('ob', $dataProd[$key]->ob_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="ob" id="ob">
+                            </label>
+                            @error('ob')
+                            <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
+                                <div class="px-4 py-2">
+                                    <p class="text-gray-600 text-sm">{{ $message }}</p>
+                                </div>
+                            </div>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label class="block mt-1 text-sm">
+                                <span class="font-semibold text-gray-700 dark:text-gray-400">
+                                    Coal <span class="text-xs text-gray-500">(mt)</span>
+                                </span>
+                                <input value="{{old('coal', $dataProd[$key]->coal_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="coal" id="coal">
+                            </label>
+                            @error('coal')
+                            <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
+                                <div class="px-4 py-2">
+                                    <p class="text-gray-600 text-sm">{{ $message }}</p>
+                                </div>
+                            </div>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
+                <!-- End Shift 1 -->
 
                 <div class="col-span-2">
                     <label class="block mt-1 text-sm">
@@ -110,9 +156,9 @@
                         <select class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="cuaca" id="cuaca">
                             <option disabled selected value="">Pilih</option>
                             @foreach($cuaca as $cc)
-                                <option class="capitalize" value="{{$cc->kode_cuaca}}" {{old('cuaca', $data[0]->cuaca) == $cc->kode_cuaca ? 'selected' : ''}}>{{$cc->nama_cuaca}}</option>
+                            <option class="capitalize" value="{{$cc->kode_cuaca}}" {{old('cuaca', $dt->cuaca) == $cc->kode_cuaca ? 'selected' : ''}}>{{$cc->nama_cuaca}}</option>
                             @endforeach
-                        </select>    
+                        </select>
                     </label>
                     @error('cuaca')
                     <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
@@ -127,6 +173,8 @@
                     Submit
                 </button>
             </form>
+            <!-- End Form -->
+            @endforeach
         </div>
     </div>
     <!-- end Overburden Overview -->
@@ -134,7 +182,7 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
+<!-- <script>
     $("#kodesite").map(function() {
         $.ajaxSetup({
             headers: {
@@ -202,5 +250,5 @@
             },
         });
     });
-</script>
+</script> -->
 @endsection

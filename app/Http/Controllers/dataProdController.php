@@ -28,19 +28,21 @@ class dataProdController extends Controller
         // ->groupBy('pma_dailyprod_tc.tgl')
         // ->get();
         
+        $bulan = Carbon::now();
+        $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
+
         $statusSite = Auth::user()->kodesite; 
 
-        $subquery = "SELECT 
+        $subquery = "SELECT id,
         IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
         IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
         IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
         IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
         FROM pma_dailyprod_tc
-        WHERE tgl BETWEEN '2022-07-01' AND '2022-07-31' 
+        WHERE ".$tanggal." 
         GROUP BY tgl";
 
         $data = collect(DB::select($subquery));
-        // dd($data);
 
         $site = DB::table('site')->select('namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
 
@@ -156,7 +158,8 @@ class dataProdController extends Controller
      */
     public function edit($id)
     {
-        $data = DB::table('pma_dailyprod_tc')->select()->where('id', '=', $id)->get();
+        $data = DB::table('pma_dailyprod_tc')->select()->where('tgl', '=', $id)->where('kodesite', '=', Auth::user()->kodesite)->groupBy('pit')->orderBy('pit')->get();
+        
         $site = DB::table('site')
         ->select()
         ->where('status_website', '=', 1)
@@ -164,12 +167,23 @@ class dataProdController extends Controller
         ->where('kodesite', '=', Auth::user()->kodesite)
         ->orderBy('id')
         ->get();
+        
         $cuaca = DB::table('pma_dailyprod_cuacaicon')
         ->select()
         ->where('del', '=', 0)
         ->get(); 
 
-        return view('data-prod.edit', compact('site', 'data', 'cuaca'));
+        $subquery = "SELECT SUM(CASE WHEN shift = 1 THEN ob END) ob_1,
+        SUM(CASE WHEN shift = 1 THEN coal END) coal_1,
+        SUM(CASE WHEN shift = 2 THEN ob END) ob_2,
+        SUM(CASE WHEN shift = 2 THEN coal END) coal_2
+        FROM pma_dailyprod_tc
+        WHERE tgl='".$id."' AND kodesite='".Auth::user()->kodesite."'
+        GROUP BY pit
+        ";
+        $dataProd = collect(DB::select($subquery));
+        
+        return view('data-prod.edit', compact('site', 'data', 'cuaca', 'dataProd'));
     }
 
     public function edit_data($id, $tgl, $other)

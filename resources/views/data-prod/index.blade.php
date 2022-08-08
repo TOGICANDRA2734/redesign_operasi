@@ -38,11 +38,20 @@
                             <td class="px-4 py-3 text-center">
                                 {{date('d-m-Y', strtotime($dt))}}
                             </td>
+                            @foreach($data[$key] as $keys => $dtS)
+                                @if($keys !== 'id')
+                                    <td class="px-4 py-3 text-center">
+                                        {{$dtS}}
+                                    </td>
+                                @endif
+                            @endforeach
                             <td class="px-4 py-3 text-center">
-                            <a class="btn btn-warning text-white"><i class="fa-solid fa-pencil"></i></a>
+                                <a href="{{route('data-prod.edit', $dt)}}" class="btn btn-warning text-white"><i class="fa-solid fa-pencil"></i></a>
                             </td>
                         </tr>
                     @endforeach
+
+                    
                 </tbody>
             </table>
         </div>
