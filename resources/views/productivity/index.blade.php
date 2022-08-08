@@ -20,6 +20,7 @@
                         <th rowspan="2" class="whitespace-nowrap text-center">#</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">No Unit</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Pit</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">AVG</th>
                         <th colspan="13" class="whitespace-nowrap text-center">Waktu</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Jarak</th>

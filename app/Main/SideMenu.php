@@ -36,7 +36,7 @@ class SideMenu
                     ],
                     'transaksi-produksi' => [
                         'icon' => 'inbox',
-                        'route_name' => 'dark-mode-switcher',
+                        'route_name' => 'productivity.create',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
