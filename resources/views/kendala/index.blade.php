@@ -30,8 +30,8 @@
             </div>
         </div>
     </div>
-
     <hr class="mb-10">
+    
     <!-- Start Kendala -->
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
         <div class="w-full overflow-x-auto">

@@ -21,13 +21,6 @@ class dataProdController extends Controller
      */
     public function index()
     {
-        // $data =  DB::table('pma_dailyprod_tc')
-        // ->select(DB::raw('pma_dailyprod_tc.id, pma_dailyprod_tc.tgl, pma_dailyprod_tc.ob act_ob, pma_dailyprod_tc.coal act_coal, pma_dailyprod_plan.ob plan_ob,  pma_dailyprod_plan.coal plan_coal'))
-        // ->join('pma_dailyprod_plan', 'pma_dailyprod_tc.tgl', '=', 'pma_dailyprod_plan.tgl')
-        // ->where('pma_dailyprod_tc.kodesite', '=', 'I')
-        // ->groupBy('pma_dailyprod_tc.tgl')
-        // ->get();
-        
         $bulan = Carbon::now();
         $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
 
@@ -158,7 +151,7 @@ class dataProdController extends Controller
      */
     public function edit($id)
     {
-        $data = DB::table('pma_dailyprod_tc')->select()->where('tgl', '=', $id)->where('kodesite', '=', Auth::user()->kodesite)->groupBy('pit')->orderBy('pit')->get();
+        $data = DB::table('pma_dailyprod_tc')->select()->where('tgl', '=', $id)->where('kodesite', '=', Auth::user()->kodesite)->groupBy('pit')->orderBy('pit')->first();
         
         $site = DB::table('site')
         ->select()
@@ -173,7 +166,8 @@ class dataProdController extends Controller
         ->where('del', '=', 0)
         ->get(); 
 
-        $subquery = "SELECT SUM(CASE WHEN shift = 1 THEN ob END) ob_1,
+        $subquery = "SELECT pit,
+        SUM(CASE WHEN shift = 1 THEN ob END) ob_1,
         SUM(CASE WHEN shift = 1 THEN coal END) coal_1,
         SUM(CASE WHEN shift = 2 THEN ob END) ob_2,
         SUM(CASE WHEN shift = 2 THEN coal END) coal_2
@@ -232,45 +226,51 @@ class dataProdController extends Controller
     }
 
     public function update_data(Request $request, $id)
-    {
+    {   
         $request->validate([
-            'pit' => 'required',
-            'ob_1' => 'required',
-            'coal_1' => 'required',
-            'ob_2' => 'required',
-            'coal_2' => 'required',
+            'pit_0' => 'required',
+            'ob_1_0' => 'required',
+            'coal_1_0' => 'required',
+            'ob_2_0' => 'required',
+            'coal_2_0' => 'required',
             'kodesite' => 'required',
             'cuaca' => 'required',
         ]);
 
-        $record = dataProd::all()->where('kodesite', $request->kodesite)->where('pit', $request->pit)->where('tgl', $request->tgl);
-
-        foreach($record as $r)
-        {   
-            $data = dataProd::findOrFail($r->id);
-            if($data->shift == 1){
-                $data->update([
-                    'tgl'               => $request->tgl,
-                    'pit'               => $request->pit,
-                    'ob'                => $request->ob_1,
-                    'coal'              => $request->coal_1,
-                    'shift'             => 1,
-                    'kodesite'          => $request->kodesite,
-                    'cuaca'             => $request->cuaca,
-                ]);
-                
-            } else {
-                $data->update([
-                    'tgl'               => $request->tgl,
-                    'pit'               => $request->pit,
-                    'ob'                => $request->ob_2,
-                    'coal'              => $request->coal_2,
-                    'shift'             => 2,
-                    'kodesite'          => $request->kodesite,
-                    'cuaca'             => $request->cuaca,
-                ]);
+        // Record Pit
+        $pit = DB::table('pma_dailyprod_tc')->select(DB::raw('DISTINCT pit'))->where('kodesite', '=',Auth::user()->kodesite)->orderBy('pit')->get();
+        
+        foreach($pit as $key => $pt){
+            $record = dataProd::all()->where('kodesite', '=', $request->kodesite)->where('pit',  '=',$pt->pit)->where('tgl', '=', $request->tgl);
+            
+            foreach($record as $r)
+            {   
+                $data = dataProd::findOrFail($r->id);
+                if($data->shift == 1){
+                    $data->update([
+                        'tgl'               => $request->tgl,
+                        'pit'               => $pt->pit,
+                        'ob'                => $request->{"ob_1_".$key.""},
+                        'coal'              => $request->{"coal_1_".$key.""},
+                        'shift'             => 1,
+                        'kodesite'          => $request->kodesite,
+                        'cuaca'             => $request->cuaca,
+                    ]);
+                    
+                } else {
+                    $data->update([
+                        'tgl'               => $request->tgl,
+                        'pit'               => $pt->pit,
+                        'ob'                => $request->{"ob_2_".$key.""},
+                        'coal'              => $request->{"coal_2_".$key.""},
+                        'shift'             => 2,
+                        'kodesite'          => $request->kodesite,
+                        'cuaca'             => $request->cuaca,
+                    ]);
+                }
             }
         }
+        
 
         if($record){
             return redirect()->route('data-prod.index')->with(['success' => 'Data Berhasil Diupdate!']);
