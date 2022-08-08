@@ -182,7 +182,7 @@ class dataProdController extends Controller
         GROUP BY pit
         ";
         $dataProd = collect(DB::select($subquery));
-        
+
         return view('data-prod.edit', compact('site', 'data', 'cuaca', 'dataProd'));
     }
 
@@ -213,15 +213,64 @@ class dataProdController extends Controller
         ]);
 
         $record = dataProd::findOrFail($id);
-
+        
         $record->update([
             'tgl'           => $request->tgl,
             'pit'           => $request->pit,
             'ob'            => $request->ob,
             'coal'          => $request->coal,
             'kodesite'      => $request->kodesite,
-            'cuaca'      => $request->cuaca,
+            'cuaca'         => $request->cuaca,
         ]);
+
+        if($record){
+            return redirect()->route('data-prod.index')->with(['success' => 'Data Berhasil Diupdate!']);
+        }
+        else{
+            return redirect()->route('data-prod.index')->with(['error' => 'Data Gagal Diupdate!']);
+        }
+    }
+
+    public function update_data(Request $request, $id)
+    {
+        $request->validate([
+            'pit' => 'required',
+            'ob_1' => 'required',
+            'coal_1' => 'required',
+            'ob_2' => 'required',
+            'coal_2' => 'required',
+            'kodesite' => 'required',
+            'cuaca' => 'required',
+        ]);
+
+        $record = dataProd::all()->where('kodesite', $request->kodesite)->where('pit', $request->pit)->where('tgl', $request->tgl);
+
+        foreach($record as $r)
+        {   
+            $data = dataProd::findOrFail($r->id);
+            if($data->shift == 1){
+                $data->update([
+                    'tgl'               => $request->tgl,
+                    'pit'               => $request->pit,
+                    'ob'                => $request->ob_1,
+                    'coal'              => $request->coal_1,
+                    'shift'             => 1,
+                    'kodesite'          => $request->kodesite,
+                    'cuaca'             => $request->cuaca,
+                ]);
+                
+            } else {
+                $data->update([
+                    'tgl'               => $request->tgl,
+                    'pit'               => $request->pit,
+                    'ob'                => $request->ob_2,
+                    'coal'              => $request->coal_2,
+                    'shift'             => 2,
+                    'kodesite'          => $request->kodesite,
+                    'cuaca'             => $request->cuaca,
+                ]);
+            }
+        }
 
         if($record){
             return redirect()->route('data-prod.index')->with(['success' => 'Data Berhasil Diupdate!']);

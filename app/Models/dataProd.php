@@ -15,6 +15,7 @@ class dataProd extends Model
         'pit',
         'ob',
         'coal',
+        'shift',
         'cuaca',
         'kodesite'
     ];

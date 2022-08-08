@@ -15,9 +15,9 @@
     <div class="card p-6">
         <div class="grid grid-cols-1 gap-3">
 
-            @foreach($data as $key => $dt)
+        @foreach($data as $key => $dt)
             <!-- Start Form -->
-            <form action="#" method="POST" id="storeDok" class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg  dark:bg-gray-800">
+            <form action="{{route('update_data.index', $dt->id)}}" method="POST" id="storeDok" class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg  dark:bg-gray-800">
                 @csrf
                 @method('PUT')
                 <div>
@@ -25,7 +25,7 @@
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
                             Tanggal <span class="text-xs text-gray-500">(Month-Day-Year)</span>
                         </span>
-                        <input value="{{old('tgl', $dt->tgl)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl" id="tgl">
+                        <input value="{{old('tgl', $data[0]->tgl)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl" id="tgl">
                     </label>
                     @error('tgl')
                     <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
@@ -42,11 +42,32 @@
                         <select class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
                             <option value="">Pilih</option>
                             @foreach($site as $st)
-                            <option value="{{$st->kodesite}}" {{old('kodesite', $dt->kodesite) == $st->kodesite ? 'selected' : ''}}>{{$st->namasite}} - {{$st->lokasi}}</option>
+                            <option value="{{$st->kodesite}}" {{old('kodesite', $data[0]->kodesite) == $st->kodesite ? 'selected' : ''}}>{{$st->namasite}} - {{$st->lokasi}}</option>
                             @endforeach
                         </select>
                     </label>
                     @error('kodesite')
+                    <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
+                        <div class="px-4 py-2">
+                            <p class="text-gray-600 text-sm">{{ $message }}</p>
+                        </div>
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block mt-1 text-sm">
+                        <span class="font-semibold text-gray-700 dark:text-gray-400">
+                            Cuaca
+                        </span>
+                        <select class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="cuaca" id="cuaca">
+                            <option disabled selected value="">Pilih</option>
+                            @foreach($cuaca as $cc)
+                                <option class="capitalize" value="{{$cc->kode_cuaca}}" {{old('cuaca', $dt->cuaca) == $cc->kode_cuaca ? 'selected' : ''}}>{{$cc->nama_cuaca}}</option>
+                            @endforeach
+                        </select>
+                    </label>
+                    @error('cuaca')
                     <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
                         <div class="px-4 py-2">
                             <p class="text-gray-600 text-sm">{{ $message }}</p>
@@ -82,9 +103,9 @@
                                 <span class="font-semibold text-gray-700 dark:text-gray-400">
                                     Overburden <span class="text-xs text-gray-500">(bcm)</span>
                                 </span>
-                                <input value="{{old('ob', $dataProd[$key]->ob_1)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="ob" id="ob">
+                                <input value="{{old('ob', $dataProd[$key]->ob_1)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="ob_1" id="ob_1">
                             </label>
-                            @error('ob')
+                            @error('ob_1')
                             <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
                                 <div class="px-4 py-2">
                                     <p class="text-gray-600 text-sm">{{ $message }}</p>
@@ -98,9 +119,9 @@
                                 <span class="font-semibold text-gray-700 dark:text-gray-400">
                                     Coal <span class="text-xs text-gray-500">(mt)</span>
                                 </span>
-                                <input value="{{old('coal', $dataProd[$key]->coal_1)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="coal" id="coal">
+                                <input value="{{old('coal', $dataProd[$key]->coal_1)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="coal_1" id="coal_1">
                             </label>
-                            @error('coal')
+                            @error('coal_1')
                             <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
                                 <div class="px-4 py-2">
                                     <p class="text-gray-600 text-sm">{{ $message }}</p>
@@ -118,9 +139,9 @@
                                 <span class="font-semibold text-gray-700 dark:text-gray-400">
                                     Overburden <span class="text-xs text-gray-500">(bcm)</span>
                                 </span>
-                                <input value="{{old('ob', $dataProd[$key]->ob_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="ob" id="ob">
+                                <input value="{{old('ob', $dataProd[$key]->ob_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="ob_2" id="ob_2">
                             </label>
-                            @error('ob')
+                            @error('ob_2')
                             <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
                                 <div class="px-4 py-2">
                                     <p class="text-gray-600 text-sm">{{ $message }}</p>
@@ -134,9 +155,9 @@
                                 <span class="font-semibold text-gray-700 dark:text-gray-400">
                                     Coal <span class="text-xs text-gray-500">(mt)</span>
                                 </span>
-                                <input value="{{old('coal', $dataProd[$key]->coal_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="coal" id="coal">
+                                <input value="{{old('coal', $dataProd[$key]->coal_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="coal_2" id="coal_2">
                             </label>
-                            @error('coal')
+                            @error('coal_2')
                             <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
                                 <div class="px-4 py-2">
                                     <p class="text-gray-600 text-sm">{{ $message }}</p>
@@ -147,27 +168,6 @@
                     </div>
                 </div>
                 <!-- End Shift 1 -->
-
-                <div class="col-span-2">
-                    <label class="block mt-1 text-sm">
-                        <span class="font-semibold text-gray-700 dark:text-gray-400">
-                            Cuaca
-                        </span>
-                        <select class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="cuaca" id="cuaca">
-                            <option disabled selected value="">Pilih</option>
-                            @foreach($cuaca as $cc)
-                            <option class="capitalize" value="{{$cc->kode_cuaca}}" {{old('cuaca', $dt->cuaca) == $cc->kode_cuaca ? 'selected' : ''}}>{{$cc->nama_cuaca}}</option>
-                            @endforeach
-                        </select>
-                    </label>
-                    @error('cuaca')
-                    <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
-                        <div class="px-4 py-2">
-                            <p class="text-gray-600 text-sm">{{ $message }}</p>
-                        </div>
-                    </div>
-                    @enderror
-                </div>
 
                 <button class="col-span-2 px-10 py-4 font-medium leading-5 text-white transition-colors duration-150 bg-black border border-transparent rounded-lg active:bg-gray-600 hover:bg-gray-800 focus:outline-none focus:shadow-outline-black">
                     Submit
