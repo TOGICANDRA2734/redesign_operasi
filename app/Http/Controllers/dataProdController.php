@@ -39,7 +39,7 @@ class dataProdController extends Controller
         IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
         IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
         FROM pma_dailyprod_tc
-        WHERE ".$tanggal." 
+        WHERE ".$tanggal." and kodesite='".Auth::user()->kodesite."' 
         GROUP BY tgl";
 
         $data = collect(DB::select($subquery));
@@ -315,16 +315,17 @@ class dataProdController extends Controller
 
     public function report()
     {
-        $subquery = "SELECT A.TGL,
-        SUM(A.ob) OB_PLAN ,
-        SUM(A.coal) COAL_PLAN,
-        SUM(IFNULL(B.ob,0)) OB_ACTUAL,
-        SUM(IFNULL(B.coal,0)) COAL_ACTUAL
-        FROM pma_dailyprod_PLAN A
-        LEFT JOIN (SELECT * FROM pma_dailyprod_TC WHERE tgl BETWEEN '2022-07-01' AND '2022-07-31' GROUP BY tgl) B
-        ON A.tgl = B.tgl
-        WHERE A.tgl BETWEEN '2022-07-01' AND '2022-07-31'
-        GROUP BY A.tgl";
+        $bulan = Carbon::now();
+        $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
+
+        $subquery = "SELECT tgl,
+        IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
+        IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
+        IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
+        IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
+        FROM pma_dailyprod_tc
+        WHERE ".$tanggal." 
+        GROUP BY tgl";
 
         $data = collect(DB::select($subquery));
 

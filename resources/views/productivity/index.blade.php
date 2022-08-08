@@ -1,6 +1,10 @@
-@extends('layouts.app', ['title' => 'Homepage | PT RCI | PMA 2023'])
+@extends('../layout/' . $layout)
 
-@section('content')
+@section('subhead')
+    <title>Dashboard - Rubick - Tailwind HTML Admin Template</title>
+@endsection
+
+@section('subcontent')
 <div class="bg-gray-100 flex-1 p-6 md:mt-16 overflow-hidden">
     <!-- Title -->
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
