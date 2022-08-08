@@ -38,7 +38,7 @@
                                                 <div class="flex justify-between items-center">
                                                     <div class="text-lg font-medium leading-8 mt-1 ">{{number_format($dt->ob_act)}}</div>
                                                     <div class="ml-auto">
-                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month">
+                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="{{number_format($dt->ob_ach, 1)}}% dari plan">
                                                             {{number_format($dt->ob_ach, 1)}}% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i>
                                                         </div>
                                                     </div>
@@ -49,7 +49,7 @@
                                                 <div class="flex justify-between items-center">
                                                     <div class="text-lg font-medium leading-8 mt-1 ">{{number_format($dt->coal_act)}}</div>
                                                     <div class="ml-auto">
-                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month">
+                                                        <div class="report-box__indicator bg-success tooltip cursor-pointer" title="{{number_format($dt->coal_ach, 1)}}% dari plan">
                                                             {{number_format($dt->coal_ach, 1)}}% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i>
                                                         </div>
                                                     </div>

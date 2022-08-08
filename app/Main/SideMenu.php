@@ -44,7 +44,7 @@ class SideMenu
                     ],
                     'transaksi-kendala' => [
                         'icon' => 'inbox',
-                        'route_name' => 'kendala.index',
+                        'route_name' => 'kendala.create',
                         'params' => [
                             'layout' => 'side-menu'
                         ],

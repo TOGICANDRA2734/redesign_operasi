@@ -5,16 +5,19 @@
 @endsection
 
 @section('subcontent')
-<div class="bg-gray-100 flex-1 p-6 md:mt-16 overflow-hidden">
+<div class="">
     <!-- Title -->
-    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Transaksi Kendala
-    </h2>
+    <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
+        <h2 class="text-lg font-medium mr-auto">
+            Laporan Kendala - {{$site[0]->namasite}}
+        </h2>
+    </div>
     <hr class="mb-10">
 
 
+
     <!-- Input Form -->
-    <div class="card p-6">
+    <div class="intro-y">
         <div class="grid grid-cols-1 gap-3">
             <!-- Start Form -->
             <form action="{{route('kendala.store')}}" method="POST" id="storeDok" class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg  dark:bg-gray-800">
