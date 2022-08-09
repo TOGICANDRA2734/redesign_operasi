@@ -12,7 +12,7 @@
             Transaksi Productivity - {{$dataPty[0]->namasite}}
         </h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-            <a href="{{route('kendala.create')}}" class="btn btn-primary shadow-md mr-2">Tambah Pty</a>
+            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#header-footer-modal-preview" class="btn btn-primary shadow-md mr-2">Tambah Pty</a>
         </div>
     </div>
     <hr class="mb-10">
@@ -57,5 +57,45 @@
         </div>
     </div>
     <!-- end PTY Overview -->
+
+    
+    <!-- BEGIN: Modal Content -->
+    <div id="header-footer-modal-preview" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- BEGIN: Modal Header -->
+                <div class="modal-header">
+                    <h2 class="font-medium text-base mr-auto">Transaksi Productivity</h2>
+                    <h5 class="text-sm ml-auto">{{$waktu}}</h5>
+                </div> <!-- END: Modal Header -->
+                <!-- BEGIN: Modal Body -->
+                <form action="{{route('productivity.check')}}" method="POST">
+                    @csrf
+                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                    {{$errors}}
+                    <input type="hidden" name="tgl" value="{{\Carbon\Carbon::now()->timezone('Asia/Kuala_lumpur')->format('Y-m-d')}}">
+                    <input type="hidden" name="jam" @if(substr($waktu,0,1) != '0') value="{{substr($waktu, 0, 2)}}" @else value="{{substr($waktu, 1, 1)}}" @endif>
+                    <input type="hidden" name="kodesite" value="{{Auth::user()->kodesite}}">
+                    <div class="col-span-12 sm:col-span-6"> <label for="modal-form-6" class="form-label">Nom Unit</label> <select id="modal-form-6" class="form-select" name="nom_unit">
+                            @foreach($dataNomUnit as $dnu)
+                            <option value="{{$dnu->nom_unit}}">{{$dnu->nom_unit}}</option>
+                            @endforeach
+                        </select> </div>
+                    <div class="col-span-12 sm:col-span-6"> <label for="modal-form-6" class="form-label">Pit</label> <select id="modal-form-6" class="form-select" name="pit">
+                        @foreach($dataPit as $dp)
+                        <option value="{{$dp->ket}}">{{$dp->ket}}</option>
+                        @endforeach
+                    </select> </div>
+                    <div class="col-span-12 sm:col-span-6"> <label for="modal-form-2" class="form-label">Pty</label> <input id="modal-form-2" type="text" class="form-control" placeholder="" name="pty"> </div>
+                    <div class="col-span-12 sm:col-span-6"> <label for="modal-form-3" class="form-label">Jarak</label> <input id="modal-form-3" type="text" class="form-control" placeholder="" name="dist"> </div>
+                    <div class="col-span-12 sm:col-span-6"> <label for="modal-form-4" class="form-label">Ket</label> <input id="modal-form-4" type="text" class="form-control" placeholder="" name="ket"> </div>
+                </div> <!-- END: Modal Body -->
+                <!-- BEGIN: Modal Footer -->
+                <div class="modal-footer"> <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancel</button> <button type="submit" class="btn btn-primary w-20">Send</button> </div> <!-- END: Modal Footer -->
+                </form>
+            </div>
+        </div>
+    </div> <!-- END: Modal Content -->
+
 </div>
 @endsection

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Productivity;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -86,7 +89,12 @@ class ProductivityController extends Controller
 
         $dataPty = collect(DB::select($subquery));
 
-        return view('productivity.create', compact('dataPty'));
+        $dataNomUnit = DB::table('plant_hm')->select(DB::raw('distinct nom_unit'))->orderBy('nom_unit')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        $dataPit = DB::table('pma_dailyprod_pit')->select(DB::raw('ket, kodepit'))->orderBy('ket')->where('kodesite', '=', Auth::user()->kodesite)->get();
+
+        $waktu = Carbon::now()->timezone('Asia/kuala_lumpur')->format('H:i'); 
+
+        return view('productivity.create', compact('dataPty', 'dataNomUnit', 'dataPit', 'waktu'));
     }
 
     /**
@@ -97,7 +105,44 @@ class ProductivityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
+        return $request;
+    }
+
+    public function check(Request $request)
+    {
+        $data = DB::table('pma_dailyprod_pty')->where('tgl', '=', $request->tgl)->where('nom_unit', '=', $request->nom_unit)->where('kodesite', '=', $request->kodesite)->where('jam', '=', $request->jam)->count();
+        if($data == 0){
+            $request->validate([
+                'tgl' => 'required',
+                'nom_unit' => 'required',
+                'jam' => 'required',
+                'pty' => 'required',
+                'dist' => 'required',
+                'kodesite' => 'required',
+                'pit' => 'required',
+            ]);
+    
+            $record = Productivity::create([
+                'tgl' => $request->tgl,
+                'nom_unit' => $request->nom_unit,
+                'type' => substr($request->nom_unit, 0, 4),
+                'jam' => $request->jam,
+                'pty' => $request->pty,
+                'dist' => $request->dist,
+                'kodesite' => $request->kodesite,
+                'pit' => $request->pit,
+            ]);
+
+            if($record){
+                return redirect()->route('kendala.index')->with(['success' => 'Data Berhasil Ditambah!']);
+            }
+            else{
+                return redirect()->route('kendala.index')->with(['error' => 'Data Gagal Ditambah!']);
+            }
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**

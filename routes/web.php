@@ -116,6 +116,8 @@ Route::middleware('auth')->group(function() {
 
     // Productivity
     Route::resource('productivity', ProductivityController::class);
+    Route::post('productivity_check', [ProductivityController::class, 'check'])->name('productivity.check');
+    Route::post('productivity_store', [ProductivityController::class, 'store_data'])->name('productivity.store_data');
 
     // Kendala
     Route::resource('kendala', KendalaController::class);
