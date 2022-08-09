@@ -9,7 +9,7 @@
     <!-- Title -->
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 class="text-lg font-medium mr-auto">
-            Transaksi Productivity - {{$dataPty[0]->namasite}}
+            Transaksi Productivity
         </h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
             <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#header-footer-modal-preview" class="btn btn-primary shadow-md mr-2">Tambah Pty</a>
@@ -66,15 +66,18 @@
                 <!-- BEGIN: Modal Header -->
                 <div class="modal-header">
                     <h2 class="font-medium text-base mr-auto">Transaksi Productivity</h2>
-                    <h5 class="text-sm ml-auto">{{$waktu}}</h5>
+                    <form action="{{route('productivity.check')}}" method="POST">
+                    @csrf
+
+                    <select id="modal-form-6" class="form-select w-16" name="jam">
+                            @for($i=7; $i<=19; $i++)
+                            <option value="{{$i}}" {{old('jam', substr($waktu,0,2)) == $i || old('jam', substr($waktu,1,1)) == $i ? 'selected' : ''}}>{{$i}}</option>
+                            @endfor
+                        </select> 
                 </div> <!-- END: Modal Header -->
                 <!-- BEGIN: Modal Body -->
-                <form action="{{route('productivity.check')}}" method="POST">
-                    @csrf
                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                    {{$errors}}
                     <input type="hidden" name="tgl" value="{{\Carbon\Carbon::now()->timezone('Asia/Kuala_lumpur')->format('Y-m-d')}}">
-                    <input type="hidden" name="jam" @if(substr($waktu,0,1) != '0') value="{{substr($waktu, 0, 2)}}" @else value="{{substr($waktu, 1, 1)}}" @endif>
                     <input type="hidden" name="kodesite" value="{{Auth::user()->kodesite}}">
                     <div class="col-span-12 sm:col-span-6"> <label for="modal-form-6" class="form-label">Nom Unit</label> <select id="modal-form-6" class="form-select" name="nom_unit">
                             @foreach($dataNomUnit as $dnu)

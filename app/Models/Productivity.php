@@ -16,6 +16,7 @@ class Productivity extends Model
         'jam',
         'pty',
         'dist',
+        'ket',
         'kodesite',
         'pit',
         'del'

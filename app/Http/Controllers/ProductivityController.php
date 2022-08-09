@@ -37,6 +37,8 @@ class ProductivityController extends Controller
         IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j11,                    
         IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j12,                          
         IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j13,                          
+	    CASE WHEN jam<>'-' THEN dist END,
+	    CASE WHEN jam<>'-' THEN ket END,        
         dist,
         ket                    
         FROM pma_dailyprod_pty A 
@@ -60,7 +62,7 @@ class ProductivityController extends Controller
     {
 
         // Data Detail PTY
-        $subquery = "SELECT
+        $subquery = "SELECT     
         nom_unit,
         b.namasite,
         pit,
@@ -78,12 +80,14 @@ class ProductivityController extends Controller
         IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j11,                    
         IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j12,                          
         IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j13,                          
+	    CASE WHEN jam<>'-' THEN dist END,
+	    CASE WHEN jam<>'-' THEN ket END,        
         dist,
         ket                    
         FROM pma_dailyprod_pty A 
         JOIN site B
         ON A.kodesite = B.kodesite                                         
-        WHERE tgl=CURDATE() AND del=0 AND b.kodesite='".Auth::user()->kodesite."'
+        WHERE tgl=CURDATE() AND del=0
         GROUP BY a.kodesite, nom_unit,TYPE
         ORDER BY b.id, nom_unit";
 
@@ -130,15 +134,16 @@ class ProductivityController extends Controller
                 'jam' => $request->jam,
                 'pty' => $request->pty,
                 'dist' => $request->dist,
+                'ket' => $request->ket,
                 'kodesite' => $request->kodesite,
                 'pit' => $request->pit,
             ]);
 
             if($record){
-                return redirect()->route('kendala.index')->with(['success' => 'Data Berhasil Ditambah!']);
+                return redirect()->route('productivity.create')->with(['success' => 'Data Berhasil Ditambah!']);
             }
             else{
-                return redirect()->route('kendala.index')->with(['error' => 'Data Gagal Ditambah!']);
+                return redirect()->route('productivity.create')->with(['error' => 'Data Gagal Ditambah!']);
             }
         } else {
             return redirect()->back();
