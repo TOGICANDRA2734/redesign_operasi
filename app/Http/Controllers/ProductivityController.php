@@ -37,10 +37,8 @@ class ProductivityController extends Controller
         IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j11,                    
         IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j12,                          
         IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j13,                          
-	    CASE WHEN jam<>'-' THEN dist END,
-	    CASE WHEN jam<>'-' THEN ket END,        
-        dist,
-        ket                    
+        (SELECT dist FROM pma_dailyprod_pty WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 ORDER BY nom_unit DESC LIMIT 1) dist,
+        (SELECT ket FROM pma_dailyprod_pty WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 ORDER BY nom_unit DESC LIMIT 1) ket
         FROM pma_dailyprod_pty A 
         JOIN site B
         ON A.kodesite = B.kodesite                                         
@@ -79,11 +77,9 @@ class ProductivityController extends Controller
         IFNULL(SUM(CASE WHEN jam = 16 THEN pty END),'-') j10,                          
         IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j11,                    
         IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j12,                          
-        IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j13,                          
-	    CASE WHEN jam<>'-' THEN dist END,
-	    CASE WHEN jam<>'-' THEN ket END,        
-        dist,
-        ket                    
+        IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j13,
+        (SELECT dist FROM pma_dailyprod_pty WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 ORDER BY nom_unit DESC LIMIT 1) dist,
+        (SELECT ket FROM pma_dailyprod_pty WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 ORDER BY nom_unit DESC LIMIT 1) ket                  
         FROM pma_dailyprod_pty A 
         JOIN site B
         ON A.kodesite = B.kodesite                                         
