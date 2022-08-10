@@ -12,7 +12,7 @@ import Litepicker from "litepicker";
             numberOfColumns: 2,
             numberOfMonths: 2,
             showWeekNumbers: true,
-            format: "D MMM, YYYY",
+            format: "D-M-YYYY",
             dropdowns: {
                 minYear: 1990,
                 maxYear: null,
@@ -43,5 +43,6 @@ import Litepicker from "litepicker";
             element: this,
             ...options,
         });
+
     });
 })();

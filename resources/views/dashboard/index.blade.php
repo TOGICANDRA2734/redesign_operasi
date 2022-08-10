@@ -68,10 +68,10 @@
             <div class="col-span-12 lg:col-span-6 mt-8">
                 <div class="intro-y block sm:flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">Overburden</h2>
-                    <form method="POST" action="{{route('')}}" class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
+                    <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
                         <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
-                        <input type="text" class="datepicker form-control sm:w-56 box pl-10">
-                    </form>
+                        <input type="text" class="datepicker form-control sm:w-56 box pl-10" id="OverburdenRange">
+                    </div>
                 </div>
                 <div class="intro-y box p-5 mt-12 sm:mt-5">
                     <div class="flex flex-col md:flex-row md:items-center">
@@ -275,6 +275,9 @@
 <!-- Chart -->
 <script>
     $(function() {
+        console.log($('#OverburdenRange').val());
+
+
         // OVERBURDEN
         //get the OB data
         var ob_prod = JSON.parse(`<?php echo $data_prod_ob['chart_data_prod_ob']; ?>`);
