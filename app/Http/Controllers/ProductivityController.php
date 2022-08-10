@@ -133,6 +133,8 @@ class ProductivityController extends Controller
                 'ket' => $request->ket,
                 'kodesite' => $request->kodesite,
                 'pit' => $request->pit,
+                'admin' => Auth::user()->username,
+                'time_admin' => Carbon::now(),
             ]);
 
             if($record){

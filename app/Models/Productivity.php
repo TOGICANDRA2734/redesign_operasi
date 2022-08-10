@@ -19,6 +19,8 @@ class Productivity extends Model
         'ket',
         'kodesite',
         'pit',
+        'admin',
+        'time_admin',
         'del'
     ];
     public $timestamps = false;
