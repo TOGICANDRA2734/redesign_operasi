@@ -37,8 +37,8 @@ class ProductivityController extends Controller
         IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j11,                    
         IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j12,                          
         IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j13,                          
-        (SELECT dist FROM pma_dailyprod_pty WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 ORDER BY nom_unit DESC LIMIT 1) dist,
-        (SELECT ket FROM pma_dailyprod_pty WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 ORDER BY nom_unit DESC LIMIT 1) ket
+        (SELECT dist FROM pma_dailyprod_pty X WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) dist,
+        (SELECT ket FROM pma_dailyprod_pty X WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) ket
         FROM pma_dailyprod_pty A 
         JOIN site B
         ON A.kodesite = B.kodesite                                         
@@ -78,8 +78,8 @@ class ProductivityController extends Controller
         IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j11,                    
         IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j12,                          
         IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j13,
-        (SELECT dist FROM pma_dailyprod_pty WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 ORDER BY nom_unit DESC LIMIT 1) dist,
-        (SELECT ket FROM pma_dailyprod_pty WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 ORDER BY nom_unit DESC LIMIT 1) ket                  
+        (SELECT dist FROM pma_dailyprod_pty X WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) dist,
+        (SELECT ket FROM pma_dailyprod_pty X WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) ket
         FROM pma_dailyprod_pty A 
         JOIN site B
         ON A.kodesite = B.kodesite                                         
