@@ -386,8 +386,10 @@ class DashboardController extends Controller
          */
         $subquery = "SELECT DISTINCT ket
         FROM pma_dailyprod_pit
-        WHERE kodesite='".$site."'";
+        WHERE kodesite='".$site."'
+        ORDER BY ket";
         $pit = collect(DB::select($subquery));
+
 
         /**
          * Kendala

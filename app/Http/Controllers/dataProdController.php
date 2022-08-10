@@ -316,15 +316,15 @@ class dataProdController extends Controller
     public function report()
     {
         $bulan = Carbon::now();
-        $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
+        $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
 
         $subquery = "SELECT tgl,
-        IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
-        IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
-        IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
-        IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
+        IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),'-') ob_1,
+        IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),'-') coal_1,
+        IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),'-') ob_2,
+        IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),'-') coal_2
         FROM pma_dailyprod_tc
-        WHERE ".$tanggal." 
+        WHERE ".$tanggal."
         GROUP BY tgl";
 
         $data = collect(DB::select($subquery));

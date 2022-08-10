@@ -34,11 +34,9 @@
                             </button>
                             <div class="dropdown-menu w-40">
                                 <ul class="dropdown-content overflow-y-auto h-32">
-                                    <li><a href="" class="dropdown-item">PC & Laptop</a></li>
-                                    <li><a href="" class="dropdown-item">Smartphone</a></li>
-                                    <li><a href="" class="dropdown-item">Electronic</a></li>
-                                    <li><a href="" class="dropdown-item">Photography</a></li>
-                                    <li><a href="" class="dropdown-item">Sport</a></li>
+                                    @foreach($pit as $pt)
+                                    <li><a href="" class="dropdown-item">{{$pt->ket}}</a></li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -66,11 +64,9 @@
                             </button>
                             <div class="dropdown-menu w-40">
                                 <ul class="dropdown-content overflow-y-auto h-32">
-                                    <li><a href="" class="dropdown-item">PC & Laptop</a></li>
-                                    <li><a href="" class="dropdown-item">Smartphone</a></li>
-                                    <li><a href="" class="dropdown-item">Electronic</a></li>
-                                    <li><a href="" class="dropdown-item">Photography</a></li>
-                                    <li><a href="" class="dropdown-item">Sport</a></li>
+                                    @foreach($pit as $pt)
+                                    <li><a href="" class="dropdown-item">{{$pt->ket}}</a></li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -91,11 +87,8 @@
                         </button>
                         <div class="dropdown-menu w-40">
                             <ul class="dropdown-content overflow-y-auto h-32">
-                                <li><a href="" class="dropdown-item">PC & Laptop</a></li>
-                                <li><a href="" class="dropdown-item">Smartphone</a></li>
-                                <li><a href="" class="dropdown-item">Electronic</a></li>
-                                <li><a href="" class="dropdown-item">Photography</a></li>
-                                <li><a href="" class="dropdown-item">Sport</a></li>
+                                <li><a href="" class="dropdown-item">Shift 1</a></li>
+                                <li><a href="" class="dropdown-item">Shift 2</a></li>
                             </ul>
                         </div>
                     </div>
@@ -151,20 +144,6 @@
             <div class="col-span-12 sm:col-span-6 mt-4 intro-y">
                 <div class="intro-y flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">Kendala</h2>
-                    <div class="dropdown ml-auto mt-0 bg-white">
-                        <button class="dropdown-toggle btn btn-outline-secondary font-normal" aria-expanded="false" data-tw-toggle="dropdown">
-                            Filter <i data-lucide="chevron-down" class="w-4 h-4 ml-2"></i>
-                        </button>
-                        <div class="dropdown-menu w-40">
-                            <ul class="dropdown-content overflow-y-auto h-32">
-                                <li><a href="" class="dropdown-item">PC & Laptop</a></li>
-                                <li><a href="" class="dropdown-item">Smartphone</a></li>
-                                <li><a href="" class="dropdown-item">Electronic</a></li>
-                                <li><a href="" class="dropdown-item">Photography</a></li>
-                                <li><a href="" class="dropdown-item">Sport</a></li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="overflow-x-auto mt-4">
