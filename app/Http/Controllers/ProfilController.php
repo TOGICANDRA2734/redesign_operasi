@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfilController extends Controller
 {
@@ -56,7 +59,8 @@ class ProfilController extends Controller
      */
     public function edit($id)
     {
-        //
+        $site = DB::table('site')->select()->where('kodesite', '=', Auth::user()->kodesite)->get();
+        return view('profil.edit', compact('site'));
     }
 
     /**
@@ -68,7 +72,26 @@ class ProfilController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd($request);
+        $request->validate([
+            'name' => 'required',
+            'posisi' => 'required'
+        ]);
+
+        $record = User::findOrFail($id);
+        
+        if($request->foto)
+        $record->update([
+            'name'              => $request->name,
+            'posisi'            => $request->posisi,
+        ]);
+
+        if($record){
+            return redirect()->route('data-prod.index')->with(['success' => 'Data Berhasil Diupdate!']);
+        }
+        else{
+            return redirect()->route('data-prod.index')->with(['error' => 'Data Gagal Diupdate!']);
+        }
     }
 
     /**

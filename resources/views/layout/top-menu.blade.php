@@ -91,10 +91,10 @@
                 <div class="dropdown-menu w-56">
                     <ul class="dropdown-content bg-primary/80 before:block before:absolute before:bg-black before:inset-0 before:rounded-md before:z-[-1] text-white">
                         <li class="p-2">
-                            
-                            <div class="font-medium">{{Auth::user()->name}}</div>
-                            <div class="text-xs text-white/60 mt-0.5 dark:text-slate-500">{{ $fakers[0]['jobs'][0] }}</div>
-                            
+                            <a href="{{profil.index}}">
+                                <div class="font-medium">{{Auth::user()->name}}</div>
+                                <div class="text-xs text-white/60 mt-0.5 dark:text-slate-500">{{ $fakers[0]['jobs'][0] }}</div>
+                            </a>
                         </li>
                         <li><hr class="dropdown-divider border-white/[0.08]"></li>
                         <li>

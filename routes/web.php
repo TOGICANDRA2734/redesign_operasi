@@ -11,6 +11,7 @@ use App\Http\Controllers\dataProdController;
 use App\Http\Controllers\KendalaController;
 use App\Http\Controllers\ProductivityController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -132,4 +133,7 @@ Route::middleware('auth')->group(function() {
 
     // Profil
     Route::resource('profil', ProfilController::class);
+
+    // Search
+    Route::post('search', [SearchController::class, 'index'])->name('search.index');
 });
