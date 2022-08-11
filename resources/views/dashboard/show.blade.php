@@ -35,7 +35,7 @@
                             <div class="dropdown-menu w-40">
                                 <ul class="dropdown-content overflow-y-auto h-32">
                                     @foreach($pit as $pt)
-                                    <li><a href="" class="dropdown-item">{{$pt->ket}}</a></li>
+                                    <li><a href="{{route('dashboard.show.filtered', ['site' => $site, 'pit' => $pt->ket])}}" class="dropdown-item">{{$pt->ket}}</a></li>
                                     @endforeach
                                 </ul>
                             </div>
