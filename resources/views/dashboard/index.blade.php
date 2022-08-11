@@ -26,7 +26,7 @@
                                 <div class="box p-5">
                                     <div class="flex">
                                         <div class="flex">
-                                            <img class="w-8 h-8" src="http://192.168.20.100:85/gambar/{{$dt->gambar}}" alt="Icon Cuaca">
+                                            <img class="w-8 h-8" src="http://192.168.20.100:85/gambar/logo/{{$dt->gambar}}" alt="Icon Cuaca">
                                             <div class="text-lg font-medium leading-8 ml-2">{{$dt->namasite}}</div>
                                         </div>
                                         <div class="ml-auto">

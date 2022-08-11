@@ -45,7 +45,7 @@
                     @foreach (array_slice($fakers, 0, 4) as $faker)
                         <a href="" class="flex items-center mt-2">
                             <div class="w-8 h-8 image-fit">
-                                <img alt="Midone - HTML Admin Template" class="rounded-full" src="{{ asset('dist/images/' . $faker['photos'][0]) }}">
+                                <img alt="" class="rounded-full" src="{{ asset('dist/images/' . $faker['photos'][0]) }}">
                             </div>
                             <div class="ml-3">{{ $faker['users'][0]['name'] }}</div>
                             <div class="ml-auto w-48 truncate text-slate-500 text-xs text-right">{{ $faker['users'][0]['email'] }}</div>
@@ -56,7 +56,7 @@
                 @foreach (array_slice($fakers, 0, 4) as $faker)
                     <a href="" class="flex items-center mt-2">
                         <div class="w-8 h-8 image-fit">
-                            <img alt="Midone - HTML Admin Template" class="rounded-full" src="{{ asset('dist/images/' . $faker['images'][0]) }}">
+                            <img alt="" class="rounded-full" src="{{ asset('dist/images/' . $faker['images'][0]) }}">
                         </div>
                         <div class="ml-3">{{ $faker['products'][0]['name'] }}</div>
                         <div class="ml-auto w-48 truncate text-slate-500 text-xs text-right">{{ $faker['products'][0]['category'] }}</div>
@@ -69,13 +69,13 @@
     <!-- BEGIN: Account Menu -->
     <div class="intro-x dropdown w-8 h-8">
         <div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in" role="button" aria-expanded="false" data-tw-toggle="dropdown">
-            <img alt="Midone - HTML Admin Template" src="{{ asset('dist/images/' . $fakers[9]['photos'][0]) }}">
+            <img alt="" src="http://192.168.20.100:85/gambar/user/{{Auth::user()->foto}}">
         </div>
         <div class="dropdown-menu w-56">
             <ul class="dropdown-content bg-primary text-white">
                 <li class="p-2">
                     <div class="font-medium">{{ Auth::user()->name }}</div>
-                    <div class="text-xs text-white/70 mt-0.5 dark:text-slate-500">{{ $fakers[0]['jobs'][0] }}</div>
+                    <div class="text-xs text-white/70 mt-0.5 dark:text-slate-500">{{Auth::user()->posisi}}</div>
                 </li>
                 <li><hr class="dropdown-divider border-white/[0.08]"></li>
                 <li>
