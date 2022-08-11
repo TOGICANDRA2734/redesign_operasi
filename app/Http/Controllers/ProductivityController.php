@@ -41,8 +41,10 @@ class ProductivityController extends Controller
         (SELECT ket FROM pma_dailyprod_pty X WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) ket
         FROM pma_dailyprod_pty A 
         JOIN site B
-        ON A.kodesite = B.kodesite                                         
-        WHERE tgl=CURDATE() AND del=0
+        ON A.kodesite = B.kodesite                
+        JOIN plant_tipe_unit C
+        ON LEFT(A.nom_unit,4)= C.kode                                      
+        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2'
         GROUP BY a.kodesite, nom_unit,TYPE
         ORDER BY b.id, nom_unit";
 
@@ -82,19 +84,31 @@ class ProductivityController extends Controller
         (SELECT ket FROM pma_dailyprod_pty X WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) ket
         FROM pma_dailyprod_pty A 
         JOIN site B
-        ON A.kodesite = B.kodesite                                         
-        WHERE tgl=CURDATE() AND del=0
+        ON A.kodesite = B.kodesite       
+        JOIN plant_tipe_unit C
+        ON LEFT(A.nom_unit,4)= C.kode                                      
+        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2'
         GROUP BY a.kodesite, nom_unit,TYPE
         ORDER BY b.id, nom_unit";
 
         $dataPty = collect(DB::select($subquery));
 
-        $dataNomUnit = DB::table('plant_hm')->select(DB::raw('distinct nom_unit'))->orderBy('nom_unit')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        $dataNomUnit = DB::table('plant_hm')->join('plant_tipe_unit', DB::raw('LEFT(plant_hm.nom_unit, 4)'), '=', 'plant_tipe_unit.kode')->select(DB::raw('nom_unit'))->orderBy('nom_unit')->where('kodesite', '=', Auth::user()->kodesite)->where('gol_1', '=', '2')->orderBy('nom_unit')->get();
         $dataPit = DB::table('pma_dailyprod_pit')->select(DB::raw('ket, kodepit'))->orderBy('ket')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        $subquery = "SELECT SUM(pty) total_pty
+        FROM pma_dailyprod_pty A 
+        JOIN site B
+        ON A.kodesite = B.kodesite       
+        JOIN plant_tipe_unit C
+        ON LEFT(A.nom_unit,4)= C.kode                                      
+        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2'
+        ORDER BY b.id, nom_unit";
+        $totalDataPty = collect(DB::select($subquery));
+
 
         $waktu = Carbon::now()->timezone('Asia/kuala_lumpur')->format('H:i'); 
 
-        return view('productivity.create', compact('dataPty', 'dataNomUnit', 'dataPit', 'waktu'));
+        return view('productivity.create', compact('dataPty', 'dataNomUnit', 'dataPit', 'waktu', 'totalDataPty'));
     }
 
     /**

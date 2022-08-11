@@ -17,7 +17,6 @@
     </div>
     <hr class="mb-10">
     <!-- Table -->
-    <!-- Table -->
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
         <div class="w-full overflow-x-auto">
             <table class="w-full table table-striped">
@@ -52,6 +51,11 @@
                         @endforeach
                     </tr>
                     @endforeach
+                    <tr class="text-center">
+                        <td colspan="20">
+                            <span class="font-bold">Total Productivity</span>: {{number_format($totalDataPty[0]->total_pty) }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

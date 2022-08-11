@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\dataProdController;
 use App\Http\Controllers\KendalaController;
 use App\Http\Controllers\ProductivityController;
+use App\Http\Controllers\ProfilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,4 +129,7 @@ Route::middleware('auth')->group(function() {
     // Komentar
     Route::post('/comment/store', [CommentController::class, 'store'])->name('comments.store');
     Route::post('/reply/store', [CommentController::class, 'replyStore'])->name('reply.store');
+
+    // Profil
+    Route::resource('profil', ProfilController::class);
 });

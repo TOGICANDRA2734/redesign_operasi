@@ -390,14 +390,14 @@ class DashboardController extends Controller
         ORDER BY ket";
         $pit = collect(DB::select($subquery));
 
-
         /**
          * Kendala
          */
         $subquery = "SELECT *
         FROM pma_dailyprod_kendala
         WHERE ".$tanggal." AND
-        kodesite='".$site."'";
+        kodesite='".$site."'
+        ORDER BY tgl";
         $kendala = collect(DB::select($subquery));
 
         $post = DB::table('pma_dailyprod_posts')->select('id')->where('kodesite', $site)->pluck('id');
