@@ -102,41 +102,59 @@
             </div>
             <div class="p-5">
                 <div class="flex flex-col-reverse xl:flex-row flex-col">
-                    <div class="flex-1 mt-6 xl:mt-0">
+                    <form action="{{route('register.store')}}" method="POST" enctype="multipart/form-data" class="flex-1 mt-6 xl:mt-0">
+                        {{$errors}}
                         <div class="grid grid-cols-12 gap-x-5">
-                            <div class="col-span-12">
-                                <div>
+                            @csrf
+                            <div class="col-span-12 2xl:col-span-6">
+                                <div class="">
                                     <label for="update-profile-form-1" class="form-label">Foto</label>
-                                    <input id="update-profile-form-1" type="file" class="form-control" placeholder="Input text">
+                                    <input name="foto" id="update-profile-form-1" type="file" class="form-control p-1 border" placeholder="Input text">
                                 </div>
+                                <div class="">
+                                    <label for="update-profile-form-1" class="form-label">Username</label>
+                                    <input name="username" id="update-profile-form-1" type="text" class="form-control" placeholder="Input text">
+                                </div>  
                             </div>
                             <div class="col-span-12 2xl:col-span-6">
                                 <div class="mt-3">
-                                    <label for="update-profile-form-1" class="form-label">Username</label>
-                                    <input id="update-profile-form-1" type="text" class="form-control" placeholder="Input text">
-                                </div>
-                                <div class="mt-3">
                                     <label for="update-profile-form-1" class="form-label">Nama</label>
-                                    <input id="update-profile-form-1" type="text" class="form-control" placeholder="Input text">
+                                    <input name="name" id="update-profile-form-1" type="text" class="form-control" placeholder="Input text">
+                                </div>
+                                <div class="">
+                                    <label for="update-profile-form-1" class="form-label">Password</label>
+                                    <input name="password" id="update-profile-form-1" type="password" class="form-control" placeholder="Input text">
                                 </div>
                             </div>
                             <div class="col-span-12 2xl:col-span-6">
                                 <div class="mt-3">
                                     <div>
                                         <label for="update-profile-form-1" class="form-label">Site</label>
-                                        <input id="update-profile-form-1" type="text" class="form-control" placeholder="Input text">
+                                        <select name="kodesite" id="update-profile-form-1"  class="form-control" placeholder="Input text">
+                                            <option disabled selected value="" class="form-control">Pilih</option>
+                                            @foreach($newSite as $st)
+                                            <option value="{{$st->kodesite}}" class="form-control">{{$st->namasite}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="mt-3">
+                            </div>
+                            <div class="col-span-12 2xl:col-span-6">
+                            <div class="mt-3">
                                     <div>
                                         <label for="update-profile-form-1" class="form-label">Posisi</label>
-                                        <input id="update-profile-form-1" type="text" class="form-control" placeholder="Input text">
+                                        <select name="posisi" id="update-profile-form-1"  class="form-control" placeholder="Input text">
+                                            <option disabled selected value="" class="form-control">Pilih</option>
+                                            @foreach($posisi as $st)
+                                            <option value="{{$st->jabatan}}" class="form-control">{{$st->jabatan}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary w-20 mt-6">Save</button>
-                    </div>
+                        <button type="submit" class="btn btn-primary w-20 mt-6">Save</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -147,24 +165,27 @@
                 <h2 class="font-medium text-base mr-auto">Ubah Password</h2>
             </div>
             <div class="p-5">
+                {{$errors}}
                 <div class="flex flex-col-reverse xl:flex-row flex-col">
-                    <div class="flex-1 mt-6 xl:mt-0">
+                    <form action="{{route('change-password.update')}}" method="POST" class="flex-1 mt-6 xl:mt-0">
+                        @csrf
+                        @method('PUT')
                         <div class="grid grid-cols-12 gap-x-5">
                             <div class=" col-span-12 ">
                                 <label for="change-password-form-1" class="form-label">Password Lama</label>
-                                <input id="change-password-form-1" type="password" class="form-control" placeholder="Input text">
+                                <input name="password" id="change-password-form-1" type="password" class="form-control" placeholder="Input text">
                             </div>
                             <div class="mt-3 col-span-12 ">
                                 <label for="change-password-form-2" class="form-label">Password Baru</label>
-                                <input id="change-password-form-2" type="password" class="form-control" placeholder="Input text">
+                                <input name="new_password" id="change-password-form-2" type="password" class="form-control" placeholder="Input text">
                             </div>
                             <div class="mt-3 col-span-12 ">
                                 <label for="change-password-form-3" class="form-label">Konfirmasi Password Baru</label>
-                                <input id="change-password-form-3" type="password" class="form-control" placeholder="Input text">
+                                <input name="confirm_password" id="change-password-form-3" type="password" class="form-control" placeholder="Input text">
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary w-36 mt-6">Change Password</button>
-                    </div>
+                        <button type="submit" class="btn btn-primary w-36 mt-6">Change Password</button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\dataProdController;
 use App\Http\Controllers\KendalaController;
 use App\Http\Controllers\ProductivityController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SearchController;
 
 /*
@@ -110,8 +112,6 @@ Route::middleware('auth')->group(function() {
     Route::get('dashboard/detail/{site}', [DashboardController::class, 'show'])->name('dashboard.show');
     Route::get('dashboard/detail_filtered/{site?}/{pit?}/{start?}/{end?}', [DashboardController::class, 'show_data'])->name('dashboard.show.filtered');
 
-
-
     // Data Produksi
     Route::resource('data-prod', dataProdController::class);
     Route::get('data-prod/create_data/{tgl}', [dataProdController::class, 'create_data'])->name('create_data.index');
@@ -135,6 +135,12 @@ Route::middleware('auth')->group(function() {
     // Profil
     Route::resource('profil', ProfilController::class);
 
+    // Add Account 
+    Route::post('register', [RegisteredUserController::class, 'store'])->name('register.store');
+
+    // Change Password
+    Route::put('change-password', [ChangePasswordController::class, 'update'])->name('change-password.update');
+    
     // Search
     Route::post('search', [SearchController::class, 'index'])->name('search.index');
 });

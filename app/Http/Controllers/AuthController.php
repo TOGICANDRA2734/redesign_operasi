@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Request\LoginRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -28,7 +29,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if (!\Auth::attempt([
+        if (!Auth::attempt([
             'username' => $request->username,
             'password' => $request->password
         ])) {
@@ -44,7 +45,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        \Auth::logout();
+        Auth::logout();
         return redirect('login');
     }
 }
