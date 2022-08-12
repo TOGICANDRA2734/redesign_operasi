@@ -406,16 +406,129 @@ class DashboardController extends Controller
         return view('dashboard.show', compact('data','data_prod_ob','data_plan_ob','data_prod_coal','data_plan_coal', 'pit', 'kendala', 'post', 'site'));
     }
 
-    public function show_data($site, $pit)
+    public function show_data($site='', $pit='')
     {
         $bulan = Carbon::now();
-        $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
-        $tanggalKedua =  "A.TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
-
+        if($start != null ){
+            $tanggal =  "TGL BETWEEN '" . $start . "' AND '" . $end . "'";
+            $tanggalKedua =  "A.TGL BETWEEN '" . $start . "' AND '" . $end . "'";    
+        }
+        else {
+            $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
+            $tanggalKedua =  "A.TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";    
+        }
+        
         /**
          * Overburden
          */
+        $subquery = "SELECT RIGHT(A.tgl, 2) tgl, SUM(A.OB) ob_act, SUM(B.OB) ob_plan
+        FROM pma_dailyprod_tc A
+        JOIN (SELECT * FROM pma_dailyprod_plan WHERE ".$tanggal." AND kodesite = '".$site."' GROUP BY tgl ORDER BY tgl) B
+        ON A.tgl = B.tgl
+        WHERE ".$tanggalKedua."
+        AND A.kodesite = '".$site."'
+        AND A.pit= '".$pit."'
+        GROUP BY A.tgl
+        ORDER BY A.tgl";
 
+        $record_ob = collect(DB::select($subquery));
+
+        $data_prod_ob = [];
+        $data_plan_ob = [];
+
+        foreach ($record_ob as $row) {
+            $data_prod_ob['label'][] = (int) $row->tgl;
+            $data_prod_ob['data'][] = $row->ob_act;
+            $data_plan_ob['label'][] = (int) $row->tgl;
+            $data_plan_ob['data'][] = $row->ob_plan;
+        }
+
+        $data_prod_ob['chart_data_prod_ob'] = json_encode($data_prod_ob);
+        $data_plan_ob['chart_data_plan_ob'] = json_encode($data_plan_ob);
+
+        /**
+         * Coal Data
+         */
+        $subquery = "SELECT RIGHT(A.tgl, 2) tgl, SUM(A.coal) coal_act, SUM(B.coal) coal_plan
+        FROM pma_dailyprod_tc A
+        JOIN (SELECT * FROM pma_dailyprod_plan WHERE ".$tanggal." AND kodesite = '".$site."' GROUP BY tgl) B
+        ON A.tgl = B.tgl
+        WHERE ".$tanggalKedua."
+        AND A.kodesite = '".$site."'
+        AND A.pit= '".$pit."'
+        GROUP BY A.tgl
+        ORDER BY A.tgl";
+
+        $record_coal = collect(DB::select($subquery));
+
+        $data_prod_coal = [];
+        $data_plan_coal = [];
+
+        foreach ($record_coal as $row) {
+            $data_prod_coal['label'][] = (int) $row->tgl;
+            $data_prod_coal['data'][] = $row->coal_act;
+            $data_plan_coal['label'][] = (int) $row->tgl;
+            $data_plan_coal['data'][] = $row->coal_plan;
+        }
+
+        $data_prod_coal['chart_data_prod_coal'] = json_encode($data_prod_coal);
+        $data_plan_coal['chart_data_plan_coal'] = json_encode($data_plan_coal);
+
+        /**
+         * Data Bulanan
+         */
+        $subquery = "SELECT A.tgl tgl, SUM(A.OB) ob_act, SUM(B.OB) ob_plan, SUM(A.coal) coal_act, SUM(B.coal) coal_plan, C.namasite, C.kodesite
+        FROM pma_dailyprod_tc A
+        JOIN (SELECT * FROM pma_dailyprod_plan WHERE ".$tanggal." AND kodesite = '".$site."' GROUP BY tgl) B
+        ON A.tgl = B.tgl
+        JOIN site C
+        ON A.kodesite = C.kodesite
+        WHERE ".$tanggalKedua."
+        AND A.kodesite = '".$site."'
+        AND A.pit= '".$pit."'
+        GROUP BY A.tgl";
+        $data = collect(DB::select($subquery));
+
+        /**
+         * Pit
+         */
+        $subquery = "SELECT DISTINCT ket
+        FROM pma_dailyprod_pit
+        WHERE kodesite='".$site."'
+        ORDER BY ket";
+        $pit = collect(DB::select($subquery));
+
+
+        /**
+         * Kendala
+         */
+        $subquery = "SELECT *
+        FROM pma_dailyprod_kendala
+        WHERE ".$tanggal." AND
+        kodesite='".$site."'";
+        $kendala = collect(DB::select($subquery));
+
+        $post = DB::table('pma_dailyprod_posts')->select('id')->where('kodesite', $site)->pluck('id');
+        $post = Post::find($post)->first();
+
+        return view('dashboard.show', compact('data','data_prod_ob','data_plan_ob','data_prod_coal','data_plan_coal', 'pit', 'kendala', 'post', 'site'));        
+    }
+    
+    public function show_data_filtered($site='', $pit='', $start='', $end='')
+    {
+        $bulan = Carbon::now();
+        if($start != null ){
+            $tanggal =  "TGL BETWEEN '" . $start . "' AND '" . $end . "'";
+            $tanggalKedua =  "A.TGL BETWEEN '" . $start . "' AND '" . $end . "'";    
+        }
+        else {
+            $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
+            $tanggalKedua =  "A.TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";    
+        }
+        
+        /**
+         * Overburden
+         */
         $subquery = "SELECT RIGHT(A.tgl, 2) tgl, SUM(A.OB) ob_act, SUM(B.OB) ob_plan
         FROM pma_dailyprod_tc A
         JOIN (SELECT * FROM pma_dailyprod_plan WHERE ".$tanggal." AND kodesite = '".$site."' GROUP BY tgl ORDER BY tgl) B

@@ -69,8 +69,13 @@
                 <div class="intro-y block sm:flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">Overburden</h2>
                     <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
-                        <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
-                        <input type="text" class="datepicker form-control sm:w-56 box pl-10" id="OverburdenRange">
+                        <!-- <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i> -->
+                        
+                        <div id="OverburdenRange" class="form-control box p-2">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                        </div>
+                        <!-- <input type="text" class="datepicker form-control sm:w-56 box pl-10" id="OverburdenRange"> -->
                     </div>
                 </div>
                 <div class="intro-y box p-5 mt-12 sm:mt-5">
@@ -119,8 +124,10 @@
                 <div class="intro-y block sm:flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">Coal</h2>
                     <form method="POST" action="#" class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
-                        <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i>
-                        <input type="text" class="datepicker form-control sm:w-56 box pl-10">
+                        <div id="CoalRange" class="form-control box p-2">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                        </div>
                     </form>
                 </div>
                 <div class="intro-y box p-5 mt-12 sm:mt-5">
@@ -275,8 +282,65 @@
 <!-- Chart -->
 <script>
     $(function() {
-        console.log($('#OverburdenRange').val());
+         var $j = jQuery.noConflict();
 
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+
+        // Overburden Range
+        $j('#OverburdenRange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+            'Hari Ini': [moment(), moment()],
+            'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+            '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+            'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+            'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            var awal = start.format("YYYY-MM-DD");
+            var akhir = end.format("YYYY-MM-DD");
+
+             var $i = jQuery.noConflict();
+
+            if(awal !== null && akhir !== null){
+                $i.ajax({
+                    url: '{{route('dashboard.show.filtered')}}',
+                    type: 'POST',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        start: awal,
+                        end: akhir,
+                    },
+                    dataType: 'json',
+                    success: function(response){
+                        console.log(response);
+                    },
+                })
+            }
+        });
+
+        // Coal Range
+        
+        // Overburden Range
+        $j('#CoalRange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+            'Hari Ini': [moment(), moment()],
+            'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+            '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+            'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+            'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+            console.log(start, end, label)
+        });
 
         // OVERBURDEN
         //get the OB data
@@ -382,4 +446,88 @@
 
     });
 </script>
+
+<!-- Filtering with date -->
+<!-- <script>
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+    $(document).ready(function() {
+        // Search by userid
+        $('.tbDetail').click(function() {
+            var userid = $(this).val();
+
+            if (userid >= 0) {
+
+                // AJAX POST request
+                $.ajax({
+                    url: '/tabel-mp/show',
+                    type: 'post',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        userid: userid
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        createRows(response);
+                        
+                    }
+                });
+            }
+        });
+    });
+
+    // Create table rows
+    function createRows(response) {
+        var len = 0;
+        $('#tablePersonal tbody').empty(); // Empty <tbody>
+        $('#tableKerja tbody').empty(); // Empty <tbody>
+        $('#modalImagePlaceholder div').empty(); // Empty <image>
+        $("#modalDocsPlaceholder tbody").empty();
+        $("#dataModal div").empty();
+        if (response['data'] != null) {
+            len = response['data'].length;
+        }
+
+        var field_dismiss = ['id', 'foto1', 'foto2', 'ktp', 'time', 'user', 'del', 'sertifikasi', ]
+
+        if (len > 0) {
+            for (var i = 0; i < len; i++) {
+                // difference month
+                // monthDifference(new Date(), new Date(response['data'][0].akhirpkwt)) 
+                // response['data'][0].statuskary
+                if (response['data'][0].statuskary == "PKWT") {
+                    if (monthDifference(new Date(), new Date(response['data'][0].akhirpkwt)) <= 1) {
+                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700'>" +
+                            "Kontrak Segera Habis - " + dateConverter(response['data'][0].akhirpkwt) +
+                            "</span>";
+                    } else {
+                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100'>" +
+                            "Dibawah Kontrak" +
+                            "</span>";
+                    }
+                } else if (response['data'][0].statuskary == "PKWTT") {
+                    if (monthDifference(new Date(), new Date(response['data'][0].tglpensiun)) <= 6) {
+                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700'>" +
+                            "Kontrak Segera Habis - " + dateConverter(response['data'][0].tglpensiun) +
+                            "</span>";
+                    } else {
+                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100'>" +
+                            "Dibawah Kontrak" +
+                            "</span>";
+                    }
+                }
+                $("#dataModal div").append(tr_modal);
+
+
+
+            }
+        } else {
+            var tr_str = "<tr>" +
+                "<td align='center' colspan='" + response['data'][0][value].length + "'>No record found.</td>" +
+                "</tr>";
+
+            $("#tablePersonal tbody").append(tr_str);
+        }
+    }
+</script> -->
 @endsection

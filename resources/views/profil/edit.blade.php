@@ -83,11 +83,11 @@
                     <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
                         <div class="border-2 border-dashed shadow-sm border-slate-200/60 dark:border-darkmode-400 rounded-md p-5">
                             <div class="h-40 relative image-fit cursor-pointer zoom-in mx-auto">
-                                <img id="preview-image-before-upload" class="rounded-md" alt="User Image" src="http://192.168.20.100:85/gambar/user/{{Auth::user()->foto}}">
+                                <img name="gambar" id="preview-image-before-upload" class="rounded-md" alt="User Image" src="http://192.168.20.100:85/gambar/user/{{Auth::user()->foto}}">
                             </div>
                             <div class="mx-auto cursor-pointer relative mt-5">
                                 <button type="button" class="btn btn-primary w-full">Change Photo</button>
-                                <input name="photo" type="file" class="w-full h-full top-0 left-0 absolute opacity-0">
+                                <input name="foto" type="file" class="w-full h-full top-0 left-0 absolute opacity-0">
                             </div>
                         </div>
                     </div>

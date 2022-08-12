@@ -3343,6 +3343,9 @@ select{
 .w-2\/3{
     width: 66.666667%;
 }
+.w-36{
+    width: 9rem;
+}
 .max-w-\[50\%\]{
     max-width: 50%;
 }
@@ -4050,6 +4053,9 @@ select{
 .font-extrabold{
     font-weight: 800;
 }
+.font-light{
+    font-weight: 300;
+}
 .uppercase{
     text-transform: uppercase;
 }
@@ -4165,6 +4171,10 @@ select{
 }
 .text-white\/70{
     color: rgb(255 255 255 / 0.7);
+}
+.text-gray-300{
+    --tw-text-opacity: 1;
+    color: rgb(209 213 219 / var(--tw-text-opacity));
 }
 .text-opacity-70{
     --tw-text-opacity: 0.7;

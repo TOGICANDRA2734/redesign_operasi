@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProfilController extends Controller
 {
@@ -80,11 +81,22 @@ class ProfilController extends Controller
 
         $record = User::findOrFail($id);
         
-        if($request->foto)
-        $record->update([
-            'name'              => $request->name,
-            'posisi'            => $request->posisi,
-        ]);
+        if($request->file('foto') == ''){
+            $record->update([
+                'name'              => $request->name,
+                'posisi'            => $request->posisi,
+            ]);
+        } else {
+            
+            Storage::disk('local')->delete('http://192:166.20.100').basename($record->foto);
+
+            $record->update([
+                'name'              => $request->name,
+                'posisi'            => $request->posisi,
+                'foto'            => $request->foto,
+            ]);
+        }
+
 
         if($record){
             return redirect()->route('data-prod.index')->with(['success' => 'Data Berhasil Diupdate!']);
