@@ -110,7 +110,7 @@ Route::middleware('auth')->group(function() {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('dashboard-filtered/{namasite}', [DashboardController::class, 'index_filtered'])->name('dashboard.filtered');
     Route::get('dashboard/detail/{site}', [DashboardController::class, 'show'])->name('dashboard.show');
-    Route::get('dashboard/detail_filtered/{site?}/{pit?}/{start?}/{end?}', [DashboardController::class, 'show_data'])->name('dashboard.show.filtered');
+    Route::get('dashboard/detail_filtered/', [DashboardController::class, 'show_data_filtered'])->name('dashboard.show.filtered');
 
     // Data Produksi
     Route::resource('data-prod', dataProdController::class);

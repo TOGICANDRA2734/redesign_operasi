@@ -300,7 +300,6 @@
             'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             }
         }, function(start, end, label) {
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
             var awal = start.format("YYYY-MM-DD");
             var akhir = end.format("YYYY-MM-DD");
@@ -308,22 +307,134 @@
              var $i = jQuery.noConflict();
 
             if(awal !== null && akhir !== null){
+                console.log("Haloo", awal, );
                 $i.ajax({
-                    url: '{{route('dashboard.show.filtered')}}',
-                    type: 'POST',
+                    url: '/dashboard/detail_filtered/',
+                    type: 'GET',
+                    dataType: 'json',
                     data: {
-                        _token: CSRF_TOKEN,
                         start: awal,
                         end: akhir,
                     },
-                    dataType: 'json',
                     success: function(response){
-                        console.log(response);
+                        update_data(response)
                     },
                 })
             }
-        });
 
+            
+        });
+        function update_data(response){
+            console.log(response);
+            // OVERBURDEN
+            data_detail_ob_prod[0] = response['data_detail_OB_prod'];
+            data_detail_ob_plan[0] = response['data_detail_OB_plan'];
+            
+            data_detail_coal_prod[0] = response['data_detail_coal_prod'];
+            data_detail_coal_plan[0] = response['data_detail_coal_plan'];
+
+            //get the OB data
+            var ob_prod = JSON.parse(response['chart_data_prod_ob']);
+            var ob_plan = JSON.parse(response['chart_data_plan_ob']);
+            var ctx = $("#overburden");
+
+            //Multi Chart
+            var data = {
+                labels: ob_prod.label,
+                datasets: [{
+                    type: 'bar',
+                    label: 'Overburden',
+                    data: ob_prod.data,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)'
+                }, {
+                    type: 'line',
+                    label: 'Plan',
+                    data: ob_plan.data,
+                    fill: false,
+                    borderColor: 'rgb(54, 162, 235)'
+                }]
+            };
+
+            //options
+            var options = {
+                responsive: true,
+                title: {
+                    display: true,
+                    position: "top",
+                    text: "",
+                    fontSize: 18,
+                    fontColor: "#111"
+                },
+                legend: {
+                    display: true,
+                    position: "bottom",
+                    labels: {
+                        fontColor: "#333",
+                        fontSize: 16
+                    }
+                }
+            };
+
+            //   Create Mixed Chart
+            var chart1 = new Chart(ctx, {
+                type: "bar",
+                data: data,
+                options: options
+            });
+
+            // Coal
+            //get the Coal data
+            var coal_prod = JSON.parse(response['chart_data_prod_coal']);
+            var coal_plan = JSON.parse(response['chart_data_plan_coal']);
+            var ctx = $("#coal");
+
+            //Multi Chart
+            var data = {
+                labels: coal_prod.label,
+                datasets: [{
+                    type: 'bar',
+                    label: 'Overburden',
+                    data: coal_prod.data,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)'
+                }, {
+                    type: 'line',
+                    label: 'Plan',
+                    data: coal_plan.data,
+                    fill: false,
+                    borderColor: 'rgb(54, 162, 235)'
+                }]
+            };
+
+            //options
+            var options = {
+                responsive: true,
+                title: {
+                    display: true,
+                    position: "top",
+                    text: "",
+                    fontSize: 18,
+                    fontColor: "#111"
+                },
+                legend: {
+                    display: true,
+                    position: "bottom",
+                    labels: {
+                        fontColor: "#333",
+                        fontSize: 16
+                    }
+                }
+            };
+
+            //   Create Mixed Chart
+            var chart2 = new Chart(ctx, {
+                type: "bar",
+                data: data,
+                options: options
+            });
+
+        }
         // Coal Range
         
         // Overburden Range
