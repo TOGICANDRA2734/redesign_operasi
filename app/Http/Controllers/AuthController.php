@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Request\LoginRequest;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Cache\RateLimiter;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -29,12 +31,25 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if (!Auth::attempt([
-            'username' => $request->username,
-            'password' => $request->password
-        ])) {
+        $user = User::where('username', $request->get('username'))->where('password', md5($request->password))->first();
+
+        if (!$user) {
             throw new \Exception('Wrong email or password.');
         }
+        else {
+            Auth::login($user, $request->remember_me);
+
+            return redirect()->route('dashboard');
+        }
+
+
+
+        // if (!Auth::attempt([
+        //     'username' => $request->username,
+        //     'password' => $request->password
+        // ])) {
+        //     throw new \Exception('Wrong email or password.');
+        // }
     }
 
     /**
