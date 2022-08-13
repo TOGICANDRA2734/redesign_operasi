@@ -7,7 +7,7 @@
 @section('subcontent')
 <div class="bg-gray-100 flex-1 p-6 md:mt-16 overflow-hidden">
     <!-- Title -->
-    <h1 class="font-bold text-xl">Detail Site ABK</h1>
+    <h1 class="font-bold text-xl">Detail Site </h1>
 
     <!-- carts -->
     <div class="flex flex-col mt-6">

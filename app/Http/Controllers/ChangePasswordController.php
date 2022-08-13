@@ -63,27 +63,30 @@ class ChangePasswordController extends Controller
 
     public function update(Request $request)
     {
-
-        dd($request);
         $this->validate($request,[
             'password' => ['required', Rules\Password::defaults()],
-            'new_password' => ['required', Rules\Password::defaults()],
+            'new_password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         if(md5($request->password) == Auth::user()->password){
             $user = User::findOrFail(Auth::user()->id);
             
-
             $user->update([
                 'password' => md5($request->new_password)
             ]);
 
+
             if($user){
+
                 return redirect()->route('profil.edit', Auth::user()->id)->with(['success' => 'Password berhasil diganti!']);
             } else {
+                dd($user, "Dikit lagi");
+
                 return redirect()->route('profil.edit', Auth::user()->id)->with(['error' => 'Password gagal diganti!']);
             }
         } else {
+            dd("gator");
+
             return redirect()->route('profil.edit', Auth::user()->id)->with(['error' => 'Password salah!']);
         }
     }

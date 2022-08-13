@@ -409,14 +409,8 @@ class DashboardController extends Controller
     public function show_data($site='', $pit='')
     {
         $bulan = Carbon::now();
-        if($start != null ){
-            $tanggal =  "TGL BETWEEN '" . $start . "' AND '" . $end . "'";
-            $tanggalKedua =  "A.TGL BETWEEN '" . $start . "' AND '" . $end . "'";    
-        }
-        else {
-            $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
-            $tanggalKedua =  "A.TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";    
-        }
+        $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
+        $tanggalKedua =  "A.TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";    
         
         /**
          * Overburden

@@ -181,7 +181,7 @@
                             </div>
                             <div class="mt-3 col-span-12 ">
                                 <label for="change-password-form-3" class="form-label">Konfirmasi Password Baru</label>
-                                <input name="confirm_password" id="change-password-form-3" type="password" class="form-control" placeholder="Input text">
+                                <input name="new_password_confirmation" id="change-password-form-3" type="password" class="form-control" placeholder="Input text">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-36 mt-6">Change Password</button>
