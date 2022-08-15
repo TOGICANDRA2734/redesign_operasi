@@ -210,15 +210,15 @@
                                 </td>
                                 <!-- START: Print Data Productivity -->
                                 @foreach($dp as $dpKey => $d)
-                                @if($dpKey == 'nom_unit')
-                                <td class="text-left">
-                                    {{$d}}
-                                </td>
-                                @else
-                                <td class="text-center">
-                                    {{$d}}
-                                </td>
-                                @endif
+                                    @if($dpKey == 'nom_unit')
+                                    <td class="text-left">
+                                        {{$d}}
+                                    </td>
+                                    @else
+                                    <td class="text-center">
+                                        {{$d}}
+                                    </td>
+                                    @endif
                                 @endforeach
                                 <!-- END: Print Data Productivity -->
                             </tr>
@@ -307,7 +307,6 @@
              var $i = jQuery.noConflict();
 
             if(awal !== null && akhir !== null){
-                console.log("Haloo", awal, );
                 $i.ajax({
                     url: '/dashboard/detail_filtered/',
                     type: 'GET',
@@ -327,113 +326,24 @@
         function update_data(response){
             console.log(response);
             // OVERBURDEN
-            data_detail_ob_prod[0] = response['data_detail_OB_prod'];
-            data_detail_ob_plan[0] = response['data_detail_OB_plan'];
+            var data_prod_ob = response['data_prod_ob']; 
+            var data_plan_ob = response['data_plan_ob']; 
             
-            data_detail_coal_prod[0] = response['data_detail_coal_prod'];
-            data_detail_coal_plan[0] = response['data_detail_coal_plan'];
-
-            //get the OB data
-            var ob_prod = JSON.parse(response['chart_data_prod_ob']);
-            var ob_plan = JSON.parse(response['chart_data_plan_ob']);
-            var ctx = $("#overburden");
-
-            //Multi Chart
-            var data = {
-                labels: ob_prod.label,
-                datasets: [{
-                    type: 'bar',
-                    label: 'Overburden',
-                    data: ob_prod.data,
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)'
-                }, {
-                    type: 'line',
-                    label: 'Plan',
-                    data: ob_plan.data,
-                    fill: false,
-                    borderColor: 'rgb(54, 162, 235)'
-                }]
-            };
-
-            //options
-            var options = {
-                responsive: true,
-                title: {
-                    display: true,
-                    position: "top",
-                    text: "",
-                    fontSize: 18,
-                    fontColor: "#111"
-                },
-                legend: {
-                    display: true,
-                    position: "bottom",
-                    labels: {
-                        fontColor: "#333",
-                        fontSize: 16
-                    }
-                }
-            };
-
-            //   Create Mixed Chart
-            var chart1 = new Chart(ctx, {
-                type: "bar",
-                data: data,
-                options: options
-            });
+            var data_prod_coal = response['data_prod_coal']; 
+            var data_plan_coal = response['data_plan_coal']; 
+            
+            // Overburden
+            chart1.config.data.datasets[0].data = data_prod_ob.data;
+            chart1.config.data.datasets[1].data = data_plan_ob.data;
+            chart1.config.data.labels = data_prod_ob.label;
 
             // Coal
-            //get the Coal data
-            var coal_prod = JSON.parse(response['chart_data_prod_coal']);
-            var coal_plan = JSON.parse(response['chart_data_plan_coal']);
-            var ctx = $("#coal");
+            chart2.config.data.datasets[0].data = data_prod_coal.data;
+            chart2.config.data.datasets[1].data = data_plan_coal.data;
+            chart2.config.data.labels = data_prod_coal.label;
 
-            //Multi Chart
-            var data = {
-                labels: coal_prod.label,
-                datasets: [{
-                    type: 'bar',
-                    label: 'Overburden',
-                    data: coal_prod.data,
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)'
-                }, {
-                    type: 'line',
-                    label: 'Plan',
-                    data: coal_plan.data,
-                    fill: false,
-                    borderColor: 'rgb(54, 162, 235)'
-                }]
-            };
-
-            //options
-            var options = {
-                responsive: true,
-                title: {
-                    display: true,
-                    position: "top",
-                    text: "",
-                    fontSize: 18,
-                    fontColor: "#111"
-                },
-                legend: {
-                    display: true,
-                    position: "bottom",
-                    labels: {
-                        fontColor: "#333",
-                        fontSize: 16
-                    }
-                }
-            };
-
-            //   Create Mixed Chart
-            var chart2 = new Chart(ctx, {
-                type: "bar",
-                data: data,
-                options: options
-            });
-
+            chart1.update();
+            chart2.update();
         }
         // Coal Range
         
@@ -515,7 +425,7 @@
             labels: coal_prod.label,
             datasets: [{
                 type: 'bar',
-                label: 'Overburden',
+                label: 'Coal',
                 data: coal_prod.data,
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)'
