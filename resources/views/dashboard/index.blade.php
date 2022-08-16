@@ -350,21 +350,12 @@
             $j("#coalPlan").empty();
             $j("#coalAch").empty();
 
-//             console.log(response['data_detail_OB_prod'][0].OB,
-// response['data_detail_OB_plan'][0].OB,
-// response['data_detail_OB_prod'][0].OB,
-// response['data_detail_OB_plan'][0].OB,
-// response['data_detail_coal_prod'][0].coal,
-// response['data_detail_coal_plan'][0].coal,
-// response['data_detail_coal_prod'][0].coal,
-// response['data_detail_coal_plan'][0].coal);
-
             $j("#obAct").append(addCommas(response['data_detail_OB_prod'][0].OB));
             $j("#obPlan").append(addCommas(response['data_detail_OB_plan'][0].OB));
-            $j("#obAch").append(addCommas(response['data_detail_OB_prod'][0].OB / response['data_detail_OB_plan'][0].OB) * 100);
+            $j("#obAch").append(addCommas(str(response['data_detail_OB_prod'][0].OB / response['data_detail_OB_plan'][0].OB) * 100) . '%');
             $j("#coalAct").append(addCommas(response['data_detail_coal_prod'][0].coal));
             $j("#coalPlan").append(addCommas(response['data_detail_coal_plan'][0].coal));
-            $j("#coalAch").append(addCommas(response['data_detail_coal_prod'][0].coal / response['data_detail_coal_plan'][0].coal) * 100);
+            $j("#coalAch").append(addCommas(str(response['data_detail_coal_prod'][0].coal / response['data_detail_coal_plan'][0].coal) * 100) . '%');
         }
         // Coal Range
         
@@ -488,15 +479,7 @@
 
         function addCommas(nStr)
         {
-            nStr += '';
-            x = nStr.split('.');
-            x1 = x[0];
-            x2 = x.length > 1 ? '.' + x[1] : '';
-            var rgx = /(\d+)(\d{3})/;
-            while (rgx.test(x1)) {
-                x1 = x1.replace(rgx, '$1' + ',' + '$2');
-            }
-            return x1 + x2;
+            return nStr.toFixed(2).replace(/\d(?=(\d{3})+\.)$(?=(\d{2}))/g, "$&,");
         }
 
     });
