@@ -83,6 +83,17 @@ class SideMenu
                     ],
                 ],
             ],
+            'devider',
+            'Tools' => [
+                'icon' => 'sidebar',
+                'title' => 'Tools',
+                'sub_menu' => [
+                    'transaksi-pma' => [
+                        'icon' => 'box',
+                        'title' => 'transaksi-pma',
+                    ],
+                ],
+            ],
         ];
     }
 }

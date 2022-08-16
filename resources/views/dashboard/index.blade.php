@@ -352,10 +352,10 @@
 
             $j("#obAct").append(addCommas(response['data_detail_OB_prod'][0].OB));
             $j("#obPlan").append(addCommas(response['data_detail_OB_plan'][0].OB));
-            $j("#obAch").append(addCommas(str(response['data_detail_OB_prod'][0].OB / response['data_detail_OB_plan'][0].OB) * 100) . '%');
+            $j("#obAch").append(addCommas(str(response['data_detail_OB_prod'][0].OB / response['data_detail_OB_plan'][0].OB) * 100) + '%');
             $j("#coalAct").append(addCommas(response['data_detail_coal_prod'][0].coal));
             $j("#coalPlan").append(addCommas(response['data_detail_coal_plan'][0].coal));
-            $j("#coalAch").append(addCommas(str(response['data_detail_coal_prod'][0].coal / response['data_detail_coal_plan'][0].coal) * 100) . '%');
+            $j("#coalAch").append(addCommas(str(response['data_detail_coal_prod'][0].coal / response['data_detail_coal_plan'][0].coal) * 100) + '%');
         }
         // Coal Range
         
