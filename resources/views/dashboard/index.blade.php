@@ -82,18 +82,18 @@
                     <div class="flex flex-col md:flex-row md:items-center">
                         <div class="flex">
                             <div>
-                                <div class="text-primary dark:text-slate-300 text-lg xl:text-xl font-medium">{{number_format($data_detail_OB_prod[0]->OB, 0, '.', ',')}}</div>
+                                <div id="obAct" class="text-primary dark:text-slate-300 text-lg xl:text-xl font-medium">{{number_format($data_detail_OB_prod[0]->OB, 0, '.', ',')}}</div>
                                 <div class="mt-0.5 text-slate-500">Actual</div>
                             </div>
                             <div class="w-px h-12 border border-r border-dashed border-slate-200 dark:border-darkmode-300 mx-4 xl:mx-5"></div>
                             <div>
-                                <div class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_OB_plan[0]->OB, 0, '.', ',')}}</div>
+                                <div id="obPlan" class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_OB_plan[0]->OB, 0, '.', ',')}}</div>
                                 <div class="mt-0.5 text-slate-500">Plan</div>
                             </div>
                             <div class="w-px h-12 border border-r border-dashed border-slate-200 dark:border-darkmode-300 mx-4 xl:mx-5"></div>
                             <div>
                                 @if($data_detail_OB_plan[0]->OB != 0)
-                                <div class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_OB_prod[0]->OB / $data_detail_OB_plan[0]->OB * 100)}}%</div>
+                                <div id="obAch" class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_OB_prod[0]->OB / $data_detail_OB_plan[0]->OB * 100)}}%</div>
                                 @else
                                 <div class="text-slate-500 text-lg xl:text-xl font-medium">NA</div>
                                 @endif
@@ -134,18 +134,18 @@
                     <div class="flex flex-col md:flex-row md:items-center">
                         <div class="flex">
                             <div>
-                                <div class="text-primary dark:text-slate-300 text-lg xl:text-xl font-medium">{{number_format($data_detail_coal_prod[0]->coal, 0, '.', ',')}}</div>
+                                <div id="coalAct" class="text-primary dark:text-slate-300 text-lg xl:text-xl font-medium">{{number_format($data_detail_coal_prod[0]->coal, 0, '.', ',')}}</div>
                                 <div class="mt-0.5 text-slate-500">Actual</div>
                             </div>
                             <div class="w-px h-12 border border-r border-dashed border-slate-200 dark:border-darkmode-300 mx-4 xl:mx-5"></div>
                             <div>
-                                <div class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_coal_plan[0]->coal, 0, '.', ',')}}</div>
+                                <div id="coalPlan" class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_coal_plan[0]->coal, 0, '.', ',')}}</div>
                                 <div class="mt-0.5 text-slate-500">Plan</div>
                             </div>
                             <div class="w-px h-12 border border-r border-dashed border-slate-200 dark:border-darkmode-300 mx-4 xl:mx-5"></div>
                             <div>
                                 @if($data_detail_OB_plan[0]->OB != 0)
-                                <div class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_coal_prod[0]->coal / $data_detail_coal_plan[0]->coal * 100)}}%</div>
+                                <div id="coalAch" class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_coal_prod[0]->coal / $data_detail_coal_plan[0]->coal * 100)}}%</div>
                                 @else
                                 <div class="text-slate-500 text-lg xl:text-xl font-medium">NA</div>
                                 @endif
@@ -324,7 +324,6 @@
             
         });
         function update_data(response){
-            console.log(response);
             // OVERBURDEN
             var data_prod_ob = response['data_prod_ob']; 
             var data_plan_ob = response['data_plan_ob']; 
@@ -344,6 +343,28 @@
 
             chart1.update();
             chart2.update();
+            $j("#obAct").empty();
+            $j("#obPlan").empty();
+            $j("#obAch").empty();
+            $j("#coalAct").empty();
+            $j("#coalPlan").empty();
+            $j("#coalAch").empty();
+
+//             console.log(response['data_detail_OB_prod'][0].OB,
+// response['data_detail_OB_plan'][0].OB,
+// response['data_detail_OB_prod'][0].OB,
+// response['data_detail_OB_plan'][0].OB,
+// response['data_detail_coal_prod'][0].coal,
+// response['data_detail_coal_plan'][0].coal,
+// response['data_detail_coal_prod'][0].coal,
+// response['data_detail_coal_plan'][0].coal);
+
+            $j("#obAct").append(addCommas(response['data_detail_OB_prod'][0].OB));
+            $j("#obPlan").append(addCommas(response['data_detail_OB_plan'][0].OB));
+            $j("#obAch").append(addCommas(response['data_detail_OB_prod'][0].OB / response['data_detail_OB_plan'][0].OB) * 100);
+            $j("#coalAct").append(addCommas(response['data_detail_coal_prod'][0].coal));
+            $j("#coalPlan").append(addCommas(response['data_detail_coal_plan'][0].coal));
+            $j("#coalAch").append(addCommas(response['data_detail_coal_prod'][0].coal / response['data_detail_coal_plan'][0].coal) * 100);
         }
         // Coal Range
         
@@ -465,90 +486,19 @@
             options: options
         });
 
+        function addCommas(nStr)
+        {
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+
     });
 </script>
-
-<!-- Filtering with date -->
-<!-- <script>
-    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-    $(document).ready(function() {
-        // Search by userid
-        $('.tbDetail').click(function() {
-            var userid = $(this).val();
-
-            if (userid >= 0) {
-
-                // AJAX POST request
-                $.ajax({
-                    url: '/tabel-mp/show',
-                    type: 'post',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        userid: userid
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        createRows(response);
-                        
-                    }
-                });
-            }
-        });
-    });
-
-    // Create table rows
-    function createRows(response) {
-        var len = 0;
-        $('#tablePersonal tbody').empty(); // Empty <tbody>
-        $('#tableKerja tbody').empty(); // Empty <tbody>
-        $('#modalImagePlaceholder div').empty(); // Empty <image>
-        $("#modalDocsPlaceholder tbody").empty();
-        $("#dataModal div").empty();
-        if (response['data'] != null) {
-            len = response['data'].length;
-        }
-
-        var field_dismiss = ['id', 'foto1', 'foto2', 'ktp', 'time', 'user', 'del', 'sertifikasi', ]
-
-        if (len > 0) {
-            for (var i = 0; i < len; i++) {
-                // difference month
-                // monthDifference(new Date(), new Date(response['data'][0].akhirpkwt)) 
-                // response['data'][0].statuskary
-                if (response['data'][0].statuskary == "PKWT") {
-                    if (monthDifference(new Date(), new Date(response['data'][0].akhirpkwt)) <= 1) {
-                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700'>" +
-                            "Kontrak Segera Habis - " + dateConverter(response['data'][0].akhirpkwt) +
-                            "</span>";
-                    } else {
-                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100'>" +
-                            "Dibawah Kontrak" +
-                            "</span>";
-                    }
-                } else if (response['data'][0].statuskary == "PKWTT") {
-                    if (monthDifference(new Date(), new Date(response['data'][0].tglpensiun)) <= 6) {
-                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700'>" +
-                            "Kontrak Segera Habis - " + dateConverter(response['data'][0].tglpensiun) +
-                            "</span>";
-                    } else {
-                        var tr_modal = "<span class='px-2 py-1 text-xs md:text-base font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100'>" +
-                            "Dibawah Kontrak" +
-                            "</span>";
-                    }
-                }
-                $("#dataModal div").append(tr_modal);
-
-
-
-            }
-        } else {
-            var tr_str = "<tr>" +
-                "<td align='center' colspan='" + response['data'][0][value].length + "'>No record found.</td>" +
-                "</tr>";
-
-            $("#tablePersonal tbody").append(tr_str);
-        }
-    }
-</script> -->
 @endsection
