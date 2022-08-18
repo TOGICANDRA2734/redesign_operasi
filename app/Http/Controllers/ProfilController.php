@@ -90,7 +90,7 @@ class ProfilController extends Controller
             ]);
         } else {
             
-            Storage::disk('local')->delete('http://192:166.20.100').basename($record->foto);
+            Storage::disk('local')->delete('http://172.172.55.2').basename($record->foto);
 
             $record->update([
                 'name'              => $request->name,
