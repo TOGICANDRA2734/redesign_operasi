@@ -75,7 +75,6 @@ class ProfilController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request);
         $request->validate([
             'name' => 'required',
             'posisi' => 'required'

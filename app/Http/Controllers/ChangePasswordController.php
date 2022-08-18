@@ -42,7 +42,6 @@ class ChangePasswordController extends Controller
         $foto = $request->file('foto');
         $foto->storeAs('public/images', $foto->hashName());
 
-        // dd($foto);
 
         $user =  User::create([
             'username' => $request->username,
@@ -80,12 +79,10 @@ class ChangePasswordController extends Controller
 
                 return redirect()->route('profil.edit', Auth::user()->id)->with(['success' => 'Password berhasil diganti!']);
             } else {
-                dd($user, "Dikit lagi");
 
                 return redirect()->route('profil.edit', Auth::user()->id)->with(['error' => 'Password gagal diganti!']);
             }
         } else {
-            dd("gator");
 
             return redirect()->route('profil.edit', Auth::user()->id)->with(['error' => 'Password salah!']);
         }

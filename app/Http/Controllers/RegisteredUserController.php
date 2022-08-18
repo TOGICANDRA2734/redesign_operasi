@@ -29,7 +29,6 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         
         $this->validate($request,[
             'username' => 'required|string|max:15|unique:pma_dailyprod_users',
@@ -44,7 +43,6 @@ class RegisteredUserController extends Controller
         $foto = $request->file('foto');
         $foto->storeAs('public/images', $foto->hashName());
 
-        // dd($foto);
 
         $user =  User::create([
             'username' => $request->username,

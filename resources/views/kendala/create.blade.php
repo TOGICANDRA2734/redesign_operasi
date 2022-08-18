@@ -70,7 +70,7 @@
                             Awal
                         </span>
                         <!-- <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="awal" id="awal"> -->
-                        <div class="in<span class="text-xs text-gray-500">(Bulan-Hari-Tahun)</span>put-group">
+                        <div class="input-group">
                             <div id="input-group-email" class="input-group-text">Jam</div> 
                             <input class="form-control" type="text" name="awal" id="awal">
                         </div>
