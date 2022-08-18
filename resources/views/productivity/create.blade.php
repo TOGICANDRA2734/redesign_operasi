@@ -88,17 +88,38 @@
                             <option value="{{$dnu->nom_unit}}">{{$dnu->nom_unit}}</option>
                             @endforeach
                         </select> </div>
-                    <div class="col-span-12 sm:col-span-6"> <label for="modal-form-6" class="form-label">Pit</label> <select id="modal-form-6" class="form-select" name="pit">
-                        @foreach($dataPit as $dp)
-                        <option value="{{$dp->ket}}">{{$dp->ket}}</option>
-                        @endforeach
-                    </select> </div>
-                    <div class="col-span-12 sm:col-span-6"> <label for="modal-form-2" class="form-label">Pty</label> <input id="modal-form-2" type="text" class="form-control" placeholder="" name="pty"> </div>
-                    <div class="col-span-12 sm:col-span-6"> <label for="modal-form-3" class="form-label">Jarak</label> <input id="modal-form-3" type="text" class="form-control" placeholder="" name="dist"> </div>
-                    <div class="col-span-12 sm:col-span-6"> <label for="modal-form-4" class="form-label">Ket</label> <input id="modal-form-4" type="text" class="form-control" placeholder="" name="ket"> </div>
+                    <div class="col-span-12 sm:col-span-6"> 
+                        <label for="modal-form-6" class="form-label">Pit</label> 
+                        <select id="modal-form-6" class="form-select" name="pit">
+                            @foreach($dataPit as $dp)
+                            <option value="{{$dp->ket}}">{{$dp->ket}}</option>
+                            @endforeach
+                        </select> 
+                    </div>
+                    <div class="col-span-12 sm:col-span-6"> 
+                        <label for="modal-form-2" class="form-label">Pty (bcm)</label> 
+                        <input id="modal-form-2" type="text" class="form-control" placeholder="" name="pty">
+                        @error('pty')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
+                     </div>
+                    <div class="col-span-12 sm:col-span-6"> 
+                        <label for="modal-form-3" class="form-label">Jarak (M)</label> 
+                        <input id="modal-form-3" type="text" class="form-control" placeholder="" name="dist">
+                        @error('dist')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
+                     </div>
+                    <div class="col-span-12 sm:col-span-6"> 
+                        <label for="modal-form-4" class="form-label">Ket (KR)</label> 
+                        <input id="modal-form-4" type="text" class="form-control" placeholder="" name="ket">
+                        @error('ket')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
+                     </div>
                 </div> <!-- END: Modal Body -->
                 <!-- BEGIN: Modal Footer -->
-                <div class="modal-footer"> <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancel</button> <button type="submit" class="btn btn-primary w-20">Send</button> </div> <!-- END: Modal Footer -->
+                <div class="modal-footer"> <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Batalkan</button> <button type="submit" class="btn btn-primary w-20">Kirim</button> </div> <!-- END: Modal Footer -->
                 </form>
             </div>
         </div>

@@ -80,9 +80,10 @@
                 @foreach($dataProd as $key => $dp)
                 <!-- Start PIT -->
                 <div class="col-span-2">
-                    <label class="block mt-1 text-lg uppercase underline">
+                    <label class="block mt-1 text-lg uppercase">
                         <span class="font-semibold text-gray-700 dark:text-gray-400">Pit {{$key + 1}}: {{$dp->pit}}</span>
                         <input type="hidden" name="pit_{{$key}}" value="{{$dp->pit}}">
+                        <hr class="pt-3">
                     </label>
                 </div>
                 <!-- End Pit -->
@@ -98,7 +99,10 @@
                                 <span class="font-semibold text-gray-700 dark:text-gray-400">
                                     Overburden <span class="text-xs text-gray-500">(bcm)</span>
                                 </span>
-                                <input value="{{old('ob', $dp->ob_1)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="ob_1_{{$key}}" id="ob_1_{{$key}}">
+                                <div class="input-group mt-2"> 
+                                    <input value="{{old('ob', $dp->ob_1)}}" type="number" name="ob_1_{{$key}}" id="ob_1_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
+                                    <div id="input-group-price" class="input-group-text">bcm</div>
+                                </div>
                             </label>
                             @error('ob_1')
                             <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
@@ -114,7 +118,10 @@
                                 <span class="font-semibold text-gray-700 dark:text-gray-400">
                                     Coal <span class="text-xs text-gray-500">(mt)</span>
                                 </span>
-                                <input value="{{old('coal', $dp->coal_1)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="coal_1_{{$key}}" id="coal_1_{{$key}}">
+                                <div class="input-group mt-2"> 
+                                    <input value="{{old('coal', $dp->coal_1)}}" type="number" name="coal_1_{{$key}}" id="coal_1_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
+                                    <div id="input-group-price" class="input-group-text">mt</div>
+                                </div>
                             </label>
                             @error('coal_1')
                             <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
@@ -134,7 +141,11 @@
                                 <span class="font-semibold text-gray-700 dark:text-gray-400">
                                     Overburden <span class="text-xs text-gray-500">(bcm)</span>
                                 </span>
-                                <input value="{{old('ob', $dp->ob_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="ob_2_{{$key}}" id="ob_2_{{$key}}">
+                                <!-- <input value="{{old('ob', $dp->ob_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="ob_2_{{$key}}" id="ob_2_{{$key}}"> -->
+                                <div class="input-group mt-2"> 
+                                    <input value="{{old('ob', $dp->ob_2)}}" type="number" name="ob_2_{{$key}}" id="ob_2_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
+                                    <div id="input-group-price" class="input-group-text">bcm</div>
+                                </div>
                             </label>
                             @error('ob_2')
                             <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
@@ -150,7 +161,11 @@
                                 <span class="font-semibold text-gray-700 dark:text-gray-400">
                                     Coal <span class="text-xs text-gray-500">(mt)</span>
                                 </span>
-                                <input value="{{old('coal', $dp->coal_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="coal_2_{{$key}}" id="coal_2_{{$key}}">
+                                <!-- <input value="{{old('coal', $dp->coal_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="coal_2_{{$key}}" id="coal_2_{{$key}}"> -->
+                                <div class="input-group mt-2"> 
+                                    <input value="{{old('coal', $dp->coal_2)}}" type="number" name="coal_2_{{$key}}" id="coal_2_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
+                                    <div id="input-group-price" class="input-group-text">mt</div>
+                                </div>
                             </label>
                             @error('coal_2')
                             <div class="w-full bg-red-200 shadow-sm rounded-md overflow-hidden mt-2">
@@ -165,7 +180,7 @@
                 <!-- End Shift 1 -->
                 @endforeach
 
-                <button class="col-span-2 px-10 py-4 font-medium leading-5 text-white transition-colors duration-150 bg-black border border-transparent rounded-lg active:bg-gray-600 hover:bg-gray-800 focus:outline-none focus:shadow-outline-black">
+                <button class="col-span-2 btn btn-primary">
                     Submit
                 </button>
             </form>

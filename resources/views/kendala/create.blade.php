@@ -25,9 +25,12 @@
                 <div>
                     <label class="block mt-1 text-sm">
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
-                            Tanggal <span class="text-xs text-gray-500">(Month-Day-Year)</span>
+                            Tanggal <span class="text-xs text-gray-500">(Bulan-Hari-Tahun)</span>
                         </span>
                         <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl" id="tgl">
+                        @error('tgl')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
                     </label>
                 </div>
 
@@ -40,6 +43,9 @@
                                 <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
                             @endforeach
                         </select>
+                        @error('kodesite')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
                     </label>
                 </div>
                 
@@ -52,6 +58,9 @@
                                 <option value="{{$ut->nom_unit}}">{{$ut->nom_unit}}</option>
                             @endforeach
                         </select>
+                        @error('unit')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
                     </label>
                 </div>
 
@@ -60,7 +69,14 @@
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
                             Awal
                         </span>
-                        <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="awal" id="awal">
+                        <!-- <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="awal" id="awal"> -->
+                        <div class="in<span class="text-xs text-gray-500">(Bulan-Hari-Tahun)</span>put-group">
+                            <div id="input-group-email" class="input-group-text">Jam</div> 
+                            <input class="form-control" type="text" name="awal" id="awal">
+                        </div>
+                        @error('awal')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
                     </label>
                 </div>
 
@@ -69,7 +85,14 @@
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
                             Akhir
                         </span>
-                        <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="akhir" id="akhir">
+                        <!-- <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="akhir" id="akhir"> -->
+                        <div class="input-group">
+                            <div id="input-group-email" class="input-group-text">Jam</div> 
+                            <input class="form-control" type="text" name="akhir" id="akhir">
+                        </div>
+                        @error('akhir')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
                     </label>
                 </div>
 
@@ -83,6 +106,9 @@
                             <option value="1">1</option>
                             <option value="2">2</option>
                         </select>
+                        @error('shift')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
                     </label>
                 </div>
 
@@ -92,10 +118,13 @@
                             Keterangan
                         </span>
                         <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="ket" id="ket">
+                        @error('ket')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
                     </label>
                 </div>
 
-                <button class="col-span-2 px-10 py-4 font-medium leading-5 text-white transition-colors duration-150 bg-black border border-transparent rounded-lg active:bg-gray-600 hover:bg-gray-800 focus:outline-none focus:shadow-outline-black">
+                <button class="col-span-2 btn btn-primary">
                     Submit
                 </button>
             </form>
