@@ -36,6 +36,18 @@ Route::controller(AuthController::class)->middleware('loggedin')->group(function
     Route::post('register', 'register')->name('register.store');
 });
 
+Route::middleware('role:user')->get('testing-user', function(){
+    return 'User';
+})->name('testing.user');
+
+Route::middleware('role:admin')->get('testing-admin', function(){
+    return 'admin';
+})->name('testing.admin');
+
+Route::middleware('role:super_admin')->get('testing-super-admin', function(){
+    return 'Super Admin';
+})->name('testing.super_admin');
+
 Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(PageController::class)->group(function() {

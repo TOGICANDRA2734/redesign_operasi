@@ -72,10 +72,10 @@
                     username: username,
                     password: password
                 }).then(res => {
-                    location.href = '/'
+                    console.log(res);
                 }).catch(err => {
                     $('#btn-login').html('Login')
-                    if (err.response.data.message != 'Wrong username or password.') {
+                    if (err.response.data.message != 'Wrong username or password.' && err.response.data.message != 'Akun tidak ada') {
                         for (const [key, val] of Object.entries(err.response.data.errors)) {
                             $(`#${key}`).addClass('border-danger')
                             $(`#error-${key}`).html(val)

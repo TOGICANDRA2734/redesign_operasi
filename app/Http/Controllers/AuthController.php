@@ -33,23 +33,24 @@ class AuthController extends Controller
     {
         $user = User::where('username', $request->get('username'))->where('password', md5($request->password))->first();
 
+
         if (!$user) {
-            throw new \Exception('Wrong email or password.');
+            throw new \Exception('Username dan/atau password salah');
         }
         else {
-            Auth::login($user, $request->remember_me);
-
-            return redirect()->route('dashboard');
+            if($user->hasRole('admin')){
+                Auth::login($user, $request->remember_me);
+                return 'testing.admin';
+            } else if($user->hasRole('user')){
+                Auth::login($user, $request->remember_me);
+                return 'testing.user';
+            } else if($user->hasRole('super_admin')){
+                Auth::login($user, $request->remember_me);
+                return 'testing.super_admin';
+            } else{
+                throw new \Exception('Akun tidak ada');
+            }
         }
-
-
-
-        // if (!Auth::attempt([
-        //     'username' => $request->username,
-        //     'password' => $request->password
-        // ])) {
-        //     throw new \Exception('Wrong email or password.');
-        // }
     }
 
     /**
