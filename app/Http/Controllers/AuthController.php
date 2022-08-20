@@ -35,20 +35,18 @@ class AuthController extends Controller
 
 
         if (!$user) {
-            throw new \Exception('Username dan/atau password salah');
+            throw new \Exception('Username dan/atau password salah.');
         }
         else {
             if($user->hasRole('admin')){
                 Auth::login($user, $request->remember_me);
-                return 'testing.admin';
+                return 'admin';
             } else if($user->hasRole('user')){
                 Auth::login($user, $request->remember_me);
-                return 'testing.user';
+                return 'user';
             } else if($user->hasRole('super_admin')){
                 Auth::login($user, $request->remember_me);
-                return 'testing.super_admin';
-            } else{
-                throw new \Exception('Akun tidak ada');
+                return 'super_admin';
             }
         }
     }

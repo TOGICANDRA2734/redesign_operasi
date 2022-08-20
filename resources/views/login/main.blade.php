@@ -72,10 +72,18 @@
                     username: username,
                     password: password
                 }).then(res => {
-                    console.log(res);
+                    if(res.data === 'admin'){
+                        location.href(<?php route('admin.dashboard') ?>)
+                    }
+                    else if (res.data === 'super_admin'){
+                        location.href(<?php route('super_admin.dashboard') ?>)
+                    }
+                    else if(res.data === 'user'){
+                        location.href(<?php route('user.dashboard') ?>)
+                    }
                 }).catch(err => {
                     $('#btn-login').html('Login')
-                    if (err.response.data.message != 'Wrong username or password.' && err.response.data.message != 'Akun tidak ada') {
+                    if (err.response.data.message != 'Username dan/atau password salah.') {
                         for (const [key, val] of Object.entries(err.response.data.errors)) {
                             $(`#${key}`).addClass('border-danger')
                             $(`#error-${key}`).html(val)
