@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -15,8 +15,6 @@ class DashboardController extends Controller
         /**
          * Overburden Data
          */
-
-        // dd(Auth::user()->getRoleNames()[0]);
 
         $bulan = Carbon::now();
 
@@ -150,7 +148,7 @@ class DashboardController extends Controller
 
         $dataPty = collect(DB::select($subquery));
         
-        return view('dashboard.index', compact('data_detail_OB_prod', 'data_detail_OB_plan', 'data_prod_ob', 'data_plan_ob', 'data_detail_coal_prod', 'data_detail_coal_plan', 'data_prod_coal', 'data_plan_coal', 'data', 'dataPty'));
+        return view('admin.dashboard.index', compact('data_detail_OB_prod', 'data_detail_OB_plan', 'data_prod_ob', 'data_plan_ob', 'data_detail_coal_prod', 'data_detail_coal_plan', 'data_prod_coal', 'data_plan_coal', 'data', 'dataPty'));
     }
 
     public function index_filtered($namasite)
@@ -306,7 +304,7 @@ class DashboardController extends Controller
 
         $dataPty = collect(DB::select($subquery));
         
-        return view('dashboard.index', compact('data_detail_OB_prod', 'data_detail_OB_plan', 'data_prod_ob', 'data_plan_ob', 'data_detail_coal_prod', 'data_detail_coal_plan', 'data_prod_coal', 'data_plan_coal', 'data', 'dataPty'));
+        return view('admin.dashboard.index', compact('data_detail_OB_prod', 'data_detail_OB_plan', 'data_prod_ob', 'data_plan_ob', 'data_detail_coal_prod', 'data_detail_coal_plan', 'data_prod_coal', 'data_plan_coal', 'data', 'dataPty'));
     }
 
     public function show($site)
@@ -406,7 +404,7 @@ class DashboardController extends Controller
         $post = DB::table('pma_dailyprod_posts')->select('id')->where('kodesite', $site)->pluck('id');
         $post = Post::find($post)->first();
 
-        return view('dashboard.show', compact('data','data_prod_ob','data_plan_ob','data_prod_coal','data_plan_coal', 'pit', 'kendala', 'post', 'site'));
+        return view('admin.dashboard.show', compact('data','data_prod_ob','data_plan_ob','data_prod_coal','data_plan_coal', 'pit', 'kendala', 'post', 'site'));
     }
 
     public function show_data($site='', $pit='')
@@ -508,7 +506,7 @@ class DashboardController extends Controller
         $post = DB::table('pma_dailyprod_posts')->select('id')->where('kodesite', $site)->pluck('id');
         $post = Post::find($post)->first();
 
-        return view('dashboard.show', compact('data','data_prod_ob','data_plan_ob','data_prod_coal','data_plan_coal', 'pit', 'kendala', 'post', 'site'));        
+        return view('admin.dashboard.show', compact('data','data_prod_ob','data_plan_ob','data_prod_coal','data_plan_coal', 'pit', 'kendala', 'post', 'site'));        
     }
     
     public function show_data_filtered(Request $request)

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -15,8 +14,6 @@ class DashboardController extends Controller
         /**
          * Overburden Data
          */
-
-        // dd(Auth::user()->getRoleNames()[0]);
 
         $bulan = Carbon::now();
 

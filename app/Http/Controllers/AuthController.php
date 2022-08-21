@@ -31,24 +31,28 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
         $user = User::where('username', $request->get('username'))->where('password', md5($request->password))->first();
 
-
-        if (!$user) {
-            throw new \Exception('Username dan/atau password salah');
-        }
-        else {
+        if($user) {
             if($user->hasRole('admin')){
                 Auth::login($user, $request->remember_me);
-                return 'testing.admin';
+                // return to admin page
+                return redirect()->route('admin.dashboard');
             } else if($user->hasRole('user')){
                 Auth::login($user, $request->remember_me);
-                return 'testing.user';
+                // return to user page
+                // return 'testing.user';
+                return redirect()->route('dashboard');
             } else if($user->hasRole('super_admin')){
                 Auth::login($user, $request->remember_me);
-                return 'testing.super_admin';
-            } else{
-                throw new \Exception('Akun tidak ada');
+                // return to super admin page
+                // return 'testing.super_admin';
+                return redirect()->route('dashboard');
             }
         }
     }

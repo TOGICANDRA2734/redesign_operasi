@@ -5,7 +5,11 @@ namespace App\Http\View\Composers;
 use Illuminate\View\View;
 use App\Main\TopMenu;
 use App\Main\SideMenu;
+use App\Main\SideMenuAdmin;
+use App\Main\SideMenuSuperAdmin;
+use App\Main\SideMenuUser;
 use App\Main\SimpleMenu;
+use Illuminate\Support\Facades\Auth;
 
 class MenuComposer
 {
@@ -23,7 +27,17 @@ class MenuComposer
             $activeMenu = $this->activeMenu($pageName, $layout);
 
             $view->with('top_menu', TopMenu::menu());
-            $view->with('side_menu', SideMenu::menu());
+            // $view->with('side_menu', SideMenu::menu());
+            if(!Auth::check() || Auth::user()->getRoleNames()[0] == 'super_admin'){
+                $view->with('side_menu', SideMenuSuperAdmin::menu());
+            } else if (!Auth::check() || Auth::user()->getRoleNames()[0] == 'admin') {
+                $view->with('side_menu', SideMenuAdmin::menu());
+            } else if (!Auth::check() || Auth::user()->getRoleNames()[0] == 'user') {
+                $view->with('side_menu', SideMenuUser::menu());
+            } else {
+                // $view->with('side_menu', SideMenu::menu());
+            }
+
             $view->with('simple_menu', SimpleMenu::menu());
             $view->with('first_level_active_index', $activeMenu['first_level_active_index']);
             $view->with('second_level_active_index', $activeMenu['second_level_active_index']);
