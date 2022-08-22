@@ -15,7 +15,7 @@ class SideMenuUser
         return [
             'dashboard' => [
                 'icon' => 'home',
-                'route_name' => 'dashboard',
+                'route_name' => 'user.dashboard',
                 'params' => [
                     'layout' => 'side-menu'
                 ],
@@ -29,7 +29,7 @@ class SideMenuUser
                     'laporan-actual' => [
                         'icon' => 'box',
                         'title' => 'Laporan Actual',
-                        'route_name' => 'data-prod.report',
+                        'route_name' => 'user.data-prod.report',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -37,7 +37,7 @@ class SideMenuUser
                     'laporan-productivity' => [
                         'icon' => 'box',
                         'title' => 'Laporan Productivity',
-                        'route_name' => 'productivity.index',
+                        'route_name' => 'user.productivity.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -45,7 +45,7 @@ class SideMenuUser
                     'laporan-kendala' => [
                         'icon' => 'box',
                         'title' => 'Laporan Kendala',
-                        'route_name' => 'kendala.index',
+                        'route_name' => 'user.kendala.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -60,7 +60,7 @@ class SideMenuUser
                     'transaksi-pma' => [
                         'icon' => 'box',
                         'title' => 'Transaksi PMA',
-                        'route_name' => 'transferPma.index',
+                        'route_name' => 'user.transferPma.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],

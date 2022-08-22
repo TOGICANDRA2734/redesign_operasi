@@ -15,7 +15,7 @@ class SideMenuSuperAdmin
         return [
             'dashboard' => [
                 'icon' => 'home',
-                'route_name' => 'dashboard',
+                'route_name' => 'super_admin.dashboard',
                 'params' => [
                     'layout' => 'side-menu'
                 ],
@@ -32,11 +32,11 @@ class SideMenuSuperAdmin
                         'params' => [
                             'layout' => 'side-menu'
                         ],
-                        'route_name' => 'data-prod.index',
+                        'route_name' => 'super_admin.data-prod.index',
                     ],
                     'transaksi-produksi' => [
                         'icon' => 'inbox',
-                        'route_name' => 'productivity.create',
+                        'route_name' => 'super_admin.productivity.create',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -44,7 +44,7 @@ class SideMenuSuperAdmin
                     ],
                     'transaksi-kendala' => [
                         'icon' => 'inbox',
-                        'route_name' => 'kendala.create',
+                        'route_name' => 'super_admin.kendala.create',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -60,7 +60,7 @@ class SideMenuSuperAdmin
                     'laporan-actual' => [
                         'icon' => 'box',
                         'title' => 'Laporan Actual',
-                        'route_name' => 'data-prod.report',
+                        'route_name' => 'super_admin.data-prod.report',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -68,7 +68,7 @@ class SideMenuSuperAdmin
                     'laporan-productivity' => [
                         'icon' => 'box',
                         'title' => 'Laporan Productivity',
-                        'route_name' => 'productivity.index',
+                        'route_name' => 'super_admin.productivity.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -76,7 +76,7 @@ class SideMenuSuperAdmin
                     'laporan-kendala' => [
                         'icon' => 'box',
                         'title' => 'Laporan Kendala',
-                        'route_name' => 'kendala.index',
+                        'route_name' => 'super_admin.kendala.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -91,7 +91,7 @@ class SideMenuSuperAdmin
                     'transaksi-pma' => [
                         'icon' => 'box',
                         'title' => 'Transaksi PMA',
-                        'route_name' => 'transferPma.index',
+                        'route_name' => 'super_admin.transferPma.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -99,7 +99,7 @@ class SideMenuSuperAdmin
                     'admin-transaksi-pma' => [
                         'icon' => 'box',
                         'title' => 'Admin PMA',
-                        'route_name' => 'adminTransaksiPma.index',
+                        'route_name' => 'super_admin.adminTransaksiPma.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],

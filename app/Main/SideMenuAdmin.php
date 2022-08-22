@@ -91,7 +91,7 @@ class SideMenuAdmin
                     'transaksi-pma' => [
                         'icon' => 'box',
                         'title' => 'Transaksi PMA',
-                        'route_name' => 'transferPma.index',
+                        'route_name' => 'admin.transferPma.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],

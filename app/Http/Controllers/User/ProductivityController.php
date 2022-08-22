@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Models\Productivity;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
