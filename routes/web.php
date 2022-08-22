@@ -13,6 +13,8 @@ use App\Http\Controllers\ProductivityController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\TransferController;
+use App\Http\Controllers\UploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -156,4 +158,9 @@ Route::middleware('auth')->group(function() {
     
     // Search
     Route::post('search', [SearchController::class, 'index'])->name('search.index');
+
+    // Transfer PMA
+    Route::get('transfer-pma', [TransferController::class, 'index'])->name('transferPma.index');
+    Route::post('transfer-pma', [TransferController::class, 'store'])->name('transferPma.store');
+    Route::post('transfer-pma-upload',  [UploadController::class, 'store'])->name('upload.store');
 });
