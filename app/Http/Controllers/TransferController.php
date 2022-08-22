@@ -65,10 +65,10 @@ class TransferController extends Controller
         // dd($record);
 
         if($record){
-            return redirect()->route('adminTransaksiPma.index')->with(['success' => 'Data Berhasil Diverifikasi!']);
+            return redirect()->route('super_admin.adminTransaksiPma.index')->with(['success' => 'Data Berhasil Diverifikasi!']);
         }
         else{
-            return redirect()->route('adminTransaksiPma.index')->with(['error' => 'Data Gagal Diverifikasi!']);
+            return redirect()->route('super_admin.adminTransaksiPma.index')->with(['error' => 'Data Gagal Diverifikasi!']);
         }
     }
     

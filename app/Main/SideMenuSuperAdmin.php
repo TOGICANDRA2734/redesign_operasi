@@ -96,6 +96,21 @@ class SideMenuSuperAdmin
                             'layout' => 'side-menu'
                         ],
                     ],
+                    'admin-transaksi-pma' => [
+                        'icon' => 'box',
+                        'title' => 'Admin PMA',
+                        'route_name' => 'adminTransaksiPma.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'log-data' => [
+                        'icon' => 'box',
+                        'title' => 'Log Data User',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
                 ],
             ],
         ];
