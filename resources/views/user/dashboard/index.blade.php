@@ -26,11 +26,11 @@
                                 <div class="box p-5">
                                     <div class="flex">
                                         <div class="flex">
-                                            <img class="w-8 h-8" src="http://172.172.55.2/gambar/logo/{{$dt->gambar}}" alt="Icon Cuaca">
+                                            <img class="w-8 h-8" src="http://ptrci.co.id/gambar/logo/{{$dt->gambar}}" alt="Icon Cuaca">
                                             <div class="text-lg font-medium leading-8 ml-2">{{$dt->namasite}}</div>
                                         </div>
                                         <div class="ml-auto">
-                                            <img class="w-8 h-8" src="http://172.172.55.2/pma_cuaca/{{$dt->icon}}" alt="Icon Cuaca">
+                                            <img class="w-8 h-8" src="http://ptrci.co.id/pma_cuaca/{{$dt->icon}}" alt="Icon Cuaca">
                                         </div>
                                     </div>
                                     <div>

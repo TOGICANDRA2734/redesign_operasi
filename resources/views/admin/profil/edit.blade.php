@@ -14,7 +14,7 @@
         <div class="intro-y box mt-5">
             <div class="relative flex items-center p-5">
                 <div class="w-12 h-12 image-fit">
-                    <img alt="User Image" class="rounded-full" src="http://172.172.55.2/gambar/user/{{Auth::user()->foto}}">
+                    <img alt="User Image" class="rounded-full" src="http://ptrci.co.id/gambar/user/{{Auth::user()->foto}}">
                 </div>
                 <div class="ml-4 mr-auto">
                     <div class="font-medium text-base">{{Auth::user()->name}} <span class="text-gray-300 opacity-50 text-sm font-light">{{Auth::user()->username}}</span></div>
@@ -83,7 +83,7 @@
                     <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
                         <div class="border-2 border-dashed shadow-sm border-slate-200/60 dark:border-darkmode-400 rounded-md p-5">
                             <div class="h-40 relative image-fit cursor-pointer zoom-in mx-auto">
-                                <img name="gambar" id="preview-image-before-upload" class="rounded-md" alt="User Image" src="http://172.172.55.2/gambar/user/{{Auth::user()->foto}}">
+                                <img name="gambar" id="preview-image-before-upload" class="rounded-md" alt="User Image" src="http://ptrci.co.id/gambar/user/{{Auth::user()->foto}}">
                             </div>
                             <div class="mx-auto cursor-pointer relative mt-5">
                                 <button type="button" class="btn btn-primary w-full">Change Photo</button>
