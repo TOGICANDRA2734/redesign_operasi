@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminTransaksiPmaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChangePasswordController;
@@ -162,5 +163,7 @@ Route::middleware('auth')->group(function() {
     // Transfer PMA
     Route::get('transfer-pma', [TransferController::class, 'index'])->name('transferPma.index');
     Route::post('transfer-pma', [TransferController::class, 'store'])->name('transferPma.store');
+    Route::put('transfer-pma', [TransferController::class, 'update'])->name('transferPma.update');
     Route::post('transfer-pma-upload',  [UploadController::class, 'store'])->name('upload.store');
+    Route::get('admin-transfer-pma',  [AdminTransaksiPmaController::class, 'index'])->name('adminTransaksiPma.index');
 });

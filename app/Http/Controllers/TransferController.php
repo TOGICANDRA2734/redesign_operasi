@@ -52,5 +52,24 @@ class TransferController extends Controller
             return redirect()->route('transferPma.index')->with(['error' => 'Data Gagal Ditambah!']);
         }
     }
+
+    public function update(Request $request)
+    {
+        $record = FilePMA::findOrFail($request->idVerif);
+
+        $record->update([
+            'sv' => 1,
+            'tgl_verifikasi' => Carbon::now(),
+        ]);
+
+        // dd($record);
+
+        if($record){
+            return redirect()->route('adminTransaksiPma.index')->with(['success' => 'Data Berhasil Diverifikasi!']);
+        }
+        else{
+            return redirect()->route('adminTransaksiPma.index')->with(['error' => 'Data Gagal Diverifikasi!']);
+        }
+    }
     
 }

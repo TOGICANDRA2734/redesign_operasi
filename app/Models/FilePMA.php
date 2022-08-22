@@ -9,7 +9,7 @@ class FilePMA extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tgl', 'waktu', 'file', 'status_verifikasi', 'kodesite'];
+    protected $fillable = ['tgl', 'waktu', 'file', 'sv', 'tgl_verifikasi', 'kodesite'];
     protected $table = 'transfer_file_pma';
     public $timestamps=false;
 }
