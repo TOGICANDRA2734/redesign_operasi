@@ -47,12 +47,12 @@ class AuthController extends Controller
                 Auth::login($user, $request->remember_me);
                 // return to user page
                 // return 'testing.user';
-                return redirect()->route('dashboard');
+                return redirect()->route('user.dashboard');
             } else if($user->hasRole('super_admin')){
                 Auth::login($user, $request->remember_me);
                 // return to super admin page
                 // return 'testing.super_admin';
-                return redirect()->route('dashboard');
+                return redirect()->route('super_admin.dashboard');
             }
         }
     }

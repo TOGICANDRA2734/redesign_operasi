@@ -148,8 +148,8 @@ class DashboardController extends Controller
         GROUP BY a.kodesite, nom_unit,TYPE
         ORDER BY b.id, nom_unit";
 
-        $dataPty = collect(DB::select($subquery));
-        
+        $dataPty = collect(DB::select($subquery))->paginate(10);
+
         return view('dashboard.index', compact('data_detail_OB_prod', 'data_detail_OB_plan', 'data_prod_ob', 'data_plan_ob', 'data_detail_coal_prod', 'data_detail_coal_plan', 'data_prod_coal', 'data_plan_coal', 'data', 'dataPty'));
     }
 
