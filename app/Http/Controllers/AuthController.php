@@ -54,6 +54,8 @@ class AuthController extends Controller
                 // return 'testing.super_admin';
                 return redirect()->route('super_admin.dashboard');
             }
+        } else {
+            return redirect()->route('login.index')->with(['error' => 'Username dan/atau password salah!']);
         }
     }
 

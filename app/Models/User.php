@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
     use HasRoles;
-    protected $table = 'pma_dailyprod_users';
+    protected $table = 'user';
     public $timestamps = false;
 
     /**
