@@ -90,7 +90,7 @@ class SideMenuAdmin
                 'sub_menu' => [
                     'transaksi-pma' => [
                         'icon' => 'box',
-                        'title' => 'Transaksi PMA',
+                        'title' => 'Kirim Data PMA',
                         'route_name' => 'admin.transferPma.index',
                         'params' => [
                             'layout' => 'side-menu'

@@ -120,7 +120,7 @@
 @endsection
 
 @section('script')
-    <script src="{{ mix('dist/js/ckeditor-classic.js') }}"></script>
+    <script src="{{ asset('dist/js/ckeditor-classic.js') }}"></script>
     <script>
         const inputElement = document.querySelector('input[id="file_pma"]');
         const pond = FilePond.create(inputElement);
