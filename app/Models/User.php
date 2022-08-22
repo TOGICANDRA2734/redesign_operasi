@@ -55,10 +55,10 @@ class User extends Authenticatable
      */
     public function getPhotoAttribute()
     {
-        if ($this->foto !== null) {
+        if ($this->foto !== 'none') {
             return url('http://ptrci.co.id/gambar/user/' . $this->foto);
         } else {
-            return url('https://eu.ui-avatars.com/api/?name='.$this->name.'&background=0D8ABC&color=fff');
+            return url('https://eu.ui-avatars.com/api/?name="'.$this->name.'"&background=0D8ABC&color=fff');
         }
     }
 }
