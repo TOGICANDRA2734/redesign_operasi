@@ -29,13 +29,13 @@
                     <h2 class="intro-x font-bold text-2xl xl:text-3xl text-center xl:text-left">Masuk</h2>
                     <div class="intro-x mt-8">
                         <form id="login-form">
-                            <input id="username" name="username" type="text" class="intro-x login__input form-control py-3 px-4 block" placeholder="username" value="candra_togi">
+                            <input id="username" name="username" type="text" class="intro-x login__input form-control py-3 px-4 block" placeholder="username">
                             @error('username')
                             <div id="error-email" class="login__input-error text-danger mt-2">
                                 {{$message}}
                             </div>
                             @enderror
-                            <input id="password" name="password" type="password" class="intro-x login__input form-control py-3 px-4 block mt-4" placeholder="Password" value="123456789">
+                            <input id="password" name="password" type="password" class="intro-x login__input form-control py-3 px-4 block mt-4" placeholder="Password">
                             @error('password')
                             <div id="error-password" class="login__input-error text-danger mt-2">
                                 {{$message}}
