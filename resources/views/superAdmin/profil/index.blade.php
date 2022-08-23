@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="ml-5">
-                    <div class="w-24 sm:w-40 truncate sm:whitespace-normal font-medium text-lg">{{ Auth::user()->name }}</div>
+                    <div class="w-24 sm:w-40 truncate sm:whitespace-normal font-medium text-lg">{{ Auth::user()->nama }}</div>
                     <div class="text-slate-500">{{ Auth::user()->posisi }}</div>
                 </div>
             </div>

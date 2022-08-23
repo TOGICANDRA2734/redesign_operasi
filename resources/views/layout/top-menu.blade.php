@@ -92,7 +92,7 @@
                     <ul class="dropdown-content bg-primary/80 before:block before:absolute before:bg-black before:inset-0 before:rounded-md before:z-[-1] text-white">
                         <li class="p-2">
                             <a href="{{profil.index}}">
-                                <div class="font-medium">{{Auth::user()->name}}</div>
+                                <div class="font-medium">{{Auth::user()->nama}}</div>
                                 <div class="text-xs text-white/60 mt-0.5 dark:text-slate-500">{{ $fakers[0]['jobs'][0] }}</div>
                             </a>
                         </li>

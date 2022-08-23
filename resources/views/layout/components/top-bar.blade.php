@@ -29,7 +29,7 @@
             <ul class="dropdown-content bg-primary text-white">
                 <li class="p-2 hover:bg-white/5">
                     <a href="{{route('profil.index')}}">
-                        <div class="font-medium">{{ Auth::user()->name }}</div>
+                        <div class="font-medium">{{ Auth::user()->nama }}</div>
                         <div class="text-xs text-white/70 mt-0.5 dark:text-slate-500">{{Auth::user()->posisi}}</div>
                     </a>
                 </li>
