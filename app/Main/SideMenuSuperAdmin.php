@@ -113,6 +113,21 @@ class SideMenuSuperAdmin
                     ],
                 ],
             ],
+            'devider',
+            'Status Breakdown' => [
+                'icon' => 'sidebar',
+                'title' => 'Plant',
+                'sub_menu' => [
+                    'breakdown-harian' => [
+                        'icon' => 'box',
+                        'title' => 'Status BD Harian',
+                        'route_name' => 'super_admin.bd-harian.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 }

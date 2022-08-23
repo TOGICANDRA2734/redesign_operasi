@@ -21,7 +21,10 @@ use App\Http\Controllers\AdminTransaksiPmaController;
 use App\Http\Controllers\Admin\dataProdController as Admin_dataProdController;
 use App\Http\Controllers\Admin\KendalaController as Admin_KendalaController;
 use App\Http\Controllers\Admin\ProductivityController as Admin_ProductivityController;
-
+use App\Http\Controllers\BDDokController;
+use App\Http\Controllers\BDHarianController;
+use App\Http\Controllers\POController;
+use App\Http\Controllers\POTransaksiController;
 // User
 use App\Http\Controllers\User\dataProdController as User_dataProdController;
 use App\Http\Controllers\User\KendalaController as User_KendalaController;
@@ -133,6 +136,21 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::put('transfer-pma', [TransferController::class, 'update'])->name('transferPma.update');
         Route::post('transfer-pma-upload',  [UploadController::class, 'store'])->name('upload.store');
         Route::get('admin-transfer-pma',  [AdminTransaksiPmaController::class, 'index'])->name('adminTransaksiPma.index');
+
+        // Status Breakdown
+        Route::resource('bd-harian', BDHarianController::class);
+        Route::post('bd-harian/delete/{id}', [BDHarianController::class, 'deleteData'])->name('bd-harian.delete');
+        Route::post('bd-harian-dok/delete/{id}', [BDDokController::class, 'deleteData'])->name('bd-harian-dok.delete');
+        Route::get('bd-harian-detail/{bd_harian}', [BDHarianController::class, 'detail'])->name('bd-harian-detail.index');
+        Route::resource('bd-harian-dok', BDDokController::class);
+
+        // PO
+        Route::resource('po-harian', POController::class);
+        Route::post('po-harian/delete/{id}', [POController::class, 'deleteData'])->name('po-harian.delete');
+
+        // PO Transaksi 
+        Route::resource('po-transaksi-harian', POTransaksiController::class);
+        Route::post('po-transaksi-harian/delete/{id}', [POTransaksiController::class, 'deleteData'])->name('po-transaksi-harian.delete');
     });
 });
 
