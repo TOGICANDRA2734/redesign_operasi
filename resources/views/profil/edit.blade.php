@@ -101,56 +101,63 @@
                 <h2 class="font-medium text-base mr-auto">Tambahkan Akun</h2>
             </div>
             <div class="p-5">
-                <div class="flex flex-col-reverse xl:flex-row flex-col">
+                <div class="flex flex-col-reverse xl:flex-row">
                     <form action="{{route('register.store')}}" method="POST" enctype="multipart/form-data" class="flex-1 mt-6 xl:mt-0">
                         <div class="grid grid-cols-12 gap-x-5">
                             @csrf
+
+                            <!-- Left Sided Content -->
                             <div class="col-span-12 2xl:col-span-6">
                                 <div class="">
                                     <label for="update-profile-form-1" class="form-label">Foto</label>
                                     <input name="foto" id="update-profile-form-1" type="file" class="form-control p-1 border" placeholder="Input text">
                                 </div>
-                                <div class="">
+                                <div class="mt-3">
                                     <label for="update-profile-form-1" class="form-label">Username</label>
                                     <input name="username" id="update-profile-form-1" type="text" class="form-control" placeholder="Input text">
-                                </div>  
-                            </div>
-                            <div class="col-span-12 2xl:col-span-6">
+                                </div>
                                 <div class="mt-3">
+                                    <label for="update-profile-form-1" class="form-label">Site</label>
+                                    <select name="kodesite" id="update-profile-form-1" class="form-control" placeholder="Input text">
+                                        <option disabled selected value="" class="form-control">Pilih</option>
+                                        @foreach($newSite as $st)
+                                        <option value="{{$st->kodesite}}" class="form-control">{{$st->namasite}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mt-3">
+                                    <label for="update-profile-form-1" class="form-label">Role (Peran)</label>
+                                    <select name="role" id="update-profile-form-1" class="form-control" placeholder="Input text">
+                                        <option disabled selected value="" class="form-control">Pilih</option>
+                                        @foreach($roles as $rl)
+                                        <option value="{{$rl->name}}" class="form-control">{{$rl->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- End Left Sided Content -->
+
+                            <!-- Right Sided Content -->
+                            <div class="col-span-12 2xl:col-span-6">
+                                <div class="">
                                     <label for="update-profile-form-1" class="form-label">Nama</label>
                                     <input name="name" id="update-profile-form-1" type="text" class="form-control" placeholder="Input text">
                                 </div>
-                                <div class="">
+                                <div class="mt-3">
                                     <label for="update-profile-form-1" class="form-label">Password</label>
                                     <input name="password" id="update-profile-form-1" type="password" class="form-control" placeholder="Input text">
                                 </div>
-                            </div>
-                            <div class="col-span-12 2xl:col-span-6">
                                 <div class="mt-3">
-                                    <div>
-                                        <label for="update-profile-form-1" class="form-label">Site</label>
-                                        <select name="kodesite" id="update-profile-form-1"  class="form-control" placeholder="Input text">
-                                            <option disabled selected value="" class="form-control">Pilih</option>
-                                            @foreach($newSite as $st)
-                                            <option value="{{$st->kodesite}}" class="form-control">{{$st->namasite}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    <label for="update-profile-form-1" class="form-label">Posisi</label>
+                                    <select name="posisi" id="update-profile-form-1" class="form-control" placeholder="Input text">
+                                        <option disabled selected value="" class="form-control">Pilih</option>
+                                        @foreach($posisi as $st)
+                                        <option value="{{$st->jabatan}}" class="form-control">{{$st->jabatan}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-                            <div class="col-span-12 2xl:col-span-6">
-                            <div class="mt-3">
-                                    <div>
-                                        <label for="update-profile-form-1" class="form-label">Posisi</label>
-                                        <select name="posisi" id="update-profile-form-1"  class="form-control" placeholder="Input text">
-                                            <option disabled selected value="" class="form-control">Pilih</option>
-                                            @foreach($posisi as $st)
-                                            <option value="{{$st->jabatan}}" class="form-control">{{$st->jabatan}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- End Right Sided Content -->
                         </div>
                         <button type="submit" class="btn btn-primary w-20 mt-6">Save</button>
                     </form>
@@ -164,7 +171,7 @@
                 <h2 class="font-medium text-base mr-auto">Ubah Password</h2>
             </div>
             <div class="p-5">
-                <div class="flex flex-col-reverse xl:flex-row flex-col">
+                <div class="flex flex-col-reverse xl:flex-row">
                     <form action="{{route('change-password.update')}}" method="POST" class="flex-1 mt-6 xl:mt-0">
                         @csrf
                         @method('PUT')
@@ -192,18 +199,18 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function (e) {
-        $('#photo').change(function(){
-                    
+    $(document).ready(function(e) {
+        $('#photo').change(function() {
+
             let reader = new FileReader();
-        
-            reader.onload = (e) => { 
-        
-                $('#preview-image-before-upload').attr('src', e.target.result); 
+
+            reader.onload = (e) => {
+
+                $('#preview-image-before-upload').attr('src', e.target.result);
             }
-        
-            reader.readAsDataURL(this.files[0]); 
-        
+
+            reader.readAsDataURL(this.files[0]);
+
         });
     });
 </script>

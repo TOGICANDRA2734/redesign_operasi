@@ -17,7 +17,7 @@
                     <img alt="User Image" class="rounded-full" src="{{Auth::user()->getPhotoAttribute()}}">
                 </div>
                 <div class="ml-4 mr-auto">
-                    <div class="font-medium text-base">{{Auth::user()->nama}} <span class="text-gray-300 opacity-50 text-sm font-light">{{Auth::user()->username}}</span></div>
+                    <div class="font-medium text-base">{{Auth::user()->name}} <span class="text-gray-300 opacity-50 text-sm font-light">{{Auth::user()->username}}</span></div>
                     <div class="text-slate-500">{{Auth::user()->posisi}}</div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="mt-3">
                                     <label for="update-profile-form-1" class="form-label">Nama</label>
-                                    <input id="update-profile-form-1" name="name" type="text" class="form-control" placeholder="Input text" value="{{ Auth::user()->nama}}">
+                                    <input id="update-profile-form-1" name="name" type="text" class="form-control" placeholder="Input text" value="{{ Auth::user()->name}}">
                                 </div>
                             </div>
                             <div class="col-span-12 2xl:col-span-6">

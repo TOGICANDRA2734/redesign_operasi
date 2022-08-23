@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
 
+use function PHPUnit\Framework\isNull;
+
 class RegisteredUserController extends Controller
 {
     /**
@@ -29,29 +31,40 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        
         $this->validate($request,[
             'username' => 'required|string|max:15|unique:pma_dailyprod_users',
             'name' => 'required|string|max:50',
             'posisi' => 'required|string|max:50',
-            'foto' => 'required|max:2000',
+            'foto' => 'max:2000',
             'kodesite' => 'required|string|max:1',
+            'role' => 'required',
             'password' => ['required', Rules\Password::defaults()],
         ]);
         
         // Store image
-        $foto = $request->file('foto');
-        $foto->storeAs('public/images', $foto->hashName());
+        if(!isNull($request->foto)){
+            $foto = $request->file('foto');
+            $foto->storeAs('public/images', $foto->hashName());    
 
+            $user =  User::create([
+                'username' => $request->username,
+                'nama' => $request->name,
+                'posisi' => $request->posisi,
+                'foto' => $foto->hashName(),
+                'kodesite' => $request->kodesite,
+                'password' => md5($request->password),
+            ]);    
+        } else {
+            $user =  User::create([
+                'username' => $request->username,
+                'nama' => $request->name,
+                'posisi' => $request->posisi,
+                'kodesite' => $request->kodesite,
+                'password' => md5($request->password),
+            ]);
+        }
 
-        $user =  User::create([
-            'username' => $request->username,
-            'name' => $request->name,
-            'posisi' => $request->posisi,
-            'foto' => $foto->hashName(),
-            'kodesite' => $request->kodesite,
-            'password' => md5($request->password),
-        ]);
+        $user->assignRole($request->role);
 
         if($user){
             return redirect()->route('profil.edit', Auth::user()->id)->with(['success' => 'Data pengguna berhasil ditambahkan!']);

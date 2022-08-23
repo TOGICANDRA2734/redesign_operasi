@@ -63,7 +63,8 @@ class ProfilController extends Controller
         $site = DB::table('site')->select()->where('kodesite', '=', Auth::user()->kodesite)->get();
         $newSite = DB::table('site')->select('kodesite', 'namasite')->where('status', '=', 1)->orderBy('namasite')->get();
         $posisi = DB::table('mp_biodata')->select(DB::raw("distinct jabatan"))->whereNotNull('jabatan')->where('jabatan', '<>', '')->where('jabatan', '<>', '-')->orderBy('jabatan')->get();
-        return view('profil.edit', compact('site', 'newSite', 'posisi'));
+        $roles = DB::table('roles')->select('name', 'id')->get();
+        return view('profil.edit', compact('site', 'newSite', 'posisi', 'roles'));
     }
 
     /**
