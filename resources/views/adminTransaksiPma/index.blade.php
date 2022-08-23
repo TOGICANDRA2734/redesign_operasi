@@ -60,7 +60,7 @@
                                     @if($dt->sv!=1)
                                         <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> {{$dt->sv==2 ? 'Ditolak' : 'Menunggu Verifikasi' }} 
                                     @else
-                                        <a href="{{Storage::url('file/'.$dt->file)}}" class="flex justify-center items-center">
+                                        <a href="{{'http://ptrci.co.id/datacenter/public/' . Storage::url('file/'.$dt->file)}}" class="flex justify-center items-center">
                                             <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Terverifikasi 
                                         </a>
                                     @endif
