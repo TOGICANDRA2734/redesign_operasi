@@ -28,7 +28,8 @@ class KendalaController extends Controller
         $subquery = "SELECT *
         FROM pma_dailyprod_kendala
         WHERE ".$tanggal." AND
-        kodesite='".Auth::user()->kodesite."'";
+        kodesite='".Auth::user()->kodesite."'
+        ORDER BY tgl DESC";
 
         $kendala = collect(DB::select($subquery));
 

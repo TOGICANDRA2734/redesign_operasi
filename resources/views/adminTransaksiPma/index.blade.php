@@ -67,7 +67,7 @@
                                 </div>
                             </td>
                             <td class="text-center w-10">
-                                <button id="btnUbahStatus" value="{{$dt->id}}" data-tw-toggle="modal" data-tw-target="#edit-statust-verifikasi" class="btn btn-warning w-24 mr-1 mb-2" @if($dt->sv==1) disabled @endif>Ubah Status</button>
+                                <button id="btnUbahStatus" value="{{$dt->id}}" data-tw-toggle="modal" data-tw-target="#edit-statust-verifikasi" class="btn btn-warning w-24 mr-1 mb-2">Verifikasi</button>
                             </td>
                         </tr>
                     @endforeach
@@ -92,11 +92,19 @@
                     </div>
                     <div class="px-5 pb-8 text-center flex items-center justify-center"> 
                         <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-24 mr-1">Batal</button> 
-                        <form class="w-24" action="{{route('transferPma.update')}}" method="POST">
+                        <form action="{{route('transferPma.update')}}" method="POST">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="idVerif" id="idVerif" value="">
-                            <button type="submit" class="btn btn-warning">Ubah</button> 
+                            <input type="hidden" name="nilaiVerif" value="2">
+                            <button type="submit" class="w-24 btn btn-danger mr-1">Tolak</button> 
+                        </form>
+                        <form action="{{route('transferPma.update')}}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="idVerif" id="idVerif" value="">
+                            <input type="hidden" name="nilaiVerif" value="1">
+                            <button type="submit" class="w-24 btn btn-warning">Verifikasi</button> 
                         </form>
                     </div>
                 </div>
