@@ -36,12 +36,14 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('username', $request->get('username'))->where('password', md5($request->password))->first();
+        $user = User::where('username', $request->username)->where('password', md5($request->password))->first();
 
         if($user) {
             if($user->hasRole('admin')){
                 Auth::login($user, $request->remember_me);
                 // return to admin page
+                // dd($user);
+
                 return redirect()->route('admin.dashboard');
             } else if($user->hasRole('user')){
                 Auth::login($user, $request->remember_me);

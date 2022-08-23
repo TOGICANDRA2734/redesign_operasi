@@ -14,7 +14,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required|exists:pma_dailyprod_users',
+            'username' => 'required|exists:user',
             'password' => 'required'
         ];
     }

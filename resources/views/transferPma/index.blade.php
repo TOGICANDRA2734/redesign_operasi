@@ -132,7 +132,18 @@
     <script>
         $('#tgl').on('change', function(){
             console.log($(this).val())
-
+            $.ajax({
+                url: '/admin/dashboard/detail_filtered/',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    start: awal,
+                    end: akhir,
+                },
+                success: function(response) {
+                    update_data(response)
+                },
+            })
             
         })
 

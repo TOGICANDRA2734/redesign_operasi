@@ -60,6 +60,7 @@
                                 <div>
                                     <label for="update-profile-form-1" class="form-label">Username</label>
                                     <input id="update-profile-form-1" type="text" class="form-control" placeholder="Input text" value="{{ Auth::user()->username}}" disabled>
+                                    
                                 </div>
                                 <div class="mt-3">
                                     <label for="update-profile-form-1" class="form-label">Nama</label>
@@ -115,10 +116,16 @@
                                 <div class="">
                                     <label for="update-profile-form-1" class="form-label">Foto</label>
                                     <input name="foto" id="update-profile-form-1" type="file" class="form-control p-1 border" placeholder="Input text">
+                                    @error('foto')
+                                        <div class="text-danger mt-2">{{$message}}</div>
+                                    @endif
                                 </div>
                                 <div class="mt-3">
                                     <label for="update-profile-form-1" class="form-label">Username</label>
                                     <input name="username" id="update-profile-form-1" type="text" class="form-control" placeholder="Input text">
+                                    @error('username')
+                                        <div class="text-danger mt-2">{{$message}}</div>
+                                    @endif
                                 </div>
                                 <div class="mt-3">
                                     <label for="update-profile-form-1" class="form-label">Site</label>
@@ -128,6 +135,9 @@
                                         <option value="{{$st->kodesite}}" class="form-control">{{$st->namasite}}</option>
                                         @endforeach
                                     </select>
+                                    @error('kodesite')
+                                        <div class="text-danger mt-2">{{$message}}</div>
+                                    @endif
                                 </div>
                                 <div class="mt-3">
                                     <label for="update-profile-form-1" class="form-label">Role (Peran)</label>
@@ -137,6 +147,9 @@
                                         <option value="{{$rl->name}}" class="form-control">{{$rl->name}}</option>
                                         @endforeach
                                     </select>
+                                    @error('role')
+                                        <div class="text-danger mt-2">{{$message}}</div>
+                                    @endif
                                 </div>
                             </div>
                             <!-- End Left Sided Content -->
@@ -146,10 +159,16 @@
                                 <div class="">
                                     <label for="update-profile-form-1" class="form-label">Nama</label>
                                     <input name="name" id="update-profile-form-1" type="text" class="form-control" placeholder="Input text">
+                                    @error('name')
+                                        <div class="text-danger mt-2">{{$message}}</div>
+                                    @endif
                                 </div>
                                 <div class="mt-3">
                                     <label for="update-profile-form-1" class="form-label">Password</label>
                                     <input name="password" id="update-profile-form-1" type="password" class="form-control" placeholder="Input text">
+                                    @error('password')
+                                        <div class="text-danger mt-2">{{$message}}</div>
+                                    @endif
                                 </div>
                                 <div class="mt-3">
                                     <label for="update-profile-form-1" class="form-label">Posisi</label>
@@ -159,6 +178,9 @@
                                         <option value="{{$st->jabatan}}" class="form-control">{{$st->jabatan}}</option>
                                         @endforeach
                                     </select>
+                                    @error('posisi')
+                                        <div class="text-danger mt-2">{{$message}}</div>
+                                    @endif
                                 </div>
                             </div>
                             <!-- End Right Sided Content -->

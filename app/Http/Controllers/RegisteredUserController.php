@@ -32,13 +32,13 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'username' => 'required|string|max:15|unique:pma_dailyprod_users',
+            'username' => 'required|string|max:15|unique:user',
             'name' => 'required|string|max:50',
             'posisi' => 'required|string|max:50',
             'foto' => 'max:2000',
             'kodesite' => 'required|string|max:1',
             'role' => 'required',
-            'password' => ['required', Rules\Password::defaults()],
+            'password' => 'required',
         ]);
         
         // Store image
