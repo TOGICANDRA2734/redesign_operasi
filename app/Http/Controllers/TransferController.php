@@ -12,8 +12,7 @@ use Illuminate\Support\Facades\DB;
 class TransferController extends Controller
 {
     public function index(Request $request)
-    {
-        
+    {        
         $site = Site::where('status_website', 1)->orderBy('id')->get();
         $data = DB::table('transfer_file_pma')->join('site', 'transfer_file_pma.kodesite', '=', 'site.kodesite')->select('site.namasite', 'transfer_file_pma.tgl', 'transfer_file_pma.waktu', 'transfer_file_pma.sv', 'transfer_file_pma.file')->orderBy('tgl', 'desc')->orderBy('site.kodesite')->orderBy('waktu', 'desc')->paginate(5);
 

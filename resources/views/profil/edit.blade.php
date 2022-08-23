@@ -27,11 +27,14 @@
                         <i data-lucide="activity" class="w-4 h-4 mr-2"></i> Data Pribadi
                     </button>
                 </li>
+                @if(Auth::user()->hasRole('super_admin'))
                 <li id="add-account-tab" role="presentation" class="tab flex items-center mt-5">
                     <button id="btnAddAccount" class="flex nav-item" data-tw-toggle="pill" data-tw-target="#add-account" type="button" role="tab" aria-controls="add-account" aria-selected="false">
                         <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Tambah Akun
                     </button>
                 </li>
+                @endif
+
                 <li id="change-password-tab" role="presentation" class="tab flex items-center mt-5">
                     <button id="btnChangePassword" class="flex nav-item" data-tw-toggle="pill" data-tw-target="#change-password" type="button" role="tab" aria-controls="change-password" aria-selected="false">
                         <i data-lucide="lock" class="w-4 h-4 mr-2"></i> Ubah Password
@@ -95,6 +98,7 @@
             </div>
         </div>
         <!-- END: Display Information -->
+        @if(Auth::user()->hasRole('super_admin'))
         <!-- BEGIN: Add Account -->
         <div id="add-account" class="tab-pane leading-relaxed box p-5 mt-5" role="tabpanel" aria-labelledby="add-account-tab">
             <div class="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
@@ -165,6 +169,7 @@
             </div>
         </div>
         <!-- END: Add Account -->
+        @endif
         <!-- BEGIN: Change Password -->
         <div id="change-password" class="tab-pane leading-relaxed box p-5 mt-5" role="tabpanel" aria-labelledby="change-password-tab">
             <div class="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">

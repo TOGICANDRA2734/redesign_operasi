@@ -9,26 +9,8 @@
     <!-- Title -->
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 class="text-lg font-medium mr-auto">
-            Laporan Kendala  - {{App\Models\Site::select('namasite')->where('kodesite', Auth::user()->kodesite)->pluck('namasite')->first()}} 
+            Laporan Kendala - {{App\Models\Site::select('namasite')->where('kodesite', Auth::user()->kodesite)->pluck('namasite')->first()}} 
         </h2>
-        <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-            <a href="{{route('kendala.create')}}" class="btn btn-primary shadow-md mr-2">Tambah Kendala</a>
-            <div class="dropdown ml-auto sm:ml-0">
-                <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
-                    <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
-                </button>
-                <div class="dropdown-menu w-40">
-                    <ul class="dropdown-content">
-                        <li>
-                            <a href="" class="dropdown-item"> <i data-lucide="file-plus" class="w-4 h-4 mr-2"></i> New Category </a>
-                        </li>
-                        <li>
-                            <a href="" class="dropdown-item"> <i data-lucide="users" class="w-4 h-4 mr-2"></i> New Group </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
     <hr class="mb-10">
     
@@ -43,7 +25,6 @@
                         <th rowspan="2" class="whitespace-nowrap text-center">Shift</th>
                         <th colspan="2" class="whitespace-nowrap text-center">Waktu</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Keterangan</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Aksi</th>
                     </tr>
                     <tr class="">
                         <th class="whitespace-nowrap text-center">Awal</th>
@@ -70,11 +51,6 @@
                         </td>
                         <td class="">
                             {{$dt->ket}}
-                        </td>
-                        <td class="">
-                            <a href="{{route('kendala.edit', $dt->id)}}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-yellow-400 rounded-md active:bg-yellow-600 hover:bg-yellow-900 sm:mr-1 cursor-pointer">
-                                <i class="fa-solid fa-pencil"></i>
-                            </a>
                         </td>
                     </tr>
                     @endforeach

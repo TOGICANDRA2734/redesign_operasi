@@ -51,7 +51,7 @@ class ProductivityController extends Controller
 
         $dataPty = collect(DB::select($subquery));
 
-        return view('productivity.index', compact('dataPty'));
+        return view('user.productivity.index', compact('dataPty'));
     }
 
     /**
@@ -109,7 +109,7 @@ class ProductivityController extends Controller
 
         $waktu = Carbon::now()->timezone('Asia/kuala_lumpur')->format('H:i'); 
 
-        return view('productivity.create', compact('dataPty', 'dataNomUnit', 'dataPit', 'waktu', 'totalDataPty'));
+        return view('user.productivity.create', compact('dataPty', 'dataNomUnit', 'dataPit', 'waktu', 'totalDataPty'));
     }
 
     /**

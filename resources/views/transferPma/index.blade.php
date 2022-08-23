@@ -5,6 +5,7 @@
 @endsection
 
 @section('subcontent')
+    @if(Auth::user()->hasRole(['super_admin','admin']))
     <div class="intro-y flex items-center mt-8">
         <h2 class="text-lg font-medium mr-auto">Kirim Data PMA ke HO</h2>
     </div>
@@ -49,21 +50,16 @@
             <!-- END: Form Layout -->
         </div>
     </div>
+    @endif
     
-    <div class="grid grid-cols-12 gap-6 mt-20">
-        <form class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-            <div class="w-full sm:w-auto mt-3 sm:mt-0">
-                <div class="w-56 relative text-slate-500">
-                    <input type="date" id="tgl" class="form-control box w-56 date-picker" placeholder="Search...">
-                </div>
-            </div>
+    <div class="grid grid-cols-12 gap-6 {{(Auth::user()->hasRole(['admin','super_admin'])) ? 'mt-5' : 'mt-20' }}">
+        <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
             <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-auto">
                 <div class="w-56 relative text-slate-500">
-                    <input type="text" id="cari" class="form-control w-56 box pr-10" placeholder="Search...">
-                    <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i> 
+                    <input type="date" id="tgl" class="form-control box w-56 date-picker">
                 </div>
             </div>
-        </form>
+        </div>
         <!-- BEGIN: Data List -->
         <div class="intro-y col-span-12 overflow-auto lg:overflow-visible ">
             <table class="table table-report -mt-2 ">
@@ -121,7 +117,7 @@
 
 @section('script')
     <script src="{{ asset('dist/js/ckeditor-classic.js') }}"></script>
-    <script>
+    <!-- <script>
         const inputElement = document.querySelector('input[id="file_pma"]');
         const pond = FilePond.create(inputElement);
         pond.setOptions({
@@ -132,5 +128,13 @@
                 }
             }
         })
+    </script> -->
+    <script>
+        $('#tgl').on('change', function(){
+            console.log($(this).val())
+
+            
+        })
+
     </script>
 @endsection

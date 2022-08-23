@@ -8,7 +8,7 @@
 <div class="">
     <!-- Title -->
     <h2 class="text-lg font-medium truncate mr-5 mt-8 ">
-        Laporan Productivity - {{App\Models\Site::select('namasite')->where('kodesite', Auth::user()->kodesite)->pluck('namasite')->first()}}}
+        Laporan Productivity - {{App\Models\Site::select('namasite')->where('kodesite', Auth::user()->kodesite)->pluck('namasite')->first()}}
     </h2>
     <hr class="mb-10">
     <!-- Table -->

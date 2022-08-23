@@ -48,7 +48,7 @@ class dataProdController extends Controller
             $period[] = $i->format("Y-m-d");
         }
 
-        return view('data-prod.index', compact('data', 'site', 'period'));
+        return view('user.data-prod.index', compact('data', 'site', 'period'));
     }
 
     /**
@@ -65,7 +65,7 @@ class dataProdController extends Controller
         ->orderBy('id')
         ->get();
         
-        return view('data-prod.create', compact('site'));
+        return view('user.data-prod.create', compact('site'));
     }
 
     public function create_data($tgl)
@@ -85,7 +85,7 @@ class dataProdController extends Controller
         ->where('del', '=', 0)
         ->get(); 
 
-        return view('data-prod.create', compact('site', 'tgl', 'cuaca'));
+        return view('user.data-prod.create', compact('site', 'tgl', 'cuaca'));
     }
 
     /**
@@ -130,7 +130,7 @@ class dataProdController extends Controller
      */
     public function show($id)
     {
-        return view('data-prod.show');
+        return view('user.data-prod.show');
     }
 
    /**
@@ -141,7 +141,7 @@ class dataProdController extends Controller
      */
     public function show_detail($id)
     {
-        return view('data-prod.show');
+        return view('user.data-prod.show');
     }
 
     /**
@@ -178,7 +178,7 @@ class dataProdController extends Controller
         ";
         $dataProd = collect(DB::select($subquery));
 
-        return view('data-prod.edit', compact('site', 'data', 'cuaca', 'dataProd'));
+        return view('user.data-prod.edit', compact('site', 'data', 'cuaca', 'dataProd'));
     }
 
     public function edit_data($id, $tgl, $other)
@@ -330,6 +330,6 @@ class dataProdController extends Controller
 
         $data = collect(DB::select($subquery));
 
-        return view('data-prod.report', compact('data'));
+        return view('user.data-prod.report', compact('data'));
     }
 }
