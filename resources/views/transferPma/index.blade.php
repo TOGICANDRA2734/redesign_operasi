@@ -6,7 +6,7 @@
 
 @section('subcontent')
     <div class="intro-y flex items-center mt-8">
-        <h2 class="text-lg font-medium mr-auto">Transaksi File PMA </h2>
+        <h2 class="text-lg font-medium mr-auto">Kirim Data PMA ke HO {{$errors}}</h2>
     </div>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 ">
@@ -34,7 +34,7 @@
                 <div class="mt-3">
                     <label for="file_pma">File PMA (Rar & Zip)</label>
                     <div class="mt-2">
-                        <input type="file" id="file_pma" />
+                        <input type="file" id="file_pma" name="file_pma" class="w-full @error('site') border-danger @enderror"/>
                         <!-- <input name="file_pma" id="file_pma" type="file" class="form-control @error('file_pma') border-danger @enderror}}" /> 
                         @error('file_pma')
                             <div class="text-danger mt-2">{{$message}}</div>

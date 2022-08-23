@@ -29,7 +29,8 @@ class TransferController extends Controller
 
         $file = $request->file('file_pma');
         // $temporaryFile = TemporaryFiles::where('filename', $request->file->getClientOriginalName())->first();
-        $file->storeAs('public/file/' . $request->kodesite . '/', $file->hashName());
+        // $file->storeAs('public/file/' . $request->kodesite . '/', $file->hashName());
+        dd(Site::select('namasite')->where('kodesite', $request->site)->pluck('namasite')->first() . '_' . Carbon::now()->format('d-m-Y') . '_' . Carbon::now()->format('H:i:s'));
 
         $record = FilePMA::create([
             'tgl' => date('Y-m-d', strtotime(Carbon::now())),
