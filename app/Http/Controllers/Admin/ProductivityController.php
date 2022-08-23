@@ -45,7 +45,7 @@ class ProductivityController extends Controller
         ON A.kodesite = B.kodesite                
         JOIN plant_tipe_unit C
         ON LEFT(A.nom_unit,4)= C.kode                                      
-        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2'
+        WHERE del=0 AND C.gol_1='2'
         GROUP BY a.kodesite, nom_unit,TYPE
         ORDER BY b.id, nom_unit";
 

@@ -9,7 +9,7 @@
     <!-- Title -->
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 class="text-lg font-medium mr-auto">
-            Laporan Kendala - {{$site[0]->namasite}}
+            Laporan Kendala  - {{App\Models\Site::select('namasite')->where('kodesite', Auth::user()->kodesite)->pluck('namasite')->first()}}
         </h2>
     </div>
     <hr class="mb-10">

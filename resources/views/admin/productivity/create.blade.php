@@ -9,7 +9,7 @@
     <!-- Title -->
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 class="text-lg font-medium mr-auto">
-            Transaksi Productivity
+            Transaksi Productivity - {{App\Models\Site::select('namasite')->where('kodesite', Auth::user()->kodesite)->pluck('namasite')->first()}}
         </h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
             <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#header-footer-modal-preview" class="btn btn-primary shadow-md mr-2">Tambah Pty</a>
