@@ -60,9 +60,8 @@ class ProductivityController extends Controller
      */
     public function create()
     {
-
         // Data Detail PTY
-        $subquery = "SELECT     
+        $subquery = "SELECT A.id,
         nom_unit,
         b.namasite,
         pit,
@@ -119,7 +118,7 @@ class ProductivityController extends Controller
      */
     public function store(Request $request)
     {
-        return $request;
+        // return $request;
     }
 
     public function check(Request $request)
@@ -180,7 +179,12 @@ class ProductivityController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = DB::table('pma_dailyprod_pty')->select()->where('id', '=', $id)->get();
+        $dataPit = DB::table('pma_dailyprod_pit')->select(DB::raw('ket, kodepit'))->orderBy('ket')->where('kodesite', '=', $data[0]->kodesite)->get();
+        $countAll = DB::table('pma_dailyprod_pty')->select(DB::raw('count(id) total_data'))->where('tgl', '=', $data[0]->tgl)->where('nom_unit', '=', $data[0]->nom_unit)->get();
+        $data = DB::table('pma_dailyprod_pty')->select(DB::raw('id, jam, pty, dist, ket, pit'))->where('tgl', '=', $data[0]->tgl)->where('nom_unit', '=', $data[0]->nom_unit)->get();
+
+        return view('productivity.edit', compact('data', 'dataPit', 'countAll'));
     }
 
     /**
@@ -192,7 +196,26 @@ class ProductivityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        for($i=0; $i<=$request->total; $i++){
+            $id = $request['id_'.$i];
+            $data = Productivity::findOrFail($id);
+
+            $data->update([
+                'pty' => $request['pty_'.$i],
+                'dist' => $request['distance_'.$i],
+                'ket' => $request['remarks_'.$i],
+                'pit' => $request['pit_'.$i],
+            ]);
+        }
+
+        dd($data);
+
+        if($data){
+            return redirect()->route('super_admin.productivity.create')->with(['success' => 'Data Berhasil Diubah!']);
+        }
+        else{
+            return redirect()->route('super_admin.productivity.create')->with(['error' => 'Data Gagal Diubah!']);
+        }
     }
 
     /**

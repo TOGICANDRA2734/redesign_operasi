@@ -30,6 +30,9 @@
                         <th colspan="13" class="whitespace-nowrap text-center">Waktu</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Jarak</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Remarks</th>
+                        @if(Auth::user()->hasRole('super_admin'))
+                            <th rowspan="2" class="whitespace-nowrap text-center">Aksi</th>
+                        @endif
                     </tr>
                     <tr class="text-xs font-semibold tracking-wide text-center text-white uppercase border-b dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
                         @for($i=6; $i<=18; $i++)
@@ -44,15 +47,21 @@
                         <td class="">
                             {{$key+1}}
                         </td>
-                        @foreach($dp as $d)
-                        <td class=" sticky left-0 bg-white">
-                            {{$d}}
-                        </td>
+                        @foreach($dp as $keys => $d)
+                            @if( $keys !== 'id')
+                                <td class=" sticky left-0 bg-white">
+                                    {{$d}}
+                                </td>
+                            @endif
                         @endforeach
+                        <td class=" sticky left-0 bg-white">
+                            <a href="{{route('super_admin.productivity.edit', $dataPty[$key]->id)}}" class="btn btn-warning mr-1 mb-2"> <i data-lucide="pencil" class="w-5 h-5"></i> </a>
+                            <a href="{{route('super_admin.productivity.edit', $dataPty[$key]->id)}}" class="btn btn-danger mr-1 mb-2"> <i data-lucide="trash" class="w-5 h-5"></i> </a>
+                        </td>
                     </tr>
                     @endforeach
                     <tr class="text-center">
-                        <td colspan="20">
+                        <td colspan="21">
                             <span class="font-bold">Total Produksi</span>: {{number_format($totalDataPty[0]->total_pty) }}
                         </td>
                     </tr>

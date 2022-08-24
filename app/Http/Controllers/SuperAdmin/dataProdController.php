@@ -47,7 +47,7 @@ class dataProdController extends Controller
             $period[] = $i->format("Y-m-d");
         }
 
-        return view('data-prod.index', compact('data', 'site', 'period'));
+        return view('superAdmin.data-prod.index', compact('data', 'site', 'period'));
     }
 
     /**
