@@ -226,9 +226,6 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- BEGIN: Pagination -->
-                {{$dataPty->links()}}
-                <!-- END: Pagination -->
             </div>
             <!-- END: Productivity Report -->
         </div>

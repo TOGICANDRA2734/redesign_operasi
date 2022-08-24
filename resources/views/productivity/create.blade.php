@@ -53,7 +53,7 @@
                     @endforeach
                     <tr class="text-center">
                         <td colspan="20">
-                            <span class="font-bold">Total Productivity</span>: {{number_format($totalDataPty[0]->total_pty) }}
+                            <span class="font-bold">Total Produksi</span>: {{number_format($totalDataPty[0]->total_pty) }}
                         </td>
                     </tr>
                 </tbody>
