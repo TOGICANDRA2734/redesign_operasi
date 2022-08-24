@@ -37,10 +37,12 @@
                         <td class="">
                             {{$key+1}}
                         </td>
-                        @foreach($dp as $d)
-                        <td class=" sticky left-0 bg-white">
-                            {{$d}}
-                        </td>
+                        @foreach($dp as $key => $d)
+                            @if($key!='id')
+                            <td class=" sticky left-0 bg-white">
+                                {{$d}} 
+                            </td>
+                            @endif
                         @endforeach
                     </tr>
                     @endforeach

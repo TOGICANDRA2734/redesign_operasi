@@ -27,13 +27,9 @@
                             <input type="hidden" name="id_{{$key}}" value="{{$dt->id}}">
                             <div class="flex-1 px-5 py-2">
                                 <label for="crud-form-1" class="form-label">Pty </label>
-                                <input id="crud-form-1" type="text" class="form-control w-full" placeholder="Input text" value="{{$dt->pty}}" name="pty_{{$key}}">
+                                <input id="crud-form-1" type="text" class="form-control w-full" placeholder="Input text" value="{{$dt->rit}}" name="pty_{{$key}}">
                             </div>
                             
-                            <div class="flex-1 px-5 py-2">
-                                <label for="crud-form-1" class="form-label">Distance </label>
-                                <input id="crud-form-1" type="text" class="form-control w-full" placeholder="Input text" value="{{$dt->dist}}" name="distance_{{$key}}">
-                            </div>
                             
                             <div class="flex-1 px-5 py-2">
                                 <label for="crud-form-1" class="form-label">Remarks </label>

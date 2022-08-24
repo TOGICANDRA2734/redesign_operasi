@@ -167,6 +167,8 @@ class ProductivityCoalController extends Controller
         $countAll = DB::table('pma_dailyprod_pty_coal')->select(DB::raw('count(id) total_data'))->where('tgl', '=', $data[0]->tgl)->get();
         $data = DB::table('pma_dailyprod_pty_coal')->select(DB::raw('id, jam, rit, ket, pit'))->where('tgl', '=', $data[0]->tgl)->get();
 
+        // dd($data, $dataPit, $countAll);
+
         return view('productivity_coal.edit', compact('data', 'dataPit', 'countAll'));
     }
 
