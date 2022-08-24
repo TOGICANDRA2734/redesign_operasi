@@ -28,7 +28,7 @@ class SideMenuAdmin
                 'sub_menu' => [
                     'transaksi-actual' => [
                         'icon' => 'box',
-                        'title' => 'Produksi Tracon',
+                        'title' => 'Produksi Truck Count',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -41,6 +41,14 @@ class SideMenuAdmin
                             'layout' => 'side-menu'
                         ],
                         'title' => 'Productivity'
+                    ],
+                    'transaksi-produksi-coal' => [
+                        'icon' => 'inbox',
+                        'route_name' => 'admin.productivity_coal.create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Productivity Coal'
                     ],
                     'transaksi-kendala' => [
                         'icon' => 'inbox',
@@ -59,7 +67,7 @@ class SideMenuAdmin
                 'sub_menu' => [
                     'laporan-actual' => [
                         'icon' => 'box',
-                        'title' => 'Laporan Actual',
+                        'title' => 'Truck Count',
                         'route_name' => 'admin.data-prod.report',
                         'params' => [
                             'layout' => 'side-menu'
@@ -67,15 +75,23 @@ class SideMenuAdmin
                     ],
                     'laporan-productivity' => [
                         'icon' => 'box',
-                        'title' => 'Laporan Productivity',
+                        'title' => 'Productivity',
                         'route_name' => 'admin.productivity.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
                     ],
+                    'laporan-produksi-coal' => [
+                        'icon' => 'inbox',
+                        'route_name' => 'admin.productivity_coal.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Ritasi Coal'
+                    ],
                     'laporan-kendala' => [
                         'icon' => 'box',
-                        'title' => 'Laporan Kendala',
+                        'title' => 'Kendala',
                         'route_name' => 'admin.kendala.index',
                         'params' => [
                             'layout' => 'side-menu'

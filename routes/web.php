@@ -25,6 +25,7 @@ use App\Http\Controllers\BDDokController;
 use App\Http\Controllers\BDHarianController;
 use App\Http\Controllers\POController;
 use App\Http\Controllers\POTransaksiController;
+use App\Http\Controllers\ProductivityCoalController;
 // User
 use App\Http\Controllers\User\dataProdController as User_dataProdController;
 use App\Http\Controllers\User\KendalaController as User_KendalaController;
@@ -88,9 +89,14 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
         Route::get('data-prod/{id}/{tgl}/{other}', [Admin_dataProdController::class, 'edit_data'])->name('edit_data_other.index');
         Route::get('data-prod-report', [Admin_dataProdController::class, 'report'])->name('data-prod.report');
         Route::post('detail-pit', [Admin_dataProdController::class, 'getPit'])->name('data-prod.getPit');
-        Route::resource('productivity', Admin_ProductivityController::class);
-        Route::post('productivity_check', [Admin_ProductivityController::class, 'check'])->name('productivity.check');
-        Route::post('productivity_store', [Admin_ProductivityController::class, 'store_data'])->name('productivity.store_data');
+        Route::resource('productivity', ProductivityController::class);
+        Route::post('productivity_check', [ProductivityController::class, 'check'])->name('productivity.check');
+        Route::post('productivity_store', [ProductivityController::class, 'store_data'])->name('productivity.store_data');
+        
+        Route::resource('productivity_coal', ProductivityCoalController::class);
+        Route::post('productivity_check_coal', [ProductivityCoalController::class, 'check'])->name('productivity_coal.check');
+        Route::post('productivity_store_coal', [ProductivityCoalController::class, 'store_data'])->name('productivity_coal.store_data');
+        
         Route::resource('kendala', Admin_KendalaController::class);        
         Route::post('/comment/store', [CommentController::class, 'store'])->name('comments.store');        
         Route::post('/reply/store', [CommentController::class, 'replyStore'])->name('reply.store');        
@@ -119,9 +125,15 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::get('data-prod/{id}/{tgl}/{other}', [dataProdController::class, 'edit_data'])->name('edit_data_other.index');
         Route::get('data-prod-report', [dataProdController::class, 'report'])->name('data-prod.report');
         Route::post('detail-pit', [dataProdController::class, 'getPit'])->name('data-prod.getPit');
+
         Route::resource('productivity', ProductivityController::class);
         Route::post('productivity_check', [ProductivityController::class, 'check'])->name('productivity.check');
         Route::post('productivity_store', [ProductivityController::class, 'store_data'])->name('productivity.store_data');
+        
+        Route::resource('productivity_coal', ProductivityCoalController::class);
+        Route::post('productivity_check_coal', [ProductivityCoalController::class, 'check'])->name('productivity_coal.check');
+        Route::post('productivity_store_coal', [ProductivityCoalController::class, 'store_data'])->name('productivity_coal.store_data');
+        
         Route::resource('kendala', KendalaController::class);
         Route::post('/comment/store', [CommentController::class, 'store'])->name('comments.store');
         Route::post('/reply/store', [CommentController::class, 'replyStore'])->name('reply.store');
@@ -203,4 +215,10 @@ Route::middleware('auth')->group(function() {
     Route::put('transfer-pma', [TransferController::class, 'update'])->name('transferPma.update');
     Route::post('transfer-pma-upload',  [UploadController::class, 'store'])->name('upload.store');
     Route::get('admin-transfer-pma',  [AdminTransaksiPmaController::class, 'index'])->name('adminTransaksiPma.index');
+
+    // Pty
+    
+    Route::resource('productivity_coal', ProductivityCoalController::class);
+    Route::post('productivity_check_coal', [ProductivityCoalController::class, 'check'])->name('productivity_coal.check');
+    Route::post('productivity_store_coal', [ProductivityCoalController::class, 'store_data'])->name('productivity_coal.store_data');
 });

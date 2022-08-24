@@ -28,7 +28,7 @@ class SideMenuSuperAdmin
                 'sub_menu' => [
                     'transaksi-actual' => [
                         'icon' => 'box',
-                        'title' => 'Produksi Tracon',
+                        'title' => 'Produksi Truck Count',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -41,6 +41,15 @@ class SideMenuSuperAdmin
                             'layout' => 'side-menu'
                         ],
                         'title' => 'Productivity'
+                    ],
+                    
+                    'transaksi-produksi-coal' => [
+                        'icon' => 'inbox',
+                        'route_name' => 'super_admin.productivity_coal.create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Ritasi Coal'
                     ],
                     'transaksi-kendala' => [
                         'icon' => 'inbox',
@@ -72,6 +81,15 @@ class SideMenuSuperAdmin
                         'params' => [
                             'layout' => 'side-menu'
                         ],
+                    ],
+                    
+                    'laporan-produksi-coal' => [
+                        'icon' => 'inbox',
+                        'route_name' => 'super_admin.productivity_coal.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Ritasi Coal'
                     ],
                     'laporan-kendala' => [
                         'icon' => 'box',

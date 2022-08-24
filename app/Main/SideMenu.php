@@ -28,7 +28,7 @@ class SideMenu
                 'sub_menu' => [
                     'transaksi-actual' => [
                         'icon' => 'box',
-                        'title' => 'Produksi Tracon',
+                        'title' => 'Produksi Truck Count',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
