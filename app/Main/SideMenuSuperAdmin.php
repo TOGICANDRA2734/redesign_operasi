@@ -28,7 +28,7 @@ class SideMenuSuperAdmin
                 'sub_menu' => [
                     'transaksi-actual' => [
                         'icon' => 'box',
-                        'title' => 'Transaksi Actual',
+                        'title' => 'Produksi Tracon',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -40,7 +40,7 @@ class SideMenuSuperAdmin
                         'params' => [
                             'layout' => 'side-menu'
                         ],
-                        'title' => 'Transaksi Productivity'
+                        'title' => 'Productivity'
                     ],
                     'transaksi-kendala' => [
                         'icon' => 'inbox',
@@ -48,7 +48,7 @@ class SideMenuSuperAdmin
                         'params' => [
                             'layout' => 'side-menu'
                         ],
-                        'title' => 'Transaksi Kendala'
+                        'title' => 'Kendala'
                     ],
                 ],
             ],

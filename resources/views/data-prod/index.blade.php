@@ -6,10 +6,21 @@
 
 @section('subcontent')
 <div class="">
-    <!-- Title -->
-    <h2 class="text-lg font-medium truncate mr-5 mt-8 ">
-        Produksi Actual - {{$site[0]->namasite}}
-    </h2>
+    <!-- Header -->
+    <div class="flex justify-between items-center py-4">
+        <!-- Title -->
+        <h2 class="text-lg font-medium truncate mr-5 ">
+            Produksi Actual - {{ Auth::user()->kodesite != 'X' ? $site[0]->namasite: 'HO - All Site'}}
+        </h2>
+        @if(Auth::user()->kodesite=='X')
+        <select class="form-control w-24">
+            <option class="form-control" value="" disabled selected>Pilih</option>
+            @foreach($site as $st)
+                <option class="form-control" value="{{$st->namasite}}">{{$st->namasite}}</option>
+            @endforeach
+        </select>
+        @endif
+    </div>
     <hr class="mb-10">
 
     <!-- Table -->

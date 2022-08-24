@@ -24,20 +24,33 @@ class dataProdController extends Controller
         $bulan = Carbon::now();
         $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
 
-        $statusSite = Auth::user()->kodesite; 
-
-        $subquery = "SELECT id,
-        IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
-        IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
-        IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
-        IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
-        FROM pma_dailyprod_tc
-        WHERE ".$tanggal." and kodesite='".Auth::user()->kodesite."' 
-        GROUP BY tgl";
+        if(Auth::user()->kodesite == 'X'){
+            $subquery = "SELECT id,
+            IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
+            IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
+            IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
+            IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
+            FROM pma_dailyprod_tc
+            WHERE ".$tanggal." 
+            GROUP BY tgl";
+        } else {
+            $subquery = "SELECT id,
+            IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
+            IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
+            IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
+            IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
+            FROM pma_dailyprod_tc
+            WHERE ".$tanggal." and kodesite='".Auth::user()->kodesite."' 
+            GROUP BY tgl";
+        }
 
         $data = collect(DB::select($subquery));
 
-        $site = DB::table('site')->select('namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        if(Auth::user()->kodesite == 'X'){
+            $site = DB::table('site')->select('namasite')->where('status_website', 1)->get();
+        } else {
+            $site = DB::table('site')->select('namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        }
 
         $begin = new DateTime( Carbon::now()->startOfMonth() );
         $end   = new DateTime( Carbon::now()->endOfMonth() );
