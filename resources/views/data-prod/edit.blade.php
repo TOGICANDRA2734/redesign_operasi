@@ -78,16 +78,7 @@
                 </div>
 
                 @foreach($dataProd as $key => $dp)
-                <!-- Start PIT -->
-                <div class="col-span-2">
-                    <label class="block mt-1 text-lg uppercase">
-                        <span class="font-semibold text-gray-700 dark:text-gray-400">Pit {{$key + 1}}: {{$dp->pit}}</span>
-                        <input type="hidden" name="pit_{{$key}}" value="{{$dp->pit}}">
-                        <hr class="pt-3">
-                    </label>
-                </div>
-                <!-- End Pit -->
-
+                
                 <!-- Shift 1 -->
                 <div class="col-span-2 grid grid-cols-2 gap-5">
                     <div class="grid grid-cols-2 gap-5">
