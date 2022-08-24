@@ -73,7 +73,7 @@ class KendalaController extends Controller
             'shift' => $request->shift,
             'awal' => $request->awal,
             'akhir' => $request->akhir,
-            'ket' => $request->ket,
+            'ket' => strtoupper($request->ket),
             'kodesite' => $request->kodesite,
         ]);
 
@@ -137,7 +137,7 @@ class KendalaController extends Controller
             'shift' => $request->shift,
             'awal' => $request->awal,
             'akhir' => $request->akhir,
-            'ket' => $request->ket,
+            'ket' => strtoupper($request->ket),
             'kodesite' => $request->kodesite,
         ]);
 

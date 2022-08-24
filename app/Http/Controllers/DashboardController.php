@@ -124,7 +124,7 @@ class DashboardController extends Controller
         $subquery = "SELECT                                                           
         b.namasite,
         nom_unit,
-        AVG(pty) avg_pty,                                                        
+        ROUND(AVG(pty), 1) avg_pty,                                                        
         IFNULL(SUM(CASE WHEN jam = 7 THEN pty END),'-') j1,                    
         IFNULL(SUM(CASE WHEN jam = 8 THEN pty END),'-') j2,                          
         IFNULL(SUM(CASE WHEN jam = 9 THEN pty END),'-') j3,                    
@@ -280,7 +280,7 @@ class DashboardController extends Controller
         $subquery = "SELECT                                                           
         b.namasite,
         nom_unit,
-        AVG(pty) avg_pty,                                                        
+        ROUND(AVG(pty), 1) avg_pty,                                                        
         IFNULL(SUM(CASE WHEN jam = 7 THEN pty END),'-') j1,                    
         IFNULL(SUM(CASE WHEN jam = 8 THEN pty END),'-') j2,                          
         IFNULL(SUM(CASE WHEN jam = 9 THEN pty END),'-') j3,                    
