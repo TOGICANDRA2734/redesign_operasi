@@ -26,6 +26,7 @@ class dataProdController extends Controller
 
         $statusSite = Auth::user()->kodesite; 
 
+
         $subquery = "SELECT id,
         IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
         IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
@@ -57,6 +58,7 @@ class dataProdController extends Controller
      */
     public function create()
     {
+
         $site = DB::table('site')
         ->select()
         ->where('status_website', '=', 1)

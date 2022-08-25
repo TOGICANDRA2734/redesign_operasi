@@ -88,6 +88,8 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
         Route::put('data-prod/update_data/{data_prod}', [Admin_dataProdController::class, 'update_data'])->name('update_data.index');
         Route::get('data-prod/{id}/{tgl}/{other}', [Admin_dataProdController::class, 'edit_data'])->name('edit_data_other.index');
         Route::get('data-prod-report', [Admin_dataProdController::class, 'report'])->name('data-prod.report');
+        Route::post('data-prod-report', [Admin_dataProdController::class, 'report'])->name('data-prod.report.post');
+
         Route::post('detail-pit', [Admin_dataProdController::class, 'getPit'])->name('data-prod.getPit');
         Route::resource('productivity', ProductivityController::class);
         Route::post('productivity_check', [ProductivityController::class, 'check'])->name('productivity.check');

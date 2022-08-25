@@ -1970,14 +1970,14 @@ select{
 .mt-20{
     margin-top: 5rem;
 }
+.mr-0{
+    margin-right: 0px;
+}
 .mr-10{
     margin-right: 2.5rem;
 }
 .mr-52{
     margin-right: 13rem;
-}
-.mr-0{
-    margin-right: 0px;
 }
 .block{
     display: block;

@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
+use function PHPUnit\Framework\isNull;
+
 class dataProdController extends Controller
 {
     /**
@@ -322,24 +324,44 @@ class dataProdController extends Controller
 
     public function report(Request $request)
     {
+        // dd($request);
+
         $bulan = Carbon::now();
         $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
 
-        $subquery = "SELECT tgl tgl_data,
-        IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN ob END),1),'-') AS ob_1,
-        IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN coal END),1),'-') AS coal_1,
-        IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN ob END),1),'-') AS ob_2,
-        IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN coal END),1),'-') AS coal_2,
-        ROUND(SUM(ob)/(SELECT SUM(ob) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1) ach_ob,
-        ROUND(SUM(coal)/(SELECT SUM(coal) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1)  ach_coal
-        FROM pma_dailyprod_tc
-        WHERE ".$tanggal."
-        GROUP BY tgl";
+        if($request->has('kodesite')){
+            $subquery = "SELECT tgl tgl_data,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN ob END),1),'-') AS ob_1,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN coal END),1),'-') AS coal_1,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN ob END),1),'-') AS ob_2,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN coal END),1),'-') AS coal_2,
+            ROUND(SUM(ob)/(SELECT SUM(ob) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1) ach_ob,
+            ROUND(SUM(coal)/(SELECT SUM(coal) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1)  ach_coal
+            FROM pma_dailyprod_tc
+            WHERE ".$tanggal." and kodesite='".$request->kodesite."'
+            GROUP BY tgl";
+        } else {
+            $subquery = "SELECT tgl tgl_data,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN ob END),1),'-') AS ob_1,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN coal END),1),'-') AS coal_1,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN ob END),1),'-') AS ob_2,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN coal END),1),'-') AS coal_2,
+            ROUND(SUM(ob)/(SELECT SUM(ob) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1) ach_ob,
+            ROUND(SUM(coal)/(SELECT SUM(coal) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1)  ach_coal
+            FROM pma_dailyprod_tc
+            WHERE ".$tanggal."
+            GROUP BY tgl";
+        }
 
         $data = collect(DB::select($subquery));
 
         $site = Site::select('namasite', 'lokasi', 'kodesite')->where('status_website', 1)->get();
 
-        return view('admin.data-prod.report', compact('data', 'site'));
+        if($request->has('kodesite')){
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('admin.data-prod.report', compact('data', 'site'));
+        }
     }
 }

@@ -113,7 +113,6 @@
         <div id="dashboard" class="tab-pane active" role="tabpanel" aria-labelledby="dashboard-tab">
             <div class="grid grid-cols-12 gap-6">
                 <!-- BEGIN: Top Categories -->
-                {{$errors}}
                 <div class="intro-y box col-span-12 lg:col-span-6">
                     <div class="flex items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
                         <h2 class="font-medium text-base mr-auto">Top Categories</h2>
