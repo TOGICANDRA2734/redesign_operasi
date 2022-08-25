@@ -70,7 +70,7 @@
                     <h2 class="text-lg font-medium truncate mr-5">Overburden</h2>
                     <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
                         <!-- <i data-lucide="calendar" class="w-4 h-4 z-10 absolute my-auto inset-y-0 ml-3 left-0"></i> -->
-                        
+
                         <div id="OverburdenRange" class="form-control box p-2">
                             <i class="fa fa-calendar"></i>&nbsp;
                             <span></span> <i class="fa fa-caret-down"></i>
@@ -159,7 +159,7 @@
                             <div class="dropdown-menu w-40">
                                 <ul class="dropdown-content overflow-y-auto h-32">
                                     @foreach($data as $dt)
-                                        <li><a href="{{route('dashboard.filtered', $dt->namasite)}}" class="dropdown-item">{{$dt->namasite}}</a></li>
+                                    <li><a href="{{route('dashboard.filtered', $dt->namasite)}}" class="dropdown-item">{{$dt->namasite}}</a></li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -184,7 +184,20 @@
                         </button>
                     </div>
                 </div>
-                <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">
+                <div class="flex mt-8">
+                    <div class="intro-x flex-1 px-3">
+                        <div class="box px-5 py-3 mb-3 flex-col items-center zoom-in">
+                            <div class="ml-4 mr-auto text-center">
+                                <div class="font-medium">ABK</div>
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <div class="px-3"><strong>Tot. Pty:</strong>+$143</div>
+                                <div class="px-3"><strong>Tot. Rit:</strong>+$143</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="intro-y overflow-auto mt-8 sm:mt-0">
                     <table class="table table-report sm:mt-2">
                         <thead>
                             <tr>
@@ -210,15 +223,15 @@
                                 </td>
                                 <!-- START: Print Data Productivity -->
                                 @foreach($dp as $dpKey => $d)
-                                    @if($dpKey == 'nom_unit')
-                                    <td class="text-left">
-                                        {{$d}}
-                                    </td>
-                                    @else
-                                    <td class="text-center">
-                                        {{$d}}
-                                    </td>
-                                    @endif
+                                @if($dpKey == 'nom_unit')
+                                <td class="text-left">
+                                    {{$d}}
+                                </td>
+                                @else
+                                <td class="text-center">
+                                    {{$d}}
+                                </td>
+                                @endif
                                 @endforeach
                                 <!-- END: Print Data Productivity -->
                             </tr>
@@ -235,7 +248,7 @@
 <!-- Chart -->
 <script>
     $(function() {
-         var $j = jQuery.noConflict();
+        var $j = jQuery.noConflict();
 
         var start = moment().subtract(29, 'days');
         var end = moment();
@@ -245,21 +258,21 @@
             startDate: start,
             endDate: end,
             ranges: {
-            'Hari Ini': [moment(), moment()],
-            'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
-            '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
-            'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
-            'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                'Hari Ini': [moment(), moment()],
+                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             }
         }, function(start, end, label) {
 
             var awal = start.format("YYYY-MM-DD");
             var akhir = end.format("YYYY-MM-DD");
 
-             var $i = jQuery.noConflict();
+            var $i = jQuery.noConflict();
 
-            if(awal !== null && akhir !== null){
+            if (awal !== null && akhir !== null) {
                 $i.ajax({
                     url: '/dashboard/detail_filtered/',
                     type: 'GET',
@@ -268,22 +281,23 @@
                         start: awal,
                         end: akhir,
                     },
-                    success: function(response){
+                    success: function(response) {
                         update_data(response)
                     },
                 })
             }
 
-            
+
         });
-        function update_data(response){
+
+        function update_data(response) {
             // OVERBURDEN
-            var data_prod_ob = response['data_prod_ob']; 
-            var data_plan_ob = response['data_plan_ob']; 
-            
-            var data_prod_coal = response['data_prod_coal']; 
-            var data_plan_coal = response['data_plan_coal']; 
-            
+            var data_prod_ob = response['data_prod_ob'];
+            var data_plan_ob = response['data_plan_ob'];
+
+            var data_prod_coal = response['data_prod_coal'];
+            var data_plan_coal = response['data_plan_coal'];
+
             // Overburden
             chart1.config.data.datasets[0].data = data_prod_ob.data;
             chart1.config.data.datasets[1].data = data_plan_ob.data;
@@ -311,18 +325,18 @@
             $j("#coalAch").append(addCommas(str(response['data_detail_coal_prod'][0].coal / response['data_detail_coal_plan'][0].coal) * 100) + '%');
         }
         // Coal Range
-        
+
         // Overburden Range
         $j('#CoalRange').daterangepicker({
             startDate: start,
             endDate: end,
             ranges: {
-            'Hari Ini': [moment(), moment()],
-            'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
-            '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
-            'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
-            'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                'Hari Ini': [moment(), moment()],
+                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             }
         }, function(start, end, label) {
             console.log(start, end, label)
@@ -430,8 +444,7 @@
             options: options
         });
 
-        function addCommas(nStr)
-        {
+        function addCommas(nStr) {
             return nStr.toFixed(2).replace(/\d(?=(\d{3})+\.)$(?=(\d{2}))/g, "$&,");
         }
 
