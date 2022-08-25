@@ -35,7 +35,7 @@ class ProductivityCoalController extends Controller
         IFNULL(SUM(CASE WHEN jam = 17 THEN rit END),'-') j11,                    
         IFNULL(SUM(CASE WHEN jam = 18 THEN rit END),'-') j12,                          
         IFNULL(SUM(CASE WHEN jam = 19 THEN rit END),'-') j13,
-        IFNULL((SELECT ket FROM pma_dailyprod_pty_coal X WHERE ket IS NOT NULL AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty_coal) LIMIT 1), '-') ket
+        IFNULL((SELECT ket FROM pma_dailyprod_pty_coal X WHERE ket IS NOT NULL AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty_coal WHERE tgl=CURDATE()) LIMIT 1), '-') ket
         FROM pma_dailyprod_pty_coal A 
         JOIN site B
         ON A.kodesite = B.kodesite                                             
@@ -73,7 +73,7 @@ class ProductivityCoalController extends Controller
         IFNULL(SUM(CASE WHEN jam = 17 THEN rit END),'-') j11,                    
         IFNULL(SUM(CASE WHEN jam = 18 THEN rit END),'-') j12,                          
         IFNULL(SUM(CASE WHEN jam = 19 THEN rit END),'-') j13,
-        IFNULL((SELECT ket FROM pma_dailyprod_pty_coal X WHERE ket IS NOT NULL AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty_coal) LIMIT 1), '-') ket
+        IFNULL((SELECT ket FROM pma_dailyprod_pty_coal X WHERE ket IS NOT NULL AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty_coal WHERE tgl=CURDATE()) LIMIT 1), '-') ket
         FROM pma_dailyprod_pty_coal A 
         JOIN site B
         ON A.kodesite = B.kodesite                                             
@@ -191,8 +191,6 @@ class ProductivityCoalController extends Controller
                 'pit' => $request['pit_'.$i],
             ]);
         }
-
-        dd($data);
 
         if($data){
             return redirect()->route('super_admin.productivity_coal.create')->with(['success' => 'Data Berhasil Diubah!']);

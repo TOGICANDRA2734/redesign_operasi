@@ -12,7 +12,7 @@
             Transaksi Productivity
         </h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#header-footer-modal-preview" class="btn btn-primary shadow-md mr-2">Tambah Pty</a>
+            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#header-footer-modal-preview" class="btn btn-primary shadow-md mr-2">Tambah Rit</a>
         </div>
     </div>
     <hr class="mb-10">
@@ -76,7 +76,7 @@
             <div class="modal-content">
                 <!-- BEGIN: Modal Header -->
                 <div class="modal-header">
-                    <h2 class="font-medium text-base mr-auto">Transaksi Productivity {{$errors}}</h2>
+                    <h2 class="font-medium text-base mr-auto">Transaksi Productivity</h2>
                     <form action="{{route('productivity_coal.check')}}" method="POST">
                     @csrf
 
