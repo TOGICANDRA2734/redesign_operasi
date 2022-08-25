@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Post extends Model
 {
@@ -22,6 +23,6 @@ class Post extends Model
      */
     public function comments()
     {
-        return $this->hasMany(Comment::class)->whereNull('parent_id');
+        return $this->hasMany(Comment::class)->whereNull('parent_id')->where('created_at', DB::raw('Curdate()'));
     }
 }
