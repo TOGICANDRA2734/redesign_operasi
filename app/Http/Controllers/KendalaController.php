@@ -17,17 +17,12 @@ class KendalaController extends Controller
      */
     public function index()
     {
-        
-        $bulan = Carbon::now();
-        $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
-        $tanggalKedua =  "A.TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
-
         /**
          * Kendala
          */
         $subquery = "SELECT *
         FROM pma_dailyprod_kendala
-        WHERE ".$tanggal." AND
+        WHERE tgl=CURDATE() AND
         kodesite='".Auth::user()->kodesite."'
         ORDER BY tgl DESC";
 

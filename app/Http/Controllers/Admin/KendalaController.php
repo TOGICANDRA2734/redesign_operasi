@@ -28,7 +28,7 @@ class KendalaController extends Controller
          */
         $subquery = "SELECT *
         FROM pma_dailyprod_kendala
-        WHERE ".$tanggal." AND
+        WHERE tgl=CURDATE() AND
         kodesite='".Auth::user()->kodesite."'";
 
         $kendala = collect(DB::select($subquery));
