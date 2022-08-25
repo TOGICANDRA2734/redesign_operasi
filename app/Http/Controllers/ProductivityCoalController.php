@@ -77,7 +77,7 @@ class ProductivityCoalController extends Controller
         FROM pma_dailyprod_pty_coal A 
         JOIN site B
         ON A.kodesite = B.kodesite                                             
-        WHERE tgl=CURDATE() AND del=0
+        WHERE tgl=CURDATE() AND del=0 and a.kodesite='".Auth::user()->kodesite."'
         GROUP BY a.kodesite
         ORDER BY b.id";
 
@@ -89,7 +89,7 @@ class ProductivityCoalController extends Controller
         FROM pma_dailyprod_pty_coal A 
         JOIN site B
         ON A.kodesite = B.kodesite                                             
-        WHERE tgl=CURDATE() AND del=0
+        WHERE tgl=CURDATE() AND del=0 and a.kodesite='".Auth::user()->kodesite."'
         ORDER BY b.id";
         $totalDataCoal = collect(DB::select($subquery));
 
@@ -111,6 +111,7 @@ class ProductivityCoalController extends Controller
 
     public function check(Request $request)
     {
+
         $data = DB::table('pma_dailyprod_pty_coal')->where('tgl', '=', $request->tgl)->where('kodesite', '=', $request->kodesite)->where('jam', '=', $request->jam)->count();
         if($data == 0){
             $request->validate([
@@ -181,7 +182,7 @@ class ProductivityCoalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        for($i=0; $i<=$request->total; $i++){
+        for($i=0; $i<$request->total; $i++){
             $id = $request['id_'.$i];
             $data = ProductivityCoal::findOrFail($id);
 

@@ -52,10 +52,12 @@
                                 </td>
                             @endif
                         @endforeach
+                        @if(Auth::user()->hasRole('super_admin'))
                         <td class=" sticky left-0 bg-white">
                             <a href="{{route('super_admin.productivity_coal.edit', $dataCoal[$key]->id)}}" class="btn btn-warning mr-1 mb-2"> <i data-lucide="pencil" class="w-5 h-5"></i> </a>
                             <a href="{{route('super_admin.productivity_coal.edit', $dataCoal[$key]->id)}}" class="btn btn-danger mr-1 mb-2"> <i data-lucide="trash" class="w-5 h-5"></i> </a>
                         </td>
+                        @endif
                     </tr>
                     @endforeach
                     <tr class="text-center">
@@ -76,7 +78,7 @@
             <div class="modal-content">
                 <!-- BEGIN: Modal Header -->
                 <div class="modal-header">
-                    <h2 class="font-medium text-base mr-auto">Transaksi Productivity</h2>
+                    <h2 class="font-medium text-base mr-auto">Ritasi Coal</h2>
                     <form action="{{route('productivity_coal.check')}}" method="POST">
                     @csrf
 
