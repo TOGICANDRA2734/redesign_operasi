@@ -28,7 +28,7 @@ class SideMenuUser
                 'sub_menu' => [
                     'laporan-actual' => [
                         'icon' => 'box',
-                        'title' => 'Laporan Actual',
+                        'title' => 'Produksi Truck Count',
                         'route_name' => 'user.data-prod.report',
                         'params' => [
                             'layout' => 'side-menu'
