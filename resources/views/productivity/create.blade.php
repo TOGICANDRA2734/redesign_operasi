@@ -125,6 +125,18 @@
                         @error('ket')
                             <div class="text-danger mt-2">{{$message}}</div>
                         @endif
+                    </div>
+                     <div class="col-span-12 sm:col-span-6"> 
+                        <label for="modal-form-4" class="form-label">Cuaca</label> 
+                        <select id="modal-form-6" class="form-select" name="cuaca">
+                            <option value="" selected disabled>Pilih</option>
+                            <option value="1">Cerah</option>
+                            <option value="2">Berawan</option>
+                            <option value="3">Hujan</option>
+                        </select> 
+                        @error('cuaca')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
                      </div>
                 </div> <!-- END: Modal Body -->
                 <!-- BEGIN: Modal Footer -->

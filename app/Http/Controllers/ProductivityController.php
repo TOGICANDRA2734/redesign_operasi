@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cuaca;
 use App\Models\Productivity;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -151,6 +152,13 @@ class ProductivityController extends Controller
                 'time_admin' => Carbon::now(),
             ]);
 
+            $data = Cuaca::create([
+                'cuaca' => $request->cuaca,
+                'kodesite' => $request->kodesite,
+                'tgl' => $request->tgl,
+                'jam' => $request->jam,
+            ]);
+
             if($record){
                 return redirect()->route('productivity.create')->with(['success' => 'Data Berhasil Ditambah!']);
             }
@@ -210,7 +218,6 @@ class ProductivityController extends Controller
             ]);
         }
 
-        dd($data);
 
         if($data){
             return redirect()->route('super_admin.productivity.create')->with(['success' => 'Data Berhasil Diubah!']);
