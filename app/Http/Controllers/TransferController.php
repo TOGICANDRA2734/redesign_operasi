@@ -30,7 +30,7 @@ class TransferController extends Controller
         $ext = $file->extension();
         $namaFile = Site::select('namasite')->where('kodesite', $request->site)->pluck('namasite')->first() . '_' . Carbon::now()->format('d_m_Y') . '_' . Carbon::now()->format('H_i_s') . '.' . $ext;
         // $temporaryFile = TemporaryFiles::where('filename', $request->file->getClientOriginalName())->first();
-        $file->storeAs('public/file_baru', $namaFile);
+        $file->storeAs('public/file', $namaFile);
 
         $record = FilePMA::create([
             'tgl' => date('Y-m-d', strtotime(Carbon::now())),

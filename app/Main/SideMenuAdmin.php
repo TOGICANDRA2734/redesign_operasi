@@ -51,7 +51,7 @@ class SideMenuAdmin
                             'params' => [
                                 'layout' => 'side-menu'
                             ],
-                            'title' => 'Productivity Coal'
+                            'title' => 'Ritasi Coal'
                         ],
                         'transaksi-kendala' => [
                             'icon' => 'inbox',

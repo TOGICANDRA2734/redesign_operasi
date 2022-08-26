@@ -58,7 +58,7 @@ class User extends Authenticatable
         if ($this->foto !== 'none') {
             return url('http://ptrci.co.id/gambar/user/' . $this->foto);
         } else {
-            return url('https://eu.ui-avatars.com/api/?name="'.$this->nama.'"&background=0D8ABC&color=fff');
+            return url('https://eu.ui-avatars.com/api/?name='.str_replace(" ","+",$this->nama).'&background=0D8ABC&color=fff');
         }
     }
 }
