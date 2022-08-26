@@ -22,12 +22,12 @@
                         <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Pit</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">AVG</th>
-                        <th colspan="13" class="whitespace-nowrap text-center">Waktu</th>
+                        <th colspan="14" class="whitespace-nowrap text-center">Waktu</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Jarak</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Remarks</th>
                     </tr>
                     <tr class="text-xs font-semibold tracking-wide text-center text-white uppercase border-b dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
-                        @for($i=6; $i<=18; $i++)
+                        @for($i=5; $i<=18; $i++)
                             <th class="whitespace-nowrap text-center">{{$i+1}}</th>
                         @endfor
                     </tr>

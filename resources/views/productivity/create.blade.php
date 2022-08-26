@@ -35,7 +35,7 @@
                         @endif
                     </tr>
                     <tr class="text-xs font-semibold tracking-wide text-center text-white uppercase border-b dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
-                        @for($i=6; $i<=18; $i++)
+                        @for($i=5; $i<=18; $i++)
                             <th class="whitespace-nowrap text-center">{{$i+1}}</th>
                         @endfor
                     </tr>
@@ -61,7 +61,7 @@
                     </tr>
                     @endforeach
                     <tr class="text-center">
-                        <td colspan="21">
+                        <td colspan="22">
                             <span class="font-bold">Total Produksi</span>: {{number_format($totalDataPty[0]->total_pty) }}
                         </td>
                     </tr>

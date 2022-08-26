@@ -7,7 +7,7 @@
 @section('subcontent')
 <div class=""><div class="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 class="text-lg font-medium mr-auto">
-            Edit Produksi Actual {{$errors}}
+            Edit Produksi Actual
         </h2>
     </div>
     <hr class="mb-10">
@@ -91,7 +91,7 @@
                                     Overburden <span class="text-xs text-gray-500">(bcm)</span>
                                 </span>
                                 <div class="input-group mt-2"> 
-                                    <input value="{{old('ob', $dp->ob_1)}}" type="number" name="ob_1_{{$key}}" id="ob_1_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
+                                    <input value="{{old('ob', $dp->ob_1)}}" type="number" step="any" name="ob_1_{{$key}}" id="ob_1_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
                                     <div id="input-group-price" class="input-group-text">bcm</div>
                                 </div>
                             </label>
@@ -110,7 +110,7 @@
                                     Coal <span class="text-xs text-gray-500">(mt)</span>
                                 </span>
                                 <div class="input-group mt-2"> 
-                                    <input value="{{old('coal', $dp->coal_1)}}" type="number" name="coal_1_{{$key}}" id="coal_1_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
+                                    <input value="{{old('coal', $dp->coal_1)}}" type="number" step="any" name="coal_1_{{$key}}" id="coal_1_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
                                     <div id="input-group-price" class="input-group-text">mt</div>
                                 </div>
                             </label>
@@ -132,9 +132,9 @@
                                 <span class="font-semibold text-gray-700 dark:text-gray-400">
                                     Overburden <span class="text-xs text-gray-500">(bcm)</span>
                                 </span>
-                                <!-- <input value="{{old('ob', $dp->ob_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="ob_2_{{$key}}" id="ob_2_{{$key}}"> -->
+                                <!-- <input value="{{old('ob', $dp->ob_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" step="any" name="ob_2_{{$key}}" id="ob_2_{{$key}}"> -->
                                 <div class="input-group mt-2"> 
-                                    <input value="{{old('ob', $dp->ob_2)}}" type="number" name="ob_2_{{$key}}" id="ob_2_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
+                                    <input value="{{old('ob', $dp->ob_2)}}" type="number" step="any" name="ob_2_{{$key}}" id="ob_2_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
                                     <div id="input-group-price" class="input-group-text">bcm</div>
                                 </div>
                             </label>
@@ -152,9 +152,9 @@
                                 <span class="font-semibold text-gray-700 dark:text-gray-400">
                                     Coal <span class="text-xs text-gray-500">(mt)</span>
                                 </span>
-                                <!-- <input value="{{old('coal', $dp->coal_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" name="coal_2_{{$key}}" id="coal_2_{{$key}}"> -->
+                                <!-- <input value="{{old('coal', $dp->coal_2)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" step="any" name="coal_2_{{$key}}" id="coal_2_{{$key}}"> -->
                                 <div class="input-group mt-2"> 
-                                    <input value="{{old('coal', $dp->coal_2)}}" type="number" name="coal_2_{{$key}}" id="coal_2_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
+                                    <input value="{{old('coal', $dp->coal_2)}}" type="number" step="any" name="coal_2_{{$key}}" id="coal_2_{{$key}}" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price">
                                     <div id="input-group-price" class="input-group-text">mt</div>
                                 </div>
                             </label>
