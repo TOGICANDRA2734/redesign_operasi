@@ -10,13 +10,15 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         /**
          * Overburden Data
          */
 
         // dd(Auth::user()->getRoleNames()[0]);
+
+        // dd($request);
 
         $bulan = Carbon::now();
 
@@ -124,20 +126,21 @@ class DashboardController extends Controller
         $subquery = "SELECT                                                           
         b.namasite,
         nom_unit,
-        ROUND(AVG(pty), 1) avg_pty,                                                        
-        IFNULL(SUM(CASE WHEN jam = 7 THEN pty END),'-') j1,                    
-        IFNULL(SUM(CASE WHEN jam = 8 THEN pty END),'-') j2,                          
-        IFNULL(SUM(CASE WHEN jam = 9 THEN pty END),'-') j3,                    
-        IFNULL(SUM(CASE WHEN jam = 10 THEN pty END),'-') j4,                          
-        IFNULL(SUM(CASE WHEN jam = 11 THEN pty END),'-') j5,                    
-        IFNULL(SUM(CASE WHEN jam = 12 THEN pty END),'-') j6,                          
-        IFNULL(SUM(CASE WHEN jam = 13 THEN pty END),'-') j7,                    
-        IFNULL(SUM(CASE WHEN jam = 14 THEN pty END),'-') j8,                          
-        IFNULL(SUM(CASE WHEN jam = 15 THEN pty END),'-') j9,                    
-        IFNULL(SUM(CASE WHEN jam = 16 THEN pty END),'-') j10,                          
-        IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j11,                    
-        IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j12,                          
-        IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j13,                          
+        ROUND(AVG(pty), 1) avg_pty,                                                                                    
+        IFNULL(SUM(CASE WHEN jam = 6 THEN pty END),'-') j1,                    
+        IFNULL(SUM(CASE WHEN jam = 7 THEN pty END),'-') j2,                    
+        IFNULL(SUM(CASE WHEN jam = 8 THEN pty END),'-') j3,                          
+        IFNULL(SUM(CASE WHEN jam = 9 THEN pty END),'-') j4,                    
+        IFNULL(SUM(CASE WHEN jam = 10 THEN pty END),'-') j5,                          
+        IFNULL(SUM(CASE WHEN jam = 11 THEN pty END),'-') j6,                    
+        IFNULL(SUM(CASE WHEN jam = 12 THEN pty END),'-') j7,                          
+        IFNULL(SUM(CASE WHEN jam = 13 THEN pty END),'-') j8,                    
+        IFNULL(SUM(CASE WHEN jam = 14 THEN pty END),'-') j9,                          
+        IFNULL(SUM(CASE WHEN jam = 15 THEN pty END),'-') j10,                    
+        IFNULL(SUM(CASE WHEN jam = 16 THEN pty END),'-') j11,                          
+        IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j12,                    
+        IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j13,                          
+        IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j14,                            
         IFNULL((SELECT dist FROM pma_dailyprod_pty X WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE nom_unit=x.nom_unit  AND tgl=curdate()) ORDER BY nom_unit DESC LIMIT 1), '-') dist,
         IFNULL((SELECT ket FROM pma_dailyprod_pty X WHERE ket IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE nom_unit=x.nom_unit AND tgl=curdate()) ORDER BY nom_unit DESC LIMIT 1), '-') ket
         FROM pma_dailyprod_pty A 
@@ -149,6 +152,7 @@ class DashboardController extends Controller
 
         $dataPty = collect(DB::select($subquery));
 
+        // Total Data Pty
         $subquery = "SELECT SUM(pty) total_pty
         FROM pma_dailyprod_pty A 
         JOIN site B
@@ -159,29 +163,42 @@ class DashboardController extends Controller
         ORDER BY b.id, nom_unit";
         $totalDataPty = collect(DB::select($subquery));
 
+        // Total Data Per Site
+        $subquery = "SELECT B.namasite, SUM(pty) pty
+        FROM pma_dailyprod_pty A 
+        JOIN site B
+        ON A.kodesite = B.kodesite       
+        JOIN plant_tipe_unit C
+        ON LEFT(A.nom_unit,4)= C.kode                                      
+        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2'
+        GROUP BY A.kodesite
+        ORDER BY b.id, nom_unit";
+        $totalDataPtySite = collect(DB::select($subquery));
+
         // Data Detail Coal
         $subquery = "SELECT A.id,
         b.namasite,
         pit,
-        ROUND(AVG(rit), 1) avg_rit,                                                        
-        IFNULL(SUM(CASE WHEN jam = 7 THEN rit END),'-') j1,                    
-        IFNULL(SUM(CASE WHEN jam = 8 THEN rit END),'-') j2,                          
-        IFNULL(SUM(CASE WHEN jam = 9 THEN rit END),'-') j3,                    
-        IFNULL(SUM(CASE WHEN jam = 10 THEN rit END),'-') j4,                          
-        IFNULL(SUM(CASE WHEN jam = 11 THEN rit END),'-') j5,                    
-        IFNULL(SUM(CASE WHEN jam = 12 THEN rit END),'-') j6,                          
-        IFNULL(SUM(CASE WHEN jam = 13 THEN rit END),'-') j7,                    
-        IFNULL(SUM(CASE WHEN jam = 14 THEN rit END),'-') j8,                          
-        IFNULL(SUM(CASE WHEN jam = 15 THEN rit END),'-') j9,                    
-        IFNULL(SUM(CASE WHEN jam = 16 THEN rit END),'-') j10,                          
-        IFNULL(SUM(CASE WHEN jam = 17 THEN rit END),'-') j11,                    
-        IFNULL(SUM(CASE WHEN jam = 18 THEN rit END),'-') j12,                          
-        IFNULL(SUM(CASE WHEN jam = 19 THEN rit END),'-') j13,
+        ROUND(AVG(rit), 1) avg_rit,                                                                                          
+        IFNULL(SUM(CASE WHEN jam = 6 THEN rit END),'-') j1,                    
+        IFNULL(SUM(CASE WHEN jam = 7 THEN rit END),'-') j2,                    
+        IFNULL(SUM(CASE WHEN jam = 8 THEN rit END),'-') j3,                          
+        IFNULL(SUM(CASE WHEN jam = 9 THEN rit END),'-') j4,                    
+        IFNULL(SUM(CASE WHEN jam = 10 THEN rit END),'-') j5,                          
+        IFNULL(SUM(CASE WHEN jam = 11 THEN rit END),'-') j6,                    
+        IFNULL(SUM(CASE WHEN jam = 12 THEN rit END),'-') j7,                          
+        IFNULL(SUM(CASE WHEN jam = 13 THEN rit END),'-') j8,                    
+        IFNULL(SUM(CASE WHEN jam = 14 THEN rit END),'-') j9,                          
+        IFNULL(SUM(CASE WHEN jam = 15 THEN rit END),'-') j10,                    
+        IFNULL(SUM(CASE WHEN jam = 16 THEN rit END),'-') j11,                          
+        IFNULL(SUM(CASE WHEN jam = 17 THEN rit END),'-') j12,                    
+        IFNULL(SUM(CASE WHEN jam = 18 THEN rit END),'-') j13,                          
+        IFNULL(SUM(CASE WHEN jam = 19 THEN rit END),'-') j14,   
         IFNULL((SELECT ket FROM pma_dailyprod_pty_coal X WHERE ket IS NOT NULL AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty_coal WHERE tgl=CURDATE()) LIMIT 1), '-') ket
         FROM pma_dailyprod_pty_coal A 
         JOIN site B
         ON A.kodesite = B.kodesite                                             
-        WHERE tgl=CURDATE() AND del=0 and a.kodesite='".Auth::user()->kodesite."'
+        WHERE tgl=CURDATE() AND del=0
         GROUP BY a.kodesite
         ORDER BY b.id";
         $dataCoal = collect(DB::select($subquery));
@@ -194,7 +211,19 @@ class DashboardController extends Controller
         ORDER BY b.id";
         $totalDataCoal = collect(DB::select($subquery));
 
-        return view('dashboard.index', compact('data_detail_OB_prod', 'data_detail_OB_plan', 'data_prod_ob', 'data_plan_ob', 'data_detail_coal_prod', 'data_detail_coal_plan', 'data_prod_coal', 'data_plan_coal', 'data', 'dataPty', 'totalDataPty', 'dataCoal', 'totalDataCoal'));
+        // Total Data Per Site
+        $subquery = "SELECT B.namasite namasite, SUM(rit) rit
+        FROM pma_dailyprod_pty_coal A 
+        JOIN site B
+        ON A.kodesite = B.kodesite                                             
+        WHERE tgl=CURDATE() AND del=0
+        GROUP BY A.kodesite
+        ORDER BY b.id";
+        $totalDataRitSite = collect(DB::select($subquery));
+
+        // dd($totalDataPtySite, $totalDataRitSite);
+
+        return view('dashboard.index', compact('data_detail_OB_prod', 'data_detail_OB_plan', 'data_prod_ob', 'data_plan_ob', 'data_detail_coal_prod', 'data_detail_coal_plan', 'data_prod_coal', 'data_plan_coal', 'data', 'dataPty', 'totalDataPty', 'dataCoal', 'totalDataCoal', 'totalDataPtySite', 'totalDataRitSite'));
     }
 
     public function index_filtered($namasite)

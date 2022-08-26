@@ -27,7 +27,7 @@
                         <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">PIT</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">AVG</th>
-                        <th colspan="13" class="whitespace-nowrap text-center">Waktu</th>
+                        <th colspan="14" class="whitespace-nowrap text-center">Waktu</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Jarak</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Remarks</th>
                     </tr>
@@ -74,7 +74,7 @@
                     @csrf
 
                     <select id="modal-form-6" class="form-select w-16" name="jam">
-                            @for($i=7; $i<=19; $i++)
+                            @for($i=6; $i<=19; $i++)
                             <option value="{{$i}}" {{old('jam', substr($waktu,0,2)) == $i || old('jam', substr($waktu,1,1)) == $i ? 'selected' : ''}}>{{$i}}</option>
                             @endfor
                         </select> 

@@ -242,7 +242,6 @@ class dataProdController extends Controller
     public function update_data(Request $request, $id)
     {   
         $request->validate([
-            'pit_0' => 'required',
             'ob_1_0' => 'required',
             'coal_1_0' => 'required',
             'ob_2_0' => 'required',

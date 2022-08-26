@@ -7,7 +7,7 @@
 @section('subcontent')
 <div class=""><div class="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 class="text-lg font-medium mr-auto">
-            Edit Produksi Actual
+            Edit Produksi Actual {{$errors}}
         </h2>
     </div>
     <hr class="mb-10">
