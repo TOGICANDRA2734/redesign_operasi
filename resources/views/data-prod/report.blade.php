@@ -9,10 +9,10 @@
     <!-- Title -->
     <div class="flex justify-between items-center mt-8 ">
         <h2 class="text-lg font-medium ">
-            Laporan Produksi
+            Laporan Produksi 
         </h2>
         @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
-        <div class="ml-auto">
+        <div class="ml-auto mr-2">
             <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
                 <option value="">Pilih</option>
                 @foreach($site as $st)
@@ -21,6 +21,21 @@
             </select>
         </div>
         @endif
+        <div class="dropdown">
+            <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
+                <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="download"></i> </span>
+            </button>
+            <div class="dropdown-menu w-40">
+                <ul class="dropdown-content">
+                    <li>
+                        <a href="{{route('super_admin.export_data')}}" class="dropdown-item"> Excel </a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"> PDF </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
     <hr class="mb-10">
 

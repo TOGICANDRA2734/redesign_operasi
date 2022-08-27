@@ -21,6 +21,21 @@
             </select>
         </div>
         @endif
+        <div class="dropdown">
+            <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
+                <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="download"></i> </span>
+            </button>
+            <div class="dropdown-menu w-40">
+                <ul class="dropdown-content">
+                    <li>
+                        <a href="" class="dropdown-item"> Excel </a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"> PDF </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
     <hr class="mb-10">
 
