@@ -14,7 +14,7 @@ class TransferController extends Controller
     public function index(Request $request)
     {        
         $site = Site::where('status_website', 1)->orderBy('id')->get();
-        $data = DB::table('transfer_file_pma')->join('site', 'transfer_file_pma.kodesite', '=', 'site.kodesite')->select('site.namasite', 'transfer_file_pma.tgl', 'transfer_file_pma.waktu', 'transfer_file_pma.sv', 'transfer_file_pma.file')->orderBy('tgl', 'desc')->orderBy('site.kodesite')->orderBy('waktu', 'desc')->paginate(155);
+        $data = DB::table('pma_transfer_file')->join('site', 'pma_transfer_file.kodesite', '=', 'site.kodesite')->select('site.namasite', 'pma_transfer_file.tgl', 'pma_transfer_file.waktu', 'pma_transfer_file.sv', 'pma_transfer_file.file')->orderBy('tgl', 'desc')->orderBy('site.kodesite')->orderBy('waktu', 'desc')->paginate(155);
 
         return view('transferPma.index', compact('site', 'data'));
     }
@@ -30,7 +30,7 @@ class TransferController extends Controller
         $ext = $file->extension();
         $namaFile = Site::select('namasite')->where('kodesite', $request->site)->pluck('namasite')->first() . '_' . Carbon::now()->format('d_m_Y') . '_' . Carbon::now()->format('H_i_s') . '.' . $ext;
         // $temporaryFile = TemporaryFiles::where('filename', $request->file->getClientOriginalName())->first();
-        $file->storeAs('public/file', $namaFile);
+        $file->storeAs('public/dokumenPMA', $namaFile);
 
         $record = FilePMA::create([
             'tgl' => date('Y-m-d', strtotime(Carbon::now())),
