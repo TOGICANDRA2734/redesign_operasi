@@ -85,6 +85,7 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
         Route::get('dashboard/detail/{site}', [DashboardController::class, 'show'])->name('dashboard.show');
         Route::get('dashboard/detail_filtered/', [DashboardController::class, 'show_data_filtered'])->name('dashboard.show.filtered');
         Route::resource('data-prod', Admin_dataProdController::class);
+        Route::post('data-prod-edit', [Admin_dataProdController::class, 'switch_site'])->name('switch_site.index');        
         Route::get('data-prod/create_data/{tgl}', [Admin_dataProdController::class, 'create_data'])->name('create_data.index');
         Route::put('data-prod/update_data/{data_prod}', [Admin_dataProdController::class, 'update_data'])->name('update_data.index');
         Route::get('data-prod/{id}/{tgl}/{other}', [Admin_dataProdController::class, 'edit_data'])->name('edit_data_other.index');

@@ -6,10 +6,22 @@
 
 @section('subcontent')
 <div class="">
-    <!-- Title -->
-    <h2 class="text-lg font-medium truncate mr-5 mt-8 ">
-        Produksi Actual - {{$site[0]->namasite}}
-    </h2>
+    <!-- Header -->
+    <div class="flex justify-between items-center py-4">
+        <!-- Title -->
+        <h2 class="text-lg font-medium truncate mr-5 ">
+            Produksi Actual - {{ Auth::user()->kodesite != 'X' ? $site[0]->namasite:  $userSite[0]->namasite}}
+        </h2>
+        
+        <div class="ml-auto mr-2">
+            <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
+                <option value="">Pilih</option>
+                @foreach($site as $st)
+                <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
     <hr class="mb-10">
 
     <!-- Table -->
@@ -50,11 +62,53 @@
                         </td>
                     </tr>
                     @endforeach
-
-
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+
+<!-- Filtering -->
+<script>
+    $('#pilihSite').on('change', function() {
+        $i = jQuery.noConflict();
+        $i.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        const kodesite = $i(this).val();
+        $i.ajax({
+            type: "POST",
+            url: '/admin/data-prod-report?layout=side-menu',
+            data: {
+                'kodesite': kodesite
+            },
+            success: function(result) {
+                $i("table tbody").empty();
+                fullText = ""
+                if (result) {
+                    $i.each(result.data, function(index) {
+                        text = '<tr class="text-center bg-white">' +
+                            '<td class="">' + result.data[index].tgl_data + '</td>' +
+                            '<td class="">' + result.data[index].ob_1 + '</td>' +
+                            '<td class="">' + result.data[index].ob_2 + '</td>' +
+                            '<td class="">' + result.data[index].coal_1 + '</td>' +
+                            '<td class="">' + result.data[index].coal_2 + '</td>' +
+                            '<td class="">' + result.data[index].ach_ob + '</td>' +
+                            '<td class="">' + result.data[index].ach_coal + '</td>' +
+                            '</tr>';
+                        fullText += text
+                    });
+                    $("table tbody").html(fullText);
+                }
+            },
+            error: function(result) {
+                console.log("error", result);
+            },
+        });
+    })
+</script>
 @endsection

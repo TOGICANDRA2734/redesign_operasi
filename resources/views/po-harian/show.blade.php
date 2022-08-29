@@ -9,7 +9,7 @@
     <div class="container px-6 mx-auto grid">
         <div class="my-3 flex items-center justify-between">
             <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                Detail PO
+                Detail PO 
             </h2>
             
             <a href="{{route('super_admin.po-harian.create')}}" class="bg-green-600 hover:bg-green-800 duration-150 ease-in-out text-white font-bold py-2 px-4 rounded inline-flex justify-between items-center">

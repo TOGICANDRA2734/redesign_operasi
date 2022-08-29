@@ -109,7 +109,7 @@
                     <span class="font-semibold text-gray-700 dark:text-gray-400">Unit</span>
                     <select class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="id_tiket" id="id_tiket">
                         @foreach($dok_tiket as $it)
-                            <option value="{{$it->id_tiket}}">{{$it->id_tiket}} - {{$it->Nom_unit}}</option>
+                            <option value="{{$it->id_tiket}}">{{$it->id_tiket}}</option>
                         @endforeach
                     </select>
                 </label>
