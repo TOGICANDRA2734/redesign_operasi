@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -10,6 +11,41 @@ class MohhController extends Controller
 {
     public function index(Request $request)
     {
+        if($request && $request->has('cari_1') || $request->has('cari_2')){
+            if($request->has('cari_1')){
+                $cari = "nom_unit LIKE '%".$request->cari_1."%' and";                
+            } else if($request->has('cari_2')){
+                $cari = "nom_unit LIKE '%".$request->cari_2."%' and";                
+            }
+        } else{
+            $cari = "";
+        }
+
+        if($request && $request->has('bulan')){
+            $bulan = Carbon::parse($request->bulan);
+            $awal = $bulan->startOfMonth()->copy();
+            $akhir = $bulan->endOfMonth()->copy();
+
+            if(!$request->has('kodesite')){
+                $tanggal =  "TGL BETWEEN '" . $awal . "' AND '" . $akhir . "'";              
+            } else {
+                $tanggal =  "TGL BETWEEN '" . $awal . "' AND '" . $akhir . "' and";              
+            }
+        } else{
+            $bulan = Carbon::now();
+            if(!$request->has('kodesite')){
+                $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";    
+            } else {
+                $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "' and";    
+            }
+        }
+
+        if($request && $request->has('kodesite')){
+            $site = "kodesite='".$request->kodesite."'";                
+        } else{
+            $site = "";
+        }
+
         $subquery = "WITH summ AS                                                     
         (                                                               
         SELECT                                                           
@@ -49,7 +85,7 @@ class MohhController extends Controller
         round(SUM(jam),0) x_total,                                                   
         '2' urut                                                         
         FROM pma_tp                                                       
-        WHERE  tgl BETWEEN '2022-08-01' AND '2022-08-31' AND kodesite='I' 
+        WHERE ".$cari." ".$tanggal." ".$site." 
         GROUP BY nom_unit                                                
                                                                          
         UNION ALL                                                        
@@ -91,7 +127,7 @@ class MohhController extends Controller
         round(SUM(jam),0) x_total,                                                       
         '1' urut                                                         
         FROM pma_a2b                                                      
-        WHERE  tgl BETWEEN '2022-08-01' AND '2022-08-31' AND kodesite='I' 
+        WHERE ".$cari." ".$tanggal." ".$site." 
         GROUP BY nom_unit                                                
         )                                                                
         SELECT                                                           

@@ -12,13 +12,16 @@
         <h2 class="text-lg font-medium truncate mr-5 ">
             MOHH Harian
         </h2>
-        <form method="POST" action="{{route('super_admin.mohh.post')}}" class="w-full sm:w-auto relative ml-auto mt-3 sm:mt-0">
+        <div class="w-full sm:w-auto relative ml-auto mt-3 sm:mt-0">
+            <form method="POST" action="{{route('super_admin.mohh.post')}}">
             @csrf
             <i class="w-4 h-4 absolute my-auto inset-y-0 ml-3 left-0 z-10 text-slate-500" data-lucide="search"></i>
             <input type="text" class="form-control w-full sm:w-64 box px-10 ml-auto" placeholder="Cari MOHH" name="cari_1">
+            </form>
             <div class="inbox-filter dropdown absolute inset-y-0 mr-3 right-0 flex items-center" data-tw-placement="bottom-start">
                 <i class="dropdown-toggle w-4 h-4 cursor-pointer text-slate-500" role="button" aria-expanded="false" data-tw-toggle="dropdown" data-lucide="chevron-down"></i>
-                <div class="inbox-filter__dropdown-menu dropdown-menu pt-2">
+                <form method="POST" action="{{route('super_admin.mohh.post')}}" class="inbox-filter__dropdown-menu dropdown-menu pt-2">
+                    @csrf
                     <div class="dropdown-content">
                         <div class="grid grid-cols-12 gap-4 gap-y-3 p-3">
                             <div class="col-span-6">
@@ -35,22 +38,17 @@
                                 </select>
                             </div>
                             <div class="col-span-6">
-                                <label for="input-filter-2" class="form-label text-xs">Tanggal Mulai</label>
-                                <input id="input-filter-2" type="date" class="form-control flex-1" name="tglMulai">
-                            </div>
-                            
-                            <div class="col-span-6">
-                                <label for="input-filter-2" class="form-label text-xs">Tanggal Akhir</label>
-                                <input id="input-filter-2" type="date" class="form-control flex-1" name="tglAkhir">
+                                <label for="input-filter-2" class="form-label text-xs">Bulan</label>
+                                <input id="input-filter-2" type="month" class="form-control flex-1" name="bulan">
                             </div>
                             <div class="col-span-12 flex items-center mt-3">
                                 <button type="submit" class="btn btn-primary w-32">Search</button>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
     <hr class="mb-10">
 
