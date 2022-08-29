@@ -173,6 +173,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
 
         // Mohh harian
         Route::get('mohh-harian', [MohhController::class, 'index'])->name('mohh.index');
+        Route::post('mohh-harian', [MohhController::class, 'index'])->name('mohh.post');
     });
 });
 
