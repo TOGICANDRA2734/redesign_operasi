@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\KendalaController as Admin_KendalaController;
 use App\Http\Controllers\Admin\ProductivityController as Admin_ProductivityController;
 use App\Http\Controllers\BDDokController;
 use App\Http\Controllers\BDHarianController;
+use App\Http\Controllers\MohhController;
 use App\Http\Controllers\POController;
 use App\Http\Controllers\POTransaksiController;
 use App\Http\Controllers\ProductivityCoalController;
@@ -169,6 +170,9 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         // PO Transaksi 
         Route::resource('po-transaksi-harian', POTransaksiController::class);
         Route::post('po-transaksi-harian/delete/{id}', [POTransaksiController::class, 'deleteData'])->name('po-transaksi-harian.delete');
+
+        // Mohh harian
+        Route::get('mohh-harian', [MohhController::class, 'index'])->name('mohh.index');
     });
 });
 

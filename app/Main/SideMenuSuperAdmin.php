@@ -129,6 +129,15 @@ class SideMenuSuperAdmin
                             'layout' => 'side-menu'
                         ],
                     ],
+                    
+                    'mohh-harian' => [
+                        'icon' => 'box',
+                        'title' => 'MOHH Harian',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'route_name' => 'super_admin.mohh.index',
+                    ],
                 ],
             ],
             'devider',
