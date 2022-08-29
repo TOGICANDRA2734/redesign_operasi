@@ -15,7 +15,7 @@ class SideMenu
         return [
             'dashboard' => [
                 'icon' => 'home',
-                'route_name' => 'dashboard',
+            'route_name' => 'dashboard',
                 'params' => [
                     'layout' => 'side-menu'
                 ],

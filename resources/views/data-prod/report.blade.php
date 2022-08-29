@@ -28,7 +28,10 @@
             <div class="dropdown-menu w-40">
                 <ul class="dropdown-content">
                     <li>
-                        <a href="{{route('super_admin.export_data')}}" class="dropdown-item"> Excel </a>
+                        <form action="{{route('super_admin.export_data.index')}}" method="POST">
+                            
+                            <button type="submit" class="dropdown-item"> Excel </button>
+                        </form>
                     </li>
                     <li>
                         <a href="" class="dropdown-item"> PDF </a>
@@ -88,7 +91,7 @@
         const kodesite = $i(this).val();
         $i.ajax({
             type: "POST",
-            url: 'http://ptrci.co.id/datacenter/public/super_admin/data-prod-report?layout=side-menu',
+            url: '/super_admin/data-prod-report?layout=side-menu',
             data: {
                 'kodesite': kodesite
             },

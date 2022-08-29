@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Maatwebsite\Excel\Facades\Excel;
 
 class dataProdController extends Controller
 {
@@ -370,10 +371,14 @@ class dataProdController extends Controller
         }
     }
 
-    public function export_data()
+    public function export_data(Request $request)
     {
         $bulan = Carbon::now();
         $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+
+        if($request && $request->has('kodesite')){
+            
+        }
 
         $subquery = "SELECT tgl tgl_data,
         IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN ob END),1),'-') AS ob_1,
@@ -389,7 +394,5 @@ class dataProdController extends Controller
         $data = collect(DB::select($subquery));
 
         return Excel::download(new DataProdExport($data), 'file.xls');
-
-
     }
 }

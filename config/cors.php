@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['http://ptrci.co.id/datacenter/public/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 

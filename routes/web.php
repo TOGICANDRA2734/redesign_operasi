@@ -54,7 +54,7 @@ Route::controller(AuthController::class)->middleware('loggedin')->group(function
     Route::post('register', 'register')->name('register.store');
 });
 
-Route::middleware(['auth', 'role:user,'])->group(function() {
+Route::middleware(['auth', 'role:user'])->group(function() {
     Route::group(['prefix'=>'user', 'as' => 'user.'],function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -63,6 +63,7 @@ Route::middleware(['auth', 'role:user,'])->group(function() {
         Route::get('dashboard/detail_filtered/', [DashboardController::class, 'show_data_filtered'])->name('dashboard.show.filtered');
         Route::resource('data-prod', User_dataProdController::class);
         Route::get('data-prod-report', [User_dataProdController::class, 'report'])->name('data-prod.report');
+        Route::post('data-prod-report', [dataProdController::class, 'report'])->name('data-prod.report.post');
         Route::post('detail-pit', [User_dataProdController::class, 'getPit'])->name('data-prod.getPit');
         Route::resource('productivity', User_ProductivityController::class);
         Route::resource('kendala', User_KendalaController::class);        
@@ -122,11 +123,12 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::get('dashboard/detail/{site}', [DashboardController::class, 'show'])->name('dashboard.show');
         Route::get('dashboard/detail_filtered/', [DashboardController::class, 'show_data_filtered'])->name('dashboard.show.filtered');
         Route::resource('data-prod', dataProdController::class);
+        Route::get('data-prod-excel-generator', [dataProdController::class, 'export_data'])->name('export_data.index');
         Route::get('data-prod/create_data/{tgl}', [dataProdController::class, 'create_data'])->name('create_data.index');
         Route::put('data-prod/update_data/{data_prod}', [dataProdController::class, 'update_data'])->name('update_data.index');
         Route::get('data-prod/{id}/{tgl}/{other}', [dataProdController::class, 'edit_data'])->name('edit_data_other.index');
         Route::get('data-prod-report', [dataProdController::class, 'report'])->name('data-prod.report');
-        Route::post('data-prod-report', [dataProdController::class, 'report'])->name('data-prod.report');
+        Route::post('data-prod-report', [dataProdController::class, 'report'])->name('data-prod.report.post');
         Route::post('detail-pit', [dataProdController::class, 'getPit'])->name('data-prod.getPit');
 
         Route::resource('productivity', ProductivityController::class);
@@ -186,6 +188,7 @@ Route::middleware('auth')->group(function() {
     Route::put('data-prod/update_data/{data_prod}', [dataProdController::class, 'update_data'])->name('update_data.index');
     Route::get('data-prod/{id}/{tgl}/{other}', [dataProdController::class, 'edit_data'])->name('edit_data_other.index');
     Route::get('data-prod-report', [dataProdController::class, 'report'])->name('data-prod.report');
+    Route::post('data-prod-report', [dataProdController::class, 'report'])->name('data-prod.report.post');
     Route::post('detail-pit', [dataProdController::class, 'getPit'])->name('data-prod.getPit');
 
     // Productivity
