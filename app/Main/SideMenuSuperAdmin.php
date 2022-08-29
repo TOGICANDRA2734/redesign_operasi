@@ -138,6 +138,15 @@ class SideMenuSuperAdmin
                         ],
                         'route_name' => 'super_admin.mohh.index',
                     ],
+                    
+                    'rep-harian' => [
+                        'icon' => 'box',
+                        'title' => 'Report Harian',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'route_name' => 'super_admin.rep.index',
+                    ],
                 ],
             ],
             'devider',

@@ -27,6 +27,7 @@ use App\Http\Controllers\MohhController;
 use App\Http\Controllers\POController;
 use App\Http\Controllers\POTransaksiController;
 use App\Http\Controllers\ProductivityCoalController;
+use App\Http\Controllers\RepHarController;
 // User
 use App\Http\Controllers\User\dataProdController as User_dataProdController;
 use App\Http\Controllers\User\KendalaController as User_KendalaController;
@@ -174,6 +175,11 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         // Mohh harian
         Route::get('mohh-harian', [MohhController::class, 'index'])->name('mohh.index');
         Route::post('mohh-harian', [MohhController::class, 'index'])->name('mohh.post');
+
+        // Report Harian
+        Route::get('rep-harian', [RepHarController::class, 'index'])->name('rep.index');
+        Route::post('rep-harian', [RepHarController::class, 'index'])->name('rep.post');
+
     });
 });
 
