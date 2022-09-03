@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cuaca;
 use App\Models\Productivity;
+use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -17,8 +18,23 @@ class ProductivityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        // dd($request);
+
+        if($request->has('pilihBulan')){
+            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
+            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+        } else {
+            $tanggal = "tgl=CURDATE()";        
+        }
+
+        if($request->has('kodesite') && $request->kodesite !== 'all'){
+            $site= "AND A.kodesite='".$request->kodesite."'";
+        } else {
+            $site= "";
+        }
+
         // Data Detail PTY
         $subquery = "SELECT     
         nom_unit,
@@ -46,13 +62,16 @@ class ProductivityController extends Controller
         ON A.kodesite = B.kodesite                
         JOIN plant_tipe_unit C
         ON LEFT(A.nom_unit,4)= C.kode                                      
-        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2'
+        WHERE ".$tanggal." AND del=0 AND C.gol_1='2' ".$site."
         GROUP BY a.kodesite, nom_unit,TYPE
         ORDER BY b.id, nom_unit";
 
         $dataPty = collect(DB::select($subquery));
+        dd($dataPty);
 
-        return view('productivity.index', compact('dataPty'));
+        $site = Site::where('status_website', 1)->get();
+
+        return view('productivity.index', compact('dataPty', 'site'));
     }
 
     /**

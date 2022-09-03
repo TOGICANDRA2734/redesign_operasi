@@ -162,6 +162,22 @@ class SideMenuSuperAdmin
                             'layout' => 'side-menu'
                         ],
                     ],
+                    'populasi-unit' => [
+                        'icon' => 'box',
+                        'title' => 'Populasi unit',
+                        'route_name' => 'super_admin.populasi-unit.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'historical-unit' => [
+                        'icon' => 'box',
+                        'title' => 'Historical Unit',
+                        'route_name' => 'super_admin.historical-unit.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
                 ],
             ],
         ];

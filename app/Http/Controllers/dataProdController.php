@@ -332,10 +332,15 @@ class dataProdController extends Controller
     {
         // dd($request);
 
-        $bulan = Carbon::now();
-        $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+        if($request->has('pilihBulan')){
+            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
+            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+        } else {
+            $bulan = Carbon::now();
+            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";        
+        }
 
-        if($request->has('kodesite')){
+        if($request->has('kodesite') && $request->kodesite !== 'all'){
             $subquery = "SELECT tgl tgl_data,
             IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN ob END),1),'-') AS ob_1,
             IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN coal END),1),'-') AS coal_1,
@@ -360,6 +365,7 @@ class dataProdController extends Controller
         }
 
         $data = collect(DB::select($subquery));
+        // dd($data);
 
         $site = Site::select('namasite', 'lokasi', 'kodesite')->where('status_website', 1)->get();
 

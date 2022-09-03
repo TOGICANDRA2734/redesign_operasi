@@ -9,12 +9,14 @@
     <!-- Title -->
     <div class="flex justify-between items-center mt-8 ">
         <h2 class="text-lg font-medium ">
-            Laporan Produksi 
+            Laporan Produksi
         </h2>
         @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
-        <div class="ml-auto mr-2">
+        <div class="ml-auto mr-2 flex">
+            <input type="month" name="pilihBulan" id="pilihBulan" class="mr-3 shadow-sm border p-2 rounded-md w-30  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray">
+
             <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
-                <option value="">Pilih</option>
+                <option value="">All Site</option>
                 @foreach($site as $st)
                 <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
                 @endforeach
@@ -29,7 +31,7 @@
                 <ul class="dropdown-content">
                     <li>
                         <form action="{{route('super_admin.export_data.index')}}" method="POST">
-                            
+
                             <button type="submit" class="dropdown-item"> Excel </button>
                         </form>
                     </li>
@@ -88,15 +90,73 @@
             }
         });
 
-        const kodesite = $i(this).val();
+        var kodesite = $i(this).val();
+        $bulan = new Date();
+        const pilihBulan = $i('#pilihBulan').val() == null ? $i('#pilihBulan').val() : $bulan.getFullYear() + '-' + ($bulan.getMonth()+1).toString();
+
+        if (kodesite == null || kodesite == '') {
+            kodesite = 'all';
+        }
+
+        console.log("PILIH Site", kodesite, pilihBulan);
+
         $i.ajax({
             type: "POST",
             url: '/super_admin/data-prod-report?layout=side-menu',
             data: {
-                'kodesite': kodesite
+                'kodesite': kodesite,
+                'pilihBulan': pilihBulan
             },
             success: function(result) {
                 $i("table tbody").empty();
+                fullText = ""
+                if (result) {
+                    $i.each(result.data, function(index) {
+                        text = '<tr class="text-center bg-white">' +
+                            '<td class="">' + result.data[index].tgl_data + '</td>' +
+                            '<td class="">' + result.data[index].ob_1 + '</td>' +
+                            '<td class="">' + result.data[index].ob_2 + '</td>' +
+                            '<td class="">' + result.data[index].coal_1 + '</td>' +
+                            '<td class="">' + result.data[index].coal_2 + '</td>' +
+                            '<td class="">' + result.data[index].ach_ob + '</td>' +
+                            '<td class="">' + result.data[index].ach_coal + '</td>' +
+                            '</tr>';
+                        fullText += text
+                    });
+                    $("table tbody").html(fullText);
+                }
+            },
+            error: function(result) {
+                console.log("error", result);
+            },
+        });
+    })
+
+    $('#pilihBulan').on('change', function() {
+        $i = jQuery.noConflict();
+        $i.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var kodesite = $i('#pilihSite').val();
+        if (kodesite == null || kodesite == '') {
+            kodesite = 'all';
+        }
+        const pilihBulan = $i(this).val();
+
+        console.log("PILIH BULAN", kodesite, pilihBulan);
+
+        $i.ajax({
+            type: "POST",
+            url: '/super_admin/data-prod-report?layout=side-menu',
+            data: {
+                'pilihBulan': pilihBulan,
+                'kodesite': kodesite,
+            },
+            success: function(result) {
+                $i("table tbody ").empty();
                 fullText = ""
                 if (result) {
                     $i.each(result.data, function(index) {

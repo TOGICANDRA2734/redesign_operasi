@@ -23,8 +23,10 @@ use App\Http\Controllers\Admin\KendalaController as Admin_KendalaController;
 use App\Http\Controllers\Admin\ProductivityController as Admin_ProductivityController;
 use App\Http\Controllers\BDDokController;
 use App\Http\Controllers\BDHarianController;
+use App\Http\Controllers\HistoricalUnitController;
 use App\Http\Controllers\MohhController;
 use App\Http\Controllers\POController;
+use App\Http\Controllers\PopulasiUnitController;
 use App\Http\Controllers\POTransaksiController;
 use App\Http\Controllers\ProductivityCoalController;
 use App\Http\Controllers\RepHarController;
@@ -180,6 +182,13 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::get('rep-harian', [RepHarController::class, 'index'])->name('rep.index');
         Route::post('rep-harian', [RepHarController::class, 'index'])->name('rep.post');
 
+        // Populasi Unit
+        Route::get('populasi-unit', [PopulasiUnitController::class, 'index'])->name('populasi-unit.index');
+        Route::post('/populasi-unit/showUser', [PopulasiUnitController::class, 'getUserbyid'])->name('populasi-unit.showUser');
+
+
+        // Historical Unit
+        Route::get('historical-unit', [HistoricalUnitController::class, 'index'])->name('historical-unit.index');
     });
 });
 
