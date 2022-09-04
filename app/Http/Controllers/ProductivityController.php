@@ -67,7 +67,6 @@ class ProductivityController extends Controller
         ORDER BY b.id, nom_unit";
 
         $dataPty = collect(DB::select($subquery));
-        dd($dataPty);
 
         $site = Site::where('status_website', 1)->get();
 

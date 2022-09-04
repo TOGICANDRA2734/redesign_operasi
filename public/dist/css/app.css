@@ -2523,9 +2523,6 @@ select{
 .p-1{
     padding: 0.25rem;
 }
-.p-10{
-    padding: 2.5rem;
-}
 .px-5{
     padding-left: 1.25rem;
     padding-right: 1.25rem;
@@ -2615,14 +2612,14 @@ select{
 .pt-2{
     padding-top: 0.5rem;
 }
+.pb-3{
+    padding-bottom: 0.75rem;
+}
 .pb-5{
     padding-bottom: 1.25rem;
 }
 .pl-4{
     padding-left: 1rem;
-}
-.pb-3{
-    padding-bottom: 0.75rem;
 }
 .text-left{
     text-align: left;
@@ -16155,6 +16152,9 @@ html body{
     }
     .sm\:mr-auto{
         margin-right: auto;
+    }
+    .sm\:ml-40{
+        margin-left: 10rem;
     }
     .sm\:block{
         display: block;

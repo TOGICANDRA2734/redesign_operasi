@@ -48,6 +48,7 @@ import Toastify from "toastify-js";
         }).showToast();
     });
 
+
     // Notification with actions
     $("#notification-with-actions-toggle").on("click", function () {
         Toastify({
