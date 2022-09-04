@@ -28,9 +28,6 @@
                     <div class="font-medium">Data Berhasil Difilter!</div>
                 </div>
             </div> <!-- END: Notification Content -->
-            <!-- BEGIN: Notification Toggle -->
-            <!-- <button id="success-notification-toggle" class="btn btn-primary">Show Notification</button>  -->
-            <!-- END: Notification Toggle -->
 
         </div>
         @endif

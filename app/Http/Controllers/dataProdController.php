@@ -330,7 +330,6 @@ class dataProdController extends Controller
 
     public function report(Request $request)
     {
-        // dd($request);
 
         if($request->has('pilihBulan')){
             $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
@@ -369,7 +368,7 @@ class dataProdController extends Controller
 
         $site = Site::select('namasite', 'lokasi', 'kodesite')->where('status_website', 1)->get();
 
-        if($request->has('kodesite')){
+        if($request->has('kodesite') || $request->has('pilihBulan')){
             $response['data'] = $data;
             return response()->json($response);
         } else {
