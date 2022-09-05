@@ -147,7 +147,6 @@
                             '<td class="">' + result.data[index].j12 + '</td>' +
                             '<td class="">' + result.data[index].j13 + '</td>' +
                             '<td class="">' + result.data[index].j14 + '</td>' +
-                            '<td class="">' + result.data[index].dist + '</td>' +
                             '<td class="">' + result.data[index].ket + '</td>' +
                             '</tr>';
                         fullText += text
@@ -213,7 +212,6 @@
                             '<td class="">' + result.data[index].j12 + '</td>' +
                             '<td class="">' + result.data[index].j13 + '</td>' +
                             '<td class="">' + result.data[index].j14 + '</td>' +
-                            '<td class="">' + result.data[index].dist + '</td>' +
                             '<td class="">' + result.data[index].ket + '</td>' +
                             '</tr>';
                         fullText += text

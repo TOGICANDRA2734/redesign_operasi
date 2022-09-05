@@ -103,7 +103,6 @@ class ProductivityController extends Controller
         } else {
             return view('productivity.index', compact('data', 'site'));
         }
-
     }
 
     /**

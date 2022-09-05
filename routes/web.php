@@ -143,6 +143,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::post('productivity_store', [ProductivityController::class, 'store_data'])->name('productivity.store_data');
         
         Route::resource('productivity_coal', ProductivityCoalController::class);
+        Route::post('productivity_coal_report', [ProductivityCoalController::class, 'index'])->name('productivity_coal.report');
         Route::post('productivity_check_coal', [ProductivityCoalController::class, 'check'])->name('productivity_coal.check');
         Route::post('productivity_store_coal', [ProductivityCoalController::class, 'store_data'])->name('productivity_coal.store_data');
         

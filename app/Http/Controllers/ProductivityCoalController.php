@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductivityCoal;
+use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,37 +16,83 @@ class ProductivityCoalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Data Detail PTY
-        $subquery = "SELECT A.id,
-        b.namasite,
-        pit,
-        ROUND(AVG(rit), 1) avg_rit,                                                        
-        IFNULL(SUM(CASE WHEN jam = 7 THEN rit END),'-') j1,                    
-        IFNULL(SUM(CASE WHEN jam = 8 THEN rit END),'-') j2,                          
-        IFNULL(SUM(CASE WHEN jam = 9 THEN rit END),'-') j3,                    
-        IFNULL(SUM(CASE WHEN jam = 10 THEN rit END),'-') j4,                          
-        IFNULL(SUM(CASE WHEN jam = 11 THEN rit END),'-') j5,                    
-        IFNULL(SUM(CASE WHEN jam = 12 THEN rit END),'-') j6,                          
-        IFNULL(SUM(CASE WHEN jam = 13 THEN rit END),'-') j7,                    
-        IFNULL(SUM(CASE WHEN jam = 14 THEN rit END),'-') j8,                          
-        IFNULL(SUM(CASE WHEN jam = 15 THEN rit END),'-') j9,                    
-        IFNULL(SUM(CASE WHEN jam = 16 THEN rit END),'-') j10,                          
-        IFNULL(SUM(CASE WHEN jam = 17 THEN rit END),'-') j11,                    
-        IFNULL(SUM(CASE WHEN jam = 18 THEN rit END),'-') j12,                          
-        IFNULL(SUM(CASE WHEN jam = 19 THEN rit END),'-') j13,
-        IFNULL((SELECT ket FROM pma_dailyprod_pty_coal X WHERE ket IS NOT NULL AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty_coal WHERE tgl=CURDATE()) LIMIT 1), '-') ket
-        FROM pma_dailyprod_pty_coal A 
-        JOIN site B
-        ON A.kodesite = B.kodesite                                             
-        WHERE tgl=CURDATE() AND del=0
-        GROUP BY a.kodesite
-        ORDER BY b.id";
 
-        $dataCoal = collect(DB::select($subquery));
+        if ($request->has('pilihBulan')) {
+            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
+            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+        } else {
+            $bulan = Carbon::now();
+            $tanggal =  "tgl=CURDATE()";
+        }
 
-        return view('productivity_coal.index', compact('dataCoal'));
+        if ($request->has('kodesite') && $request->kodesite !== 'all') {
+            $subquery = "SELECT A.id,
+            DATE_FORMAT(tgl, '%d-%m-%Y') tanggal,    
+            b.namasite,
+            pit,
+            ROUND(AVG(rit), 1) avg_rit,                                                        
+            IFNULL(SUM(CASE WHEN jam = 6 THEN rit END),'-') j1,                    
+            IFNULL(SUM(CASE WHEN jam = 7 THEN rit END),'-') j2,                    
+            IFNULL(SUM(CASE WHEN jam = 8 THEN rit END),'-') j3,                          
+            IFNULL(SUM(CASE WHEN jam = 9 THEN rit END),'-') j4,                    
+            IFNULL(SUM(CASE WHEN jam = 10 THEN rit END),'-') j5,                          
+            IFNULL(SUM(CASE WHEN jam = 11 THEN rit END),'-') j6,                    
+            IFNULL(SUM(CASE WHEN jam = 12 THEN rit END),'-') j7,                          
+            IFNULL(SUM(CASE WHEN jam = 13 THEN rit END),'-') j8,                    
+            IFNULL(SUM(CASE WHEN jam = 14 THEN rit END),'-') j9,                          
+            IFNULL(SUM(CASE WHEN jam = 15 THEN rit END),'-') j10,                    
+            IFNULL(SUM(CASE WHEN jam = 16 THEN rit END),'-') j11,                          
+            IFNULL(SUM(CASE WHEN jam = 17 THEN rit END),'-') j12,                    
+            IFNULL(SUM(CASE WHEN jam = 18 THEN rit END),'-') j13,                          
+            IFNULL(SUM(CASE WHEN jam = 19 THEN rit END),'-') j14,
+            IFNULL((SELECT ket FROM pma_dailyprod_pty_coal X WHERE ket IS NOT NULL AND tgl=A.tgl AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty_coal WHERE tgl=A.tgl) LIMIT 1), '-') ket
+            FROM pma_dailyprod_pty_coal A 
+            JOIN site B
+            ON A.kodesite = B.kodesite              
+            WHERE " . $tanggal . " AND del=0  AND A.kodesite='" . $request->kodesite . "'
+            GROUP BY a.kodesite
+            ORDER BY b.id";
+        } else {
+            $subquery = "SELECT A.id,
+            DATE_FORMAT(tgl, '%d-%m-%Y') tanggal,    
+            b.namasite,
+            pit,
+            ROUND(AVG(rit), 1) avg_rit,                                                        
+            IFNULL(SUM(CASE WHEN jam = 6 THEN rit END),'-') j1,                    
+            IFNULL(SUM(CASE WHEN jam = 7 THEN rit END),'-') j2,                    
+            IFNULL(SUM(CASE WHEN jam = 8 THEN rit END),'-') j3,                          
+            IFNULL(SUM(CASE WHEN jam = 9 THEN rit END),'-') j4,                    
+            IFNULL(SUM(CASE WHEN jam = 10 THEN rit END),'-') j5,                          
+            IFNULL(SUM(CASE WHEN jam = 11 THEN rit END),'-') j6,                    
+            IFNULL(SUM(CASE WHEN jam = 12 THEN rit END),'-') j7,                          
+            IFNULL(SUM(CASE WHEN jam = 13 THEN rit END),'-') j8,                    
+            IFNULL(SUM(CASE WHEN jam = 14 THEN rit END),'-') j9,                          
+            IFNULL(SUM(CASE WHEN jam = 15 THEN rit END),'-') j10,                    
+            IFNULL(SUM(CASE WHEN jam = 16 THEN rit END),'-') j11,                          
+            IFNULL(SUM(CASE WHEN jam = 17 THEN rit END),'-') j12,                    
+            IFNULL(SUM(CASE WHEN jam = 18 THEN rit END),'-') j13,                          
+            IFNULL(SUM(CASE WHEN jam = 19 THEN rit END),'-') j14,
+            IFNULL((SELECT ket FROM pma_dailyprod_pty_coal X WHERE ket IS NOT NULL AND tgl=A.tgl AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty_coal WHERE tgl=A.tgl) LIMIT 1), '-') ket
+            FROM pma_dailyprod_pty_coal A 
+            JOIN site B
+            ON A.kodesite = B.kodesite                                             
+            WHERE " . $tanggal . " AND del=0
+            GROUP BY a.kodesite
+            ORDER BY b.id";
+        }
+
+        $data = collect(DB::select($subquery));
+
+        $site = Site::where('status_website', 1)->get();
+
+        if ($request->has('kodesite') || $request->has('pilihBulan')) {
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('productivity_coal.index', compact('data', 'site'));
+        }
     }
 
     /**
@@ -77,7 +124,7 @@ class ProductivityCoalController extends Controller
         FROM pma_dailyprod_pty_coal A 
         JOIN site B
         ON A.kodesite = B.kodesite                                             
-        WHERE tgl=CURDATE() AND del=0 and a.kodesite='".Auth::user()->kodesite."'
+        WHERE tgl=CURDATE() AND del=0 and a.kodesite='" . Auth::user()->kodesite . "'
         GROUP BY a.kodesite
         ORDER BY b.id";
 
@@ -89,11 +136,11 @@ class ProductivityCoalController extends Controller
         FROM pma_dailyprod_pty_coal A 
         JOIN site B
         ON A.kodesite = B.kodesite                                             
-        WHERE tgl=CURDATE() AND del=0 and a.kodesite='".Auth::user()->kodesite."'
+        WHERE tgl=CURDATE() AND del=0 and a.kodesite='" . Auth::user()->kodesite . "'
         ORDER BY b.id";
         $totalDataCoal = collect(DB::select($subquery));
 
-        $waktu = Carbon::now()->format('H:i'); 
+        $waktu = Carbon::now()->format('H:i');
 
         return view('productivity_coal.create', compact('dataCoal', 'dataPit', 'waktu', 'totalDataCoal'));
     }
@@ -113,7 +160,7 @@ class ProductivityCoalController extends Controller
     {
 
         $data = DB::table('pma_dailyprod_pty_coal')->where('tgl', '=', $request->tgl)->where('kodesite', '=', $request->kodesite)->where('jam', '=', $request->jam)->count();
-        if($data == 0){
+        if ($data == 0) {
             $request->validate([
                 'tgl' => 'required',
                 'jam' => 'required',
@@ -121,7 +168,7 @@ class ProductivityCoalController extends Controller
                 'kodesite' => 'required',
                 'pit' => 'required',
             ]);
-    
+
             $record = ProductivityCoal::create([
                 'tgl' => $request->tgl,
                 'jam' => $request->jam,
@@ -133,10 +180,9 @@ class ProductivityCoalController extends Controller
                 'time_admin' => Carbon::now(),
             ]);
 
-            if($record){
+            if ($record) {
                 return redirect()->route('productivity_coal.create')->with(['success' => 'Data Berhasil Ditambah!']);
-            }
-            else{
+            } else {
                 return redirect()->route('productivity_coal.create')->with(['error' => 'Data Gagal Ditambah!']);
             }
         } else {
@@ -182,21 +228,20 @@ class ProductivityCoalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        for($i=0; $i<$request->total; $i++){
-            $id = $request['id_'.$i];
+        for ($i = 0; $i < $request->total; $i++) {
+            $id = $request['id_' . $i];
             $data = ProductivityCoal::findOrFail($id);
 
             $data->update([
-                'rit' => $request['rit_'.$i],
-                'ket' => $request['remarks_'.$i],
-                'pit' => $request['pit_'.$i],
+                'rit' => $request['rit_' . $i],
+                'ket' => $request['remarks_' . $i],
+                'pit' => $request['pit_' . $i],
             ]);
         }
 
-        if($data){
+        if ($data) {
             return redirect()->route('super_admin.productivity_coal.create')->with(['success' => 'Data Berhasil Diubah!']);
-        }
-        else{
+        } else {
             return redirect()->route('super_admin.productivity_coal.create')->with(['error' => 'Data Gagal Diubah!']);
         }
     }

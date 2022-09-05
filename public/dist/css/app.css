@@ -1973,6 +1973,9 @@ select{
 .ml-6{
     margin-left: 1.5rem;
 }
+.mr-4{
+    margin-right: 1rem;
+}
 .-mt-10{
     margin-top: -2.5rem;
 }
@@ -1987,9 +1990,6 @@ select{
 }
 .mt-1\.5{
     margin-top: 0.375rem;
-}
-.mr-4{
-    margin-right: 1rem;
 }
 .mb-4{
     margin-bottom: 1rem;
@@ -16152,9 +16152,6 @@ html body{
     }
     .sm\:mr-auto{
         margin-right: auto;
-    }
-    .sm\:ml-40{
-        margin-left: 10rem;
     }
     .sm\:block{
         display: block;
