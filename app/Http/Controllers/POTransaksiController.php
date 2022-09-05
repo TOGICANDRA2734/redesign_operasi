@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\plant_status_db_po_transaksi;
 use App\Models\PO;
+use App\Models\Site;
 use Illuminate\Http\Request;
 
 use function PHPUnit\Framework\isNull;
@@ -79,10 +80,9 @@ class POTransaksiController extends Controller
     public function show($id)
     {
         $data = plant_status_db_po_transaksi::where('del', 1)->where('id_tiket_po', $id)->get();
-        
-        // dd($data[0]->no_mrs == "", $data[0]->no_mrs, $data[1]->no_mrs == "", $data[1]->no_mrs);
+        $site = Site::where('status',1)->get();        
 
-        return view('po-transaksi-harian.show', compact('data'));
+        return view('po-transaksi-harian.show', compact('data', 'site'));
     }
 
     /**
