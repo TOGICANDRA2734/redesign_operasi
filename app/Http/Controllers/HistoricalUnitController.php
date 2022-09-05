@@ -56,8 +56,12 @@ class HistoricalUnitController extends Controller
      */
     public function show($id)
     {
+        $id = Plant_Populasi::where('nom_unit', $id)->get()->pluck('id');
         $data = Plant_Populasi::findOrFail($id);
-        dd($data);
+        $site = Site::where('status', 1)->get();
+
+        
+        return view('historical-unit.show', compact('data', 'site'));
     }
 
     /**

@@ -93,11 +93,11 @@
                             <div class="w-px h-12 border border-r border-dashed border-slate-200 dark:border-darkmode-300 mx-4 xl:mx-5"></div>
                             <div>
                                 @if($data_detail_OB_plan[0]->OB != 0)
-                                    <div id="obAch" class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_OB_prod[0]->OB / $data_detail_OB_plan[0]->OB * 100)}}%</div>
+                                <div id="obAch" class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_OB_prod[0]->OB / $data_detail_OB_plan[0]->OB * 100)}}%</div>
                                 @else
-                                    <div class="text-slate-500 text-lg xl:text-xl font-medium">NA</div>
+                                <div class="text-slate-500 text-lg xl:text-xl font-medium">NA</div>
                                 @endif
-                                    <div class="mt-0.5 text-slate-500">ACH</div>
+                                <div class="mt-0.5 text-slate-500">ACH</div>
                             </div>
                         </div>
                         <div class="dropdown md:ml-auto mt-5 md:mt-0">
@@ -113,7 +113,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="">
+                    <div class="relative h-16 w-full sm:h-full" style="position: relative; height: 30vh; width: 100%;">
                         <canvas id="overburden" class="mt-6"></canvas>
                     </div>
                 </div>
@@ -165,7 +165,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="">
+                    <div class="relative h-16 w-full sm:h-full" style="position: relative; height: 30vh; width: 100%;">
                         <canvas id="coal" class="mt-6"></canvas>
                     </div>
                 </div>
@@ -292,14 +292,14 @@
                                     {{$key+1}}
                                 </td>
                                 @foreach($dp as $key => $d)
-                                    @if($key!='id')
-                                    <td class="text-center">
-                                        {{$d}} 
-                                    </td>
-                                    @endif
+                                @if($key!='id')
+                                <td class="text-center">
+                                    {{$d}}
+                                </td>
+                                @endif
                                 @endforeach
                             </tr>
-                            @endforeach    
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -382,11 +382,11 @@
             $j("#coalAch").empty();
 
             $j("#obAct").append(number_format(response['data_detail_OB_prod'][0].OB, 1));
-            $j("#obPlan").append(number_format(response['data_detail_OB_plan'][0].OB,1));
+            $j("#obPlan").append(number_format(response['data_detail_OB_plan'][0].OB, 1));
             $j("#obAch").append(number_format((response['data_detail_OB_prod'][0].OB / response['data_detail_OB_plan'][0].OB) * 100, 1) + '%');
             $j("#coalAct").append(number_format(response['data_detail_coal_prod'][0].coal, 1));
             $j("#coalPlan").append(number_format(response['data_detail_coal_plan'][0].coal, 1));
-            $j("#coalAch").append(number_format((response['data_detail_coal_prod'][0].coal / response['data_detail_coal_plan'][0].coal) * 100,1) + '%');
+            $j("#coalAch").append(number_format((response['data_detail_coal_prod'][0].coal / response['data_detail_coal_plan'][0].coal) * 100, 1) + '%');
         }
         // Coal Range
 
@@ -432,7 +432,7 @@
 
         //options
         var options = {
-            responsive: true,
+            maintainAspectRatio: false,
             title: {
                 display: true,
                 position: "top",
@@ -483,7 +483,7 @@
 
         //options
         var options = {
-            responsive: true,
+            maintainAspectRatio: false,
             title: {
                 display: true,
                 position: "top",
@@ -508,7 +508,7 @@
             options: options
         });
 
-        function number_format (number, decimals, dec_point, thousands_sep) {
+        function number_format(number, decimals, dec_point, thousands_sep) {
             // Strip all characters but numerical ones.
             number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
             var n = !isFinite(+number) ? 0 : +number,
@@ -516,7 +516,7 @@
                 sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
                 dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
                 s = '',
-                toFixedFix = function (n, prec) {
+                toFixedFix = function(n, prec) {
                     var k = Math.pow(10, prec);
                     return '' + Math.round(n * k) / k;
                 };
