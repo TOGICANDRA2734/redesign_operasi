@@ -7,16 +7,52 @@
 @section('subcontent')
 <div class="">
     <!-- Header -->
-    <div class="flex justify-between items-center py-4">
-        <!-- Title -->
-        <h2 class="text-lg font-medium truncate mr-5 ">
+    <div class="flex justify-between items-center mt-8 ">
+        <h2 class="text-lg font-medium ">
             Historical Unit
         </h2>
+        @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
+        <div class="ml-auto mr-2 flex">
+            <input type="text" name="cariNama" id="cariNama" placeholder="Cari Data" class="block shadow-sm border p-2 rounded-md w-30 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray mr-2">
+            <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
+                <option value="">All Site</option>
+                @foreach($site as $st)
+                <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
+                @endforeach
+            </select>
 
-        <select class="form-control w-24">
-            <option class="form-control" value="" disabled selected>Pilih</option>
+            <!-- BEGIN: Notification Content -->
+            <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
+                <div class="ml-4 mr-4">
+                    <div class="font-medium">Data Berhasil Difilter!</div>
+                </div>
+            </div> <!-- END: Notification Content -->
 
-        </select>
+        </div>
+        @endif
+        <a href="{{route('super_admin.populasi-unit.create')}}" class="btn px-2 box mr-2">
+            <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
+        </a>
+
+        <div class="dropdown">
+            <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
+                <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="download"></i> </span>
+            </button>
+            <div class="dropdown-menu w-40">
+                <ul class="dropdown-content">
+                    <li>
+                        <form action="{{route('super_admin.export_data.index')}}" method="POST">
+
+                            <button type="submit" class="dropdown-item"> Excel </button>
+                        </form>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"> PDF </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
     <hr class="mb-10">
 
@@ -35,8 +71,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
-
+                    @foreach($data as $key => $dt)
+                    <tr class="bg-white">
+                        <td class="whitespace-nowrap text-center">{{$key+1}}</td>
+                        @foreach($dt as $d)
+                        <td class="whitespace-nowrap text-center">{{$d}}</td>
+                        @endforeach
+                        <td class="whitespace-nowrap text-center">
+                            <!-- Detail -->
+                            <a href="{{route('super_admin.historical-unit.show', $dt->nom_unit)}}" value="{{1}}" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview" class="tbDetail btn btn-dark mr-1 mb-2">
+                                <i data-lucide="eye" class="w-5 h-5"></i>
+                            </a>
+                            <!-- End: Detail -->
+                            <!-- Edit -->
+                            <!-- <a href="{{ route('super_admin.populasi-unit.edit', 1) }}" class="tbDetail btn btn-warning mr-1 mb-2">
+                                <i data-lucide="edit" class="w-5 h-5"></i>
+                            </a> -->
+                            <!-- End: Edit -->
+                        </td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
