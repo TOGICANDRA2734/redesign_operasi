@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plant_bd;
+use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,7 +27,9 @@ class BDHarianController extends Controller
         ->orderBy('id')
         ->get();
 
-        return view('bd-harian.index', compact('data'));
+        $site = Site::where('status_website', 1)->get();
+
+        return view('bd-harian.index', compact('data', 'site'));
     }
 
     /**

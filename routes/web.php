@@ -186,7 +186,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::post('rep-harian', [RepHarController::class, 'index'])->name('rep.post');
 
         // Populasi Unit
-        Route::get('populasi-unit', [PopulasiUnitController::class, 'index'])->name('populasi-unit.index');
+        Route::resource('populasi-unit', PopulasiUnitController::class);
         Route::post('/populasi-unit/showUser', [PopulasiUnitController::class, 'getUserbyid'])->name('populasi-unit.showUser');
 
 

@@ -6,19 +6,56 @@
 
 @section('subcontent')
 <div class="">
-    <!-- Header -->
-    <div class="flex justify-between items-center py-4">
-        <!-- Title -->
-        <h2 class="text-lg font-medium truncate mr-5 ">
+    <!-- Title -->
+    <div class="flex justify-between items-center mt-8 ">
+        <h2 class="text-lg font-medium ">
             Populasi Unit
         </h2>
+        @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
+        <div class="ml-auto mr-2 flex">
+            <input type="text" name="cariNama" id="cariNama" placeholder="Cari Data" class="block shadow-sm border p-2 rounded-md w-30 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray mr-2">
+            <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
+                <option value="">All Site</option>
+                @foreach($site as $st)
+                <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
+                @endforeach
+            </select>
 
-        <select class="form-control w-24">
-            <option class="form-control" value="" disabled selected>Pilih</option>
+            <!-- BEGIN: Notification Content -->
+            <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
+                <div class="ml-4 mr-4">
+                    <div class="font-medium">Data Berhasil Difilter!</div>
+                </div>
+            </div> <!-- END: Notification Content -->
 
-        </select>
+        </div>
+        @endif
+        <a href="{{route('super_admin.populasi-unit.create')}}" class="btn px-2 box mr-2">
+            <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
+        </a>
+
+        <div class="dropdown">
+            <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
+                <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="download"></i> </span>
+            </button>
+            <div class="dropdown-menu w-40">
+                <ul class="dropdown-content">
+                    <li>
+                        <form action="{{route('super_admin.export_data.index')}}" method="POST">
+
+                            <button type="submit" class="dropdown-item"> Excel </button>
+                        </form>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"> PDF </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
     <hr class="mb-10">
+
 
     <!-- Table -->
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
@@ -55,8 +92,11 @@
                         @endforeach
                         <td class="cekTbModal">
                             <button href="javascript:;" value="{{$data[$key]->id}}" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview" class="tbDetail btn btn-dark mr-1 mb-2">
-                                <i data-lucide="archive" class="w-5 h-5"></i>
+                                <i data-lucide="eye" class="w-5 h-5"></i>
                             </button>
+                            <a href="{{ route('super_admin.populasi-unit.edit', 1) }}" class="tbDetail btn btn-warning mr-1 mb-2">
+                                <i data-lucide="edit" class="w-5 h-5"></i>
+                            </a>
                         </td>
 
                     </tr>
@@ -73,25 +113,30 @@
 <div id="superlarge-modal-size-preview" class="modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content p-5">
-            <div class="w-full overflow-hidden rounded-lg shadow-xs">
+            <div class="modal-header">
+                <h2 class="font-bold mb-2 text-xl">Data Unit</h2>
+
+            </div>
+            <div class="modal-body">
+
                 <div class="overflow-y-auto max-h-[30rem]">
                     <div class="w-full overflow-y-auto sm:max-h-[20rem] mt-3 mb-3">
-                        <h2 class="font-bold mb-2">Data Unit</h2>
                         <div class="grid grid-cols-1 gap-5">
                         </div>
                         <div id="imageUnit" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         </div>
 
-                        <table id='tableUnit' class="w-full whitespace-no-wrap border table-auto">
+                        <table id='tableUnit' class="table table-striped sm:mt-2 table-auto">
                             <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
+</div>
 </div>
 <!-- END: Super Large Modal Content -->
 
@@ -139,25 +184,25 @@
             $i("#imageUnit").append(image);
 
             var tr_str =
-                "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>" +
-                "<th class='px-1 py-2 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>NOM UNIT</th>" +
-                "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].nom_unit + "</td>" +
+                "<tr class=''>" +
+                "<th>NOM UNIT</th>" +
+                "<td>" + response['data'][0].nom_unit + "</td>" +
                 "</tr>" +
-                "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>" +
-                "<th class='px-1 py-2 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>DO</th>" +
-                "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + dateConverter(response['data'][0].DO) + "</td>" +
+                "<tr class=''>" +
+                "<th>DO</th>" +
+                "<td>" + dateConverter(response['data'][0].DO) + "</td>" +
                 "</tr>" +
-                "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>" +
-                "<th class='px-1 py-2 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Height</th>" +
-                "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].height + "</td>" +
+                "<tr class=''>" +
+                "<th>Height</th>" +
+                "<td>" + response['data'][0].height + "</td>" +
                 "</tr>" +
-                "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>" +
-                "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Width</th>" +
-                "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].width + "</td>" +
+                "<tr class=''>" +
+                "<th>Width</th>" +
+                "<td>" + response['data'][0].width + "</td>" +
                 "</tr>" +
-                "<tr class='data-row text-center text-gray-700 dark:text-gray-400'>" +
-                "<th class='px-1 py-1 md:px-4 md:py-3 border-b border-r text-xs bg-stone-800 text-white'>Length</th>" +
-                "<td class='px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm'>" + response['data'][0].length + "</td>" +
+                "<tr class=''>" +
+                "<th>Length</th>" +
+                "<td>" + response['data'][0].length + "</td>" +
                 "</tr>";
             $i("#tableUnit tbody").append(tr_str);
         } else {

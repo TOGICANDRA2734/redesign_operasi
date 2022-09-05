@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Plant_Populasi;
+use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -78,6 +80,69 @@ class PopulasiUnitController extends Controller
         return view('populasi-unit.index', compact('data', 'site', 'jenisTipe', 'jenisBrand', 'summary'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $subquery = "SELECT DISTINCT model FROM plant_populasi";
+        $model = collect(DB::select($subquery));
+
+        $site = Site::where('status', 1)->get();
+
+        $type_unit = "SELECT DISTINCT type_unit FROM plant_populasi";
+        $type_unit = collect(DB::select($subquery));
+
+        $engine_brand = "SELECT DISTINCT engine_brand FROM plant_populasi";
+        $engine_brand = collect(DB::select($subquery));
+
+        $engine_model = "SELECT DISTINCT engine_model FROM plant_populasi";
+        $engine_model = collect(DB::select($subquery));
+
+        return view('populasi-unit.create', compact('site', 'model', 'type_unit', 'engine_brand', 'engine_model'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $subquery = "SELECT DISTINCT model FROM plant_populasi";
+        $model = collect(DB::select($subquery));
+
+        $site = Site::where('status', 1)->get();
+
+        $type_unit = "SELECT DISTINCT type_unit FROM plant_populasi";
+        $type_unit = collect(DB::select($subquery));
+
+        $engine_brand = "SELECT DISTINCT engine_brand FROM plant_populasi";
+        $engine_brand = collect(DB::select($subquery));
+
+        $engine_model = "SELECT DISTINCT engine_model FROM plant_populasi";
+        $engine_model = collect(DB::select($subquery));
+
+        return view('populasi-unit.edit', compact('site', 'model', 'type_unit', 'engine_brand', 'engine_model'));        
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return view('data-prod.show');
+    }
+
+
+
     public function getUserbyid(Request $request){
 
         $userid = $request->userid;
@@ -107,4 +172,55 @@ class PopulasiUnitController extends Controller
         
         return response()->json($response);
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'pit' => 'required',
+            'ob' => 'required',
+            'coal' => 'required',
+            'kodesite' => 'required',
+            'cuaca' => 'required',
+        ]);
+
+        $record = dataProd::findOrFail($id);
+        
+        $record->update([
+            'tgl'           => $request->tgl,
+            'pit'           => $request->pit,
+            'ob'            => $request->ob,
+            'coal'          => $request->coal,
+            'kodesite'      => $request->kodesite,
+            'cuaca'         => $request->cuaca,
+        ]);
+
+        if($record){
+            return redirect()->route('data-prod.index')->with(['success' => 'Data Berhasil Diupdate!']);
+        }
+        else{
+            return redirect()->route('data-prod.index')->with(['error' => 'Data Gagal Diupdate!']);
+        }
+    }
+
+    
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+
+
 }

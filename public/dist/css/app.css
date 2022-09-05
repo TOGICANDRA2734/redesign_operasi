@@ -2003,6 +2003,21 @@ select{
 .mr-52{
     margin-right: 13rem;
 }
+.ml-1\.5{
+    margin-left: 0.375rem;
+}
+.ml-1{
+    margin-left: 0.25rem;
+}
+.-ml-0\.5{
+    margin-left: -0.125rem;
+}
+.-ml-0{
+    margin-left: -0px;
+}
+.mr-0\.5{
+    margin-right: 0.125rem;
+}
 .block{
     display: block;
 }
@@ -2168,6 +2183,9 @@ select{
 .w-2{
     width: 0.5rem;
 }
+.w-60{
+    width: 15rem;
+}
 .flex-1{
     flex: 1 1 0%;
 }
@@ -2234,6 +2252,9 @@ select{
 .items-center{
     align-items: center;
 }
+.justify-start{
+    justify-content: flex-start;
+}
 .justify-center{
     justify-content: center;
 }
@@ -2261,6 +2282,13 @@ select{
 .gap-x-5{
     -moz-column-gap: 1.25rem;
          column-gap: 1.25rem;
+}
+.gap-y-8{
+    row-gap: 2rem;
+}
+.gap-x-10{
+    -moz-column-gap: 2.5rem;
+         column-gap: 2.5rem;
 }
 .space-y-2 > :not([hidden]) ~ :not([hidden]){
     --tw-space-y-reverse: 0;
@@ -2523,6 +2551,9 @@ select{
 .p-1{
     padding: 0.25rem;
 }
+.p-8{
+    padding: 2rem;
+}
 .px-5{
     padding-left: 1.25rem;
     padding-right: 1.25rem;
@@ -2579,6 +2610,18 @@ select{
     padding-left: 0.25rem;
     padding-right: 0.25rem;
 }
+.px-8{
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+.py-12{
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+.py-1\.5{
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+}
 .pr-10{
     padding-right: 2.5rem;
 }
@@ -2620,6 +2663,9 @@ select{
 }
 .pl-4{
     padding-left: 1rem;
+}
+.pl-3{
+    padding-left: 0.75rem;
 }
 .text-left{
     text-align: left;
@@ -16246,6 +16292,9 @@ html body{
     .md\:col-span-6{
         grid-column: span 6 / span 6;
     }
+    .md\:col-span-4{
+        grid-column: span 4 / span 4;
+    }
     .md\:ml-auto{
         margin-left: auto;
     }
@@ -16378,6 +16427,9 @@ html body{
     .lg\:border-t-0{
         border-top-width: 0px;
     }
+    .lg\:border-l{
+        border-left-width: 1px;
+    }
     .lg\:pt-0{
         padding-top: 0px;
     }
@@ -16388,6 +16440,9 @@ html body{
 @media (min-width: 1280px){
     .xl\:col-span-2{
         grid-column: span 2 / span 2;
+    }
+    .xl\:col-span-9{
+        grid-column: span 9 / span 9;
     }
     .xl\:mx-5{
         margin-left: 1.25rem;
