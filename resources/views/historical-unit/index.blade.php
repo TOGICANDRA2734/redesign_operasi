@@ -66,7 +66,6 @@
                         <th rowspan="2" class="whitespace-nowrap text-center">Nom Unit</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Brand Type</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">HM</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Status</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -79,7 +78,7 @@
                         @endforeach
                         <td class="whitespace-nowrap text-center">
                             <!-- Detail -->
-                            <a href="{{route('super_admin.historical-unit.show', $dt->nom_unit)}}" value="{{1}}" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview" class="tbDetail btn btn-dark mr-1 mb-2">
+                            <a href="{{route('super_admin.historical-unit.show', $dt->nom_unit)}}" class="btn btn-dark mr-1 mb-2">
                                 <i data-lucide="eye" class="w-5 h-5"></i>
                             </a>
                             <!-- End: Detail -->

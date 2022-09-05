@@ -16,13 +16,13 @@ class HistoricalUnitController extends Controller
      */
     public function index()
     {
-        $subquery = "SELECT a.nom_unit, type_unit, hm, ket_tgl_rfu
+        $subquery = "SELECT a.nom_unit, type_unit, hm
         FROM plant_populasi a
-        JOIN plant_status_bd b
-        ON a.nom_unit = b.nom_unit";
+        JOIN plant_hm b
+        on a.nom_unit=b.nom_unit";
         $data = collect(DB::select($subquery));
 
-        $site = Site::where('status',1)->get();
+        $site = Site::where('status', 1)->get();
 
         return view('historical-unit.index', compact('data', 'site'));
     }
@@ -60,7 +60,26 @@ class HistoricalUnitController extends Controller
         $data = Plant_Populasi::findOrFail($id);
         $site = Site::where('status', 1)->get();
 
-        
+        // Data
+        $subquery = "SELECT a.sn,
+            descript,
+            CASE WHEN b.status=1 THEN 'RS'
+            WHEN b.STATUS=6 THEN 'SR'
+            END 'SR/RS', 
+            b.hm, 
+            DATE_FORMAT(b.tgdok, '%d-%m-%Y') tanggal,
+            mechanic,
+            c.namasite
+            FROM plant_populasi a
+            JOIN unit_rssp b
+            ON a.nom_unit = b.nom_unit
+            JOIN site c
+            ON b.kodesite = c.kodesite
+            WHERE a.nom_unit='" . $data[0]->nom_unit . "'
+            ORDER BY b.tgdok";
+
+        $data = DB::select($subquery);
+
         return view('historical-unit.show', compact('data', 'site'));
     }
 

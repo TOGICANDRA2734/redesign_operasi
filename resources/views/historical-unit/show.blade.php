@@ -63,32 +63,26 @@
                 <thead class="table-dark">
                     <tr class="">
                         <th rowspan="2" class="whitespace-nowrap text-center">NO</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Nom Unit</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Brand Type</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Serial Number</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Deskripsi</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">SR/RS</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">HM</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Status</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Aksi</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Tanggal Dokumentasi</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">PIC</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($data as $key => $dt)
                     <tr class="bg-white">
                         <td class="whitespace-nowrap text-center">{{$key+1}}</td>
-                        @foreach($dt as $d)
+                        @foreach($dt as $k => $d)
+                        @if($k == 'descript')
+                        <td class="whitespace-nowrap text-left">{{$d}}</td>
+                        @else
                         <td class="whitespace-nowrap text-center">{{$d}}</td>
+                        @endif
                         @endforeach
-                        <td class="whitespace-nowrap text-center">
-                            <!-- Detail -->
-                            <a href="{{route('super_admin.historical-unit.show', $dt->nom_unit)}}" value="{{1}}" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview" class="tbDetail btn btn-dark mr-1 mb-2">
-                                <i data-lucide="eye" class="w-5 h-5"></i>
-                            </a>
-                            <!-- End: Detail -->
-                            <!-- Edit -->
-                            <!-- <a href="{{ route('super_admin.populasi-unit.edit', 1) }}" class="tbDetail btn btn-warning mr-1 mb-2">
-                                <i data-lucide="edit" class="w-5 h-5"></i>
-                            </a> -->
-                            <!-- End: Edit -->
-                        </td>
                     </tr>
                     @endforeach
                 </tbody>
