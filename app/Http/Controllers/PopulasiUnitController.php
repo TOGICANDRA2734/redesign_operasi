@@ -28,8 +28,9 @@ class PopulasiUnitController extends Controller
         ->when(request()->nama, function($data){
             $data = $data->where('plant_populasi.nom_unit', 'like', '%'.request()->nama.'%');
         })   
-        ->paginate(request()->paginate ? request()->paginate : 50)
-        ->withQueryString();
+        ->get();
+        // ->paginate(request()->paginate ? request()->paginate : 50)
+        // ->withQueryString();
 
         // dd($data);
 

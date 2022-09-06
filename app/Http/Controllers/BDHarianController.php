@@ -23,7 +23,6 @@ class BDHarianController extends Controller
         IFNULL(DATEDIFF(curdate(), plant_status_bd.tgl_bd),0) as day,
         site.namasite"))
         ->join('site', 'plant_status_bd.kodesite', '=', 'site.kodesite')
-        ->where('del', '=', 1)
         ->orderBy('id')
         ->get();
 

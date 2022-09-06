@@ -180,6 +180,61 @@ class SideMenuSuperAdmin
                     ],
                 ],
             ],
+            'devider',
+            'Manpower' => [
+                'icon' => 'sidebar',
+                'title' => 'Manpower',
+                'sub_menu' => [
+                    'laporan-actual' => [
+                        'icon' => 'box',
+                        'title' => 'Table MP',
+                        'route_name' => 'super_admin.data-prod.report',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'kontrak' => [
+                        'icon' => 'box',
+                        'title' => 'Kontrak',
+                        'route_name' => 'super_admin.data-prod.report',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'tambah-data-mp' => [
+                        'icon' => 'box',
+                        'title' => 'Tambah Data MP',
+                        'route_name' => 'super_admin.data-prod.report',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'statistik' => [
+                        'icon' => 'box',
+                        'title' => 'Statistik',
+                        'route_name' => 'super_admin.data-prod.report',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'export-mp' => [
+                        'icon' => 'box',
+                        'title' => 'Export MP',
+                        'route_name' => 'super_admin.data-prod.report',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'general-request' => [
+                        'icon' => 'box',
+                        'title' => 'General Request',
+                        'route_name' => 'super_admin.data-prod.report',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 }

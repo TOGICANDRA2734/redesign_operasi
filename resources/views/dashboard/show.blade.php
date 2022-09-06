@@ -19,7 +19,7 @@
             </div>
             <!-- END: General Report -->
             <!-- BEGIN: Overbuden Report -->
-            <div class="col-span-12 lg:col-span-6 mt-1">
+            <!-- <div class="col-span-12 lg:col-span-6 mt-1">
                 <div class="intro-y box p-5 sm:mt-5">
                     <div class="flex items-center">
                         <div class="flex">
@@ -45,10 +45,10 @@
                         <canvas id="overburden" class="mt-6"></canvas>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- END: Overburden Report -->
             <!-- BEGIN: Coal Report -->
-            <div class="col-span-12 lg:col-span-6 mt-1">
+            <!-- <div class="col-span-12 lg:col-span-6 mt-1">
 
                 <div class="intro-y box p-5 sm:mt-5">
                     <div class="flex flex-col md:flex-row md:items-center">
@@ -75,11 +75,139 @@
                         <canvas id="coal" class="mt-6"></canvas>
                     </div>
                 </div>
+            </div> -->
+            <!-- END: Coal Report -->
+
+            <!-- BEGIN: Overbuden Report -->
+            <div class="col-span-12 lg:col-span-6">
+                <div class="intro-y block sm:flex items-center h-10">
+                    <h2 class="text-lg font-medium truncate mr-5">Overburden</h2>
+                    <div class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
+                        <div id="OverburdenRange" class="form-control box p-2">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="intro-y box p-5 mt-12 sm:mt-5">
+                    <div class="flex flex-col md:flex-row md:items-center">
+                        <div class="flex">
+                            <div>
+                                <div id="obAct" class="text-primary dark:text-slate-300 text-lg xl:text-xl font-medium">{{number_format($data_detail_OB_prod[0]->OB, 0, '.', ',')}}</div>
+                                <div class="mt-0.5 text-slate-500">Actual</div>
+                            </div>
+                            <div class="w-px h-12 border border-r border-dashed border-slate-200 dark:border-darkmode-300 mx-4 xl:mx-5"></div>
+                            <div>
+                                <div id="obPlan" class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_OB_plan[0]->OB, 0, '.', ',')}}</div>
+                                <div class="mt-0.5 text-slate-500">Plan</div>
+                            </div>
+                            <div class="w-px h-12 border border-r border-dashed border-slate-200 dark:border-darkmode-300 mx-4 xl:mx-5"></div>
+                            <div>
+                                @if($data_detail_OB_plan[0]->OB != 0)
+                                <div id="obAch" class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_OB_prod[0]->OB / $data_detail_OB_plan[0]->OB * 100)}}%</div>
+                                @else
+                                <div class="text-slate-500 text-lg xl:text-xl font-medium">NA</div>
+                                @endif
+                                <div class="mt-0.5 text-slate-500">ACH</div>
+                            </div>
+                        </div>
+                        <div class="dropdown md:ml-auto mt-5 md:mt-0">
+                            <button class="dropdown-toggle btn btn-outline-secondary font-normal" aria-expanded="false" data-tw-toggle="dropdown">
+                                Filter Site<i data-lucide="chevron-down" class="w-4 h-4 ml-2"></i>
+                            </button>
+                            <div class="dropdown-menu w-40">
+                                <ul class="dropdown-content overflow-y-auto h-32">
+                                    @foreach($data as $dt)
+                                    <li><a href="{{route('dashboard.filtered', $dt->namasite)}}" class="dropdown-item">{{$dt->namasite}}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative h-16 w-full sm:h-full" style="position: relative; height: 30vh; width: 100%;">
+                        <canvas id="overburden" class="mt-6"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- END: Overburden Report -->
+            <!-- BEGIN: Coal Report -->
+            <div class="col-span-12 lg:col-span-6">
+                <div class="intro-y block sm:flex items-center h-10">
+                    <h2 class="text-lg font-medium truncate mr-5">Coal</h2>
+                    <form method="POST" action="#" class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
+                        <div id="CoalRange" class="form-control box p-2">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                        </div>
+                    </form>
+                </div>
+                <div class="intro-y box p-5 mt-12 sm:mt-5">
+                    <div class="flex flex-col md:flex-row md:items-center">
+                        <div class="flex">
+                            <div>
+                                <div id="coalAct" class="text-primary dark:text-slate-300 text-lg xl:text-xl font-medium">{{number_format($data_detail_coal_prod[0]->coal, 0, '.', ',')}}</div>
+                                <div class="mt-0.5 text-slate-500">Actual</div>
+                            </div>
+                            <div class="w-px h-12 border border-r border-dashed border-slate-200 dark:border-darkmode-300 mx-4 xl:mx-5"></div>
+                            <div>
+                                <div id="coalPlan" class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_coal_plan[0]->coal, 0, '.', ',')}}</div>
+                                <div class="mt-0.5 text-slate-500">Plan</div>
+                            </div>
+                            <div class="w-px h-12 border border-r border-dashed border-slate-200 dark:border-darkmode-300 mx-4 xl:mx-5"></div>
+                            <div>
+                                @if($data_detail_OB_plan[0]->OB != 0)
+                                <div id="coalAch" class="text-slate-500 text-lg xl:text-xl font-medium">{{number_format($data_detail_coal_prod[0]->coal / $data_detail_coal_plan[0]->coal * 100)}}%</div>
+                                @else
+                                <div class="text-slate-500 text-lg xl:text-xl font-medium">NA</div>
+                                @endif
+                                <div class="mt-0.5 text-slate-500">ACH</div>
+                            </div>
+                        </div>
+                        <div class="dropdown md:ml-auto mt-5 md:mt-0">
+                            <button class="dropdown-toggle btn btn-outline-secondary font-normal" aria-expanded="false" data-tw-toggle="dropdown">
+                                Filter Site <i data-lucide="chevron-down" class="w-4 h-4 ml-2"></i>
+                            </button>
+                            <div class="dropdown-menu w-40">
+                                <ul class="dropdown-content overflow-y-auto h-32">
+                                    @foreach($data as $dt)
+                                    <li><a href="{{route('dashboard.filtered', $dt->namasite)}}" class="dropdown-item">{{$dt->namasite}}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative h-16 w-full sm:h-full" style="position: relative; height: 30vh; width: 100%;">
+                        <canvas id="coal" class="mt-6"></canvas>
+                    </div>
+                </div>
             </div>
             <!-- END: Coal Report -->
+
             <!-- BEGIN: Production Report -->
             <div class="col-span-12 sm:col-span-6 mt-4 intro-y">
-                <div class="intro-y flex items-center h-10">
+                <!-- Title -->
+                <div class="intro-y h-10 flex justify-between items-center">
+                    <h2 class="text-lg font-medium ">
+                        Produksi
+                    </h2>
+                    <div class="ml-auto mr-2 flex">
+                        <form method="POST" action="#" class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
+                            <div id="CoalRange" class="form-control box p-2">
+                                <i class="fa fa-calendar"></i>&nbsp;
+                                <span></span> <i class="fa fa-caret-down"></i>
+                            </div>
+                        </form>
+
+                        <!-- BEGIN: Notification Content -->
+                        <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
+                            <div class="ml-4 mr-4">
+                                <div class="font-medium">Data Berhasil Difilter!</div>
+                            </div>
+                        </div> <!-- END: Notification Content -->
+
+                    </div>
+                </div>
+                <!-- <div class="intro-y flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">Produksi</h2>
                     <div class="dropdown ml-auto mt-0 bg-white">
                         <button class="dropdown-toggle btn btn-outline-secondary font-normal" aria-expanded="false" data-tw-toggle="dropdown">
@@ -92,7 +220,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="overflow-x-auto mt-4">
                     <table class="table rounded-lg">
@@ -142,6 +270,12 @@
             <div class="col-span-12 sm:col-span-6 mt-4 intro-y">
                 <div class="intro-y flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">Kendala</h2>
+                    <form method="POST" action="#" class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
+                        <div id="CoalRange" class="form-control box p-2">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="overflow-x-auto mt-4">
@@ -198,12 +332,12 @@
     <div class="bg-white col-span-12 p-5">
         <div class="intro-y mt-5 pt-5">
             <div class="text-base sm:text-lg font-medium">Komentar</div>
-            <form  method="post" action="{{ route('comments.store') }}" class="news__input relative mt-5 grid grid-cols-12 gap-5">
+            <form method="post" action="{{ route('comments.store') }}" class="news__input relative mt-5 grid grid-cols-12 gap-5">
                 @csrf
                 <div class="col-span-10">
                     <i data-lucide="message-circle" class="w-5 h-5 absolute my-auto inset-y-0 ml-6 left-0 text-slate-500"></i>
                     <textarea name="body" class="form-control border-transparent bg-slate-100 pl-16 py-6 resize-none" rows="1" placeholder="Komentar"></textarea>
-                    <input type="hidden" name="post_id" value="{{ $post->id }}" />    
+                    <input type="hidden" name="post_id" value="{{ $post->id }}" />
                 </div>
                 <div class="col-span-2">
                     <button class="btn btn-primary w-full h-full inline-block mr-1 mb-2">Komentar</button>
@@ -217,8 +351,103 @@
     <!-- END: Comments -->
 </div>
 
+<!-- Chart -->
 <script>
     $(function() {
+        var $j = jQuery.noConflict();
+
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+
+        // Overburden Range
+        $j('#OverburdenRange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Hari Ini': [moment(), moment()],
+                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+
+            var awal = start.format("YYYY-MM-DD");
+            var akhir = end.format("YYYY-MM-DD");
+
+            var $i = jQuery.noConflict();
+
+            if (awal !== null && akhir !== null) {
+                $i.ajax({
+                    url: '/dashboard/detail_filtered/',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        start: awal,
+                        end: akhir,
+                    },
+                    success: function(response) {
+                        update_data(response)
+                    },
+                })
+            }
+
+
+        });
+
+        function update_data(response) {
+            // OVERBURDEN
+            var data_prod_ob = response['data_prod_ob'];
+            var data_plan_ob = response['data_plan_ob'];
+
+            var data_prod_coal = response['data_prod_coal'];
+            var data_plan_coal = response['data_plan_coal'];
+
+            // Overburden
+            chart1.config.data.datasets[0].data = data_prod_ob.data;
+            chart1.config.data.datasets[1].data = data_plan_ob.data;
+            chart1.config.data.labels = data_prod_ob.label;
+
+            // Coal
+            chart2.config.data.datasets[0].data = data_prod_coal.data;
+            chart2.config.data.datasets[1].data = data_plan_coal.data;
+            chart2.config.data.labels = data_prod_coal.label;
+
+            chart1.update();
+            chart2.update();
+            $j("#obAct").empty();
+            $j("#obPlan").empty();
+            $j("#obAch").empty();
+            $j("#coalAct").empty();
+            $j("#coalPlan").empty();
+            $j("#coalAch").empty();
+
+            $j("#obAct").append(number_format(response['data_detail_OB_prod'][0].OB, 1));
+            $j("#obPlan").append(number_format(response['data_detail_OB_plan'][0].OB, 1));
+            $j("#obAch").append(number_format((response['data_detail_OB_prod'][0].OB / response['data_detail_OB_plan'][0].OB) * 100, 1) + '%');
+            $j("#coalAct").append(number_format(response['data_detail_coal_prod'][0].coal, 1));
+            $j("#coalPlan").append(number_format(response['data_detail_coal_plan'][0].coal, 1));
+            $j("#coalAch").append(number_format((response['data_detail_coal_prod'][0].coal / response['data_detail_coal_plan'][0].coal) * 100, 1) + '%');
+        }
+        // Coal Range
+
+        // Overburden Range
+        $j('#CoalRange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Hari Ini': [moment(), moment()],
+                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+            console.log(start, end, label)
+        });
+
         // OVERBURDEN
         //get the OB data
         var ob_prod = JSON.parse(`<?php echo $data_prod_ob['chart_data_prod_ob']; ?>`);
@@ -230,7 +459,7 @@
             labels: ob_prod.label,
             datasets: [{
                 type: 'bar',
-                label: 'Actual',
+                label: 'Overburden',
                 data: ob_prod.data,
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)'
@@ -245,7 +474,7 @@
 
         //options
         var options = {
-            responsive: true,
+            maintainAspectRatio: false,
             title: {
                 display: true,
                 position: "top",
@@ -281,7 +510,7 @@
             labels: coal_prod.label,
             datasets: [{
                 type: 'bar',
-                label: 'Actual',
+                label: 'Coal',
                 data: coal_prod.data,
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)'
@@ -296,7 +525,7 @@
 
         //options
         var options = {
-            responsive: true,
+            maintainAspectRatio: false,
             title: {
                 display: true,
                 position: "top",
@@ -320,6 +549,30 @@
             data: data,
             options: options
         });
+
+        function number_format(number, decimals, dec_point, thousands_sep) {
+            // Strip all characters but numerical ones.
+            number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+            var n = !isFinite(+number) ? 0 : +number,
+                prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                s = '',
+                toFixedFix = function(n, prec) {
+                    var k = Math.pow(10, prec);
+                    return '' + Math.round(n * k) / k;
+                };
+            // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+            if (s[0].length > 3) {
+                s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+            }
+            if ((s[1] || '').length < prec) {
+                s[1] = s[1] || '';
+                s[1] += new Array(prec - s[1].length + 1).join('0');
+            }
+            return s.join(dec);
+        }
 
     });
 </script>
