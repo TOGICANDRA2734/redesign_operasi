@@ -25,7 +25,7 @@
                 </select>
             </div>
             <div class="mt-3">
-                <label for="crud-form-1" class="form-label">Nomor Unit</label>
+                <label for="crud-form-1" class="form-label">Code Unit</label>
                 <select data-placeholder="Pilih Type Unit" class="tom-select w-full" id="crud-form-3" name="type_unit">
                     @foreach($nom_unit as $nu)
                     <option value="{{$nu->Nom_unit}}">{{$nu->Nom_unit}}</option>

@@ -72,7 +72,7 @@ class POController extends Controller
      */
     public function show($id)
     {
-        $data = PO::where('del', '=', 1)->where('id_tiket_po', $id)->get();
+        $data = PO::where('del', '=', 0)->where('id_tiket_po', $id)->get();
 
         if(count($data) != 0){
             $dataDok = Plant_bd_dok::select('id_tiket','dok_no')->where('id', $data[0]->id_tiket_po)->get();

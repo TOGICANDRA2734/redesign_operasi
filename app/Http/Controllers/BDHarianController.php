@@ -23,6 +23,7 @@ class BDHarianController extends Controller
         IFNULL(DATEDIFF(curdate(), plant_status_bd.tgl_bd),0) as day,
         site.namasite"))
         ->join('site', 'plant_status_bd.kodesite', '=', 'site.kodesite')
+        ->where('status_bd', '=', 1)
         ->orderBy('id')
         ->get();
 
@@ -57,9 +58,14 @@ class BDHarianController extends Controller
     {
         $data = DB::table('plant_status_bd')->select(DB::raw("
         plant_status_bd.*, 
+        DATE_FORMAT(tgl_bd, '%d-%m-%Y') tgl_bd_format,
+        DATE_FORMAT(tgl_rfu, '%d-%m-%Y') tgl_rfu_format,
         IFNULL(DATEDIFF(curdate(), plant_status_bd.tgl_bd),0) as day,
-        site.namasite"))
+        site.namasite,
+        kode_bd.kode_bd,
+        kode_bd.deskripsi_bd"))
         ->join('site', 'plant_status_bd.kodesite', '=', 'site.kodesite')
+        ->join('kode_bd', 'plant_status_bd.status_bd', '=', 'kode_bd.id')
         ->where('plant_status_bd.id', '=', $id)
         ->orderBy('id')
         ->get();
@@ -70,7 +76,7 @@ class BDHarianController extends Controller
         ->select('plant_status_bd_dok.id', 'plant_status_bd.nom_unit', 'plant_status_bd_dok.dok_type', 'plant_status_bd_dok.dok_no', 'plant_status_bd_dok.dok_tgl', 'plant_status_bd_dok.uraian_bd', 'plant_status_bd_dok.kode_bd', 'plant_status_bd_dok.uraian', 'plant_status_bd_dok.keterangan')
         ->join('plant_status_bd_dok', 'plant_status_bd.id', '=', 'plant_status_bd_dok.id_tiket')
         ->where('plant_status_bd.id', '=', $id)
-        ->where('plant_status_bd_dok.del', '=', 1)
+        ->where('plant_status_bd_dok.del', '=', 0)
         ->get();
 
         if(count($dataDok) === 0){

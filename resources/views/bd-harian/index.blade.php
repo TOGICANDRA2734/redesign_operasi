@@ -45,18 +45,16 @@
                 <thead class="table-dark">
                     <tr class="">
                         <th rowspan="2" class="whitespace-nowrap text-center">#</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Nom Unit</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Code Unit</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">HM/KM</th>
-                        <th colspan="2" class="whitespace-nowrap text-center">Breakdown</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Kode Breakdown</th>
                         <th colspan="3" class="whitespace-nowrap text-center">Tanggal</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">PIC</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Aksi</th>
                     </tr>
                     <tr class="">
-                        <th class="whitespace-nowrap text-center">Status</th>
-                        <th class="whitespace-nowrap text-center">Kode</th>
-                        <th class="whitespace-nowrap text-center">Start</th>
+                        <th class="whitespace-nowrap text-center">Start BD</th>
                         <th class="whitespace-nowrap text-center">Plant RFU</th>
                         <th class="whitespace-nowrap text-center">Day</th>
                     </tr>
@@ -68,13 +66,12 @@
                         <td class="whitespace-nowrap text-center">{{$key + 1}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->nom_unit}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->hm}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->status_bd == 1 ? 'Breakdown' : 'Tidak Breakdown' }}</td>
+                        <td class="whitespace-nowrap text-center">{{$dt->namasite}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->kode_bd}}</td>
                         <td class="whitespace-nowrap text-center">{{date('d-m-Y', strtotime($dt->tgl_bd))}}</td>
                         <td class="whitespace-nowrap text-center">{{date('d-m-Y', strtotime($dt->tgl_rfu))}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->day}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->pic}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->namasite}}</td>
                         <td class="whitespace-nowrap text-center">
                             <a href="{{route('super_admin.bd-harian-detail.index', $dt->id)}}" class="btn px-2 btn-dark mr-1 mb-2"> <i data-lucide="eye" class="w-5 h-5"></i></a>
                         </td>

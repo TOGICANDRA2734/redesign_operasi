@@ -47,10 +47,10 @@
                 <thead class="table-dark">
                     <tr class="">
                         <th class="whitespace-nowrap text-center">#</th>
-                        <th class="whitespace-nowrap text-center">RS/SR Site</th>
-                        <th class="whitespace-nowrap text-center">Nomor PO</th>
-                        <th class="whitespace-nowrap text-center">Site</th>
-                        <th class="whitespace-nowrap text-center">Deskripsi</th>
+                        <th class="whitespace-nowrap text-center">PO</th>
+                        <th class="whitespace-nowrap text-center">Tanggal</th>
+                        <th class="whitespace-nowrap text-center">Supplier</th>
+                        <th class="whitespace-nowrap text-center">Estimasi</th>
                         <th class="whitespace-nowrap text-center">Aksi</th>
                     </tr>
                 </thead>

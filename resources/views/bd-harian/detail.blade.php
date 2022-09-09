@@ -24,11 +24,11 @@
                             <div class="col-span-12 lg:col-span-4 px-8 py-3 flex flex-col justify-center items-center">
                                 <!-- <i data-lucide="pie-chart" class="w-10 h-10 text-pending"></i> -->
                                 <img src="https://products.unitedtractors.com/wp-content/uploads/2021/03/PC500LC-10R.png" class="w-36 h-36" alt="Unit Image">
-                                <div class="justify-start flex items-center text-slate-600 dark:text-slate-300 mt-8"> Nomor Unit <i data-lucide="alert-circle" class="tooltip w-4 h-4 ml-1.5" title="Nomor Unit"></i> </div>
+                                <div class="justify-start flex items-center text-slate-600 dark:text-slate-300 mt-8"> Code Unit <i data-lucide="alert-circle" class="tooltip w-4 h-4 ml-1.5" title="Code Unit"></i> </div>
                                 <div class="flex items-center justify-start mt-2">
-                                    <div class="relative text-2xl font-medium"> KE12012 </div>
+                                    <div class="relative text-2xl font-medium"> {{$data[0]->nom_unit}} </div>
                                 </div>
-                                <div class="mt-2 text-slate-500 text-xs">ABK</div>
+                                <div class="mt-2 text-slate-500 text-xs">{{$data[0]->namasite}}</div>
                                 <!-- <button class="btn btn-outline-secondary relative justify-start rounded-full mt-12">
                                     Download Reports
                                     <span class="w-8 h-8 absolute flex justify-center items-center bg-primary text-white rounded-full right-0 top-0 bottom-0 my-auto ml-auto mr-0.5"> <i data-lucide="arrow-right" class="w-4 h-4"></i> </span>
@@ -40,45 +40,45 @@
                                         <div class="col-span-6 sm:col-span-6 md:col-span-4">
                                             <div class="text-slate-500">HM/KM</div>
                                             <div class="mt-1.5 flex items-center">
-                                                <div class="text-base">4.501</div>
+                                                <div class="text-base">{{$data[0]->hm}}</div>
                                                 <!-- <div class="text-danger flex text-xs font-medium tooltip cursor-pointer ml-2" title="2% Lower than last month"> 2% <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i> </div> -->
                                             </div>
                                         </div>
                                         <div class="col-span-12 sm:col-span-6 md:col-span-4">
                                             <div class="text-slate-500">Status BD</div>
                                             <div class="mt-1.5 flex items-center">
-                                                <div class="text-base">2 - Waiting Mechanic</div>
+                                                <div class="text-base">{{$data[0]->kode_bd}} - {{$data[0]->deskripsi_bd}}</div>
                                             </div>
                                         </div>
                                         <div class="col-span-12 sm:col-span-6 md:col-span-4">
                                             <div class="text-slate-500">Tanggal Breakdown</div>
                                             <div class="mt-1.5 flex items-center">
-                                                <div class="text-base">12-12-2022</div>
+                                                <div class="text-base">{{$data[0]->tgl_bd_format}}</div>
                                             </div>
                                         </div>
                                         <div class="col-span-12 sm:col-span-6 md:col-span-4">
                                             <div class="text-slate-500">Plant RFU</div>
                                             <div class="mt-1.5 flex items-center">
-                                                <div class="text-base">12-01-2023</div>
+                                                <div class="text-base">{{$data[0]->tgl_rfu_format}}</div>
                                             </div>
                                         </div>
                                         <div class="col-span-12 sm:col-span-6 md:col-span-4">
                                             <div class="text-slate-500">Total Hari BD</div>
                                             <div class="mt-1.5 flex items-center">
-                                                <div class="text-base">30 Hari</div>
+                                                <div class="text-base">{{$data[0]->day}} Hari</div>
                                                 <!-- <div class="text-success flex text-xs font-medium tooltip cursor-pointer ml-2" title="52% Higher than last month"> 52% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div> -->
                                             </div>
                                         </div>
                                         <div class="col-span-12 sm:col-span-6 md:col-span-4">
                                             <div class="text-slate-500">Keterangan RFU</div>
                                             <div class="mt-1.5 flex items-center">
-                                                <div class="text-base">TBA</div>
+                                                <div class="text-base">{{$data[0]->ket_tgl_rfu ? $data[0]->ket_tgl_rfu : ""}}</div>
                                             </div>
                                         </div>
                                         <div class="col-span-12 sm:col-span-6 md:col-span-4">
                                             <div class="text-slate-500">PIC</div>
                                             <div class="mt-1.5 flex items-center">
-                                                <div class="text-base">UT</div>
+                                                <div class="text-base">{{$data[0]->pic}}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -184,11 +184,11 @@
                 <thead class="table-dark">
                     <tr class="whitespace-nowrap text-center">
                         <th rowspan="2" class="whitespace-nowrap text-center w-5">No</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Deskripsi</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Item Code</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Item Name</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Deskripsi BD</th>
                         <th colspan="3" class="whitespace-nowrap text-center">RS/SR/PP</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Kode BD</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Uraian</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Keterangan</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Progress</th>
                         <th rowspan="2" class="whitespace-nowrap text-center w-[12rem]">Aksi</th>
                     </tr>
                     <tr class="whitespace-nowrap text-center">
@@ -207,13 +207,13 @@
                     @foreach($dataDok as $key => $dt)
                     <tr class="whitespace-nowrap text-center">
                         <td class="whitespace-nowrap text-center">{{$key+1}}</td>
+                        <td class="whitespace-nowrap text-center"></td>
+                        <td class="whitespace-nowrap text-center"></td>
                         <td class="whitespace-nowrap text-center">{{$dt->uraian_bd}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->dok_type}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->dok_no}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->dok_tgl}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->kode_bd}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->uraian}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->keterangan}}</td>
                         <td class="whitespace-nowrap text-center">
                             <a href="{{route('super_admin.po-harian.show', 1)}}" class="btn px-2 btn-dark mr-1 mb-2">
                                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="eye"></i> </span>
@@ -249,7 +249,7 @@
                     <thead class="bg-stone-800 sticky top-0">
                         <tr class="text-xs font-semibold tracking-wide text-center text-white uppercase dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
                             <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">No</th>
-                            <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Nom Unit</th>
+                            <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Code Unit</th>
                             <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">HM/KM</th>
                             <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Status BD</th>
                             <th colspan="3" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Tanggal</th>

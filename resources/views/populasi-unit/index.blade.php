@@ -60,19 +60,21 @@
     <!-- Table -->
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
         <div class="w-full overflow-x-auto">
-            <table class="w-full table table-striped">
+            <table class="w-full table table-striped text-xs">
                 <thead class="table-dark">
                     <tr class="">
                         <th rowspan="2" class="whitespace-nowrap text-center">NO</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Nom Unit</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Model</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">DO</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">SITE</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Type Unit</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">S/N</th>
                         <th colspan="3" class="whitespace-nowrap text-center">Engine</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">HP</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Fuel</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">HM</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">KM</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">SITE</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">AKSI</th>
                     </tr>
                     <tr class="">

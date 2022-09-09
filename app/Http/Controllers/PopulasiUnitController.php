@@ -13,7 +13,7 @@ class PopulasiUnitController extends Controller
     public function index()
     {
         $data = DB::table('plant_populasi')
-        ->select(DB::raw("plant_populasi.id, plant_populasi.nom_unit, model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  KM, site.namasite"))
+        ->select(DB::raw("plant_populasi.id, plant_populasi.nom_unit, site.namasite, DATE_FORMAT(do, '%d-%m-%Y'), model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM"))
         ->join('plant_hm', 'plant_populasi.nom_unit', '=', 'plant_hm.nom_unit')
         ->join('site', 'plant_hm.kodesite', '=', 'site.kodesite')
         ->when(request()->site, function($data){
