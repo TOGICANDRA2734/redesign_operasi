@@ -15,20 +15,22 @@
 <div class="grid grid-cols-12 gap-6 mt-5">
     <div class="intro-y col-span-12">
         <!-- BEGIN: Form Layout -->
-        <form action="" method="" class="intro-y box p-5">
+        <form action="" method="" class="intro-y box p-5 grid md:grid-cols-2 gap-4">
             <div>
-                <label for="crud-form-1" class="form-label">Nom Unit</label>
-                <input id="crud-form-1" type="text" class="form-control w-full" placeholder="Masukkan Nomor Unit" name="nom_unit">
+                <label for="crud-form-1" class="form-label">Code Unit</label>
+                <input id="crud-form-1" type="text" class="form-control w-full" placeholder="Masukkan Code Unit" name="nom_unit">
             </div>
             <div class="mt-3">
                 <label for="crud-form-2" class="form-label">Model</label>
                 <select data-placeholder="Pilih Model" class="tom-select w-full" id="crud-form-2" name="model">
+                    <!-- Pick Every Distinct Model in plant populasi -->
                     <option value="1" selected>Drilling Machine</option>
                 </select>
             </div>
             <div class="mt-3">
                 <label for="crud-form-3" class="form-label">Type Unit</label>
                 <select data-placeholder="Pilih Type Unit" class="tom-select w-full" id="crud-form-3" name="type_unit">
+                    <!-- Pick Every disticnt type unit in plant populasi -->
                     <option value="1" selected>Atlas Copco DM45</option>
                 </select>
             </div>
@@ -48,17 +50,17 @@
 
             
             <div class="mt-3">
-                <label for="crud-form-6" class="form-label">Engine SN</label>
+                <label for="crud-form-6" class="form-label">Engine Serial Number</label>
                 <input id="crud-form-6" type="text" class="form-control w-full" placeholder="Masukkan Engine Serial Number" name="engine_sn">
             </div>
 
             <div class="mt-3">
-                <label for="crud-form-7" class="form-label">HP</label>
+                <label for="crud-form-7" class="form-label">Horse Power (HP)</label>
                 <input id="crud-form-7" type="text" class="form-control w-full" placeholder="Masukkan HP" name="HP">
             </div>
 
             <div class="mt-3">
-                <label for="crud-form-8" class="form-label">DO</label>
+                <label for="crud-form-8" class="form-label">Delivery Order (DO)</label>
                 <input id="crud-form-8" type="date" class="form-control w-full" placeholder="Masukkan DO" name="do">
             </div>
 
@@ -66,11 +68,6 @@
             <div class="mt-3">
                 <label for="crud-form-9" class="form-label">PIC 1</label>
                 <input id="crud-form-9" type="text" class="form-control w-full" placeholder="Masukkan PIC 1" name="pic_1">
-            </div>
-            
-            <div class="mt-3">
-                <label for="crud-form-10" class="form-label">PIC 2</label>
-                <input id="crud-form-10" type="text" class="form-control w-full" placeholder="Masukkan PIC 2" name="pic_2">
             </div>
             
             <div class="mt-3">
