@@ -188,6 +188,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         // Populasi Unit
         Route::resource('populasi-unit', PopulasiUnitController::class);
         Route::post('/populasi-unit/showUser', [PopulasiUnitController::class, 'getUserbyid'])->name('populasi-unit.showUser');
+        Route::post('populasi_unit_filter', [PopulasiUnitController::class, 'index'])->name('populasi_unit.filter');
 
 
         // Historical Unit

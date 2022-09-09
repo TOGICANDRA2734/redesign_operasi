@@ -16,7 +16,7 @@ class BDHarianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $data = DB::table('plant_status_bd')->select(DB::raw("
         plant_status_bd.*, 
@@ -24,6 +24,7 @@ class BDHarianController extends Controller
         site.namasite"))
         ->join('site', 'plant_status_bd.kodesite', '=', 'site.kodesite')
         ->where('status_bd', '=', 1)
+        ->when($request->nama)
         ->orderBy('id')
         ->get();
 
@@ -72,12 +73,21 @@ class BDHarianController extends Controller
 
         $nom_unit = DB::table('plant_status_bd')->select("nom_unit")->where('id', '=', $id)->get();
 
-        $dataDok = DB::table('plant_status_bd')
-        ->select('plant_status_bd_dok.id', 'plant_status_bd.nom_unit', 'plant_status_bd_dok.dok_type', 'plant_status_bd_dok.dok_no', 'plant_status_bd_dok.dok_tgl', 'plant_status_bd_dok.uraian_bd', 'plant_status_bd_dok.kode_bd', 'plant_status_bd_dok.uraian', 'plant_status_bd_dok.keterangan')
-        ->join('plant_status_bd_dok', 'plant_status_bd.id', '=', 'plant_status_bd_dok.id_tiket')
-        ->where('plant_status_bd.id', '=', $id)
-        ->where('plant_status_bd_dok.del', '=', 0)
-        ->get();
+        // dataDok lama
+        // $dataDok = DB::table('plant_status_bd')
+        // ->select('plant_status_bd_dok.id', 'plant_status_bd.nom_unit', 'plant_status_bd_dok.dok_type', 'plant_status_bd_dok.dok_no', 'plant_status_bd_dok.dok_tgl', 'plant_status_bd_dok.uraian_bd', 'plant_status_bd_dok.kode_bd', 'plant_status_bd_dok.uraian', 'plant_status_bd_dok.keterangan')
+        // ->join('plant_status_bd_dok', 'plant_status_bd.id', '=', 'plant_status_bd_dok.id_tiket')
+        // ->where('plant_status_bd.id', '=', $id)
+        // ->where('plant_status_bd_dok.del', '=', 0)
+        // ->get();
+
+        // dataDok Baru
+        $subquery = "SELECT nodokstream no_st, '', descript uraian_bd, IF(STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian
+            FROM unit_rssp
+            WHERE nom_unit='".$nom_unit[0]->nom_unit."'
+        ";
+
+        $dataDok=collect(DB::select($subquery));
 
         if(count($dataDok) === 0){
             $dataDesc = "Data Kosong";

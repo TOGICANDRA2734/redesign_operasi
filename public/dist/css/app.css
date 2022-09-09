@@ -6484,10 +6484,10 @@ select{
 }
 .table th{
     border-bottom-width: 2px;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    /* padding-top: 0.75rem; */
-    /* padding-bottom: 0.75rem; */
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
     font-weight: 500;
 }
 .dark .table th{
@@ -6496,10 +6496,10 @@ select{
 }
 .table td{
     border-bottom-width: 1px;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    /* padding-top: 0.75rem;
-    padding-bottom: 0.75rem; */
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
 }
 .dark .table td{
     --tw-border-opacity: 1;

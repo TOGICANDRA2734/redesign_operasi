@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\dataProd;
 use App\Models\Plant_Populasi;
 use App\Models\Site;
 use Carbon\Carbon;
@@ -10,29 +11,55 @@ use Illuminate\Support\Facades\DB;
 
 class PopulasiUnitController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $data = DB::table('plant_populasi')
-        ->select(DB::raw("plant_populasi.id, plant_populasi.nom_unit, site.namasite, DATE_FORMAT(do, '%d-%m-%Y'), model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM"))
-        ->join('plant_hm', 'plant_populasi.nom_unit', '=', 'plant_hm.nom_unit')
-        ->join('site', 'plant_hm.kodesite', '=', 'site.kodesite')
-        ->when(request()->site, function($data){
-            $data = $data->where('plant_hm.kodesite', '=', request()->site);
-        })
-        ->when(request()->jenisTipe, function($data){
-            $data = $data->where('plant_populasi.type_unit', '=', request()->jenisTipe);
-        })
-        ->when(request()->jenisBrand, function($data){
-            $data = $data->where('plant_populasi.engine_brand', '=', request()->jenisBrand);
-        })
-        ->when(request()->nama, function($data){
-            $data = $data->where('plant_populasi.nom_unit', 'like', '%'.request()->nama.'%');
-        })   
-        ->get();
+        if($request->cariNama!==null && $request->kodesite !==null){
+            $nama =  "AND a.NOM_UNIT LIKE \"%".$request->cariNama."%\"";
+        }
+        else if($request->has('cariNama') && $request->cariNama !== null){
+            $nama =  "WHERE a.NOM_UNIT LIKE \"%".$request->cariNama."%\"";
+        } else {
+            $nama = "";
+        }
+
+        if($request->has('kodesite') && $request->kodesite !== 'all'){
+            $subquery = "SELECT a.id id, a.nom_unit nom_unit, c.namasite namasite, DATE_FORMAT(do, '%d-%m-%Y') DO, model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM
+            FROM plant_populasi a
+            JOIN plant_HM b
+            ON  a.nom_unit=b.nom_unit
+            JOIN site c
+            ON b.kodesite = c.kodesite
+            WHERE b.kodesite='".$request->kodesite."' ".$nama."";
+        } else {
+            $subquery = "SELECT a.id id, a.nom_unit nom_unit, c.namasite namasite, DATE_FORMAT(do, '%d-%m-%Y') DO, model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM
+            FROM plant_populasi a
+            JOIN plant_HM b
+            ON  a.nom_unit=b.nom_unit
+            JOIN site c
+            ON b.kodesite = c.kodesite
+            ".$nama."";
+        }
+
+        // dd($subquery);
+
+        // $data = DB::table('plant_populasi')
+        // ->select(DB::raw("plant_populasi.id, plant_populasi.nom_unit, site.namasite, DATE_FORMAT(do, '%d-%m-%Y'), model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM"))
+        // ->join('plant_hm', 'plant_populasi.nom_unit', '=', 'plant_hm.nom_unit')
+        // ->join('site', 'plant_hm.kodesite', '=', 'site.kodesite')
+        // ->when(request()->kodesite && request()->kodesite != 'all', function($data){
+        //     $data = $data->where('plant_hm.kodesite', '=', request()->kodesite);
+        // })
+        // ->when(request()->kodesite == 'all', function($data){
+        //     $data = $data->where('plant_populasi.type_unit', '=', request()->jenisTipe);
+        // })
+        // ->when(request()->cariNama, function($data){
+        //     $data = $data->where('plant_populasi.nom_unit', 'LIKE', '%'.request()->cariNama.'%');
+        // })
+        // ->get();
         // ->paginate(request()->paginate ? request()->paginate : 50)
         // ->withQueryString();
 
-        // dd($data);
+        $data = collect(DB::select($subquery));
 
         $site = collect(DB::select(
             DB::raw("
@@ -78,7 +105,13 @@ class PopulasiUnitController extends Controller
         ->get();
 
 
-        return view('populasi-unit.index', compact('data', 'site', 'jenisTipe', 'jenisBrand', 'summary'));
+
+        if($request->has('kodesite') || $request->has('cariNama')){
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('populasi-unit.index', compact('data', 'site', 'jenisTipe', 'jenisBrand', 'summary'));
+        }
     }
 
     /**
@@ -148,28 +181,11 @@ class PopulasiUnitController extends Controller
 
         $userid = $request->userid;
 
-        $data = DB::table('plant_populasi')->select('*')->join('plant_hm', 'plant_populasi.nom_unit', '=', 'plant_hm.nom_unit')->where('plant_hm.id', $userid)->get();
+        $subquery = "SELECT  * FROM plant_populasi WHERE id=". $userid;
 
-        $dataChart = DB::table('pma_a2b')->select(DB::raw("
-            MONTHNAME(TGL),
-            (SUM(jam)-SUM(IF(LEFT(kode,1)='B',jam,0)))/SUM(jam) AS MA
-        "))
-        ->where('nom_unit', '=', $data[0]->nom_unit)
-        ->get();
-        
-        
-        if(!isset($dataChart)){
-            $dataChart = DB::table('pmatp')->select(DB::raw("
-                MONTHNAME(TGL),
-                (SUM(jam)-SUM(IF(LEFT(aktivitas,1)='B',jam,0)))/SUM(jam) AS MA
-            "))
-            ->where('nom_unit', '=', $data[0]->nom_unit)
-            ->get();
-        }
-
+        $data = collect(DB::select($subquery));
 
         $response['data'] = $data;
-        $response['dataChart'] = $dataChart;
         
         return response()->json($response);
     }
