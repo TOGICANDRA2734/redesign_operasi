@@ -93,9 +93,9 @@
                             @endif
                         @endforeach
                         <td class="cekTbModal">
-                            <button href="javascript:;" value="{{$data[$key]->id}}" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview" class="tbDetail btn btn-dark mr-1 mb-2">
+                            <a href="{{route('super_admin.populasi-unit.show', $data[$key]->id)}}" class="btn btn-dark mr-1 mb-2">
                                 <i data-lucide="eye" class="w-5 h-5"></i>
-                            </button>
+                            </a>
                             <a href="{{ route('super_admin.populasi-unit.edit', $data[$key]->id) }}" class="btn btn-warning mr-1 mb-2">
                                 <i data-lucide="edit" class="w-5 h-5"></i>
                             </a>
@@ -268,7 +268,6 @@
                         text = '<tr class="text-center bg-white">' +
                             '<td class="">' + i + '</td>' +
                             '<td class="">' + result.data[index].nom_unit + '</td>' +
-                            '<td class="">' + result.data[index].namasite + '</td>' +
                             '<td class="">' + result.data[index].model + '</td>' +
                             '<td class="">' + result.data[index].DO + '</td>' +
                             '<td class="">' + result.data[index].namasite + '</td>' +
@@ -281,6 +280,14 @@
                             '<td class="">' + result.data[index].fuel + '</td>' +
                             '<td class="">' + result.data[index].HM + '</td>' +
                             '<td class="">' + result.data[index].KM + '</td>' +
+                            '<td class="cekTbModal">' + 
+                                '<a href="/super_admin/populasi-unit/'+result.data[index].id+'" class="btn btn-dark mr-1 mb-2">' + 
+                                    '<i data-lucide="eye" class="w-5 h-5"></i>' + 
+                                '</a>' + 
+                                '<a href="/super_admin/populasi-unit/'+result.data[index].id+'/edit" class="btn btn-warning mr-1 mb-2">' + 
+                                    '<i data-lucide="edit" class="w-5 h-5"></i>' + 
+                                '</a>' + 
+                            '</td>' + 
                             '</tr>';
                         fullText += text
                     });
@@ -327,7 +334,6 @@
                         text = '<tr class="text-center bg-white">' +
                             '<td class="">' + i + '</td>' +
                             '<td class="">' + result.data[index].nom_unit + '</td>' +
-                            '<td class="">' + result.data[index].namasite + '</td>' +
                             '<td class="">' + result.data[index].model + '</td>' +
                             '<td class="">' + result.data[index].DO + '</td>' +
                             '<td class="">' + result.data[index].namasite + '</td>' +
@@ -340,6 +346,14 @@
                             '<td class="">' + result.data[index].fuel + '</td>' +
                             '<td class="">' + result.data[index].HM + '</td>' +
                             '<td class="">' + result.data[index].KM + '</td>' +
+                            '<td class="cekTbModal">' + 
+                                '<a href="/super_admin/populasi-unit/'+result.data[index].id+'" class="btn btn-dark mr-1 mb-2">' + 
+                                    '<i data-lucide="eye" class="w-5 h-5"></i>' + 
+                                '</a>' + 
+                                '<a href="/super_admin/populasi-unit/'+result.data[index].id+'/edit" class="btn btn-warning mr-1 mb-2">' + 
+                                    '<i data-lucide="edit" class="w-5 h-5"></i>' + 
+                                '</a>' + 
+                            '</td>' + 
                             '</tr>';
                         fullText += text
                     });

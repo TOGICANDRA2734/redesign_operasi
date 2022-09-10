@@ -14,17 +14,31 @@ class HistoricalUnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $subquery = "SELECT a.nom_unit, type_unit, hm
-        FROM plant_populasi a
-        JOIN plant_hm b
-        on a.nom_unit=b.nom_unit";
+        if($request->has('cariNama')){
+            $subquery = "SELECT a.nom_unit, type_unit, hm
+            FROM plant_populasi a
+            JOIN plant_hm b
+            on a.nom_unit=b.nom_unit
+            WHERE a.nom_unit LIKE '%".$request->cariNama."%'";
+        } else {
+            $subquery = "SELECT a.nom_unit, type_unit, hm
+            FROM plant_populasi a
+            JOIN plant_hm b
+            on a.nom_unit=b.nom_unit";
+        }
+
         $data = collect(DB::select($subquery));
 
         $site = Site::where('status', 1)->get();
-
-        return view('historical-unit.index', compact('data', 'site'));
+        
+        if($request->has('cariNama')){
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('historical-unit.index', compact('data', 'site'));
+        }
     }
 
     /**

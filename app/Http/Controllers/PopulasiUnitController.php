@@ -151,7 +151,9 @@ class PopulasiUnitController extends Controller
      */
     public function show($id)
     {
-        return view('data-prod.show');
+        $data = DB::table('plant_populasi')->where('id', '=', $id)->get();
+
+        return view('populasi-unit.show', compact('data'));
     }
 
 
