@@ -195,6 +195,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         // Historical Unit
         Route::resource('historical-unit', HistoricalUnitController::class);
         Route::post('historical-unit-filter', [HistoricalUnitController::class, 'index'])->name('historical-unit.filter');
+        Route::post('historical-unit-show-filter', [HistoricalUnitController::class, 'showFilter'])->name('historical-unit-show.filter');
     });
 });
 

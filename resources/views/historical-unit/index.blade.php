@@ -117,8 +117,6 @@
 </div>
 <!-- END: Super Large Modal Content -->
 
-
-
 <!-- Filtering -->
 <script>
         $i = jQuery.noConflict();

@@ -70,13 +70,13 @@ class HistoricalUnitController extends Controller
      */
     public function show($id)
     {
+        $nom_unit = Plant_Populasi::select('nom_unit')->where('nom_unit', $id)->pluck('nom_unit');
         $id = Plant_Populasi::where('nom_unit', $id)->get()->pluck('id');
         $data = Plant_Populasi::findOrFail($id);
         $site = Site::where('status', 1)->get();
 
         // Data
-        $subquery = "SELECT a.sn,
-            descript,
+        $subquery = "SELECT descript,
             CASE WHEN b.status=1 THEN 'RS'
             WHEN b.STATUS=6 THEN 'SR'
             END 'SR/RS', 
@@ -94,7 +94,7 @@ class HistoricalUnitController extends Controller
 
         $data = DB::select($subquery);
 
-        return view('historical-unit.show', compact('data', 'site'));
+        return view('historical-unit.show', compact('data', 'site','nom_unit'));
     }
 
     /**
@@ -129,5 +129,57 @@ class HistoricalUnitController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function showFilter(Request $request)
+    {
+        if($request->cariNama!==null && $request->kodesite !==null){
+            $nama =  "AND a.NOM_UNIT LIKE \"%".$request->cariNama."%\"";
+        }
+        else if($request->has('cariNama') && $request->cariNama !== null){
+            $nama =  "AND a.NOM_UNIT LIKE \"%".$request->cariNama."%\"";
+        } else {
+            $nama = "";
+        }
+
+        if($request->has('kodesite') && $request->kodesite !== 'all'){
+            $subquery = "SELECT descript,
+            CASE WHEN b.status=1 THEN 'RS'
+            WHEN b.STATUS=6 THEN 'SR'
+            END status_sr, 
+            b.hm AS hm_fix, 
+            DATE_FORMAT(b.tgdok, '%d-%m-%Y') AS tanggal,
+            mechanic AS PIC,
+            c.namasite namasite
+            FROM plant_populasi a
+            JOIN unit_rssp b
+            ON a.nom_unit = b.nom_unit
+            JOIN site c
+            ON b.kodesite = c.kodesite
+            WHERE a.nom_unit='" . $request->nom_unit . "' AND b.kodesite='".$request->kodesite."' ".$nama."
+            ORDER BY b.tgdok";
+        } else {
+            $subquery = "SELECT descript,
+            CASE WHEN b.status=1 THEN 'RS'
+            WHEN b.STATUS=6 THEN 'SR'
+            END status_sr, 
+            b.hm AS hm_fix, 
+            DATE_FORMAT(b.tgdok, '%d-%m-%Y') AS tanggal,
+            mechanic AS PIC,
+            c.namasite namasite
+            FROM plant_populasi a
+            JOIN unit_rssp b
+            ON a.nom_unit = b.nom_unit
+            JOIN site c
+            ON b.kodesite = c.kodesite
+            WHERE a.nom_unit='" . $request->nom_unit . "' ".$nama."
+            ORDER BY b.tgdok";
+        }
+
+        $data = collect(DB::select($subquery));
+
+        $response['data'] = $data;
+        return response()->json($response);
+        
     }
 }
