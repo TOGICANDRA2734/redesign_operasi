@@ -52,7 +52,7 @@
 
     <!-- Table -->
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
-        <div class="w-full overflow-x-auto">
+        <div class="w-full overflow-x-auto h-[40rem]">
             <table class="w-full table table-striped">
                 <thead class="table-dark">
                     <tr class="">

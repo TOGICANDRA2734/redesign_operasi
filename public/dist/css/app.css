@@ -2090,6 +2090,9 @@ select{
 .h-96{
     height: 24rem;
 }
+.h-\[40rem\]{
+    height: 40rem;
+}
 .max-h-96{
     max-height: 24rem;
 }
@@ -2101,6 +2104,9 @@ select{
 }
 .max-h-\[45rem\]{
     max-height: 45rem;
+}
+.max-h-\[35rem\]{
+    max-height: 35rem;
 }
 .min-h-screen{
     min-height: 100vh;
