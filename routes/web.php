@@ -166,6 +166,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::resource('bd-harian', BDHarianController::class);
         Route::post('bd-harian/delete/{id}', [BDHarianController::class, 'deleteData'])->name('bd-harian.delete');
         Route::post('bd-harian-dok/delete/{id}', [BDDokController::class, 'deleteData'])->name('bd-harian-dok.delete');
+        Route::post('bd-harian-filter', [BDHarianController::class, 'index'])->name('bd-harian.filter');
         Route::get('bd-harian-detail/{bd_harian}', [BDHarianController::class, 'detail'])->name('bd-harian-detail.index');
         Route::resource('bd-harian-dok', BDDokController::class);
 

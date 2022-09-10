@@ -40,25 +40,6 @@ class PopulasiUnitController extends Controller
             ".$nama."";
         }
 
-        // dd($subquery);
-
-        // $data = DB::table('plant_populasi')
-        // ->select(DB::raw("plant_populasi.id, plant_populasi.nom_unit, site.namasite, DATE_FORMAT(do, '%d-%m-%Y'), model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM"))
-        // ->join('plant_hm', 'plant_populasi.nom_unit', '=', 'plant_hm.nom_unit')
-        // ->join('site', 'plant_hm.kodesite', '=', 'site.kodesite')
-        // ->when(request()->kodesite && request()->kodesite != 'all', function($data){
-        //     $data = $data->where('plant_hm.kodesite', '=', request()->kodesite);
-        // })
-        // ->when(request()->kodesite == 'all', function($data){
-        //     $data = $data->where('plant_populasi.type_unit', '=', request()->jenisTipe);
-        // })
-        // ->when(request()->cariNama, function($data){
-        //     $data = $data->where('plant_populasi.nom_unit', 'LIKE', '%'.request()->cariNama.'%');
-        // })
-        // ->get();
-        // ->paginate(request()->paginate ? request()->paginate : 50)
-        // ->withQueryString();
-
         $data = collect(DB::select($subquery));
 
         $site = collect(DB::select(
@@ -103,8 +84,6 @@ class PopulasiUnitController extends Controller
         ->groupBy('plant_populasi.type_unit')
         ->groupBy('plant_hm.tgl')
         ->get();
-
-
 
         if($request->has('kodesite') || $request->has('cariNama')){
             $response['data'] = $data;

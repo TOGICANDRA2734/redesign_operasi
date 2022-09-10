@@ -18,19 +18,60 @@ class BDHarianController extends Controller
      */
     public function index(Request $request)
     {
+        if($request->cariNama!==null && $request->kodesite !==null){
+            $nama =  "AND a.NOM_UNIT LIKE \"%".$request->cariNama."%\"";
+        }
+        else if($request->has('cariNama') && $request->cariNama !== null){
+            $nama =  "WHERE a.NOM_UNIT LIKE \"%".$request->cariNama."%\"";
+        } else {
+            $nama = "";
+        }
+
+        // if($request->has('kodesite') && $request->kodesite !== 'all'){
+        //     $subquery = "SELECT a.id id, a.nom_unit nom_unit, c.namasite namasite, DATE_FORMAT(do, '%d-%m-%Y') DO, model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM
+        //     FROM plant_populasi a
+        //     JOIN plant_HM b
+        //     ON  a.nom_unit=b.nom_unit
+        //     JOIN site c
+        //     ON b.kodesite = c.kodesite
+        //     WHERE b.kodesite='".$request->kodesite."' ".$nama."";
+        // } else {
+        //     $subquery = "SELECT a.id id, a.nom_unit nom_unit, c.namasite namasite, DATE_FORMAT(do, '%d-%m-%Y') DO, model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM
+        //     FROM plant_populasi a
+        //     JOIN plant_HM b
+        //     ON  a.nom_unit=b.nom_unit
+        //     JOIN site c
+        //     ON b.kodesite = c.kodesite
+        //     ".$nama."";
+        // }
+
+        // $data = collect(DB::select($subquery));
+
+
         $data = DB::table('plant_status_bd')->select(DB::raw("
         plant_status_bd.*, 
         IFNULL(DATEDIFF(curdate(), plant_status_bd.tgl_bd),0) as day,
         site.namasite"))
         ->join('site', 'plant_status_bd.kodesite', '=', 'site.kodesite')
         ->where('status_bd', '=', 1)
-        ->when($request->nama)
+        ->when(($nama && $nama!=""), function($query) use($request){
+            $query = $query->where('nom_unit', 'like', '%'.$request->cariNama.'%');
+        })
+        ->when(($request->kodesite && $request->kodesite!='all'), function ($query) use($request){
+            $query = $query->where('plant_status_bd.kodesite', '=', $request->kodesite);
+        })
         ->orderBy('id')
         ->get();
 
         $site = Site::where('status_website', 1)->get();
 
-        return view('bd-harian.index', compact('data', 'site'));
+        if($request->has('kodesite') || $request->has('cariNama')){
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('bd-harian.index', compact('data', 'site'));
+        }
+
     }
 
     /**
@@ -41,7 +82,7 @@ class BDHarianController extends Controller
     public function create()
     {
         // Data Utama
-        $nom_unit = DB::table("plant_populasi")->select("Nom_unit")->whereRaw('nom_unit NOT IN (SELECT nom_unit FROM plant_status_bd)')->get();
+        $nom_unit = DB::table("plant_populasi")->select("Nom_unit")->get();
         $kode_bd = DB::table("kode_bd")->select("kode_bd", "deskripsi_bd")->where('kode_bd', '<>', 'NA')->get();
         $dok_type = DB::table("plant_status_bd_dok")->select(DB::raw("DISTINCT dok_type"))->get();
         $dok_tiket = DB::table("plant_status_bd_dok")->select(DB::raw("DISTINCT id_tiket"))->get();
@@ -106,6 +147,7 @@ class BDHarianController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'nom_unit' => 'required',
             'tgl_bd' => 'required',
@@ -126,17 +168,16 @@ class BDHarianController extends Controller
             'pic'               =>  $request->pic,
             'hm'                =>  $request->hm,
             'kodesite'          =>  $request->site,
-            'keterangan'        =>  "Testing",
-            'status_bd'         =>  $request->kode_bd[1],
+            'keterangan'        =>  $request->keterangan,
+            'status_bd'         =>  1,
         ]);
 
-        $this->idTable = Plant_bd::select('id')->where('nom_unit', $record->nom_unit)->get();
 
         if($record){
-            return redirect()->route('super_admin.bd-harian.index');
+            return redirect()->route('super_admin.bd-harian.index')->with(['success' => 'Data Berhasil Ditambah!']);;
         }
         else{
-            return redirect()->route('super_admin.bd-harian.index');
+            return redirect()->route('super_admin.bd-harian.index')->with(['error' => 'Data Gagal Ditambah!']);;
         }
     }
 
