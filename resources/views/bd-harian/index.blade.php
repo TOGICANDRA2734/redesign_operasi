@@ -39,10 +39,10 @@
 
     <!-- Table -->
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
-        <div class="w-full overflow-x-auto">
-            <table class="w-full table table-striped ">
-                <thead class="table-dark">
-                    <tr class="">
+        <div class="w-full overflow-x-auto max-h-[45rem]">
+            <table class="w-full table table-striped table-sm">
+                <thead class="table-dark sticky top-0 z-20">
+                    <tr>
                         <th rowspan="2" class="whitespace-nowrap text-center">#</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Code Unit</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">HM/KM</th>

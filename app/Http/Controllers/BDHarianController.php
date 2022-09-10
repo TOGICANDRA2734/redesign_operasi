@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Plant_bd;
 use App\Models\Site;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -114,17 +115,11 @@ class BDHarianController extends Controller
 
         $nom_unit = DB::table('plant_status_bd')->select("nom_unit")->where('id', '=', $id)->get();
 
-        // dataDok lama
-        // $dataDok = DB::table('plant_status_bd')
-        // ->select('plant_status_bd_dok.id', 'plant_status_bd.nom_unit', 'plant_status_bd_dok.dok_type', 'plant_status_bd_dok.dok_no', 'plant_status_bd_dok.dok_tgl', 'plant_status_bd_dok.uraian_bd', 'plant_status_bd_dok.kode_bd', 'plant_status_bd_dok.uraian', 'plant_status_bd_dok.keterangan')
-        // ->join('plant_status_bd_dok', 'plant_status_bd.id', '=', 'plant_status_bd_dok.id_tiket')
-        // ->where('plant_status_bd.id', '=', $id)
-        // ->where('plant_status_bd_dok.del', '=', 0)
-        // ->get();
-
         // dataDok Baru
-        $subquery = "SELECT nodokstream no_st, '', descript uraian_bd, IF(STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian
-            FROM unit_rssp
+        $subquery = "SELECT nodokstream no_st, '', descript uraian_bd, IF(a.STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian, b.namasite
+            FROM unit_rssp a
+            JOIN site b
+            ON a.kodesite=b.kodesite
             WHERE nom_unit='".$nom_unit[0]->nom_unit."'
         ";
 
@@ -135,7 +130,8 @@ class BDHarianController extends Controller
             $dataDok = "Data Kosong";
         }
 
-        return view('bd-harian.detail', compact('dataDok', 'nom_unit', 'data'));
+        $site =  Site::where('status', 1)->get();
+        return view('bd-harian.detail', compact('dataDok', 'nom_unit', 'data','site'));
     }
 
 
@@ -291,4 +287,39 @@ class BDHarianController extends Controller
             ]);
         }
     }
+
+
+    public function showFilter(Request $request)
+    {
+
+        
+        if($request->has('kodesite') && $request->kodesite !== 'all'){
+            $subquery = "SELECT nodokstream no_st, 
+            '', 
+            descript uraian_bd, 
+            IF(a.STATUS=1, 
+            'RS', 
+            'SR') dok_type, 
+            no_rs dok_no, 
+            DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, 
+            keterangan uraian, 
+            b.namasite namasite
+            FROM unit_rssp a
+            JOIN site b
+            ON a.kodesite=b.kodesite
+            WHERE nom_unit='".$request->nom_unit."' AND a.kodesite='".$request->kodesite."'";
+        } else {
+            $subquery = "SELECT nodokstream no_st, '', descript uraian_bd, IF(a.STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian, b.namasite namasite
+            FROM unit_rssp a
+            JOIN site b
+            ON a.kodesite=b.kodesite
+            WHERE nom_unit='".$request->nom_unit."'";
+        }
+
+        $data = collect(DB::select($subquery));
+
+        $response['data'] = $data;
+        return response()->json($response);
+        
+    } 
 }
