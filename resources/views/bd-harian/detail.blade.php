@@ -92,7 +92,7 @@
 
             <!-- Data Dok -->
             <!-- Title -->
-            <div class="flex justify-between items-center mt-8 ">
+            <div class="flex justify-between items-center mt-8 intro-y">
                 <h2 class="text-lg font-medium ">
                     Detail
                 </h2>
@@ -138,9 +138,9 @@
                     </div>
                 </div>
             </div>
-            <hr class="my-5">
+            <hr class="my-5 intro-y">
 
-            <table class="w-full table table-striped mt-10">
+            <table class="w-full table table-striped mt-10 intro-y">
                 <thead class="table-dark">
                     <tr class="whitespace-nowrap text-center">
                         <th rowspan="2" class="whitespace-nowrap text-center w-5">No</th>
@@ -177,13 +177,13 @@
                         <td class="whitespace-nowrap text-center">{{$dt->uraian}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->namasite}}</td>
                         <td class="whitespace-nowrap text-center">
-                            <a href="{{route('super_admin.po-harian.show', 1)}}" class="btn px-2 btn-dark mr-1 mb-2">
+                            <a href="{{route('super_admin.po-harian.show', $dt->id)}}" class="btn px-2 btn-dark mr-1 mb-2">
                                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="eye"></i> </span>
                             </a>
-                            <a href="{{route('super_admin.bd-harian-dok.edit', 1)}}" class="btn px-2 btn-warning  mr-1 mb-2">
+                            <a href="{{route('super_admin.bd-harian-dok.edit', $dt->id)}}" class="btn px-2 btn-warning  mr-1 mb-2">
                                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="pencil"></i> </span>
                             </a>
-                            <a onclick="deleteConfirmationDetail({{1}})" class="btn px-2 btn-danger mr-1 mb-2">
+                            <a onclick="deleteConfirmationDetail({{$dt->id}})" class="btn px-2 btn-danger mr-1 mb-2">
                                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="trash"></i> </span>
                             </a>
                         </td>
@@ -244,6 +244,17 @@
                             '<td class="">' + result.data[index].dok_tgl + '</td>' +
                             '<td class="">' + result.data[index].uraian + '</td>' +
                             '<td class="">' + result.data[index].namasite + '</td>' +
+                            '<td class="whitespace-nowrap text-center">' + 
+                                '<a href="/super_admin/po-harian/' + result.data[index].id + '" class="btn px-2 btn-dark mr-1 mb-2">' + 
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="eye"></i> </span>' +
+                                '</a>' + 
+                                '<a href="/super_admin/bd-harian-dok/' + result.data[index].id + '/edit" class="btn px-2 btn-warning  mr-1 mb-2">' + 
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="pencil"></i> </span>' + 
+                                '</a>' + 
+                                '<a onclick="deleteConfirmationDetail({{1}})" class="btn px-2 btn-danger mr-1 mb-2">' + 
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="trash"></i> </span>' + 
+                                '</a>' + 
+                            '</td>' + 
                             '</tr>';
                         fullText += text
                     });
@@ -298,6 +309,17 @@
                             '<td class="">' + result.data[index].dok_tgl + '</td>' +
                             '<td class="">' + result.data[index].uraian + '</td>' +
                             '<td class="">' + result.data[index].namasite + '</td>' +
+                            '<td class="whitespace-nowrap text-center">' + 
+                                '<a href="/super_admin/po-harian/' + result.data[index].id + '" class="btn px-2 btn-dark mr-1 mb-2">' + 
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="eye"></i> </span>' +
+                                '</a>' + 
+                                '<a href="/super_admin/bd-harian-dok/' + result.data[index].id + '/edit" class="btn px-2 btn-warning  mr-1 mb-2">' + 
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="pencil"></i> </span>' + 
+                                '</a>' + 
+                                '<a onclick="deleteConfirmationDetail({{1}})" class="btn px-2 btn-danger mr-1 mb-2">' + 
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="trash"></i> </span>' + 
+                                '</a>' + 
+                            '</td>' +
                             '</tr>';
                         fullText += text
                     });

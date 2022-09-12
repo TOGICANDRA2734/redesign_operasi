@@ -1818,14 +1818,14 @@ select{
 .left-0{
     left: 0px;
 }
+.z-20{
+    z-index: 20;
+}
 .z-10{
     z-index: 10;
 }
 .z-50{
     z-index: 50;
-}
-.z-20{
-    z-index: 20;
 }
 .col-span-12{
     grid-column: span 12 / span 12;
@@ -2057,14 +2057,14 @@ select{
 .h-full{
     height: 100%;
 }
-.h-72{
-    height: 18rem;
-}
 .h-12{
     height: 3rem;
 }
 .h-32{
     height: 8rem;
+}
+.h-\[40rem\]{
+    height: 40rem;
 }
 .h-screen{
     height: 100vh;
@@ -2087,11 +2087,8 @@ select{
 .h-3{
     height: 0.75rem;
 }
-.h-96{
-    height: 24rem;
-}
-.h-\[40rem\]{
-    height: 40rem;
+.max-h-\[45rem\]{
+    max-height: 45rem;
 }
 .max-h-96{
     max-height: 24rem;
@@ -2099,14 +2096,8 @@ select{
 .max-h-\[30rem\]{
     max-height: 30rem;
 }
-.max-h-\[50rem\]{
-    max-height: 50rem;
-}
-.max-h-\[45rem\]{
-    max-height: 45rem;
-}
-.max-h-\[35rem\]{
-    max-height: 35rem;
+.max-h-\[40rem\]{
+    max-height: 40rem;
 }
 .min-h-screen{
     min-height: 100vh;

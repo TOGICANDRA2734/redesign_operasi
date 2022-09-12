@@ -116,7 +116,7 @@ class BDHarianController extends Controller
         $nom_unit = DB::table('plant_status_bd')->select("nom_unit")->where('id', '=', $id)->get();
 
         // dataDok Baru
-        $subquery = "SELECT nodokstream no_st, '', descript uraian_bd, IF(a.STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian, b.namasite
+        $subquery = "SELECT a.id id, nodokstream no_st, '', descript uraian_bd, IF(a.STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian, b.namasite
             FROM unit_rssp a
             JOIN site b
             ON a.kodesite=b.kodesite
@@ -290,11 +290,10 @@ class BDHarianController extends Controller
 
 
     public function showFilter(Request $request)
-    {
-
-        
+    {        
         if($request->has('kodesite') && $request->kodesite !== 'all'){
-            $subquery = "SELECT nodokstream no_st, 
+            $subquery = "SELECT a.id id,
+            nodokstream no_st, 
             '', 
             descript uraian_bd, 
             IF(a.STATUS=1, 

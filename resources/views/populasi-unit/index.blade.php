@@ -59,8 +59,8 @@
 
     <!-- Table -->
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
-        <div class="w-full overflow-x-auto">
-            <table class="w-full table table-striped text-xs">
+        <div class="w-full overflow-x-auto max-h-[45rem]">
+            <table class="w-full table table-striped table-sm text-xs">
                 <thead class="table-dark">
                     <tr class="">
                         <th rowspan="2" class="whitespace-nowrap text-center">NO</th>
@@ -92,12 +92,12 @@
                             <td>{{$d}}</td>
                             @endif
                         @endforeach
-                        <td class="cekTbModal">
-                            <a href="{{route('super_admin.populasi-unit.show', $data[$key]->id)}}" class="btn btn-dark mr-1 mb-2">
-                                <i data-lucide="eye" class="w-5 h-5"></i>
+                        <td class="cekTbModal flex">
+                            <a href="{{route('super_admin.populasi-unit.show', $data[$key]->id)}}" class="btn btn-dark mr-1 mb-2 p-1">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
                             </a>
-                            <a href="{{ route('super_admin.populasi-unit.edit', $data[$key]->id) }}" class="btn btn-warning mr-1 mb-2">
-                                <i data-lucide="edit" class="w-5 h-5"></i>
+                            <a href="{{ route('super_admin.populasi-unit.edit', $data[$key]->id) }}" class="btn btn-warning mr-1 mb-2 p-1">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
                             </a>
                         </td>
                     </tr>
