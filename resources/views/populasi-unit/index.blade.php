@@ -14,12 +14,19 @@
         @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
         <div class="ml-auto mr-2 flex">
             <input type="text" name="cariNama" id="cariNama" placeholder="Cari Data" class="block shadow-sm border p-2 rounded-md w-30 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray mr-2">
-            <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
+            <select id="pilihSite" class="block shadow-sm border p-2 mr-2 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
                 <option value="">All Site</option>
                 @foreach($site as $st)
                 <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
                 @endforeach
             </select>
+            <select id="pilihModel" class="block shadow-sm border p-2 mr-0 rounded-md w-24 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="pilihModel" id="pilihModel">
+                <option value="">All Model</option>
+                @foreach($model as $st)
+                <option value="{{$st->model}}">{{$st->model}}</option>
+                @endforeach
+            </select>
+
 
             <!-- BEGIN: Notification Content -->
             <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
@@ -42,7 +49,6 @@
                 <ul class="dropdown-content">
                     <li>
                         <form action="{{route('super_admin.export_data.index')}}" method="POST">
-
                             <button type="submit" class="dropdown-item"> Excel </button>
                         </form>
                     </li>
@@ -232,8 +238,9 @@
 
 <!-- Filtering -->
 <script>
+    $i = jQuery.noConflict();
+
     $i('#pilihSite').on('change', function() {
-        $i = jQuery.noConflict();
         $i.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
@@ -241,8 +248,8 @@
         });
 
         var kodesite = $i(this).val();
-        $bulan = new Date();
         const cariNama = $i('#cariNama').val() ? $i('#cariNama').val() : "";
+        const pilihModel = $i('#pilihModel').val() ? $i('#pilihModel').val() : "";
 
         if (kodesite == null || kodesite == '') {
             kodesite = 'all';
@@ -255,7 +262,8 @@
             url: '/super_admin/populasi_unit_filter?layout=side-menu',
             data: {
                 'kodesite': kodesite,
-                'cariNama': cariNama
+                'cariNama': cariNama,
+                'pilihModel': pilihModel,
             },
             success: function(result) {
                 console.log(result)
@@ -314,6 +322,8 @@
             kodesite = 'all';
         }
         const cariNama = $i(this).val();
+        const pilihModel = $i("#pilihModel").val();
+        
 
         console.log("PILIH Nama", kodesite, cariNama);
 
@@ -323,6 +333,7 @@
             data: {
                 'cariNama': cariNama,
                 'kodesite': kodesite,
+                'pilihModel': pilihModel,
             },
             success: function(result) {
                 $i("table tbody ").empty();

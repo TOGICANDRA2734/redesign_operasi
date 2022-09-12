@@ -22,6 +22,15 @@ class PopulasiUnitController extends Controller
             $nama = "";
         }
 
+        if($request->pilihModel && $request->pilihModel !=''){
+            $model =  "AND a.model LIKE \"%".$request->pilihModel."%\"";
+        }
+        else {
+            $model = "";
+        }
+
+        // dd($model);
+
         if($request->has('kodesite') && $request->kodesite !== 'all'){
             $subquery = "SELECT a.id id, a.nom_unit nom_unit, c.namasite namasite, DATE_FORMAT(do, '%d-%m-%Y') DO, model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM
             FROM plant_populasi a
@@ -29,7 +38,7 @@ class PopulasiUnitController extends Controller
             ON  a.nom_unit=b.nom_unit
             JOIN site c
             ON b.kodesite = c.kodesite
-            WHERE b.kodesite='".$request->kodesite."' ".$nama."";
+            WHERE b.kodesite='".$request->kodesite."' ".$nama." ".$model."";
         } else {
             $subquery = "SELECT a.id id, a.nom_unit nom_unit, c.namasite namasite, DATE_FORMAT(do, '%d-%m-%Y') DO, model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM
             FROM plant_populasi a
@@ -37,7 +46,7 @@ class PopulasiUnitController extends Controller
             ON  a.nom_unit=b.nom_unit
             JOIN site c
             ON b.kodesite = c.kodesite
-            ".$nama."";
+            ".$nama." ".$model."";
         }
 
         $data = collect(DB::select($subquery));
@@ -53,22 +62,8 @@ class PopulasiUnitController extends Controller
             ")
         ));
 
-        $jenisTipe = collect(DB::select(
-            DB::raw("
-                SELECT 
-                DISTINCT type_unit
-                FROM plant_populasi
-            ")
-        ));
-
-        $jenisBrand = collect(DB::select(
-            DB::raw("
-                SELECT 
-                DISTINCT IF(ENGINE_BRAND='','Tidak Ada Brand', engine_brand) AS brand
-                FROM plant_populasi
-                ORDER BY brand
-            ")
-        ));
+        $subquery = "SELECT DISTINCT model FROM plant_populasi WHERE del=0";
+        $model = collect(DB::select($subquery));
 
         $summary = DB::table('plant_populasi')->select(DB::raw('DISTINCT plant_populasi.type_unit, COUNT(plant_populasi.type_unit) TOTAL'))
         ->join('plant_hm', 'plant_populasi.nom_unit', '=', 'plant_hm.nom_unit')
@@ -89,7 +84,7 @@ class PopulasiUnitController extends Controller
             $response['data'] = $data;
             return response()->json($response);
         } else {
-            return view('populasi-unit.index', compact('data', 'site', 'jenisTipe', 'jenisBrand', 'summary'));
+            return view('populasi-unit.index', compact('data', 'site', 'summary', 'model'));
         }
     }
 

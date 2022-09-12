@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plant_bd;
+use App\Models\Plant_Populasi;
 use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -121,6 +122,7 @@ class BDHarianController extends Controller
             JOIN site b
             ON a.kodesite=b.kodesite
             WHERE nom_unit='".$nom_unit[0]->nom_unit."'
+            ORDER BY a.status DESC, tgdok DESC
         ";
 
         $dataDok=collect(DB::select($subquery));

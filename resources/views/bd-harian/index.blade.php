@@ -54,7 +54,7 @@
                     </tr>
                     <tr class="">
                         <th class="whitespace-nowrap text-center">Start BD</th>
-                        <th class="whitespace-nowrap text-center">Plant RFU</th>
+                        <th class="whitespace-nowrap text-center">Plan RFU</th>
                         <th class="whitespace-nowrap text-center">Day</th>
                     </tr>
                 </thead>

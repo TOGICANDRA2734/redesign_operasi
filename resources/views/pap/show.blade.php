@@ -61,7 +61,7 @@
                             @endif
                         @endforeach
                         <td>
-                            <a href="{{asset('storage/dokumenPlantPap/'.$data[$key]->file)}}">File</a> 
+                            <a href="{{'http://ptrci.co.id/dt/public' . Storage::url('dokumenPlantPap/'.$dt->file)}}">File</a> 
                         </td>
                         <td class="cekTbModal flex justify-center">
                             <a href="{{route('super_admin.pap.show', $data[$key]->id)}}" class="btn btn-dark mr-1 mb-2 p-1">
