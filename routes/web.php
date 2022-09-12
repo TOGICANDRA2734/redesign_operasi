@@ -25,6 +25,7 @@ use App\Http\Controllers\BDDokController;
 use App\Http\Controllers\BDHarianController;
 use App\Http\Controllers\HistoricalUnitController;
 use App\Http\Controllers\MohhController;
+use App\Http\Controllers\PapController;
 use App\Http\Controllers\POController;
 use App\Http\Controllers\PopulasiUnitController;
 use App\Http\Controllers\POTransaksiController;
@@ -197,6 +198,10 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::resource('historical-unit', HistoricalUnitController::class);
         Route::post('historical-unit-filter', [HistoricalUnitController::class, 'index'])->name('historical-unit.filter');
         Route::post('historical-unit-show-filter', [HistoricalUnitController::class, 'showFilter'])->name('historical-unit-show.filter');
+
+        // Pap
+        Route::resource('pap', PapController::class);
+        Route::post('pap-filter', [PapController::class, 'index'])->name('pap.filter');
     });
 });
 

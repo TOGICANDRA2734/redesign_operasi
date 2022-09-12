@@ -181,7 +181,7 @@ class SideMenuSuperAdmin
                     'program-analisa-pelumasan' => [
                         'icon' => 'box',
                         'title' => 'Program Analisa Pelumas (PAP)',
-                        'route_name' => 'super_admin.historical-unit.index',
+                        'route_name' => 'super_admin.pap.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
