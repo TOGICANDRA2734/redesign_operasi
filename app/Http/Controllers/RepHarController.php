@@ -3,20 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
+use function PHPUnit\Framework\isNull;
 
 class RepHarController extends Controller
 {
     public function index(Request $request)
     {
-        $site = Site::where('status_website',1)->get();
-        $subquery = "WITH summ AS
+        $where = '';
+
+        if (count($request->all()) > 1) {              
+            $where .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
+            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
+            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? "nom_unit LIKE '%" . $request->cariNama . "%'" : "";
+            dd($where);
+        } else {
+            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' ";
+        }
+
+        $site = Site::where('status_website', 1)->get();
+        $subquery = "SELECT * FROM
+        (
+        WITH summ AS
         (
         SELECT
-        'TP' db,
-        tp.nom_unit,
         LEFT(tp.nom_unit,4) k_kode,
+        COALESCE(tp.nom_unit, 'SUB TOTAL') nom_unit,
         SUM(IF(tp.aktivitas='001',tp.jam,0)) ob,
         SUM(IF(tp.aktivitas='020',tp.jam,0)) gen,
         SUM(IF(tp.aktivitas='015',tp.jam,0)) trav,
@@ -26,6 +43,8 @@ class RepHarController extends Controller
         SUM(IF(LEFT(tp.aktivitas,1)='0',tp.jam,0)) totalwh,
         SUM(IF(LEFT(tp.aktivitas,1)='B',tp.jam,0)) bd,
         SUM(tp.jam) mohh,
+        ((SUM(tp.jam)-SUM(IF(LEFT(tp.aktivitas,1)='B',tp.jam,0)))/SUM(tp.jam)*100) ma,
+        (SUM(IF(LEFT(tp.aktivitas,1)='0',tp.jam,0))/(SUM(tp.jam)-SUM(IF(LEFT(tp.aktivitas,1)='B',tp.jam,0))) * 100) ut,
         SUM(IF(tp.aktivitas='s00',tp.jam,0)) s00,
         SUM(IF(tp.aktivitas='s01',tp.jam,0)) s01,
         SUM(IF(tp.aktivitas='s02',tp.jam,0)) s02,
@@ -45,8 +64,6 @@ class RepHarController extends Controller
         SUM(IF(tp.aktivitas='s16',tp.jam,0)) s16,
         SUM(IF(tp.aktivitas='s17',tp.jam,0)) s17,
         SUM(IF(LEFT(tp.aktivitas,1)='S',tp.jam,0)) total_stb,
-        ((SUM(tp.jam)-SUM(IF(LEFT(tp.aktivitas,1)='B',tp.jam,0)))/SUM(tp.jam)*100) ma,
-        (SUM(IF(LEFT(tp.aktivitas,1)='0',tp.jam,0))/(SUM(tp.jam)-SUM(IF(LEFT(tp.aktivitas,1)='B',tp.jam,0))) * 100) ut,
         SUM(tp.ritasi) ritasi,
         SUM(tp.bcm) bcm,
         IFNULL(SUM(tp.distbcm)/SUM(tp.bcm),0) jarak,
@@ -56,18 +73,17 @@ class RepHarController extends Controller
         IFNULL((fuel.ltr/SUM(IF(LEFT(tp.aktivitas,1)='0',tp.jam,0))),0) ltr_wh
         FROM pma_tp tp
         LEFT JOIN
-        (SELECT nom_unit,SUM(qty2)ltr FROM pma_fuel WHERE (tgl BETWEEN '2022-07-01' AND '2022-07-31') AND kodesite='E' AND del=0 GROUP BY nom_unit) fuel
+        (SELECT nom_unit,SUM(qty2)ltr FROM pma_fuel WHERE  " . $where . " GROUP BY nom_unit) fuel
         ON tp.nom_unit=fuel.nom_unit
-        WHERE (tp.tgl BETWEEN '2022-07-01' AND '2022-07-31') AND tp.kodesite='E' AND tp.del=0
-        GROUP BY tp.nom_unit,k_kode
+        WHERE  " . $where . "
+        GROUP BY k_kode,tp.nom_unit WITH ROLLUP
         
         UNION ALL
         
         (
         SELECT
-        'A2B' db, 
-        a2b.nom_unit,
         LEFT(a2b.nom_unit,4) k_kode,
+        COALESCE(a2b.nom_unit, 'SUB TOTAL') nom_unit,
         SUM(IF(	(a2b.kode='008') OR
             (a2b.kode='009') OR
             (a2b.kode='010') OR
@@ -103,32 +119,39 @@ class RepHarController extends Controller
         ((SUM(a2b.jam)-SUM(IF(LEFT(a2b.kode,1)='B',a2b.jam,0)))/SUM(a2b.jam)*100) ma,
         (SUM(IF(LEFT(a2b.kode,1)='0',a2b.jam,0))/(SUM(a2b.jam)-SUM(IF(LEFT(a2b.kode,1)='B',a2b.jam,0))) * 100) ut,
         IFNULL(tp.ritasi,0) ritasi,
-        IFNULL(tp.bcm,0) bcm,
         IFNULL((tp.dist/tp.bcm),0) jarak,
+        IFNULL(tp.bcm,0) bcm,
         IFNULL(((tp.bcm)/ SUM(IF((a2b.kode='008') OR (a2b.kode='009') OR (a2b.kode='010') OR (a2b.kode='011') OR (a2b.kode='012'),a2b.jam,0))),0) pty,
         IFNULL(fuel.ltr,0) liter,
         IFNULL((fuel.ltr/SUM(tp.bcm)),0) ltr_bcm,
         IFNULL((fuel.ltr/SUM(IF(LEFT(a2b.kode,1)='0',a2b.jam,0))),0) ltr_wh
         FROM pma_a2b a2b
         LEFT JOIN
-        (SELECT unit_load,SUM(ritasi) ritasi,SUM(bcm) bcm, SUM(distbcm) dist FROM pma_tp WHERE (tgl BETWEEN '2022-07-01' AND '2022-07-31') AND kodesite='E' AND del=0 GROUP BY unit_load) tp
+        (SELECT unit_load,SUM(ritasi) ritasi,SUM(bcm) bcm, SUM(distbcm) dist FROM pma_tp WHERE  " . $where . " GROUP BY unit_load) tp
         ON a2b.nom_unit=tp.unit_load
         LEFT JOIN
-        (SELECT nom_unit,SUM(qty2)ltr FROM pma_fuel WHERE (tgl BETWEEN '2022-07-01' AND '2022-07-31') AND kodesite='E' AND del=0 GROUP BY nom_unit) fuel
+        (SELECT nom_unit,SUM(qty2)ltr FROM pma_fuel WHERE  " . $where . " GROUP BY nom_unit) fuel
         ON a2b.nom_unit=fuel.nom_unit
-        WHERE (a2b.tgl BETWEEN '2022-07-01' AND '2022-07-31') AND a2b.kodesite='E' AND a2b.del=0
-        GROUP BY a2b.nom_unit
+        WHERE " . $where . "
+        GROUP BY k_kode,a2b.nom_unit WITH ROLLUP
         )
         )
         SELECT 
         a.*,IFNULL(b.gol,0) gol FROM summ a
-        LEFT JOIN (SELECT kode_left,gol FROM unit_urut) b
+        JOIN (SELECT kode_left,gol FROM unit_urut) b
         ON a.k_kode = b.kode_left
-        ORDER BY b.gol,db,a.nom_unit";
+        ORDER BY b.gol,a.nom_unit
+        ) t        
+        ";
+
 
         $data = collect(DB::select($subquery));
 
-
-        return view('rephar.index', compact('site', 'data'));
+        if ($request->has('start') || $request->has('end') || $request->has('pilihSite') || $request->has('cariNama')) {
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('rephar.index', compact('site', 'data'));
+        }
     }
 }

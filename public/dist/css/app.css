@@ -2081,6 +2081,9 @@ select{
 .h-2{
     height: 0.5rem;
 }
+.h-\[45rem\]{
+    height: 45rem;
+}
 .h-24{
     height: 6rem;
 }
@@ -2177,6 +2180,9 @@ select{
 .w-3{
     width: 0.75rem;
 }
+.w-28{
+    width: 7rem;
+}
 .flex-1{
     flex: 1 1 0%;
 }
@@ -2242,6 +2248,9 @@ select{
 }
 .flex-wrap{
     flex-wrap: wrap;
+}
+.items-end{
+    align-items: flex-end;
 }
 .items-center{
     align-items: center;
@@ -2427,6 +2436,10 @@ select{
     --tw-bg-opacity: 1;
     background-color: rgb(68 64 60 / var(--tw-bg-opacity));
 }
+.bg-success{
+    --tw-bg-opacity: 1;
+    background-color: rgb(var(--color-success) / var(--tw-bg-opacity));
+}
 .bg-stone-800{
     --tw-bg-opacity: 1;
     background-color: rgb(41 37 36 / var(--tw-bg-opacity));
@@ -2434,10 +2447,6 @@ select{
 .bg-gray-200{
     --tw-bg-opacity: 1;
     background-color: rgb(229 231 235 / var(--tw-bg-opacity));
-}
-.bg-success{
-    --tw-bg-opacity: 1;
-    background-color: rgb(var(--color-success) / var(--tw-bg-opacity));
 }
 .bg-slate-100{
     --tw-bg-opacity: 1;
@@ -2510,6 +2519,18 @@ select{
 .bg-indigo-900{
     --tw-bg-opacity: 1;
     background-color: rgb(49 46 129 / var(--tw-bg-opacity));
+}
+.bg-gray-800{
+    --tw-bg-opacity: 1;
+    background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+}
+.bg-gray-700{
+    --tw-bg-opacity: 1;
+    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+}
+.bg-gray-600{
+    --tw-bg-opacity: 1;
+    background-color: rgb(75 85 99 / var(--tw-bg-opacity));
 }
 .fill-current{
     fill: currentColor;
@@ -16356,6 +16377,9 @@ html body{
     }
 }
 @media (min-width: 1280px){
+    .xl\:col-span-3{
+        grid-column: span 3 / span 3;
+    }
     .xl\:col-span-2{
         grid-column: span 2 / span 2;
     }

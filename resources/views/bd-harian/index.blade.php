@@ -5,40 +5,71 @@
 @endsection
 
 @section('subcontent')
-<div class="">
-    <!-- Title -->
-    <div class="flex justify-between items-center mt-8 ">
-        <h2 class="text-lg font-medium ">
-            Status Breakdown Harian
-        </h2>
-        @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
-        <div class="ml-auto mr-2 flex">
-            <input type="text" name="cariNama" id="cariNama" placeholder="Cari Data" class="block shadow-sm border p-2 rounded-md w-30 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray mr-2">
-
-            <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
-                <option value="">All Site</option>
-                @foreach($site as $st)
-                <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
-                @endforeach
-            </select>
-
-            <!-- BEGIN: Notification Content -->
-            <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
-                <div class="ml-4 mr-4">
-                    <div class="font-medium">Data Berhasil Difilter!</div>
-                </div>
-            </div> <!-- END: Notification Content -->
-
+<div class="grid grid-cols-12 gap-6">
+    <!-- BEGIN: General Report -->
+    <div class="col-span-12 mt-4">
+        <div class="intro-y flex items-center h-10">
+            <h2 class="text-lg font-medium truncate mr-5">
+                Status Breakdown Harian
+            </h2>
+            <a href="" class="ml-auto flex items-center text-primary"> <i data-lucide="refresh-ccw" class="w-4 h-4 mr-3"></i> Reload Data </a>
         </div>
-        @endif
-        <a href="{{route('super_admin.bd-harian.create')}}" class="btn px-2 box mr-2">
-            <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
-        </a>
+        <hr class="col-span-12">
+
+        <div class="grid grid-cols-12 gap-6 mt-5">
+            <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                <div class="report-box zoom-in">
+                    <div class="box p-5">
+                        <div class="flex">
+                            <i data-lucide="shopping-cart" class="report-box__icon text-primary"></i> 
+                            <div class="ml-auto">
+                                <div class="report-box__indicator bg-success tooltip cursor-pointer" title="33% Higher than last month"> 33% <i data-lucide="chevron-up" class="w-4 h-4 ml-0.5"></i> </div>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-medium leading-8 mt-6">4.710</div>
+                        <div class="text-base text-slate-500 mt-1">Item Sales</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <hr class="mb-10">
+    <!-- END: General Report -->
+
+    <!-- Title -->
+    <div class="col-span-12">
+        <div class="flex justify-between items-center mt-8">
+            <h2 class="text-lg font-medium ">
+                Table Breakdown Harian
+            </h2>
+            @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
+            <div class="ml-auto mr-2 flex">
+                <input type="text" name="cariNama" id="cariNama" placeholder="Cari Data" class="block shadow-sm border p-2 rounded-md w-30 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray mr-2">
+    
+                <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
+                    <option value="">All Site</option>
+                    @foreach($site as $st)
+                    <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
+                    @endforeach
+                </select>
+    
+                <!-- BEGIN: Notification Content -->
+                <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
+                    <div class="ml-4 mr-4">
+                        <div class="font-medium">Data Berhasil Difilter!</div>
+                    </div>
+                </div> <!-- END: Notification Content -->
+    
+            </div>
+            @endif
+            <a href="{{route('super_admin.bd-harian.create')}}" class="btn px-2 box mr-2">
+                <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
+            </a>
+        </div>
+        </div>
+        <hr class="col-span-12">
 
     <!-- Table -->
-    <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
+    <div class="col-span-12 mb-8 overflow-hidden rounded-lg shadow-xs">
         <div class="w-full overflow-x-auto max-h-[45rem]">
             <table class="w-full table table-striped table-sm">
                 <thead class="table-dark sticky top-0 z-20">
