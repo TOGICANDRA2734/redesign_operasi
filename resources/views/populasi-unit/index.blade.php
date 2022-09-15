@@ -383,7 +383,7 @@
             node: $("#success-notification-content")
                 .clone()
                 .removeClass("hidden")[0],
-            duration: -1,
+            duration: 1500,
             newWindow: true,
             close: true,
             gravity: "top",

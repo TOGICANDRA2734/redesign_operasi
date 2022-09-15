@@ -137,7 +137,7 @@
 
         $i.ajax({
             type: "POST",
-            url: '/super_admin/bd-harian-filter',
+            url: '/dt/public/super_admin/bd-harian-filter',
             data: {
                 'kodesite': kodesite,
                 'cariNama': cariNama
@@ -194,7 +194,7 @@
 
         $i.ajax({
             type: "POST",
-            url: '/super_admin/bd-harian-filter',
+            url: '/dt/public/super_admin/bd-harian-filter',
             data: {
                 'cariNama': cariNama,
                 'kodesite': kodesite,

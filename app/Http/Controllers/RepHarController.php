@@ -13,17 +13,39 @@ class RepHarController extends Controller
 {
     public function index(Request $request)
     {
-        $where = '';
+        $whereTp = '';
+        $whereA2b = '';
+        $whereFuel = '';
 
         if (count($request->all()) > 1) {              
-            $where .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
-            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
-            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
-            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? "nom_unit LIKE '%" . $request->cariNama . "%'" : "";
-            dd($where);
+            // WhereTP
+            $whereTp .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $whereTp .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $whereTp .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
+            $whereTp .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
+            $whereTp .= ($request->has('cariNama') && !empty($request->cariNama)) ? "tp.nom_unit LIKE '%" . $request->cariNama . "%'" : "";
+            $whereTp .= "AND DEL=0";
+
+            // WhereA2b
+            $whereA2b .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $whereA2b .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $whereA2b .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
+            $whereA2b .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
+            $whereA2b .= ($request->has('cariNama') && !empty($request->cariNama)) ? "a2b.nom_unit LIKE '%" . $request->cariNama . "%'" : "";
+            $whereA2b .= "AND DEL=0";
+
+
+            // WherePmaFuel
+            $whereFuel .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $whereFuel .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $whereFuel .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
+            $whereFuel .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
+            $whereFuel .= ($request->has('cariNama') && !empty($request->cariNama)) ? "pma_fuel.nom_unit LIKE '%" . $request->cariNama . "%'" : "";
+            $whereFuel .= "AND DEL=0";
         } else {
-            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' ";
+            $whereTp .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
+            $whereA2b .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
+            $whereFuel .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
         }
 
         $site = Site::where('status_website', 1)->get();
@@ -73,9 +95,9 @@ class RepHarController extends Controller
         IFNULL((fuel.ltr/SUM(IF(LEFT(tp.aktivitas,1)='0',tp.jam,0))),0) ltr_wh
         FROM pma_tp tp
         LEFT JOIN
-        (SELECT nom_unit,SUM(qty2)ltr FROM pma_fuel WHERE  " . $where . " GROUP BY nom_unit) fuel
+        (SELECT nom_unit,SUM(qty2)ltr FROM pma_fuel WHERE  " . $whereFuel . " GROUP BY nom_unit) fuel
         ON tp.nom_unit=fuel.nom_unit
-        WHERE  " . $where . "
+        WHERE  " . $whereTp . "
         GROUP BY k_kode,tp.nom_unit WITH ROLLUP
         
         UNION ALL
@@ -127,12 +149,12 @@ class RepHarController extends Controller
         IFNULL((fuel.ltr/SUM(IF(LEFT(a2b.kode,1)='0',a2b.jam,0))),0) ltr_wh
         FROM pma_a2b a2b
         LEFT JOIN
-        (SELECT unit_load,SUM(ritasi) ritasi,SUM(bcm) bcm, SUM(distbcm) dist FROM pma_tp WHERE  " . $where . " GROUP BY unit_load) tp
+        (SELECT unit_load,SUM(ritasi) ritasi,SUM(bcm) bcm, SUM(distbcm) dist FROM pma_tp tp WHERE  " . $whereTp . " GROUP BY unit_load) tp
         ON a2b.nom_unit=tp.unit_load
         LEFT JOIN
-        (SELECT nom_unit,SUM(qty2)ltr FROM pma_fuel WHERE  " . $where . " GROUP BY nom_unit) fuel
+        (SELECT nom_unit,SUM(qty2)ltr FROM pma_fuel WHERE  " . $whereFuel . " GROUP BY nom_unit) fuel
         ON a2b.nom_unit=fuel.nom_unit
-        WHERE " . $where . "
+        WHERE " . $whereA2b . "
         GROUP BY k_kode,a2b.nom_unit WITH ROLLUP
         )
         )
@@ -143,7 +165,6 @@ class RepHarController extends Controller
         ORDER BY b.gol,a.nom_unit
         ) t        
         ";
-
 
         $data = collect(DB::select($subquery));
 
