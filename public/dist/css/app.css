@@ -16372,6 +16372,15 @@ html body{
     .xl\:col-span-2{
         grid-column: span 2 / span 2;
     }
+    .xl\:col-span-5{
+        grid-column: span 5 / span 5;
+    }
+    .xl\:col-span-1{
+        grid-column: span 1 / span 1;
+    }
+    .xl\:col-span-6{
+        grid-column: span 6 / span 6;
+    }
     .xl\:mx-5{
         margin-left: 1.25rem;
         margin-right: 1.25rem;

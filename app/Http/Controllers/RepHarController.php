@@ -142,7 +142,7 @@ class RepHarController extends Controller
         (SUM(IF(LEFT(a2b.kode,1)='0',a2b.jam,0))/(SUM(a2b.jam)-SUM(IF(LEFT(a2b.kode,1)='B',a2b.jam,0))) * 100) ut,
         IFNULL(tp.ritasi,0) ritasi,
         IFNULL((tp.dist/tp.bcm),0) jarak,
-        IFNULL(tp.bcm,0) bcm,
+        IF(a2b.nom_unit IS NULL, IFNULL((SELECT SUM(bcm) bcm FROM pma_tp tp WHERE tgl BETWEEN '2022-1-01' AND '2022-01-31' AND kodesite='Q' AND del=0 AND LEFT(unit_load,4)=k_kode),0), IFNULL(tp.bcm,0)),
         IFNULL(((tp.bcm)/ SUM(IF((a2b.kode='008') OR (a2b.kode='009') OR (a2b.kode='010') OR (a2b.kode='011') OR (a2b.kode='012'),a2b.jam,0))),0) pty,
         IFNULL(fuel.ltr,0) liter,
         IFNULL((fuel.ltr/SUM(tp.bcm)),0) ltr_bcm,

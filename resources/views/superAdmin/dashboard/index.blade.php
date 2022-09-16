@@ -264,7 +264,7 @@
 
             if(awal !== null && akhir !== null){
                 $i.ajax({
-                    url: '/dashboard/detail_filtered/',
+                    url: 'http://ptrci.co.id/datacenter/public/dashboard/detail_filtered/',
                     type: 'GET',
                     dataType: 'json',
                     data: {

@@ -89,7 +89,7 @@
     const pond = FilePond.create(inputElement);
     pond.setOptions({
         server: {
-            url: '/upload',
+            url: 'http://ptrci.co.id/datacenter/public/upload',
             headers: {
                 'X-CSRF-TOKEN': '{{csrf_token()}}'
             }

@@ -129,7 +129,7 @@
 
         $i.ajax({
             type: "POST",
-            url: '/super_admin/kendala?layout=side-menu',
+            url: 'http://ptrci.co.id/datacenter/public/super_admin/kendala?layout=side-menu',
             data: {
                 'kodesite': kodesite,
                 'pilihBulan': pilihBulan
@@ -191,7 +191,7 @@
 
         $i.ajax({
             type: "POST",
-            url: '/super_admin/kendala?layout=side-menu',
+            url: 'http://ptrci.co.id/datacenter/public/super_admin/kendala?layout=side-menu',
             data: {
                 'pilihBulan': pilihBulan,
                 'kodesite': kodesite,

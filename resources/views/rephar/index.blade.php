@@ -86,7 +86,7 @@
                             <th class="whitespace-nowrap text-center border">TOTAL</th>
 
                             <th class="whitespace-nowrap text-center border">S00</th>
-                            <th class="whitespace-nowrap text-center border">S01</th>
+                            <th class="whitespace-nowrap text-centasdaer border">S01</th>
                             <th class="whitespace-nowrap text-center border">S02</th>
                             <th class="whitespace-nowrap text-center border">S03</th>
                             <th class="whitespace-nowrap text-center border">S04</th>
@@ -225,7 +225,7 @@
 
             if (awal !== null && akhir !== null) {
                 $j.ajax({
-                    url: '/super_admin/rep-harian?layout=side-menu',
+                    url: 'http://ptrci.co.id/datacenter/public/super_admin/rep-harian?layout=side-menu',
                     type: 'GET',
                     dataType: 'json',
                     data: {
@@ -500,7 +500,7 @@
 
             $j.ajax({
                 type: "GET",
-                url: '/super_admin/rep-harian?layout=side-menu',
+                url: 'http://ptrci.co.id/datacenter/public/super_admin/rep-harian?layout=side-menu',
                 data: {
                     'start': awal,
                     'end': akhir,
