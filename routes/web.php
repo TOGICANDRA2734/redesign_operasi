@@ -171,6 +171,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::post('bd-harian-show-filter', [BDHarianController::class, 'showFilter'])->name('bd-harian-show.filter');
         Route::get('bd-harian-detail/{bd_harian}', [BDHarianController::class, 'detail'])->name('bd-harian-detail.index');
         Route::resource('bd-harian-dok', BDDokController::class);
+        Route::post('bd-harian-show-model', [BDHarianController::class, 'showModel'])->name('showModel.index');
 
         // PO
         Route::resource('po-harian', POController::class);
