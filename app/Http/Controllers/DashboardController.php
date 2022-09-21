@@ -421,9 +421,10 @@ class DashboardController extends Controller
             $data_plan_ob['label'][] = (int) $row->prod_tgl;
             $data_plan_ob['data'][] = $row->OB;
         }
-
+        
         $data_prod_ob['chart_data_prod_ob'] = json_encode($data_prod_ob);
         $data_plan_ob['chart_data_plan_ob'] = json_encode($data_plan_ob);
+
 
 
         $data_detail_OB_prod = DB::table('pma_dailyprod_tc')
@@ -499,7 +500,7 @@ class DashboardController extends Controller
         $data = collect(DB::select($subquery));
 
 
-        $subquery = "SELECT RIGHT(A.tgl, 2) tgl, SUM(A.OB) ob_act, SUM(B.OB) ob_plan
+        $subquery = "SELECT RIGHT(A.tgl, 2) tgl, A.OB ob_act, B.OB ob_plan
         FROM pma_dailyprod_tc A
         JOIN (SELECT * FROM pma_dailyprod_plan WHERE ".$tanggal." AND kodesite = '".$site."' GROUP BY tgl ORDER BY tgl) B
         ON A.tgl = B.tgl
@@ -526,7 +527,7 @@ class DashboardController extends Controller
         /**
          * Coal Data
          */
-        $subquery = "SELECT RIGHT(A.tgl, 2) tgl, SUM(A.coal) coal_act, SUM(B.coal) coal_plan
+        $subquery = "SELECT RIGHT(A.tgl, 2) tgl, A.coal coal_act, B.coal coal_plan
         FROM pma_dailyprod_tc A
         JOIN (SELECT * FROM pma_dailyprod_plan WHERE ".$tanggal." AND kodesite = '".$site."' GROUP BY tgl) B
         ON A.tgl = B.tgl

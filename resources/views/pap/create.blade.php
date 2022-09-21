@@ -77,7 +77,7 @@
         const pond = FilePond.create(inputElement);
         pond.setOptions({
             server: {
-                url: 'http://127.0.0.1:8000upload',
+                url: 'http://ptrci.co.id/datacenter/publicupload',
                 headers: {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -88,7 +88,7 @@
         $('#tgl').on('change', function(){
             console.log($(this).val())
             $.ajax({
-                url: 'http://127.0.0.1:8000admin/dashboard/detail_filtered/',
+                url: 'http://ptrci.co.id/datacenter/publicadmin/dashboard/detail_filtered/',
                 type: 'GET',
                 dataType: 'json',
                 data: {

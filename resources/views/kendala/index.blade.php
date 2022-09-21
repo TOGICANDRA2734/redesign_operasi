@@ -123,7 +123,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://127.0.0.1:8000/kendala-filter?layout=side-menu',
+            url: 'http://ptrci.co.id/datacenter/public/kendala-filter?layout=side-menu',
             data: {
                 'kodesite': kodesite,
                 'pilihBulan': pilihBulan
@@ -172,7 +172,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://127.0.0.1:8000/kendala-filter?layout=side-menu',
+            url: 'http://ptrci.co.id/datacenter/public/kendala-filter?layout=side-menu',
             data: {
                 'pilihBulan': pilihBulan,
                 'kodesite': kodesite,

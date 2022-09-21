@@ -18,12 +18,13 @@
             <hr class="col-span-12">
 
             <div class="grid grid-cols-12 gap-6 mt-5">
-                @foreach ($data as $ket => $dt)
+                @foreach ($dataCard as $ket => $dt)
                     <div class="col-span-12 sm:col-span-6 xl:col-span-4 intro-y">
                         <div class="report-box zoom-in">
                             <div class="box p-5">
                                 <div class="flex">
-                                    <img src="http://ptrci.co.id/gambar/logo/{{ $dt[0]['gambar'] }}" alt="Icon Site"
+                                    <img src="http://ptrci.co.id/gambar/logo/{{ $dt[0]['gambar'] }}" alt="Icon Site
+                                    "
                                         class="w-8 h-8">
                                     <div class="text-base font-medium leading-8 ml-2">{{ $dt[0]['namasite'] }}</div>
                                 </div>
@@ -56,16 +57,16 @@
                                                         <td class="whitespace-nowrap text-center">{{ $d['BD'] }}
                                                         </td>
                                                         <td class="whitespace-nowrap text-center">
-                                                            <form action="{{ route('super_admin.showModel.index') }}"
+                                                            {{-- <form action="{{ route('super_admin.showModel.index') }}"
                                                                 method="POST">
                                                                 @csrf
                                                                 <input type="hidden" name="site"
                                                                     value="{{ $d['namasite'] }}">
                                                                 <input type="hidden" name="model"
-                                                                    value="{{ $d['model'] }}">
+                                                                    value="{{ $d['model'] }}"> --}}
                                                                 <button type="submit" class="btn px-2 btn-dark"><i
                                                                         data-lucide="eye" class="w-4 h-4"></i></button>
-                                                            </form>
+                                                            {{-- </form> --}}
                                                         </td>
                                                     </tr>
                                                 @endforeach

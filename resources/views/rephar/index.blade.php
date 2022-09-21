@@ -225,7 +225,7 @@
 
             if (awal !== null && akhir !== null) {
                 $j.ajax({
-                    url: 'http://127.0.0.1:8000/rep-harian?layout=side-menu',
+                    url: 'http://ptrci.co.id/datacenter/public/rep-harian?layout=side-menu',
                     type: 'GET',
                     dataType: 'json',
                     data: {
@@ -500,7 +500,7 @@
 
             $j.ajax({
                 type: "GET",
-                url: 'http://127.0.0.1:8000/rep-harian?layout=side-menu',
+                url: 'http://ptrci.co.id/datacenter/public/rep-harian?layout=side-menu',
                 data: {
                     'start': awal,
                     'end': akhir,

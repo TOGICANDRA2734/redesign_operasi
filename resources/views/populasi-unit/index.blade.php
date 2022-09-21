@@ -162,7 +162,7 @@
         if (userid >= 0) {
             // AJAX POST request
             $i.ajax({
-                url: 'http://127.0.0.1:8000/populasi-unit/showUser',
+                url: 'http://ptrci.co.id/datacenter/public/populasi-unit/showUser',
                 type: 'post',
                 data: {
                     _token: CSRF_TOKEN,
@@ -259,7 +259,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://127.0.0.1:8000/populasi_unit_filter?layout=side-menu',
+            url: 'http://ptrci.co.id/datacenter/public/populasi_unit_filter?layout=side-menu',
             data: {
                 'kodesite': kodesite,
                 'cariNama': cariNama,
@@ -329,7 +329,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://127.0.0.1:8000/populasi_unit_filter?layout=side-menu',
+            url: 'http://ptrci.co.id/datacenter/public/populasi_unit_filter?layout=side-menu',
             data: {
                 'cariNama': cariNama,
                 'kodesite': kodesite,

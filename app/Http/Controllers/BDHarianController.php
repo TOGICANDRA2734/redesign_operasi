@@ -101,6 +101,7 @@ class BDHarianController extends Controller
             ]];
         });
 
+
         if($request->has('kodesite') || $request->has('cariNama')){
             $response['data'] = $data;
             return response()->json($response);
