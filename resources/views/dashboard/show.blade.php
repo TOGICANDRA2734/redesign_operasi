@@ -380,7 +380,7 @@
 
             if (awal !== null && akhir !== null) {
                 $i.ajax({
-                    url: 'http://ptrci.co.id/datacenter/public/dashboard/detail_filtered/',
+                    url: 'http://127.0.0.1:8000dashboard/detail_filtered/',
                     type: 'GET',
                     dataType: 'json',
                     data: {

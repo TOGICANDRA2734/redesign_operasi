@@ -11,7 +11,7 @@
         <h2 class="text-lg font-medium ">
             Laporan Kendala
         </h2>
-        @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
+        {{-- @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin')) --}}
         <div class="ml-auto mr-2 flex">
             <input type="month" name="pilihBulan" id="pilihBulan" class="mr-3 shadow-sm border p-2 rounded-md w-30  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray">
 
@@ -30,7 +30,7 @@
             </div> <!-- END: Notification Content -->
 
         </div>
-        @endif
+        {{-- @endif --}}
         <div class="dropdown">
             <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="download"></i> </span>
@@ -64,7 +64,6 @@
                         <th rowspan="2" class="whitespace-nowrap text-center">Shift</th>
                         <th colspan="2" class="whitespace-nowrap text-center">Waktu</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Keterangan</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Aksi</th>
                     </tr>
                     <tr class="">
                         <th class="whitespace-nowrap text-center">Awal</th>
@@ -95,11 +94,6 @@
                         <td class="">
                             {{$dt->ket}}
                         </td>
-                        <td class="">
-                            <a href="{{route('kendala.edit', $dt->id)}}" class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-yellow-400 rounded-md active:bg-yellow-600 hover:bg-yellow-900 sm:mr-1 cursor-pointer">
-                                <i class="fa-solid fa-pencil"></i>
-                            </a>
-                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -129,7 +123,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://ptrci.co.id/datacenter/public/super_admin/kendala?layout=side-menu',
+            url: 'http://127.0.0.1:8000/kendala-filter?layout=side-menu',
             data: {
                 'kodesite': kodesite,
                 'pilihBulan': pilihBulan
@@ -144,23 +138,10 @@
                         text = '<tr class="text-center bg-white">' +
                             '<td class="">' + number + '</td>' +
                             '<td class="">' + result.data[index].tanggal + '</td>' +
-                            '<td class="">' + result.data[index].namasite + '</td>' +
-                            '<td class="">' + result.data[index].pit + '</td>' +
-                            '<td class="">' + result.data[index].avg_rit + '</td>' +
-                            '<td class="">' + result.data[index].j1 + '</td>' +
-                            '<td class="">' + result.data[index].j2 + '</td>' +
-                            '<td class="">' + result.data[index].j3 + '</td>' +
-                            '<td class="">' + result.data[index].j4 + '</td>' +
-                            '<td class="">' + result.data[index].j5 + '</td>' +
-                            '<td class="">' + result.data[index].j6 + '</td>' +
-                            '<td class="">' + result.data[index].j7 + '</td>' +
-                            '<td class="">' + result.data[index].j8 + '</td>' +
-                            '<td class="">' + result.data[index].j9 + '</td>' +
-                            '<td class="">' + result.data[index].j10 + '</td>' +
-                            '<td class="">' + result.data[index].j11 + '</td>' +
-                            '<td class="">' + result.data[index].j12 + '</td>' +
-                            '<td class="">' + result.data[index].j13 + '</td>' +
-                            '<td class="">' + result.data[index].j14 + '</td>' +
+                            '<td class="">' + result.data[index].unit + '</td>' +
+                            '<td class="">' + result.data[index].shift + '</td>' +
+                            '<td class="">' + result.data[index].awal + '</td>' +
+                            '<td class="">' + result.data[index].akhir + '</td>' +
                             '<td class="">' + result.data[index].ket + '</td>' +
                             '</tr>';
                         fullText += text
@@ -191,7 +172,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://ptrci.co.id/datacenter/public/super_admin/kendala?layout=side-menu',
+            url: 'http://127.0.0.1:8000/kendala-filter?layout=side-menu',
             data: {
                 'pilihBulan': pilihBulan,
                 'kodesite': kodesite,
@@ -209,23 +190,10 @@
                         text = '<tr class="text-center bg-white">' +
                             '<td class="">' + number + '</td>' +
                             '<td class="">' + result.data[index].tanggal + '</td>' +
-                            '<td class="">' + result.data[index].namasite + '</td>' +
-                            '<td class="">' + result.data[index].pit + '</td>' +
-                            '<td class="">' + result.data[index].avg_rit + '</td>' +
-                            '<td class="">' + result.data[index].j1 + '</td>' +
-                            '<td class="">' + result.data[index].j2 + '</td>' +
-                            '<td class="">' + result.data[index].j3 + '</td>' +
-                            '<td class="">' + result.data[index].j4 + '</td>' +
-                            '<td class="">' + result.data[index].j5 + '</td>' +
-                            '<td class="">' + result.data[index].j6 + '</td>' +
-                            '<td class="">' + result.data[index].j7 + '</td>' +
-                            '<td class="">' + result.data[index].j8 + '</td>' +
-                            '<td class="">' + result.data[index].j9 + '</td>' +
-                            '<td class="">' + result.data[index].j10 + '</td>' +
-                            '<td class="">' + result.data[index].j11 + '</td>' +
-                            '<td class="">' + result.data[index].j12 + '</td>' +
-                            '<td class="">' + result.data[index].j13 + '</td>' +
-                            '<td class="">' + result.data[index].j14 + '</td>' +
+                            '<td class="">' + result.data[index].unit + '</td>' +
+                            '<td class="">' + result.data[index].shift + '</td>' +
+                            '<td class="">' + result.data[index].awal + '</td>' +
+                            '<td class="">' + result.data[index].akhir + '</td>' +
                             '<td class="">' + result.data[index].ket + '</td>' +
                             '</tr>';
                         fullText += text

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kendala;
+use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,25 +17,37 @@ class KendalaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        
-        $bulan = Carbon::now();
-        $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
-        $tanggalKedua =  "A.TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
+        if ($request->has('pilihBulan')) {
+            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
+            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+        } else {
+            $bulan = Carbon::now();
+            $tanggal =  "tgl=CURDATE()";
+        }
 
-        /**
-         * Kendala
-         */
-        $subquery = "SELECT *
-        FROM pma_dailyprod_kendala
-        WHERE tgl=CURDATE() AND
-        kodesite='".Auth::user()->kodesite."'";
+        if ($request->has('kodesite') && $request->kodesite !== 'all') {
+            $subquery = "SELECT *
+            FROM pma_dailyprod_kendala
+            WHERE ".$tanggal." AND kodesite='".$request->kodesite."' 
+            ORDER BY tgl DESC";
+        } else {
+            $subquery = "SELECT *
+            FROM pma_dailyprod_kendala
+            WHERE ".$tanggal."
+            ORDER BY tgl DESC";
+        }
 
-        $kendala = collect(DB::select($subquery));
+        $data = collect(DB::select($subquery));
 
-        $site = DB::table('site')->select('namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        $site = Site::where('status_website', 1)->get();
 
-        return view('user.kendala.index', compact('kendala', 'site'));
+        if  ($request->has('kodesite') || $request->has('pilihBulan')) {
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('kendala.index', compact('data', 'site'));
+        }
     }
 }

@@ -88,7 +88,7 @@
         const kodesite = $i(this).val();
         $i.ajax({
             type: "POST",
-            url: 'http://ptrci.co.id/datacenter/public/admin/data-prod-report?layout=side-menu',
+            url: 'http://127.0.0.1:8000admin/data-prod-report?layout=side-menu',
             data: {
                 'kodesite': kodesite
             },

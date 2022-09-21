@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\dataProd;
+use App\Models\Site;
 use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
@@ -25,20 +26,33 @@ class dataProdController extends Controller
         $bulan = Carbon::now();
         $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
 
-        $statusSite = Auth::user()->kodesite; 
-
-        $subquery = "SELECT id,
-        IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
-        IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
-        IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
-        IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
-        FROM pma_dailyprod_tc
-        WHERE ".$tanggal." and kodesite='".Auth::user()->kodesite."' 
-        GROUP BY tgl";
+        if(Auth::user()->kodesite == 'X'){
+            $subquery = "SELECT id,
+            IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
+            IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
+            IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
+            IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
+            FROM pma_dailyprod_tc
+            WHERE ".$tanggal." 
+            GROUP BY tgl";
+        } else {
+            $subquery = "SELECT id,
+            IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
+            IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
+            IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
+            IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
+            FROM pma_dailyprod_tc
+            WHERE ".$tanggal." and kodesite='".Auth::user()->kodesite."' 
+            GROUP BY tgl";
+        }
 
         $data = collect(DB::select($subquery));
 
-        $site = DB::table('site')->select('namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        if(Auth::user()->kodesite == 'X'){
+            $site = DB::table('site')->select('namasite')->where('status_website', 1)->get();
+        } else {
+            $site = DB::table('site')->select('namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        }
 
         $begin = new DateTime( Carbon::now()->startOfMonth() );
         $end   = new DateTime( Carbon::now()->endOfMonth() );
@@ -48,7 +62,7 @@ class dataProdController extends Controller
             $period[] = $i->format("Y-m-d");
         }
 
-        return view('user.data-prod.index', compact('data', 'site', 'period'));
+        return view('data-prod.index', compact('data', 'site', 'period'));
     }
 
     /**
@@ -314,22 +328,51 @@ class dataProdController extends Controller
         return response()->json(['status' => 'failed', 'message' => 'Please select language'], 500);
     }
 
-    public function report()
+    public function report(Request $request)
     {
-        $bulan = Carbon::now();
-        $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
 
-        $subquery = "SELECT tgl,
-        IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),'-') ob_1,
-        IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),'-') coal_1,
-        IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),'-') ob_2,
-        IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),'-') coal_2
-        FROM pma_dailyprod_tc
-        WHERE ".$tanggal."
-        GROUP BY tgl";
+        if($request->has('pilihBulan')){
+            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
+            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+        } else {
+            $bulan = Carbon::now();
+            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";        
+        }
+
+        if($request->has('kodesite') && $request->kodesite !== 'all'){
+            $subquery = "SELECT tgl tgl_data,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN ob END),1),'-') AS ob_1,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN coal END),1),'-') AS coal_1,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN ob END),1),'-') AS ob_2,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN coal END),1),'-') AS coal_2,
+            ROUND(SUM(ob)/(SELECT SUM(ob) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1) ach_ob,
+            ROUND(SUM(coal)/(SELECT SUM(coal) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1)  ach_coal
+            FROM pma_dailyprod_tc
+            WHERE ".$tanggal." and kodesite='".$request->kodesite."'
+            GROUP BY tgl";
+        } else {
+            $subquery = "SELECT tgl tgl_data,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN ob END),1),'-') AS ob_1,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN coal END),1),'-') AS coal_1,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN ob END),1),'-') AS ob_2,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN coal END),1),'-') AS coal_2,
+            ROUND(SUM(ob)/(SELECT SUM(ob) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1) ach_ob,
+            ROUND(SUM(coal)/(SELECT SUM(coal) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1)  ach_coal
+            FROM pma_dailyprod_tc
+            WHERE ".$tanggal."
+            GROUP BY tgl";
+        }
 
         $data = collect(DB::select($subquery));
+        // dd($data);
 
-        return view('user.data-prod.report', compact('data'));
+        $site = Site::select('namasite', 'lokasi', 'kodesite')->where('status_website', 1)->get();
+
+        if($request->has('kodesite') || $request->has('pilihBulan')){
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('data-prod.report', compact('data', 'site'));
+        }
     }
 }

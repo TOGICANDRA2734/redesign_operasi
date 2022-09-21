@@ -42,6 +42,15 @@ class SideMenuUser
                             'layout' => 'side-menu'
                         ],
                     ],
+                    
+                    'laporan-produksi-coal' => [
+                        'icon' => 'inbox',
+                        'route_name' => 'user.productivity_coal.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Ritasi Coal'
+                    ],
                     'laporan-kendala' => [
                         'icon' => 'box',
                         'title' => 'Laporan Kendala',
@@ -49,6 +58,23 @@ class SideMenuUser
                         'params' => [
                             'layout' => 'side-menu'
                         ],
+                    ],
+                    'mohh-harian' => [
+                        'icon' => 'box',
+                        'title' => 'MOHH Harian',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'route_name' => 'mohh.index',
+                    ],
+                    
+                    'rep-harian' => [
+                        'icon' => 'box',
+                        'title' => 'Report Harian',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'route_name' => 'rep.index',
                     ],
                 ],
             ],

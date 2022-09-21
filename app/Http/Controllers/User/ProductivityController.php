@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Productivity;
+use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -17,42 +18,91 @@ class ProductivityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Data Detail PTY
-        $subquery = "SELECT     
-        nom_unit,
-        b.namasite,
-        pit,
-        ROUND(AVG(pty), 1) avg_pty,
-        IFNULL(SUM(CASE WHEN jam = 6 THEN pty END),'-') j1,                    
-        IFNULL(SUM(CASE WHEN jam = 7 THEN pty END),'-') j2,                    
-        IFNULL(SUM(CASE WHEN jam = 8 THEN pty END),'-') j3,                          
-        IFNULL(SUM(CASE WHEN jam = 9 THEN pty END),'-') j4,                    
-        IFNULL(SUM(CASE WHEN jam = 10 THEN pty END),'-') j5,                          
-        IFNULL(SUM(CASE WHEN jam = 11 THEN pty END),'-') j6,                    
-        IFNULL(SUM(CASE WHEN jam = 12 THEN pty END),'-') j7,                          
-        IFNULL(SUM(CASE WHEN jam = 13 THEN pty END),'-') j8,                    
-        IFNULL(SUM(CASE WHEN jam = 14 THEN pty END),'-') j9,                          
-        IFNULL(SUM(CASE WHEN jam = 15 THEN pty END),'-') j10,                    
-        IFNULL(SUM(CASE WHEN jam = 16 THEN pty END),'-') j11,                          
-        IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j12,                    
-        IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j13,                          
-        IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j14,                         
-        (SELECT dist FROM pma_dailyprod_pty X WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) dist,
-        (SELECT ket FROM pma_dailyprod_pty X WHERE dist IS NOT NULL AND nom_unit=A.nom_unit AND tgl=CURDATE() AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) ket
-        FROM pma_dailyprod_pty A 
-        JOIN site B
-        ON A.kodesite = B.kodesite                
-        JOIN plant_tipe_unit C
-        ON LEFT(A.nom_unit,4)= C.kode                                      
-        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2'
-        GROUP BY a.kodesite, nom_unit,TYPE
-        ORDER BY b.id, nom_unit";
 
-        $dataPty = collect(DB::select($subquery));
+        if ($request->has('pilihBulan')) {
+            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
+            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+        } else {
+            $bulan = Carbon::now();
+            $tanggal =  "tgl=CURDATE()";
+        }
 
-        return view('user.productivity.index', compact('dataPty'));
+        if ($request->has('kodesite') && $request->kodesite !== 'all') {
+            $subquery = "SELECT     
+            DATE_FORMAT(tgl, '%d-%m-%Y') tanggal,    
+            nom_unit,
+            b.namasite,
+            pit,
+            ROUND(AVG(pty), 1) avg_pty,                                                        
+            IFNULL(SUM(CASE WHEN jam = 6 THEN pty END),'-') j1,                    
+            IFNULL(SUM(CASE WHEN jam = 7 THEN pty END),'-') j2,                    
+            IFNULL(SUM(CASE WHEN jam = 8 THEN pty END),'-') j3,                          
+            IFNULL(SUM(CASE WHEN jam = 9 THEN pty END),'-') j4,                    
+            IFNULL(SUM(CASE WHEN jam = 10 THEN pty END),'-') j5,                          
+            IFNULL(SUM(CASE WHEN jam = 11 THEN pty END),'-') j6,                    
+            IFNULL(SUM(CASE WHEN jam = 12 THEN pty END),'-') j7,                          
+            IFNULL(SUM(CASE WHEN jam = 13 THEN pty END),'-') j8,                    
+            IFNULL(SUM(CASE WHEN jam = 14 THEN pty END),'-') j9,                          
+            IFNULL(SUM(CASE WHEN jam = 15 THEN pty END),'-') j10,                    
+            IFNULL(SUM(CASE WHEN jam = 16 THEN pty END),'-') j11,                          
+            IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j12,                    
+            IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j13,                          
+            IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j14,                          
+            (SELECT dist FROM pma_dailyprod_pty X WHERE ".$tanggal." AND nom_unit=A.nom_unit AND dist IS NOT NULL AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE ".$tanggal." AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) dist,
+            (SELECT ket FROM pma_dailyprod_pty X WHERE ".$tanggal." AND nom_unit=A.nom_unit AND ket IS NOT NULL  AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE ".$tanggal." AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) ket
+            FROM pma_dailyprod_pty A
+            JOIN site B
+            ON A.kodesite = B.kodesite                
+            JOIN plant_tipe_unit C
+            ON LEFT(A.nom_unit,4)= C.kode                
+            WHERE " . $tanggal . " AND del=0 AND C.gol_1='2' and a.kodesite='" . $request->kodesite . "'
+            GROUP BY a.kodesite, nom_unit,TYPE
+            ORDER BY b.id, tgl, nom_unit";
+        } else {
+            $subquery = "SELECT     
+            DATE_FORMAT(tgl, '%d-%m-%Y') tanggal,    
+            nom_unit,
+            b.namasite,
+            pit,
+            ROUND(AVG(pty), 1) avg_pty,                                                        
+            IFNULL(SUM(CASE WHEN jam = 6 THEN pty END),'-') j1,                    
+            IFNULL(SUM(CASE WHEN jam = 7 THEN pty END),'-') j2,                    
+            IFNULL(SUM(CASE WHEN jam = 8 THEN pty END),'-') j3,                          
+            IFNULL(SUM(CASE WHEN jam = 9 THEN pty END),'-') j4,                    
+            IFNULL(SUM(CASE WHEN jam = 10 THEN pty END),'-') j5,                          
+            IFNULL(SUM(CASE WHEN jam = 11 THEN pty END),'-') j6,                    
+            IFNULL(SUM(CASE WHEN jam = 12 THEN pty END),'-') j7,                          
+            IFNULL(SUM(CASE WHEN jam = 13 THEN pty END),'-') j8,                    
+            IFNULL(SUM(CASE WHEN jam = 14 THEN pty END),'-') j9,                          
+            IFNULL(SUM(CASE WHEN jam = 15 THEN pty END),'-') j10,                    
+            IFNULL(SUM(CASE WHEN jam = 16 THEN pty END),'-') j11,                          
+            IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j12,                    
+            IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j13,                          
+            IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j14,                          
+            (SELECT dist FROM pma_dailyprod_pty X WHERE tgl=A.tgl AND nom_unit=A.nom_unit AND dist IS NOT NULL AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE tgl=A.tgl AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) dist,
+            (SELECT ket FROM pma_dailyprod_pty X WHERE tgl=A.tgl AND nom_unit=A.nom_unit AND ket IS NOT NULL  AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE tgl=A.tgl AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) ket
+            FROM pma_dailyprod_pty A 
+            JOIN site B
+            ON A.kodesite = B.kodesite                
+            JOIN plant_tipe_unit C
+            ON LEFT(A.nom_unit,4)= C.kode                
+            WHERE " . $tanggal . " AND del=0 AND C.gol_1='2'
+            GROUP BY a.kodesite, nom_unit,TYPE
+            ORDER BY b.id, tgl, nom_unit";
+        }
+
+        $data = collect(DB::select($subquery));
+
+        $site = Site::where('status_website', 1)->get();
+
+        if ($request->has('kodesite') || $request->has('pilihBulan')) {
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('productivity.index', compact('data', 'site'));
+        }
     }
 
     /**

@@ -9,10 +9,11 @@
     <!-- Title -->
     <div class="flex justify-between items-center mt-8 ">
         <h2 class="text-lg font-medium ">
-            Laporan Produksi
+            Laporan Produksi 
         </h2>
-        @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
-        <div class="ml-auto mr-2 flex">
+        {{-- @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin')) --}}
+        <div class="ml-auto mr-2 flex items-center">
+            <i data-loading-icon="oval" class="w-7 h-7 mr-3 hidden" id="loading"></i> 
             <input type="month" name="pilihBulan" id="pilihBulan" class="mr-3 shadow-sm border p-2 rounded-md w-30  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray">
 
             <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
@@ -30,7 +31,7 @@
             </div> <!-- END: Notification Content -->
 
         </div>
-        @endif
+        {{-- @endif --}}
         <div class="dropdown">
             <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="download"></i> </span>
@@ -110,7 +111,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://ptrci.co.id/datacenter/public/super_admin/data-prod-report?layout=side-menu',
+            url: 'http://127.0.0.1:8000/data-prod-report?layout=side-menu',
             data: {
                 'kodesite': kodesite,
                 'pilihBulan': pilihBulan
@@ -159,7 +160,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://ptrci.co.id/datacenter/public/super_admin/data-prod-report?layout=side-menu',
+            url: 'http://127.0.0.1:8000/data-prod-report?layout=side-menu',
             data: {
                 'pilihBulan': pilihBulan,
                 'kodesite': kodesite,

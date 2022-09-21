@@ -134,7 +134,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://ptrci.co.id/datacenter/public/super_admin/historical-unit-filter?layout=side-menu',
+            url: 'http://127.0.0.1:8000/historical-unit-filter?layout=side-menu',
             data: {
                 'cariNama': cariNama
             },
