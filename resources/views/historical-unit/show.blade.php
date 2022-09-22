@@ -144,7 +144,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://ptrci.co.id/datacenter/public/historical-unit-show-filter?layout=side-menu',
+            url: 'http://127.0.0.1:8000/historical-unit-show-filter?layout=side-menu',
             data: {
                 'kodesite': kodesite,
                 'cariNama': cariNama,
@@ -197,7 +197,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://ptrci.co.id/datacenter/public/historical-unit-show-filter?layout=side-menu',
+            url: 'http://127.0.0.1:8000/historical-unit-show-filter?layout=side-menu',
             data: {
                 'cariNama': cariNama,
                 'kodesite': kodesite,

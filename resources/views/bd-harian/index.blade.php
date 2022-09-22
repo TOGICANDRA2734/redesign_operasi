@@ -57,16 +57,16 @@
                                                         <td class="whitespace-nowrap text-center">{{ $d['BD'] }}
                                                         </td>
                                                         <td class="whitespace-nowrap text-center">
-                                                            {{-- <form action="{{ route('super_admin.showModel.index') }}"
+                                                            <form action="{{ route('super_admin.showModel.index') }}"
                                                                 method="POST">
                                                                 @csrf
                                                                 <input type="hidden" name="site"
                                                                     value="{{ $d['namasite'] }}">
                                                                 <input type="hidden" name="model"
-                                                                    value="{{ $d['model'] }}"> --}}
+                                                                    value="{{ $d['model'] }}">
                                                                 <button type="submit" class="btn px-2 btn-dark"><i
                                                                         data-lucide="eye" class="w-4 h-4"></i></button>
-                                                            {{-- </form> --}}
+                                                            </form>
                                                         </td>
                                                     </tr>
                                                 @endforeach

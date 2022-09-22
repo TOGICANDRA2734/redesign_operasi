@@ -111,7 +111,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://ptrci.co.id/datacenter/public/data-prod-report?layout=side-menu',
+            url: 'http://127.0.0.1:8000/data-prod-report?layout=side-menu',
             data: {
                 'kodesite': kodesite,
                 'pilihBulan': pilihBulan
@@ -160,7 +160,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://ptrci.co.id/datacenter/public/data-prod-report?layout=side-menu',
+            url: 'http://127.0.0.1:8000/data-prod-report?layout=side-menu',
             data: {
                 'pilihBulan': pilihBulan,
                 'kodesite': kodesite,

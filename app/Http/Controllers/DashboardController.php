@@ -554,7 +554,7 @@ class DashboardController extends Controller
         /**
          * Data Bulanan
          */
-        $subquery = "SELECT A.tgl tgl, A.OB ob_act, B.OB ob_plan, A.coal coal_act, B.coal coal_plan, C.namasite, C.kodesite
+        $subquery = "SELECT A.tgl tgl, SUM(A.OB) ob_act, B.OB ob_plan, SUM(A.coal) coal_act, B.coal coal_plan, C.namasite, C.kodesite
         FROM pma_dailyprod_tc A
         JOIN (SELECT * FROM pma_dailyprod_plan WHERE ".$tanggal." AND kodesite = '".$site."' GROUP BY tgl) B
         ON A.tgl = B.tgl

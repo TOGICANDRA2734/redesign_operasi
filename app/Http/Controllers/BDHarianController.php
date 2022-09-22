@@ -145,11 +145,11 @@ class BDHarianController extends Controller
         kode_bd.deskripsi_bd"))
         ->join('site', 'plant_status_bd.kodesite', '=', 'site.kodesite')
         ->join('kode_bd', 'plant_status_bd.status_bd', '=', 'kode_bd.id')
-        ->where('plant_status_bd.id', '=', $id)
+        ->where('plant_status_bd.nom_unit', '=', $id)
         ->orderBy('id')
         ->get();
 
-        $nom_unit = DB::table('plant_status_bd')->select("nom_unit")->where('id', '=', $id)->get();
+        $nom_unit = DB::table('plant_status_bd')->select("nom_unit")->where('nom_unit', '=', $id)->get();
 
         // dataDok Baru
         $subquery = "SELECT a.id id, nodokstream no_st, '', descript uraian_bd, IF(a.STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian, b.namasite
@@ -384,6 +384,42 @@ class BDHarianController extends Controller
         ORDER BY d.id, a.status_bagian";
         $data = collect(DB::select($subquery));
 
-        return view('bd-harian.showModel', compact('data'));
+        $subquery = "SELECT a.nom_unit,
+        a.type_unit
+        FROM plant_populasi a
+        JOIN plant_hm b
+        ON a.nom_unit=b.nom_unit
+        LEFT JOIN plant_status_bd c
+        ON a.nom_unit=c.nom_unit
+        JOIN site d
+        ON b.kodesite=d.kodesite
+        JOIN plant_populasi_bagian e
+        ON e.id = a.status_bagian
+        JOIN plant_icon_unit f
+        ON e.status=f.status
+        WHERE d.namasite='".$request->site."' AND e.status LIKE '%".$request->model."%' AND C.nom_unit IS NULL OR (C.ket_tgl_rfu='RFU' AND C.status_bd=0)
+        ORDER BY d.id, a.status_bagian";
+        $dataRFU = collect(DB::select($subquery));
+
+        
+        $subquery = "SELECT a.nom_unit,
+        a.type_unit
+        FROM plant_populasi a
+        JOIN plant_hm b
+        ON a.nom_unit=b.nom_unit
+        LEFT JOIN plant_status_bd c
+        ON a.nom_unit=c.nom_unit
+        JOIN site d
+        ON b.kodesite=d.kodesite
+        JOIN plant_populasi_bagian e
+        ON e.id = a.status_bagian
+        JOIN plant_icon_unit f
+        ON e.status=f.status
+        WHERE d.namasite='".$request->site."' AND e.status LIKE '%".$request->model."%' AND C.nom_unit IS NOT NULL AND (C.ket_tgl_rfu<>'RFU' AND C.status_bd=1)
+        ORDER BY d.id, a.status_bagian";
+        $dataBD = collect(DB::select($subquery));
+
+
+        return view('bd-harian.showModel', compact('data', 'dataRFU', 'dataBD'));
     }
 }
