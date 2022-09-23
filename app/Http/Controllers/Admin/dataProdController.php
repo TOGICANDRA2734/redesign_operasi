@@ -25,36 +25,47 @@ class dataProdController extends Controller
      */
     public function index(Request $request)
     {
-        $bulan = Carbon::now();
-        $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
+        $where = "";
 
-        if(strtolower(Auth::user()->kodesite) === 'x'){
-            $site = DB::table('site')->select('namasite', 'kodesite')->where('status_website', '=', 1)->get();
-            $userSite = 'I';
+        if (count($request->all()) > 1) {              
+            $where = "kodesite='" . $request->pilihSite . "' and ";
+            $bulan = Carbon::now();
+            $where .= "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'"; 
 
+        } else {    
+            $bulan = Carbon::now();
+            $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
+            $where = $tanggal; 
+        }
+
+
+        if(Auth::user()->kodesite == 'X'){
             $subquery = "SELECT id,
             IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
             IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
             IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
             IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
             FROM pma_dailyprod_tc
-            WHERE ".$tanggal." and kodesite='".$userSite."' 
-            GROUP BY tgl, kodesite";
+            WHERE ".$where." 
+            GROUP BY tgl";
         } else {
-            $userSite = Auth::user()->kodesite;
-
-            $site = DB::table('site')->select('namasite', 'kodesite')->where('kodesite', '=', $userSite)->get();
             $subquery = "SELECT id,
             IFNULL(SUM(CASE WHEN shift = 1 THEN ob END),0) ob_s1, 
             IFNULL(SUM(CASE WHEN shift = 2 THEN ob END),0) ob_s2, 
             IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
             IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
             FROM pma_dailyprod_tc
-            WHERE ".$tanggal." and kodesite='".$userSite."' 
+            WHERE ".$where." and kodesite='".Auth::user()->kodesite."' 
             GROUP BY tgl";
         }
 
         $data = collect(DB::select($subquery));
+
+        if(Auth::user()->kodesite == 'X'){
+            $site = DB::table('site')->select('namasite', 'kodesite')->where('status_website', 1)->get();
+        } else {
+            $site = DB::table('site')->select('namasite', 'kodesite')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        }
 
         $begin = new DateTime( Carbon::now()->startOfMonth() );
         $end   = new DateTime( Carbon::now()->endOfMonth() );
@@ -64,9 +75,14 @@ class dataProdController extends Controller
             $period[] = $i->format("Y-m-d");
         }
 
-        $userSite = DB::table('site')->select('namasite')->where('kodesite', '=', $userSite)->get();
 
-        return view('admin.data-prod.index', compact('data', 'site', 'period', 'userSite'));
+        if ($request->has('pilihSite')) {
+            $response['data'] = $data;
+            $response['period'] = $period;
+            return response()->json($response);
+        } else {
+            return view('data-prod.index', compact('data', 'site', 'period'));
+        }
     }
 
     /**

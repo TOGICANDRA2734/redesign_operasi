@@ -130,6 +130,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::get('dashboard-filtered/{namasite}', [DashboardController::class, 'index_filtered'])->name('dashboard.filtered');
         Route::get('dashboard/detail/{site}', [DashboardController::class, 'show'])->name('dashboard.show');
         Route::get('dashboard/detail_filtered/', [DashboardController::class, 'show_data_filtered'])->name('dashboard.show.filtered');
+
         Route::resource('data-prod', dataProdController::class);
         Route::get('data-prod-excel-generator', [dataProdController::class, 'export_data'])->name('export_data.index');
         Route::get('data-prod/create_data/{tgl}', [dataProdController::class, 'create_data'])->name('create_data.index');
@@ -139,12 +140,16 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::post('data-prod-report', [dataProdController::class, 'report'])->name('data-prod.report.post');
         Route::post('detail-pit', [dataProdController::class, 'getPit'])->name('data-prod.getPit');
 
+
         Route::resource('productivity', ProductivityController::class);
         Route::post('productivity_filter', [ProductivityController::class, 'index'])->name('productivity.filter');
 
+
         Route::post('productivity_check', [ProductivityController::class, 'check'])->name('productivity.check');
         Route::post('productivity_store', [ProductivityController::class, 'store_data'])->name('productivity.store_data');
+        Route::get('productivity-create-page', [ProductivityController::class, 'create_page'])->name('productivity-create.index');
         
+
         Route::resource('productivity_coal', ProductivityCoalController::class);
         Route::post('productivity_coal_report', [ProductivityCoalController::class, 'index'])->name('productivity_coal.report');
         Route::post('productivity_check_coal', [ProductivityCoalController::class, 'check'])->name('productivity_coal.check');
@@ -225,9 +230,12 @@ Route::middleware('auth')->group(function() {
         Route::get('data-prod-report', [dataProdController::class, 'report'])->name('data-prod.report');
         Route::post('data-prod-report', [dataProdController::class, 'report'])->name('data-prod.report.post');
         Route::post('detail-pit', [dataProdController::class, 'getPit'])->name('data-prod.getPit');
+        Route::get('data-prod-filter', [dataProdController::class, 'index'])->name('data-prod.filter');
 
         Route::resource('productivity', ProductivityController::class);
         Route::post('productivity_filter', [ProductivityController::class, 'index'])->name('productivity.filter');
+        Route::get('productivity-create-page', [ProductivityController::class, 'create_page'])->name('productivity-create.index');
+
 
         Route::post('productivity_check', [ProductivityController::class, 'check'])->name('productivity.check');
         Route::post('productivity_store', [ProductivityController::class, 'store_data'])->name('productivity.store_data');

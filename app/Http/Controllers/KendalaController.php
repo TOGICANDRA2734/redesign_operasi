@@ -41,12 +41,13 @@ class KendalaController extends Controller
         $data = collect(DB::select($subquery));
 
         $site = Site::where('status_website', 1)->get();
+        $waktu = Carbon::now();
 
         if  ($request->has('kodesite') || $request->has('pilihBulan')) {
             $response['data'] = $data;
             return response()->json($response);
         } else {
-            return view('kendala.index', compact('data', 'site'));
+            return view('kendala.index', compact('data', 'site', 'waktu'));
         }
     }
 
@@ -59,7 +60,10 @@ class KendalaController extends Controller
     {
         $site = DB::table('site')->select('kodesite', 'namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
         $unit = DB::table('plant_hm')->select('nom_unit')->where('kodesite', '=', Auth::user()->kodesite)->orderBy('nom_unit')->get();
-        return view('kendala.create', compact('site', 'unit'));
+        $waktu = Carbon::now()->format('Y-m-d');
+        $kendala_code  = DB::table('kendala_status')->select('status','kode')->where('del','=',0)->get();
+        
+        return view('kendala.create', compact('site', 'unit', 'waktu', 'kendala_code'));
     }
 
     /**

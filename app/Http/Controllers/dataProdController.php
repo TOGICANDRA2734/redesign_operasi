@@ -22,10 +22,21 @@ class dataProdController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $bulan = Carbon::now();
-        $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
+        $where = "";
+
+        if (count($request->all()) > 1) {              
+            $where = "kodesite='" . $request->pilihSite . "' and ";
+            $bulan = Carbon::now();
+            $where .= "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'"; 
+
+        } else {    
+            $bulan = Carbon::now();
+            $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
+            $where = $tanggal; 
+        }
+
 
         if(Auth::user()->kodesite == 'X'){
             $subquery = "SELECT id,
@@ -34,7 +45,7 @@ class dataProdController extends Controller
             IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
             IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
             FROM pma_dailyprod_tc
-            WHERE ".$tanggal." 
+            WHERE ".$where." 
             GROUP BY tgl";
         } else {
             $subquery = "SELECT id,
@@ -43,16 +54,16 @@ class dataProdController extends Controller
             IFNULL(SUM(CASE WHEN shift = 1 THEN coal END),0) coal_s1, 
             IFNULL(SUM(CASE WHEN shift = 2 THEN coal END),0) coal_s2
             FROM pma_dailyprod_tc
-            WHERE ".$tanggal." and kodesite='".Auth::user()->kodesite."' 
+            WHERE ".$where." and kodesite='".Auth::user()->kodesite."' 
             GROUP BY tgl";
         }
 
         $data = collect(DB::select($subquery));
 
         if(Auth::user()->kodesite == 'X'){
-            $site = DB::table('site')->select('namasite')->where('status_website', 1)->get();
+            $site = DB::table('site')->select('namasite', 'kodesite')->where('status_website', 1)->get();
         } else {
-            $site = DB::table('site')->select('namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
+            $site = DB::table('site')->select('namasite', 'kodesite')->where('kodesite', '=', Auth::user()->kodesite)->get();
         }
 
         $begin = new DateTime( Carbon::now()->startOfMonth() );
@@ -63,7 +74,14 @@ class dataProdController extends Controller
             $period[] = $i->format("Y-m-d");
         }
 
-        return view('data-prod.index', compact('data', 'site', 'period'));
+
+        if ($request->has('pilihSite')) {
+            $response['data'] = $data;
+            $response['period'] = $period;
+            return response()->json($response);
+        } else {
+            return view('data-prod.index', compact('data', 'site', 'period'));
+        }
     }
 
     /**
@@ -193,7 +211,7 @@ class dataProdController extends Controller
         ";
         $dataProd = collect(DB::select($subquery));
 
-        return view('data-prod.edit', compact('site', 'data', 'cuaca', 'dataProd'));
+        return view('admin.data-prod.edit', compact('site', 'data', 'cuaca', 'dataProd'));
     }
 
     public function edit_data($id, $tgl, $other)
@@ -364,7 +382,6 @@ class dataProdController extends Controller
         }
 
         $data = collect(DB::select($subquery));
-        // dd($data);
 
         $site = Site::select('namasite', 'lokasi', 'kodesite')->where('status_website', 1)->get();
 

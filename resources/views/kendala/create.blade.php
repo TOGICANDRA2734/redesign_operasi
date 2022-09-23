@@ -27,7 +27,7 @@
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
                             Tanggal <span class="text-xs text-gray-500">(Bulan-Hari-Tahun)</span>
                         </span>
-                        <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl" id="tgl">
+                        <input value="{{$waktu}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl" id="tgl" >
                         @error('tgl')
                             <div class="text-danger mt-2">{{$message}}</div>
                         @endif
@@ -37,12 +37,12 @@
                 <div>
                     <label class="block mt-1 text-sm">
                         <span class="font-semibold text-gray-700 dark:text-gray-400">Site</span>
-                        <select class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
-                            <option disabled selected value="">Pilih</option>
+                        <select data-placeholder="Pilih site" name="kodesite" class="tom-select w-full @error('kodesite') border-danger @enderror">
+                            <option value="" selected disabled>Pilih Site</option>
                             @foreach($site as $st)
-                                <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
+                            <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
                             @endforeach
-                        </select>
+                        </select> 
                         @error('kodesite')
                             <div class="text-danger mt-2">{{$message}}</div>
                         @endif
@@ -52,12 +52,12 @@
                 <div class="col-span-2">
                     <label class="block mt-1 text-sm">
                         <span class="font-semibold text-gray-700 dark:text-gray-400">Nom Unit</span>
-                        <select class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="unit" id="unit">
-                            <option disabled selected value="">Select</option>
+                        <select data-placeholder="Pilih unit" name="unit" class="tom-select w-full @error('unit') border-danger @enderror">
+                            <option value="" selected disabled>Pilih Unit</option>
                             @foreach($unit as $ut)
                                 <option value="{{$ut->nom_unit}}">{{$ut->nom_unit}}</option>
                             @endforeach
-                        </select>
+                        </select> 
                         @error('unit')
                             <div class="text-danger mt-2">{{$message}}</div>
                         @endif
@@ -117,7 +117,13 @@
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
                             Keterangan
                         </span>
-                        <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="ket" id="ket">
+            
+                        <select data-placeholder="Pilih Keterangan" name="ket" class="tom-select w-full @error('ket') border-danger @enderror">
+                            <option value="" selected disabled>Pilih Site</option>
+                            @foreach($kendala_code as $st)
+                            <option value="{{$st->kode}}">{{$st->kode}} - {{$st->status}}</option>
+                            @endforeach
+                        </select> 
                         @error('ket')
                             <div class="text-danger mt-2">{{$message}}</div>
                         @endif
