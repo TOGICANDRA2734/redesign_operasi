@@ -14,6 +14,9 @@
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
             <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#header-footer-modal-preview" class="btn btn-primary shadow-md mr-2">Tambah Pty</a>
         </div>
+        <button class=" btn px-2 box" id="addData">
+            <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
+        </button>
     </div>
     <hr class="mb-10">
     <!-- Table -->
@@ -83,6 +86,9 @@
         <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Batalkan</button> 
         <button type="submit" class="btn btn-primary w-20">Kirim</button> 
     </div>
+
+
+    
 </form>
     <!-- end PTY Overview -->
 
@@ -166,6 +172,7 @@
             </div>
         </div>
     </div> <!-- END: Modal Content -->
-
 </div>
+
+
 @endsection

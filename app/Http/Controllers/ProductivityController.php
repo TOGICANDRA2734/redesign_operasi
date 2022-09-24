@@ -50,8 +50,8 @@ class ProductivityController extends Controller
             IFNULL(SUM(CASE WHEN jam = 17 THEN pty END),'-') j12,                    
             IFNULL(SUM(CASE WHEN jam = 18 THEN pty END),'-') j13,                          
             IFNULL(SUM(CASE WHEN jam = 19 THEN pty END),'-') j14,                          
-            (SELECT dist FROM pma_dailyprod_pty X WHERE ".$tanggal." AND nom_unit=A.nom_unit AND dist IS NOT NULL AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE ".$tanggal." AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) dist,
-            (SELECT ket FROM pma_dailyprod_pty X WHERE ".$tanggal." AND nom_unit=A.nom_unit AND ket IS NOT NULL  AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE ".$tanggal." AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) ket
+            (SELECT dist FROM pma_dailyprod_pty X WHERE " . $tanggal . " AND nom_unit=A.nom_unit AND dist IS NOT NULL AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE " . $tanggal . " AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) dist,
+            (SELECT ket FROM pma_dailyprod_pty X WHERE " . $tanggal . " AND nom_unit=A.nom_unit AND ket IS NOT NULL  AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE " . $tanggal . " AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) ket
             FROM pma_dailyprod_pty A
             JOIN site B
             ON A.kodesite = B.kodesite                
@@ -139,7 +139,7 @@ class ProductivityController extends Controller
         ON A.kodesite = B.kodesite       
         JOIN plant_tipe_unit C
         ON LEFT(A.nom_unit,4)= C.kode                                      
-        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2' AND A.kodesite='".Auth::user()->kodesite."'
+        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2' AND A.kodesite='" . Auth::user()->kodesite . "'
         GROUP BY a.kodesite, nom_unit,TYPE
         ORDER BY b.id, nom_unit";
 
@@ -153,12 +153,12 @@ class ProductivityController extends Controller
         ON A.kodesite = B.kodesite       
         JOIN plant_tipe_unit C
         ON LEFT(A.nom_unit,4)= C.kode                                      
-        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2' and a.kodesite='".Auth::user()->kodesite."'
+        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2' and a.kodesite='" . Auth::user()->kodesite . "'
         ORDER BY b.id, nom_unit";
         $totalDataPty = collect(DB::select($subquery));
 
 
-        $waktu = Carbon::now()->format('H:i'); 
+        $waktu = Carbon::now()->format('H:i');
 
         return view('productivity.create', compact('dataPty', 'dataNomUnit', 'dataPit', 'waktu', 'totalDataPty'));
     }
@@ -191,13 +191,13 @@ class ProductivityController extends Controller
         ON A.kodesite = B.kodesite       
         JOIN plant_tipe_unit C
         ON LEFT(A.nom_unit,4)= C.kode                                      
-        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2' AND A.kodesite='".Auth::user()->kodesite."'
+        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2' AND A.kodesite='" . Auth::user()->kodesite . "'
         GROUP BY a.kodesite, nom_unit,TYPE
         ORDER BY b.id, nom_unit";
 
         $dataPty = collect(DB::select($subquery));
 
-        $dataNomUnit = DB::table('plant_hm')->join('plant_tipe_unit', DB::raw('LEFT(plant_hm.nom_unit, 4)'), '=', 'plant_tipe_unit.kode')->select(DB::raw('nom_unit'))->orderBy('nom_unit')->where('kodesite', '=', Auth::user()->kodesite)->where('gol_1', '=', '2')->orderBy('nom_unit')->get();
+        $dataNomUnit = DB::table('plant_hm')->join('plant_tipe_unit', DB::raw('LEFT(plant_hm.nom_unit, 4)'), '=', 'plant_tipe_unit.kode')->join('pma_dailyprod_pit', 'pma_dailyprod_pit.kodesite', '=', 'plant_hm.kodesite')->select(DB::raw('nom_unit'))->where('plant_hm.kodesite', '=', Auth::user()->kodesite)->where('gol_1', '=', '2')->orderBy('nom_unit')->get();
         $dataPit = DB::table('pma_dailyprod_pit')->select(DB::raw('ket, kodepit'))->orderBy('ket')->where('kodesite', '=', Auth::user()->kodesite)->get();
         $subquery = "SELECT SUM(pty) total_pty
         FROM pma_dailyprod_pty A 
@@ -205,12 +205,12 @@ class ProductivityController extends Controller
         ON A.kodesite = B.kodesite       
         JOIN plant_tipe_unit C
         ON LEFT(A.nom_unit,4)= C.kode                                      
-        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2' and a.kodesite='".Auth::user()->kodesite."'
+        WHERE tgl=CURDATE() AND del=0 AND C.gol_1='2' and a.kodesite='" . Auth::user()->kodesite . "'
         ORDER BY b.id, nom_unit";
         $totalDataPty = collect(DB::select($subquery));
 
 
-        $waktu = Carbon::now()->format('H:i'); 
+        $waktu = Carbon::now()->format('H:i');
 
         return view('productivity.createPage', compact('dataPty', 'dataNomUnit', 'dataPit', 'waktu', 'totalDataPty'));
     }
@@ -228,50 +228,98 @@ class ProductivityController extends Controller
 
     public function check(Request $request)
     {
-        dd($request);
-        
-        $data = DB::table('pma_dailyprod_pty')->where('tgl', '=', $request->tgl)->where('nom_unit', '=', $request->nom_unit)->where('kodesite', '=', $request->kodesite)->where('jam', '=', $request->jam)->count();
-        if($data == 0){
-            $request->validate([
-                'tgl' => 'required',
-                'nom_unit' => 'required',
-                'jam' => 'required',
-                'pty' => 'required',
-                'dist' => 'required',
-                'kodesite' => 'required',
-                'pit' => 'required',
-            ]);
-    
-            $record = Productivity::create([
-                'tgl' => $request->tgl,
-                'nom_unit' => $request->nom_unit,
-                'type' => substr($request->nom_unit, 0, 4),
-                'jam' => $request->jam,
-                'pty' => $request->pty,
-                'dist' => $request->dist,
-                'ket' => strtoupper($request->ket),
-                'kodesite' => $request->kodesite,
-                'pit' => $request->pit,
-                'admin' => Auth::user()->username,
-                'time_admin' => Carbon::now(),
-            ]);
+        $data = $request->all();
 
-            $data = Cuaca::create([
-                'cuaca' => $request->cuaca,
-                'kodesite' => $request->kodesite,
-                'tgl' => $request->tgl,
-                'jam' => $request->jam,
-            ]);
+        dd($data);
 
-            if($record){
-                return redirect()->route('productivity.create')->with(['success' => 'Data Berhasil Ditambah!']);
+        foreach ($data as $key => $dt) {
+            foreach ($dt as $k => $d) {
+                // dd($d, $k);
+                // $cek = DB::table('pma_dailyprod_pty')->where('tgl', '=', Carbon::now()->timezone('Asia/Kuala_lumpur'))->where('nom_unit', '=', $key)->where('kodesite', '=', Auth::user()->kodesite)->where('jam', '=', $)->count();
+                $data = DB::table('pma_dailyprod_pty')->where('tgl', '=', Carbon::now()->timezone('Asia/Kuala_lumpur'))->where('nom_unit', '=', $key)->where('kodesite', '=', Auth::user()->kodesite)->where('jam', '=', $request->jam)->count();
+
+
+                if ($data == 0) {
+                    $request->validate([
+                        'tgl' => 'required',
+                        'nom_unit' => 'required',
+                        'jam' => 'required',
+                        'pty' => 'required',
+                        'dist' => 'required',
+                        'kodesite' => 'required',
+                        'pit' => 'required',
+                    ]);
+
+                    $record = Productivity::create([
+                        'tgl' => Carbon::now()->format('Y-m-d'),
+                        'nom_unit' => $key,
+                        'type' => substr($key, 0, 4),
+                        'jam' => 0,
+                        'pty' => $dt['pty_0'],
+                        'dist' => $dt['dist'],
+                        'ket' => strtoupper($dt['ket']),
+                        'kodesite' => Auth::user()->kodesite,
+                        'pit' => $dt['pit'],
+                        'admin' => Auth::user()['username'],
+                        'time_admin' => Carbon::now(),
+                    ]);
+
+                    $data = Cuaca::create([
+                        'cuaca' => $dt['cuaca'],
+                        'kodesite' => Auth::user()->kodesite,
+                        'tgl' => Carbon::now()->format('Y m d'),
+                        'jam' => 0,
+                    ]);
+                }
             }
-            else{
-                return redirect()->route('productivity.create')->with(['error' => 'Data Gagal Ditambah!']);
-            }
-        } else {
-            return redirect()->back();
         }
+        if ($record) {
+            return redirect()->route('productivity.create')->with(['success' => 'Data Berhasil Ditambah!']);
+        } else {
+            return redirect()->route('productivity.create')->with(['error' => 'Data Gagal Ditambah!']);
+        }
+
+        // if($data == 0){
+        //     $request->validate([
+        //         'tgl' => 'required',
+        //         'nom_unit' => 'required',
+        //         'jam' => 'required',
+        //         'pty' => 'required',
+        //         'dist' => 'required',
+        //         'kodesite' => 'required',
+        //         'pit' => 'required',
+        //     ]);
+
+        //     $record = Productivity::create([
+        //         'tgl' => $request->tgl,
+        //         'nom_unit' => $request->nom_unit,
+        //         'type' => substr($request->nom_unit, 0, 4),
+        //         'jam' => $request->jam,
+        //         'pty' => $request->pty,
+        //         'dist' => $request->dist,
+        //         'ket' => strtoupper($request->ket),
+        //         'kodesite' => $request->kodesite,
+        //         'pit' => $request->pit,
+        //         'admin' => Auth::user()->username,
+        //         'time_admin' => Carbon::now(),
+        //     ]);
+
+        //     $data = Cuaca::create([
+        //         'cuaca' => $request->cuaca,
+        //         'kodesite' => $request->kodesite,
+        //         'tgl' => $request->tgl,
+        //         'jam' => $request->jam,
+        //     ]);
+
+        //     if($record){
+        //         return redirect()->route('productivity.create')->with(['success' => 'Data Berhasil Ditambah!']);
+        //     }
+        //     else{
+        //         return redirect()->route('productivity.create')->with(['error' => 'Data Gagal Ditambah!']);
+        //     }
+        // } else {
+        //     return redirect()->back();
+        // }
     }
 
     /**
@@ -310,23 +358,22 @@ class ProductivityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        for($i=0; $i<=$request->total; $i++){
-            $id = $request['id_'.$i];
+        for ($i = 0; $i <= $request->total; $i++) {
+            $id = $request['id_' . $i];
             $data = Productivity::findOrFail($id);
 
             $data->update([
-                'pty' => $request['pty_'.$i],
-                'dist' => $request['distance_'.$i],
-                'ket' => $request['remarks_'.$i],
-                'pit' => $request['pit_'.$i],
+                'pty' => $request['pty_' . $i],
+                'dist' => $request['distance_' . $i],
+                'ket' => $request['remarks_' . $i],
+                'pit' => $request['pit_' . $i],
             ]);
         }
 
 
-        if($data){
+        if ($data) {
             return redirect()->route('super_admin.productivity.create')->with(['success' => 'Data Berhasil Diubah!']);
-        }
-        else{
+        } else {
             return redirect()->route('super_admin.productivity.create')->with(['error' => 'Data Gagal Diubah!']);
         }
     }
