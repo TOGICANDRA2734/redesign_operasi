@@ -57,6 +57,7 @@
                 <tbody>
                     @foreach($data as $key => $dt)
                     <tr class="text-center bg-white">
+                        <td class="whitespace-nowrap text-center">{{$key + 1}}</td>
                         @foreach ($dt as $d)
                             <td class="whitespace-nowrap text-center">{{$d}}</td>                        
                         @endforeach
