@@ -182,6 +182,8 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
 
         // PO
         Route::resource('po-harian', POController::class);
+        Route::get('po-harian-show', [POController::class, 'show'])->name('po-harian-show.index');
+        Route::get('po-harian-show/{id?}', [POController::class, 'show'])->where('id', '.*')->name('po-harian-show.example');
         Route::post('po-harian/delete/{id}', [POController::class, 'deleteData'])->name('po-harian.delete');
 
         // PO Transaksi 

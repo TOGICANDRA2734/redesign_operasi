@@ -57,12 +57,14 @@
                 <tbody>
                     @foreach($data as $key => $dt)
                     <tr class="text-center bg-white">
-                        <td class="whitespace-nowrap text-center">1</td>
-                        <td class="whitespace-nowrap text-center">1000</td>
-                        <td class="whitespace-nowrap text-center">B1</td>
-                        <td class="whitespace-nowrap text-center">12/12/2022</td>
-                        <td class="whitespace-nowrap text-center">12/12/2022</td>
-                        <td class="px-4 py-3 text-sm group-hover:bg-gray-400 group-hover:text-white text-center">
+                        @foreach ($dt as $d)
+                            <td class="whitespace-nowrap text-center">{{$d}}</td>                        
+                        @endforeach
+                        {{-- <td class="whitespace-nowrap text-center">1000</td> --}}
+                        {{-- <td class="whitespace-nowrap text-center">B1</td> --}}
+                        {{-- <td class="whitespace-nowrap text-center">12/12/2022</td> --}}
+                        {{-- <td class="whitespace-nowrap text-center">12/12/2022</td> --}}
+                        {{-- <td class="px-4 py-3 text-sm group-hover:bg-gray-400 group-hover:text-white text-center">
                             <a href="{{route('super_admin.po-transaksi-harian.show', 1)}}" class="btn px-2 btn-dark mr-1 mb-2">
                                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="eye"></i> </span>
                             </a>
@@ -73,7 +75,7 @@
                                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="trash"></i> </span>
                             </button>
 
-                        </td>
+                        </td> --}}
                     </tr>
                     @endforeach
                 </tbody>

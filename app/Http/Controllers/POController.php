@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Plant_bd;
 use App\Models\Plant_bd_dok;
 use App\Models\PO;
+use App\Models\unitPoReq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -72,19 +73,19 @@ class POController extends Controller
      */
     public function show($id)
     {
-        $data = PO::where('del', '=', 0)->where('id_tiket_po', $id)->get();
-
-        if(count($data) != 0){
-            $dataDok = Plant_bd_dok::select('id_tiket','dok_no')->where('id', $data[0]->id_tiket_po)->get();
-            $dataBD = Plant_bd::select('kodesite')->where('id', $dataDok[0]->id_tiket)->get();    
-        }
-        else{ 
-            $dataDok = 1;
-            $dataBD = 1;
-        }
-
+        $subquery = "SELECT d.item_name, b.po_date, c.name, DATEDIFF(IFNULL(voucher_date,0), IFNULL(a.tgdok,0)) estimasi
+        FROM unit_rssp a
+        JOIN (SELECT * FROM unit_po_req WHERE ref_no='".$id."' ) b
+        ON a.nodokstream=b.ref_no
+        LEFT JOIN (SELECT * FROM unit_in_trans WHERE pr_no='".$id."') c
+        ON b.ref_no=c.pr_no
+        JOIN unit_t_item d
+        ON b.item_code=d.item_code
+        WHERE nodokstream='".$id."'
+        ";
+        $data = DB::select(DB::raw($subquery));
         
-        return view('po-harian.show', compact('data', 'dataDok', 'dataBD'));
+        return view('po-harian.show', compact('data'));
     }
 
     /**

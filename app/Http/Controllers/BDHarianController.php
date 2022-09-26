@@ -145,7 +145,6 @@ class BDHarianController extends Controller
         kode_bd.deskripsi_bd"))
         ->join('site', 'plant_status_bd.kodesite', '=', 'site.kodesite')
         ->join('kode_bd', 'plant_status_bd.status_bd', '=', 'kode_bd.id')
-
         ->where('plant_status_bd.nom_unit', '=', $id)
         ->orderBy('id')
         ->get();
@@ -153,12 +152,10 @@ class BDHarianController extends Controller
         $nom_unit = DB::table('plant_status_bd')->select("nom_unit")->where('nom_unit', '=', $id)->get();
 
         // dataDok Baru
-        $subquery = "SELECT a.id id, nodokstream no_st, '', descript uraian_bd, IF(a.STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian, b.namasite, pr_type, pr_prd, sq_no, pr_date, dept_code, vend_code, item_code, item_qty, pr_desc_4
+        $subquery = "SELECT a.id id, nodokstream no_st, '', descript uraian_bd, IF(a.STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian, b.namasite
             FROM unit_rssp a
             JOIN site b
             ON a.kodesite=b.kodesite
-            JOIN unit_po_req c
-            on c.ref_no=a.nodokstream
             WHERE nom_unit='".$nom_unit[0]->nom_unit."'
             ORDER BY a.status DESC, tgdok DESC
         ";

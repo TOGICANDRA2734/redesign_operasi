@@ -167,6 +167,9 @@
                     @else
                     @foreach($dataDok as $key => $dt)
                     <tr class="whitespace-nowrap text-center">
+                        {{-- @foreach ($dt as $d)
+                            <td>{{$d}}</td>
+                        @endforeach --}}
                         <td class="whitespace-nowrap text-center">{{$key+1}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->no_st}}</td>
                         <td class="whitespace-nowrap text-center"></td>
@@ -177,13 +180,13 @@
                         <td class="whitespace-nowrap text-center">{{$dt->uraian}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->namasite}}</td>
                         <td class="whitespace-nowrap text-center">
-                            <a href="{{route('super_admin.po-harian.show', $dt->id)}}" class="btn px-2 btn-dark mr-1 mb-2">
+                            <a href="{{route('super_admin.po-harian-show.example', $dt->no_st)}}" class="btn px-2 btn-dark mr-1 mb-2">
                                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="eye"></i> </span>
                             </a>
-                            <a href="{{route('super_admin.bd-harian-dok.edit', $dt->id)}}" class="btn px-2 btn-warning  mr-1 mb-2">
+                            <a href="{{route('super_admin.bd-harian-dok.edit', $dt->no_st)}}" class="btn px-2 btn-warning  mr-1 mb-2">
                                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="pencil"></i> </span>
                             </a>
-                            <a onclick="deleteConfirmationDetail({{$dt->id}})" class="btn px-2 btn-danger mr-1 mb-2">
+                            <a onclick="deleteConfirmationDetail({{$dt->no_st}})" class="btn px-2 btn-danger mr-1 mb-2">
                                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="trash"></i> </span>
                             </a>
                         </td>
