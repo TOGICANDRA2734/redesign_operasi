@@ -73,7 +73,7 @@ class POController extends Controller
      */
     public function show($id)
     {
-        $subquery = "SELECT d.item_name, b.po_date, c.name, DATEDIFF(IFNULL(voucher_date,0), IFNULL(a.tgdok,0)) estimasi
+        $subquery = "SELECT d.item_name, DATE_FORMAT(b.po_date, '%d-%m-%Y'), c.name, DATEDIFF(IFNULL(voucher_date,0), IFNULL(a.tgdok,0)) estimasi, date_format(IF(voucher_date is null, DATE_ADD(tgdok, INTERVAL DATEDIFF(IFNULL(voucher_date,0), IFNULL(a.tgdok,0)) DAY), voucher_date), '%d-%m-%Y') est_date
         FROM unit_rssp a
         JOIN (SELECT * FROM unit_po_req WHERE ref_no='".$id."' ) b
         ON a.nodokstream=b.ref_no
