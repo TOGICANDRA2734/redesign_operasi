@@ -228,14 +228,16 @@
                             <tr>
                                 <th rowspan="2" class="text-center whitespace-nowrap">#</th>
                                 <th rowspan="2" class="text-center whitespace-nowrap">Tanggal</th>
-                                <th colspan="2" class="text-center whitespace-nowrap">Overburden</th>
-                                <th colspan="2" class="text-center whitespace-nowrap">Coal</th>
+                                <th colspan="3" class="text-center whitespace-nowrap">Overburden</th>
+                                <th colspan="3" class="text-center whitespace-nowrap">Coal</th>
                             </tr>
                             <tr>
-                                <th class="text-center whitespace-nowrap">Plan</th>
                                 <th class="text-center whitespace-nowrap">Act</th>
                                 <th class="text-center whitespace-nowrap">Plan</th>
+                                <th class="text-center whitespace-nowrap">ACH</th>
                                 <th class="text-center whitespace-nowrap">Act</th>
+                                <th class="text-center whitespace-nowrap">Plan</th>
+                                <th class="text-center whitespace-nowrap">ACH</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white">
@@ -248,16 +250,23 @@
                                     {{date('d-m-Y', strtotime($dt->tgl))}}
                                 </td>
                                 <td>
+                                    {{$dt->ob_act}}
+                                </td>
+                                <td>
                                     {{$dt->ob_plan}}
                                 </td>
                                 <td>
-                                    {{$dt->ob_act}}
+                                    {{number_format($dt->ob_act / ($dt->ob_plan ?: 1) *100 ,1) }}
+                                </td>
+
+                                <td>
+                                    {{$dt->coal_act}}
                                 </td>
                                 <td>
                                     {{$dt->coal_plan}}
                                 </td>
                                 <td>
-                                    {{$dt->coal_act}}
+                                    {{number_format($dt->coal_act / ($dt->coal_plan ?: 1) *100 ,1)}}
                                 </td>
                             </tr>
                             @endforeach

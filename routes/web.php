@@ -303,4 +303,5 @@ Route::middleware('auth')->group(function() {
         // Pap
         Route::resource('pap', PapController::class);
         Route::post('pap-filter', [PapController::class, 'index'])->name('pap.filter');
+        Route::post('pap-get-bagian', [PapController::class, 'getPapBagian'])->name('pap.getPapBagian');
 });

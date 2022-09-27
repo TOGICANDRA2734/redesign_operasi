@@ -73,18 +73,18 @@ class POController extends Controller
      */
     public function show($id)
     {
-        $subquery = "SELECT d.item_name, DATE_FORMAT(b.po_date, '%d-%m-%Y'), c.name, DATEDIFF(IFNULL(voucher_date,0), IFNULL(a.tgdok,0)) estimasi, date_format(IF(voucher_date is null, DATE_ADD(tgdok, INTERVAL DATEDIFF(IFNULL(voucher_date,0), IFNULL(a.tgdok,0)) DAY), voucher_date), '%d-%m-%Y') est_date
+        $subquery = "SELECT a.nodokstream, a.tgdok, a.item, a.pn, a.descript, a.qtyrs, c.ref_no, po_date, c.name, 'c.pn', 'c.qtypo', c.voucher_doc, c.voucher_no, c.voucher_date, 'c.qtymrs'
+        -- a.tgdok, a.item, a.cat, a.pn, a.status, a.descript, a.mechanic, b.pr_type, b.pr_no, b.sq_no, b.pr_date, b.vend_code, b.item_code, b.item_qty, b.pr_desc4, b.po_date, b.grr_date, c.voucher_doc, c.voucher_no, c.sq_no, c.voucher_date, c.code, c.name, c.item_code, c.form_code, d.item_name, DATE_FORMAT(b.po_date, '%d-%m-%Y') tgl, c.name, DATEDIFF(IFNULL(voucher_date,0), IFNULL(a.tgdok,0)) estimasi, date_format(IF(voucher_date is null, DATE_ADD(tgdok, INTERVAL DATEDIFF(IFNULL(voucher_date,0), IFNULL(a.tgdok,0)) DAY), voucher_date), '%d-%m-%Y') est_date
         FROM unit_rssp a
         JOIN (SELECT * FROM unit_po_req WHERE ref_no='".$id."' ) b
         ON a.nodokstream=b.ref_no
         LEFT JOIN (SELECT * FROM unit_in_trans WHERE pr_no='".$id."') c
-        ON b.ref_no=c.pr_no
+        ON b.pr_no=c.pr_no
         JOIN unit_t_item d
         ON b.item_code=d.item_code
         WHERE nodokstream='".$id."'
-        ";
+        GROUP BY c.item_code";
         $data = DB::select(DB::raw($subquery));
-        
         return view('po-harian.show', compact('data'));
     }
 

@@ -47,11 +47,23 @@
                 <thead class="table-dark">
                     <tr class="">
                         <th class="whitespace-nowrap text-center">#</th>
-                        <th class="whitespace-nowrap text-center">PO</th>
-                        <th class="whitespace-nowrap text-center">Tanggal</th>
+                        <th class="whitespace-nowrap text-center">No RS</th>
+                        <th class="whitespace-nowrap text-center">Tanggal RS</th>
+                        <th class="whitespace-nowrap text-center">No. Item</th>
+                        <th class="whitespace-nowrap text-center">CN</th>
+                        <th class="whitespace-nowrap text-center">Part Number</th>
+                        <th class="whitespace-nowrap text-center">QTY RS</th>
+                        <th class="whitespace-nowrap text-center">NO PO</th>
+                        <th class="whitespace-nowrap text-center">Tanggal PO</th>
                         <th class="whitespace-nowrap text-center">Supplier</th>
-                        <th class="whitespace-nowrap text-center">Estimasi</th>
-                        <th class="whitespace-nowrap text-center">Aksi</th>
+                        <th class="whitespace-nowrap text-center">PN Interchange</th>
+                        <th class="whitespace-nowrap text-center">Estimasi Hari</th>
+                        <th class="whitespace-nowrap text-center">Estimasi Tanggal</th>
+                        <th class="whitespace-nowrap text-center">QTY PO</th>
+                        <th class="whitespace-nowrap text-center">DOK MRS</th>
+                        <th class="whitespace-nowrap text-center">NO MRS</th>
+                        <th class="whitespace-nowrap text-center">TGL MRS</th>
+                        <th class="whitespace-nowrap text-center">QTY MRS</th>
                     </tr>
                 </thead>
                 <tbody>

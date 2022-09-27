@@ -46,7 +46,8 @@ class PapController extends Controller
     {
         $request->validate([
             'site' => 'required|string|max:1',
-            'nom_unit' => 'required|string|max:7',
+            'nom_unit' => 'required|string|max:10',
+            'kompartemen' => 'required|int',
             'file_pap' => 'required|file|mimes:pdf',
         ]);
 
@@ -61,6 +62,7 @@ class PapController extends Controller
             'tgl' => date('Y-m-d', strtotime(Carbon::now())),
             'waktu' => date('h:i:s', strtotime(Carbon::now())),
             'file' => $namaFile,
+            'kode_bagian' => $request->kompartemen,
             'kodesite' => $request->site,
             'del' => 0
         ]);
@@ -83,7 +85,7 @@ class PapController extends Controller
     {
         $dataUnit = Plant_Pap::findOrFail($id);
     
-        $subquery = "SELECT a.id, namasite, tgl, waktu, file FROM plant_pap a JOIN site b ON a.kodesite=b.kodesite WHERE del=0 AND nom_unit='".$dataUnit->nom_unit."'" ;
+        $subquery = "SELECT bagian, date_format(tgl, '%d-%m-%Y'), a.id, namasite,  date_format(waktu, '%h:%i:%s'), file FROM plant_pap a JOIN site b ON a.kodesite=b.kodesite JOIN plant_pap_bagian c ON a.kode_bagian=c.id WHERE a.del=0 AND nom_unit='".$dataUnit->nom_unit."'" ;
         $data = collect(DB::select($subquery));
         $site = Site::where('status',1)->get();
         return view('pap.show',compact('site', 'data', 'dataUnit'));
@@ -126,5 +128,20 @@ class PapController extends Controller
     public function delete($id)
     {
         
+    }
+
+    public function getPapBagian(Request $request)
+    {
+        if($request->has('nom_unit')){
+            $subquery = "SELECT model FROM plant_populasi WHERE del=0 AND nom_unit='".$request->nom_unit."'";
+            $type = DB::select(DB::raw($subquery));
+            $subquery = "SELECT id, bagian FROM plant_pap_bagian WHERE del=0 AND model LIKE '%".$type[0]->model."%'";
+            $type = DB::select(DB::raw($subquery));    
+        } else if($request->has('site')) {
+            $subquery = "SELECT nom_unit FROM plant_populasi WHERE del=0 AND kodesite='".$request->site."'";
+            $type = DB::select(DB::raw($subquery));
+        }
+        
+        return response()->json($type);
     }
 }

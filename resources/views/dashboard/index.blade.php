@@ -350,8 +350,6 @@
                     },
                 })
             }
-
-
         });
 
         function update_data(response) {

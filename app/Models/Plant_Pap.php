@@ -13,6 +13,7 @@ class Plant_Pap extends Model
     'tgl',
     'waktu', 
     'file',   
+    'kode_bagian',   
     'kodesite',
     'del'];
     protected $table = 'plant_pap';

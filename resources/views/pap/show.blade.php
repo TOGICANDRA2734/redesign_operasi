@@ -40,9 +40,10 @@
             <table class="w-full table table-striped table-sm text-xs">
                 <thead class="table-dark">
                     <tr class="">
-                        <th rowspan="2" class="whitespace-nowrap text-center">NO</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">#</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Bagian</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Tanggal</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Waktu</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">File</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">AKSI</th>
@@ -61,12 +62,9 @@
                             @endif
                         @endforeach
                         <td>
-                            <a href="{{'http://ptrci.co.id/dt/public' . Storage::url('dokumenPlantPap/'.$dt->file)}}">File</a> 
+                            <a href="{{'http://127.0.0.1:8000' . Storage::url('dokumenPlantPap/'.$dt->file)}}">File</a> 
                         </td>
                         <td class="cekTbModal flex justify-center">
-                            <a href="{{route('super_admin.pap.show', $data[$key]->id)}}" class="btn btn-dark mr-1 mb-2 p-1">
-                                <i data-lucide="eye" class="w-4 h-4"></i>
-                            </a>
                             <a href="{{ route('super_admin.pap.edit', $data[$key]->id) }}" class="btn btn-warning mr-1 mb-2 p-1">
                                 <i data-lucide="edit" class="w-4 h-4"></i>
                             </a>
