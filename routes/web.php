@@ -35,8 +35,7 @@ use App\Http\Controllers\RepHarController;
 use App\Http\Controllers\User\dataProdController as User_dataProdController;
 use App\Http\Controllers\User\KendalaController as User_KendalaController;
 use App\Http\Controllers\User\ProductivityController as User_ProductivityController;
-
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -288,6 +287,14 @@ Route::middleware('auth')->group(function() {
         // Report Harian
         Route::get('rep-harian', [RepHarController::class, 'index'])->name('rep.index');
         Route::post('rep-harian', [RepHarController::class, 'index'])->name('rep.post');
+        Route::post('rep-harian-add', function (){
+            // TODO: NOM UNIT
+            $data['nom_unit'] = DB::table('plant_populasi')->select('nom_unit')->where('del', '=', 0)->where('kodesite','=',Auth::user()->kodesite)->get(); 
+            dd($data);
+            // TODO: PIT
+            
+            return response()->json($data);
+        });
 
         // Populasi Unit
         Route::resource('populasi-unit', PopulasiUnitController::class);

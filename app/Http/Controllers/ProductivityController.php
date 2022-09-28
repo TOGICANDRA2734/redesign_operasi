@@ -197,7 +197,7 @@ class ProductivityController extends Controller
 
         $dataPty = collect(DB::select($subquery));
 
-        $dataNomUnit = DB::table('plant_hm')->join('plant_tipe_unit', DB::raw('LEFT(plant_hm.nom_unit, 4)'), '=', 'plant_tipe_unit.kode')->join('pma_dailyprod_pit', 'pma_dailyprod_pit.kodesite', '=', 'plant_hm.kodesite')->select(DB::raw('nom_unit'))->where('plant_hm.kodesite', '=', Auth::user()->kodesite)->where('gol_1', '=', '2')->orderBy('nom_unit')->get();
+        $dataNomUnit = DB::table('plant_hm')->join('plant_tipe_unit', DB::raw('LEFT(plant_hm.nom_unit, 4)'), '=', 'plant_tipe_unit.kode')->join('pma_dailyprod_pit', 'pma_dailyprod_pit.kodesite', '=', 'plant_hm.kodesite')->select(DB::raw('nom_unit'))->where('plant_hm.kodesite', '=', Auth::user()->kodesite)->where('gol_1', '=', '2')->orderBy('nom_unit')->limit(1)->get();
         $dataPit = DB::table('pma_dailyprod_pit')->select(DB::raw('ket, kodepit'))->orderBy('ket')->where('kodesite', '=', Auth::user()->kodesite)->get();
         $subquery = "SELECT SUM(pty) total_pty
         FROM pma_dailyprod_pty A 
@@ -228,34 +228,31 @@ class ProductivityController extends Controller
 
     public function check(Request $request)
     {
-        $data = $request->all();
-
-        dd($data);
+        $data = $request->except('_token');
 
         foreach ($data as $key => $dt) {
-            foreach ($dt as $k => $d) {
-                // dd($d, $k);
-                // $cek = DB::table('pma_dailyprod_pty')->where('tgl', '=', Carbon::now()->timezone('Asia/Kuala_lumpur'))->where('nom_unit', '=', $key)->where('kodesite', '=', Auth::user()->kodesite)->where('jam', '=', $)->count();
-                $data = DB::table('pma_dailyprod_pty')->where('tgl', '=', Carbon::now()->timezone('Asia/Kuala_lumpur'))->where('nom_unit', '=', $key)->where('kodesite', '=', Auth::user()->kodesite)->where('jam', '=', $request->jam)->count();
-
-
+            // dd($key, $dt);
+            for ($i=0; $i < 24; $i++) {
+                $text = "pty_".$i;
+                // dd($text);
+                $data = DB::table('pma_dailyprod_pty')->where('tgl', '=', Carbon::now()->timezone('Asia/Kuala_lumpur'))->where('nom_unit', '=', $key)->where('kodesite', '=', Auth::user()->kodesite)->where('jam', '=', $i)->count();
                 if ($data == 0) {
                     $request->validate([
-                        'tgl' => 'required',
-                        'nom_unit' => 'required',
-                        'jam' => 'required',
-                        'pty' => 'required',
-                        'dist' => 'required',
-                        'kodesite' => 'required',
-                        'pit' => 'required',
+                        // 'tgl' => 'required',
+                        // 'nom_unit' => 'required',
+                        // 'jam' => 'required',
+                        // 'pty' => 'required',
+                        // 'dist' => 'required',
+                        // 'kodesite' => 'required',
+                        // 'pit' => 'required',
                     ]);
 
                     $record = Productivity::create([
                         'tgl' => Carbon::now()->format('Y-m-d'),
                         'nom_unit' => $key,
                         'type' => substr($key, 0, 4),
-                        'jam' => 0,
-                        'pty' => $dt['pty_0'],
+                        'jam' => $i,
+                        'pty' => $dt[$text],
                         'dist' => $dt['dist'],
                         'ket' => strtoupper($dt['ket']),
                         'kodesite' => Auth::user()->kodesite,
@@ -264,13 +261,14 @@ class ProductivityController extends Controller
                         'time_admin' => Carbon::now(),
                     ]);
 
-                    $data = Cuaca::create([
-                        'cuaca' => $dt['cuaca'],
-                        'kodesite' => Auth::user()->kodesite,
-                        'tgl' => Carbon::now()->format('Y m d'),
-                        'jam' => 0,
-                    ]);
+                    // $data = Cuaca::create([
+                    //     'cuaca' => $dt['cuaca'],
+                    //     'kodesite' => Auth::user()->kodesite,
+                    //     'tgl' => Carbon::now()->format('Y m d'),
+                    //     'jam' => $i,
+                    // ]);
                 }
+                
             }
         }
         if ($record) {
