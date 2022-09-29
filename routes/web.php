@@ -236,7 +236,7 @@ Route::middleware('auth')->group(function() {
         Route::resource('productivity', ProductivityController::class);
         Route::post('productivity_filter', [ProductivityController::class, 'index'])->name('productivity.filter');
         Route::get('productivity-create-page', [ProductivityController::class, 'create_page'])->name('productivity-create.index');
-
+        Route::post('productivity-import-excel', [ProductivityController::class, 'import_excel'])->name('productivity.import-excel');
 
         Route::post('productivity_check', [ProductivityController::class, 'check'])->name('productivity.check');
         Route::post('productivity_store', [ProductivityController::class, 'store_data'])->name('productivity.store_data');

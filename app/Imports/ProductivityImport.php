@@ -6,8 +6,9 @@ use App\Models\Productivity;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ProductivityImport implements ToModel
+class ProductivityImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -16,17 +17,20 @@ class ProductivityImport implements ToModel
     */
     public function model(array $row)
     {
+        // dd($row[0], $row[1]);
+
         return new Productivity([
-            'nom_unit' => $row[1],
-            'pit' => $row[2],
-            'pty' => $row[3],
-            'dist' => $row[4],
-            'ket' => $row[5],
-            'jam' => $row[6],
+            'nom_unit' => $row['nom_unit'],
+            'nom_unit' => $row['nom_unit'],
+            'pit' => $row['pit'],
+            'pty' => $row['productivity'],
+            'dist' => $row['jarak'],
+            'ket' => $row['keterangan'],
+            'jam' => $row['jam'],
             'tgl' => Carbon::now(),
             'type' => substr($row[1], 0, 4),
             'kodesite' => Auth::user()->kodesite,
-            'admin' => Auth::user()->name,
+            'admin' => Auth::user()->username,
             'time_admin' => Carbon::now() 
         ]);
     }

@@ -177,7 +177,7 @@
                 <!-- BEGIN: Modal Header -->
                 <div class="modal-header">
                     <h2 class="font-medium text-base mr-auto">Import Excel Productivity</h2>
-                    <form action="" method="POST" enctype="multipart/form-data">
+                    <form action="{{route('productivity.import-excel')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                 </div> 
                 <!-- END: Modal Header -->
