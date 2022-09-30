@@ -415,6 +415,6 @@ class ProductivityController extends Controller
 		Session::flash('sukses','Data Siswa Berhasil Diimport!');
  
 		// alihkan halaman kembali
-		return redirect()->back();
+		return redirect()->back()->with(['success' => 'Data Berhasil Diimport!']);;
     }
 }
