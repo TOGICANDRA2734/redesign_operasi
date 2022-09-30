@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\dataProd;
+use App\Models\Plant_Populasi;
 use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -127,31 +128,72 @@ class PopulasiUnitController extends Controller
             'engine_brand' => 'required',
             'engine_model' => 'required',
             'engine_sn' => 'required',
-            'generator_brand' => 'required',
-            'generator_model' => 'required',
-            'generator_sn' => 'required',
-            'pump_merk' => 'required',
-            'pump_merk' => 'required',
-            'pump_merk' => 'required',
-            'ket' => 'required',
+            // 'generator_brand' => 'required',
+            // 'generator_model' => 'required',
+            // 'generator_sn' => 'required',
+            // 'pump_merk' => 'required',
+            // 'pump_model' => 'required',
+            // 'pump_sn' => 'required',
+            // 'comp_merk' => 'required',
+            // 'comp_model' => 'required',
+            // 'comp_sn' => 'required',
+            // 'kapasitas' => 'required',
+            'HP' => 'required',
+            'DO' => 'required',
+            // 'pic_1' => 'required',
+            // 'pic_2' => 'required',
+            // 'height' => 'required',
+            // 'width' => 'required',
+            // 'length' => 'required',
+            // 'fuel' => 'required',
+            'status_bagian' => 'required',
+            'status_kepemilikan' => 'required',
             'kodesite' => 'required',
         ]);
 
-        $record = Kendala::create([
-            'tgl' => $request->tgl,
-            'unit' => $request->unit,
-            'shift' => $request->shift,
-            'awal' => $request->awal,
-            'akhir' => $request->akhir,
-            'ket' => strtoupper($request->ket),
+        $record = Plant_Populasi::create([
+            'nom_unit' => $request->nom_unit,
+            'model' => $request->model,
+            'type_unit' => $request->type_unit,
+            'sn' => $request->sn,
+            'engine_brand' => $request->engine_brand,
+            'engine_model' => $request->engine_model,
+            'engine_sn' => $request->engine_sn,
+            'generator_brand' => $request->generator_brand,
+            'generator_model' => $request->generator_model,
+            'generator_sn' => $request->generator_sn,
+            'pump_merk' => $request->pump_merk,
+            'pump_model' => $request->pump_model,
+            'pump_sn' => $request->pump_sn,
+            'comp_merk' => $request->comp_merk,
+            'comp_model' => $request->comp_model,
+            'comp_sn' => $request->comp_sn,
+            'kapasitas' => $request->kapasitas,
+            'HP' => $request->HP,
+            'DO' => $request->DO,
+            'pic_1' => $request->pic_1,
+            'pic_2' => $request->pic_2,
+            'height' => $request->height,
+            'width' => $request->width,
+            'length' => $request->length,
+            'fuel' => $request->fuel,
+            'status_bagian' => $request->status_bagian,
+            'status_kepemilikan' => $request->status_kepemilikan,
             'kodesite' => $request->kodesite,
+            // 'tgl' => $request->tgl,
+            // 'unit' => $request->unit,
+            // 'shift' => $request->shift,
+            // 'awal' => $request->awal,
+            // 'akhir' => $request->akhir,
+            // 'ket' => strtoupper($request->ket),
+            // 'kodesite' => $request->kodesite,
         ]);
 
         if($record){
-            return redirect()->route('kendala.index')->with(['success' => 'Data Berhasil Ditambah!']);
+            return redirect()->back()->with(['success' => 'Data Berhasil Ditambah!']);
         }
         else{
-            return redirect()->route('kendala.index')->with(['error' => 'Data Gagal Ditambah!']);
+            return redirect()->back()->with(['error' => 'Data Gagal Ditambah!']);
         }
     }
 

@@ -7,7 +7,7 @@
 @section('subcontent')
 <div class="flex justify-between items-center mt-8 ">
     <h2 class="text-lg font-medium ">
-        Transaksi Populasi Unit
+        Transaksi Populasi Unit {{$errors}}
     </h2>
 </div>
 <hr class="mb-10">
