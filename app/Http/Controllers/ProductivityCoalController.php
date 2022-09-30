@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ProductivityCoalImport;
 use App\Models\ProductivityCoal;
 use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductivityCoalController extends Controller
 {
@@ -255,5 +258,32 @@ class ProductivityCoalController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+
+    public function import_excel(Request $request)
+    {
+        // validasi
+		$this->validate($request, [
+			'excel' => 'required|mimes:csv,xls,xlsx'
+		]);
+ 
+		// menangkap file excel
+		$file = $request->file('excel');
+ 
+		// membuat nama file unik
+		$nama_file = rand().$file->getClientOriginalName();
+ 
+		// upload ke folder file_siswa di dalam folder public
+		$file->move('file_productivity_coal',$nama_file);
+ 
+		// import data
+		Excel::import(new ProductivityCoalImport, public_path('/file_productivity_coal/'.$nama_file));
+ 
+		// notifikasi dengan session
+		Session::flash('sukses','Data Siswa Berhasil Diimport!');
+ 
+		// alihkan halaman kembali
+		return redirect()->back();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\CuacaImport;
 use App\Imports\ProductivityImport;
 use App\Models\Cuaca;
 use App\Models\Productivity;
@@ -408,6 +409,7 @@ class ProductivityController extends Controller
  
 		// import data
 		Excel::import(new ProductivityImport, public_path('/file_productivity/'.$nama_file));
+		Excel::import(new CuacaImport, public_path('/file_productivity/'.$nama_file));
  
 		// notifikasi dengan session
 		Session::flash('sukses','Data Siswa Berhasil Diimport!');

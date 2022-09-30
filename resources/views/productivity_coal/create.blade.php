@@ -9,10 +9,23 @@
     <!-- Title -->
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 class="text-lg font-medium mr-auto">
-            Transaksi Productivity
+            Transaksi Productivity Coal
         </h2>
-        <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#header-footer-modal-preview" class="btn btn-primary shadow-md mr-2">Tambah Rit</a>
+
+        <div class="dropdown">
+            <button class="dropdown-toggle btn btn-primary shadow-md mr-2" aria-expanded="false" data-tw-toggle="dropdown">
+                <span class="w-5 h-5 flex items-center justify-center "> <i class="w-4 h-4" data-lucide="plus"></i> </span>
+            </button>
+            <div class="dropdown-menu w-40">
+                <ul class="dropdown-content">
+                    <li>
+                        <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#input1"  type="button" class="dropdown-item">Satu PTY</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#input2" class="dropdown-item">Import Excel</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <hr class="mb-10">
@@ -73,7 +86,7 @@
 
     
     <!-- BEGIN: Modal Content -->
-    <div id="header-footer-modal-preview" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="input1" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- BEGIN: Modal Header -->
@@ -121,7 +134,44 @@
                 </form>
             </div>
         </div>
-    </div> <!-- END: Modal Content -->
+    </div> 
+    <!-- END: Modal Content -->
+
+    
+    <!-- BEGIN: Modal Content -->
+    <div id="input2" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- BEGIN: Modal Header -->
+                <div class="modal-header">
+                    <h2 class="font-medium text-base mr-auto">Import Excel Productivity Coal</h2>
+                    <form action="{{route('productivity_coal.import-excel')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                </div> 
+                <!-- END: Modal Header -->
+                <!-- BEGIN: Modal Body -->
+                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                    <div class="col-span-12"> 
+                        <label for="modal-form-4" class="form-label">Data Excel (XLS)</label> 
+                        <input id="modal-form-4" type="file" class="form-control" name="excel">
+                        @error('excel')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
+                    </div>
+                </div> 
+                <!-- END: Modal Body -->
+                <!-- BEGIN: Modal Footer -->
+                <div class="modal-footer flex justify-between items-center"> 
+                    <div>
+                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Batalkan</button> 
+                        <button type="submit" class="btn btn-primary w-20">Kirim</button> 
+                    </div>
+                </div> <!-- END: Modal Footer -->
+                </form>
+            </div>
+        </div>
+    </div> 
+    <!-- END: Modal Content -->
 
 </div>
 @endsection

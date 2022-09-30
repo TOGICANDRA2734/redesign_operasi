@@ -36,6 +36,7 @@ use App\Http\Controllers\User\dataProdController as User_dataProdController;
 use App\Http\Controllers\User\KendalaController as User_KendalaController;
 use App\Http\Controllers\User\ProductivityController as User_ProductivityController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -245,9 +246,11 @@ Route::middleware('auth')->group(function() {
         Route::post('productivity_coal_report', [ProductivityCoalController::class, 'index'])->name('productivity_coal.report');
         Route::post('productivity_check_coal', [ProductivityCoalController::class, 'check'])->name('productivity_coal.check');
         Route::post('productivity_store_coal', [ProductivityCoalController::class, 'store_data'])->name('productivity_coal.store_data');
+        Route::post('productivity-coal-import', [ProductivityCoalController::class, 'import_excel'])->name('productivity_coal.import-excel');
         
         Route::resource('kendala', KendalaController::class);
         Route::post('/kendala-filter', [KendalaController::class, 'index'])->name('kendala.filter');
+        Route::post('kendala-import', [KendalaController::class, 'import_excel'])->name('kendala.import');
         Route::post('/comment/store', [CommentController::class, 'store'])->name('comments.store');
         Route::post('/reply/store', [CommentController::class, 'replyStore'])->name('reply.store');
         Route::resource('profil', ProfilController::class);

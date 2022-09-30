@@ -17,10 +17,8 @@ class ProductivityImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        // dd($row[0], $row[1]);
 
         return new Productivity([
-            'nom_unit' => $row['nom_unit'],
             'nom_unit' => $row['nom_unit'],
             'pit' => $row['pit'],
             'pty' => $row['productivity'],
@@ -28,7 +26,7 @@ class ProductivityImport implements ToModel, WithHeadingRow
             'ket' => $row['keterangan'],
             'jam' => $row['jam'],
             'tgl' => Carbon::now(),
-            'type' => substr($row[1], 0, 4),
+            'type' => substr($row['nom_unit'], 0, 4),
             'kodesite' => Auth::user()->kodesite,
             'admin' => Auth::user()->username,
             'time_admin' => Carbon::now() 
