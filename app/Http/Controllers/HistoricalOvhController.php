@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PlantOvh;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HistoricalOvhController extends Controller
 {
@@ -13,7 +15,8 @@ class HistoricalOvhController extends Controller
      */
     public function index()
     {
-        return view('historical-overhaul.index');
+        $data = DB::table('plant_ovh')->select('*')->get();
+        return view('historical-overhaul.index', compact('data'));
     }
 
     /**

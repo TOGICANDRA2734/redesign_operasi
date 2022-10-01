@@ -58,13 +58,26 @@
                     <tr class="">
                         <th rowspan="2" class="whitespace-nowrap text-center">NO</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Code Unit</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Brand Type</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">HM</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Aksi</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Model</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Komponen</th>
+                        <th colspan="2" class="whitespace-nowrap text-center">Ovh</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Remark</th>
+                    </tr>
+                    <tr>
+                        <th class="whitespace-nowrap text-center">Start</th>
+                        <th class="whitespace-nowrap text-center">Finish</th>
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    @foreach ($data as $dt)
+                        <tr>
+                            @foreach ($dt as $d)
+                                <td>
+                                    {{$d}}
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
