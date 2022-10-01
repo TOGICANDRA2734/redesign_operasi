@@ -110,13 +110,13 @@ class DashboardController extends Controller
 
         $subquery = "SELECT A.tgl, D.icon_cuaca icon,  A.ob ob_act, A.coal coal_act, B.ob ob_plan, B.coal coal_plan, ((A.ob/B.ob)*100)ob_ach,((A.coal/B.coal)*100)coal_ach, C.kodesite, C.namasite, C.gambar
         FROM pma_dailyprod_tc A
-        JOIN (SELECT * FROM pma_dailyprod_plan WHERE tgl=CURDATE()-1 GROUP BY tgl, kodesite) B
+        JOIN (SELECT * FROM pma_dailyprod_plan WHERE tgl=DATE_SUB(CURDATE(), INTERVAL 1 DAY) GROUP BY tgl, kodesite) B
         ON a.kodesite = b.kodesite
         JOIN (SELECT * FROM site GROUP BY kodesite) c
         ON a.kodesite = c.kodesite
         JOIN pma_dailyprod_cuacaicon D
         ON A.cuaca = D.kode_cuaca
-        WHERE A.TGL=CURDATE()-1
+        WHERE A.TGL=DATE_SUB(CURDATE(), INTERVAL 1 DAY)
         GROUP BY A.tgl, A.kodesite
         ORDER BY C.id";
 
@@ -221,7 +221,7 @@ class DashboardController extends Controller
         ORDER BY b.id";
         $totalDataRitSite = collect(DB::select($subquery));
 
-        // dd($totalDataPtySite, $totalDataRitSite);
+        // dd($data_detail_OB_prod, $data_detail_OB_plan, $data_prod_ob, $data_plan_ob, $data_detail_coal_prod, $data_detail_coal_plan, $data_prod_coal, $data_plan_coal, $data, $dataPty, $totalDataPty, $dataCoal, $totalDataCoal, $totalDataPtySite, $totalDataRitSite);
 
         return view('dashboard.index', compact('data_detail_OB_prod', 'data_detail_OB_plan', 'data_prod_ob', 'data_plan_ob', 'data_detail_coal_prod', 'data_detail_coal_plan', 'data_prod_coal', 'data_plan_coal', 'data', 'dataPty', 'totalDataPty', 'dataCoal', 'totalDataCoal', 'totalDataPtySite', 'totalDataRitSite'));
     }
@@ -338,17 +338,17 @@ class DashboardController extends Controller
         $subquery = "SELECT A.tgl, D.icon_cuaca icon, SUM(A.ob)ob_act,SUM(A.coal)coal_act,SUM(B.ob)ob_plan,SUM(B.coal)coal_plan,
         ((SUM(A.ob)/SUM(B.ob))*100)ob_ach,((SUM(A.coal)/SUM(B.coal))*100)coal_ach, C.kodesite, C.namasite, C.gambar
         FROM pma_dailyprod_tc A
-        JOIN (SELECT * FROM pma_dailyprod_plan WHERE tgl=CURDATE()-1 GROUP BY tgl, kodesite) B 
+        JOIN (SELECT * FROM pma_dailyprod_plan WHERE tgl=DATE_SUB(CURDATE(), INTERVAL 1 DAY) GROUP BY tgl, kodesite) B 
         ON A.tgl = B.tgl
         JOIN site C
         ON A.kodesite = C.kodesite
         JOIN pma_dailyprod_cuacaicon D
         ON A.cuaca = D.kode_cuaca
-        WHERE A.TGL=CURDATE()-1
+        WHERE A.TGL=DATE_SUB(CURDATE(), INTERVAL 1 DAY)
         GROUP BY A.tgl, A.kodesite
         ORDER BY C.id";
 
-        $data = collect(DB::select($subquery));
+        $data = collect(DB::select($subquery)) ;
 
         // Data Detail PTY
         $subquery = "SELECT                                                           

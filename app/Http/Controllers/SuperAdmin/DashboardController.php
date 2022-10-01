@@ -106,13 +106,13 @@ class DashboardController extends Controller
         $subquery = "SELECT A.tgl, D.icon_cuaca icon, SUM(A.ob)ob_act,SUM(A.coal)coal_act,SUM(B.ob)ob_plan,SUM(B.coal)coal_plan,
         ((SUM(A.ob)/SUM(B.ob))*100)ob_ach,((SUM(A.coal)/SUM(B.coal))*100)coal_ach, C.kodesite, C.namasite, C.gambar
         FROM pma_dailyprod_tc A
-        JOIN (SELECT * FROM pma_dailyprod_plan WHERE tgl=CURDATE()-1 GROUP BY tgl, kodesite) B 
+        JOIN (SELECT * FROM pma_dailyprod_plan WHERE tgl=DATE_SUB(CURDATE(), INTERVAL 1 DAY) GROUP BY tgl, kodesite) B 
         ON A.tgl = B.tgl
         JOIN site C
         ON A.kodesite = C.kodesite
         JOIN pma_dailyprod_cuacaicon D
         ON A.cuaca = D.kode_cuaca
-        WHERE A.TGL=CURDATE()-1
+        WHERE A.TGL=DATE_SUB(CURDATE(), INTERVAL 1 DAY)
         GROUP BY A.tgl, A.kodesite
         ORDER BY C.id";
 
@@ -262,13 +262,13 @@ class DashboardController extends Controller
         $subquery = "SELECT A.tgl, D.icon_cuaca icon, SUM(A.ob)ob_act,SUM(A.coal)coal_act,SUM(B.ob)ob_plan,SUM(B.coal)coal_plan,
         ((SUM(A.ob)/SUM(B.ob))*100)ob_ach,((SUM(A.coal)/SUM(B.coal))*100)coal_ach, C.kodesite, C.namasite, C.gambar
         FROM pma_dailyprod_tc A
-        JOIN (SELECT * FROM pma_dailyprod_plan WHERE tgl=CURDATE()-1 GROUP BY tgl, kodesite) B 
+        JOIN (SELECT * FROM pma_dailyprod_plan WHERE tgl=DATE_SUB(CURDATE(), INTERVAL 1 DAY) GROUP BY tgl, kodesite) B 
         ON A.tgl = B.tgl
         JOIN site C
         ON A.kodesite = C.kodesite
         JOIN pma_dailyprod_cuacaicon D
         ON A.cuaca = D.kode_cuaca
-        WHERE A.TGL=CURDATE()-1
+        WHERE A.TGL=DATE_SUB(CURDATE(), INTERVAL 1 DAY)
         GROUP BY A.tgl, A.kodesite
         ORDER BY C.id";
 

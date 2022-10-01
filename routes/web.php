@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\KendalaController as Admin_KendalaController;
 use App\Http\Controllers\Admin\ProductivityController as Admin_ProductivityController;
 use App\Http\Controllers\BDDokController;
 use App\Http\Controllers\BDHarianController;
+use App\Http\Controllers\HistoricalOvhController;
 use App\Http\Controllers\HistoricalUnitController;
 use App\Http\Controllers\MohhController;
 use App\Http\Controllers\PapController;
@@ -209,6 +210,9 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::post('historical-unit-filter', [HistoricalUnitController::class, 'index'])->name('historical-unit.filter');
         Route::post('historical-unit-show-filter', [HistoricalUnitController::class, 'showFilter'])->name('historical-unit-show.filter');
 
+        // Historical Overhaul
+        Route::resource('historical-overhaul', HistoricalOvhController::class);
+
         // Pap
         Route::resource('pap', PapController::class);
         Route::post('pap-filter', [PapController::class, 'index'])->name('pap.filter');
@@ -309,6 +313,9 @@ Route::middleware('auth')->group(function() {
         Route::resource('historical-unit', HistoricalUnitController::class);
         Route::post('historical-unit-filter', [HistoricalUnitController::class, 'index'])->name('historical-unit.filter');
         Route::post('historical-unit-show-filter', [HistoricalUnitController::class, 'showFilter'])->name('historical-unit-show.filter');
+
+        // Historical Overhaul
+        Route::resource('historical-overhaul', HistoricalOvhController::class);
 
         // Pap
         Route::resource('pap', PapController::class);

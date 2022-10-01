@@ -178,6 +178,14 @@ class SideMenuSuperAdmin
                             'layout' => 'side-menu'
                         ],
                     ],
+                    'historical-overhaul' => [
+                        'icon' => 'box',
+                        'title' => 'Historical Overhaul',
+                        'route_name' => 'super_admin.historical-overhaul.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
                     'program-analisa-pelumasan' => [
                         'icon' => 'box',
                         'title' => 'Program Analisa Pelumas (PAP)',
