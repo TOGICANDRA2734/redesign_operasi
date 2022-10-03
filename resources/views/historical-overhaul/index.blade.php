@@ -61,6 +61,7 @@
                         <th rowspan="2" class="whitespace-nowrap text-center">Model</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Komponen</th>
                         <th colspan="2" class="whitespace-nowrap text-center">Ovh</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">HM</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Remark</th>
                     </tr>
                     <tr>
@@ -68,13 +69,15 @@
                         <th class="whitespace-nowrap text-center">Finish</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-white">
                     @foreach ($data as $dt)
                         <tr>
-                            @foreach ($dt as $d)
-                                <td>
-                                    {{$d}}
-                                </td>
+                            @foreach ($dt as $key => $d)
+                                @if ($key !='del')
+                                    <td>
+                                        {{$d}}
+                                    </td>    
+                                @endif
                             @endforeach
                         </tr>
                     @endforeach
