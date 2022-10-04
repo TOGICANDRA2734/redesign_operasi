@@ -23,7 +23,7 @@ class KendalaImport implements ToModel, WithHeadingRow
             'akhir' => $row['akhir'],
             'unit' => $row['unit'],
             'ket' => $row['ket'],
-            'tgl' => Carbon::now()->format('Y-m-d'),
+            'tgl' => Carbon::now()->toDateString(),
             'kodesite' => Auth::user()->kodesite,
         ]);
     }

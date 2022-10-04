@@ -30,12 +30,12 @@ class KendalaController extends Controller
         }
 
         if ($request->has('kodesite') && $request->kodesite !== 'all') {
-            $subquery = "SELECT *
+            $subquery = "SELECT DATE_FORMAT(tgl, \"%d-%m-%Y\") tgl, shift, awal, akhir, unit, ket
             FROM pma_dailyprod_kendala
             WHERE ".$tanggal." AND kodesite='".$request->kodesite."' 
             ORDER BY tgl DESC";
         } else {
-            $subquery = "SELECT *
+            $subquery = "SELECT DATE_FORMAT(tgl, \"%d-%m-%Y\") tgl, shift, awal, akhir, unit, ket
             FROM pma_dailyprod_kendala
             WHERE ".$tanggal."
             ORDER BY tgl DESC";
@@ -61,12 +61,13 @@ class KendalaController extends Controller
      */
     public function create()
     {
+        $data = DB::table('pma_dailyprod_kendala')->select(DB::raw("DATE_FORMAT(tgl, \"%d-%m-%Y\") tgl, unit, shift, awal, akhir, ket"))->where("kodesite", '=', Auth::user()->kodesite)->where('tgl', '=', DB::raw("CURDATE()"))->get();
         $site = DB::table('site')->select('kodesite', 'namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
         $unit = DB::table('plant_hm')->select('nom_unit')->where('kodesite', '=', Auth::user()->kodesite)->orderBy('nom_unit')->get();
         $waktu = Carbon::now()->format('Y-m-d');
         $kendala_code  = DB::table('kendala_status')->select('status','kode')->where('del','=',0)->get();
         
-        return view('kendala.create', compact('site', 'unit', 'waktu', 'kendala_code'));
+        return view('kendala.create', compact('site', 'unit', 'waktu', 'kendala_code', 'data'));
     }
 
     /**
@@ -201,7 +202,7 @@ class KendalaController extends Controller
 		Excel::import(new KendalaImport, public_path('/file_kendala/'.$nama_file));
  
 		// notifikasi dengan session
-		Session::flash('sukses','Data Siswa Berhasil Diimport!');
+		Session::flash('sukses','Data Berhasil Diimport!');
  
 		// alihkan halaman kembali
 		return redirect()->back()->with(['success' => 'Data Berhasil Diimport!']);;

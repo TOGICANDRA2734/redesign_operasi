@@ -72,10 +72,12 @@
                                 </td>
                             @endif
                         @endforeach
+                        @if (Auth::user()->hasRole('super_admin'))
                         <td class=" sticky left-0 bg-white">
                             <a href="{{route('super_admin.productivity.edit', $dataPty[$key]->id)}}" class="btn btn-warning mr-1 mb-2"> <i data-lucide="pencil" class="w-5 h-5"></i> </a>
                             <a href="{{route('super_admin.productivity.edit', $dataPty[$key]->id)}}" class="btn btn-danger mr-1 mb-2"> <i data-lucide="trash" class="w-5 h-5"></i> </a>
-                        </td>
+                        </td>    
+                        @endif
                     </tr>
                     @endforeach
                     <tr class="text-center">

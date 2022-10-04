@@ -232,6 +232,52 @@ class ProductivityController extends Controller
 
     public function check(Request $request)
     {
+        $data = DB::table('pma_dailyprod_pty')->where('tgl', '=', $request->tgl)->where('nom_unit', '=', $request->nom_unit)->where('kodesite', '=', $request->kodesite)->where('jam', '=', $request->jam)->count();
+        if($data == 0){
+            $request->validate([
+                'tgl' => 'required',
+                'nom_unit' => 'required',
+                'jam' => 'required',
+                'pty' => 'required',
+                'dist' => 'required',
+                'kodesite' => 'required',
+                'pit' => 'required',
+            ]);
+    
+            $record = Productivity::create([
+                'tgl' => $request->tgl,
+                'nom_unit' => $request->nom_unit,
+                'type' => substr($request->nom_unit, 0, 4),
+                'jam' => $request->jam,
+                'pty' => $request->pty,
+                'dist' => $request->dist,
+                'ket' => strtoupper($request->ket),
+                'kodesite' => $request->kodesite,
+                'pit' => $request->pit,
+                'admin' => Auth::user()->username,
+                'time_admin' => Carbon::now(),
+            ]);
+
+            $data = Cuaca::create([
+                'cuaca' => $request->cuaca,
+                'kodesite' => $request->kodesite,
+                'tgl' => $request->tgl,
+                'jam' => $request->jam,
+            ]);
+
+            if($record){
+                return redirect()->route('productivity.create')->with(['success' => 'Data Berhasil Ditambah!']);
+            }
+            else{
+                return redirect()->route('productivity.create')->with(['error' => 'Data Gagal Ditambah!']);
+            }
+        } else {
+            return redirect()->back();
+        }
+    }
+
+    public function check_massal(Request $request)
+    {
         $data = $request->except('_token');
 
         foreach ($data as $key => $dt) {

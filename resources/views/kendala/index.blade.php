@@ -77,7 +77,7 @@
                             {{$key + 1}}
                         </td>
                         <td class="">
-                            {{date('d-m-Y', strtotime($dt->tgl))}}
+                            {{$dt->tgl}}
                         </td>
                         <td class="">
                             {{$dt->unit}}
@@ -129,7 +129,6 @@
                 'pilihBulan': pilihBulan
             },
             success: function(result) {
-                console.log($result)
                 $i("table tbody").empty();
                 fullText = ""
                 if (result) {
@@ -137,7 +136,7 @@
                         var number = index + 1
                         text = '<tr class="text-center bg-white">' +
                             '<td class="">' + number + '</td>' +
-                            '<td class="">' + result.data[index].tanggal + '</td>' +
+                            '<td class="">' + result.data[index].tgl + '</td>' +
                             '<td class="">' + result.data[index].unit + '</td>' +
                             '<td class="">' + result.data[index].shift + '</td>' +
                             '<td class="">' + result.data[index].awal + '</td>' +
@@ -178,8 +177,6 @@
                 'kodesite': kodesite,
             },
             success: function(result) {
-                console.log($result)
-                console.log(result);
                 $i("table tbody ").empty();
                 fullText = ""
 
@@ -189,7 +186,7 @@
 
                         text = '<tr class="text-center bg-white">' +
                             '<td class="">' + number + '</td>' +
-                            '<td class="">' + result.data[index].tanggal + '</td>' +
+                            '<td class="">' + result.data[index].tgl + '</td>' +
                             '<td class="">' + result.data[index].unit + '</td>' +
                             '<td class="">' + result.data[index].shift + '</td>' +
                             '<td class="">' + result.data[index].awal + '</td>' +

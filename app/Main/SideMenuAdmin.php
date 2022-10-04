@@ -56,7 +56,7 @@ class SideMenuAdmin
                         'icon' => 'inbox',
                         'route_name' => 'admin.kendala.create',
                         'params' => [
-                            'layout' => 'side-menu'
+                            'layout' => 'side-menu' 
                         ],
                         'title' => 'Kendala'
                     ],

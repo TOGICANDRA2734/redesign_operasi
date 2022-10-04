@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Cuaca;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -18,8 +19,9 @@ class CuacaImport implements ToModel, WithHeadingRow
     {
         return new Cuaca([
             'cuaca' => $row['cuaca'],
-            'tgl' => Carbon::now()->format('Y-m-d'),
+            'tgl' => Carbon::now(),
             'jam' => $row['jam'],
+            'kodesite' => Auth::user()->kodesite,
         ]);
     }
 }

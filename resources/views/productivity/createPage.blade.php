@@ -21,7 +21,7 @@
         </div>
         <hr class="mb-10">
         <!-- Table -->
-        <form action="{{ route('productivity.check') }}" method="POST">
+        <form action="{{ route('productivity.check_massal') }}" method="POST">
             @csrf
             <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
                 <div class="w-full overflow-x-auto max-h-[30rem]">

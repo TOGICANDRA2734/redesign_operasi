@@ -5,9 +5,9 @@
 @endsection
 
 @section('subcontent')
-<div class="">
+<div class="grid grid-cols-12 gap-5">
     <!-- Title -->
-    <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
+    <div class="intro-y flex flex-col sm:flex-row items-center mt-8 col-span-12">
         <h2 class="text-lg font-medium mr-auto">
             Laporan Kendala  - {{App\Models\Site::select('namasite')->where('kodesite', Auth::user()->kodesite)->pluck('namasite')->first()}}
         </h2>
@@ -24,12 +24,11 @@
             </div>
         </div>
     </div>
-    <hr class="mb-10">
-
+    <hr class="mb-10 col-span-12">
 
 
     <!-- Input Form -->
-    <div class="intro-y">
+    <div class="intro-y col-span-12">
         <div class="grid grid-cols-1 gap-3">
             <!-- Start Form -->
             <form action="{{route('kendala.store')}}" method="POST" id="storeDok" class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg  dark:bg-gray-800">
@@ -151,13 +150,65 @@
     <!-- end Overburden Overview -->
 
     
+
+
+    <!-- Start Kendala -->
+    <div class="col-span-12 w-full mb-8 overflow-hidden rounded-lg shadow-xs">
+        <div class="w-full overflow-x-auto">
+            <table class="w-full table table-striped">
+                <thead class="table-dark">
+                    <tr class="">
+                        <th rowspan="2" class="whitespace-nowrap text-center">#</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Tanggal</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Nom Unit</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Shift</th>
+                        <th colspan="2" class="whitespace-nowrap text-center">Waktu</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Keterangan</th>
+                    </tr>
+                    <tr class="">
+                        <th class="whitespace-nowrap text-center">Awal</th>
+                        <th class="whitespace-nowrap text-center">Akhir</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @foreach($data as $key => $dt)
+                    <tr class="text-center bg-white">
+                        <td class="">
+                            {{$key + 1}}
+                        </td>
+                        <td class="">
+                            {{$dt->tgl}}
+                        </td>
+                        <td class="">
+                            {{$dt->unit}}
+                        </td>
+                        <td class="">
+                            {{$dt->shift}}
+                        </td>
+                        <td class="">
+                            {{$dt->awal}}
+                        </td>
+                        <td class="">
+                            {{$dt->akhir}}
+                        </td>
+                        <td class="">
+                            {{$dt->ket}}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- End Kendala -->
+
     <!-- BEGIN: Modal Content -->
     <div id="input2" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- BEGIN: Modal Header -->
                 <div class="modal-header">
-                    <h2 class="font-medium text-base mr-auto">Import Excel Productivity Coal</h2>
+                    <h2 class="font-medium text-base mr-auto">Import Excel Kendala</h2>
                     <form action="{{route('kendala.import')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                 </div> 

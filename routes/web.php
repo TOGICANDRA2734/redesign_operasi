@@ -109,7 +109,7 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
         Route::post('productivity_check_coal', [ProductivityCoalController::class, 'check'])->name('productivity_coal.check');
         Route::post('productivity_store_coal', [ProductivityCoalController::class, 'store_data'])->name('productivity_coal.store_data');
         
-        Route::resource('kendala', Admin_KendalaController::class);        
+        Route::resource('kendala', KendalaController::class);        
         Route::post('/comment/store', [CommentController::class, 'store'])->name('comments.store');        
         Route::post('/reply/store', [CommentController::class, 'replyStore'])->name('reply.store');        
         Route::resource('profil', ProfilController::class);        
@@ -244,6 +244,7 @@ Route::middleware('auth')->group(function() {
         Route::post('productivity-import-excel', [ProductivityController::class, 'import_excel'])->name('productivity.import-excel');
 
         Route::post('productivity_check', [ProductivityController::class, 'check'])->name('productivity.check');
+        Route::post('productivity_check_massal', [ProductivityController::class, 'check_massal'])->name('productivity.check_massal');
         Route::post('productivity_store', [ProductivityController::class, 'store_data'])->name('productivity.store_data');
         
         Route::resource('productivity_coal', ProductivityCoalController::class);
