@@ -1,7 +1,7 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-<title>PMA 2023</title>
+    <title>PMA 2023</title>
 @endsection
 
 @section('subcontent')
@@ -60,15 +60,19 @@
                 <thead class="table-dark">
                     <tr class="">
                         <th rowspan="2" class="whitespace-nowrap text-center">Tanggal</th>
-                        <th colspan="2" class="whitespace-nowrap text-center">Overburden</th>
-                        <th colspan="2" class="whitespace-nowrap text-center">Coal</th>
+                        <th colspan="4" class="whitespace-nowrap text-center">Overburden</th>
+                        <th colspan="4" class="whitespace-nowrap text-center">Coal</th>
                         <th colspan="2" class="whitespace-nowrap text-center">ACH</th>
                     </tr>
                     <tr class="">
                         <th class="whitespace-nowrap text-center">Shift 1</th>
                         <th class="whitespace-nowrap text-center">Shift 2</th>
+                        <th class="whitespace-nowrap text-center">Total</th>
+                        <th class="whitespace-nowrap text-center">Plan</th>
                         <th class="whitespace-nowrap text-center">Shift 1</th>
                         <th class="whitespace-nowrap text-center">Shift 2</th>
+                        <th class="whitespace-nowrap text-center">Total</th>
+                        <th class="whitespace-nowrap text-center">Plan</th>
                         <th class="whitespace-nowrap text-center">OB</th>
                         <th class="whitespace-nowrap text-center">Coal</th>
                     </tr>
@@ -111,7 +115,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://127.0.0.1:8000/data-prod-report?layout=side-menu',
+            url: 'http://ptrci.co.id/datacenter/public/data-prod-report?layout=side-menu',
             data: {
                 'kodesite': kodesite,
                 'pilihBulan': pilihBulan
@@ -123,12 +127,16 @@
                     $i.each(result.data, function(index) {
                         text = '<tr class="text-center bg-white">' +
                             '<td class="">' + result.data[index].tgl_data + '</td>' +
-                            '<td class="">' + result.data[index].ob_1 + '</td>' +
-                            '<td class="">' + result.data[index].ob_2 + '</td>' +
-                            '<td class="">' + result.data[index].coal_1 + '</td>' +
-                            '<td class="">' + result.data[index].coal_2 + '</td>' +
-                            '<td class="">' + result.data[index].ach_ob + '</td>' +
-                            '<td class="">' + result.data[index].ach_coal + '</td>' +
+                            '<td class="">' + number_format(result.data[index].ob_1,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].ob_2,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].sum_ob,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].plan_ob,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].coal_1,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].coal_2,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].sum_coal,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].plan_coal,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].ach_ob,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].ach_coal,0) + '</td>' +
                             '</tr>';
                         fullText += text
                     });
@@ -160,7 +168,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://127.0.0.1:8000/data-prod-report?layout=side-menu',
+            url: 'http://ptrci.co.id/datacenter/public/data-prod-report?layout=side-menu',
             data: {
                 'pilihBulan': pilihBulan,
                 'kodesite': kodesite,
@@ -172,12 +180,16 @@
                     $i.each(result.data, function(index) {
                         text = '<tr class="text-center bg-white">' +
                             '<td class="">' + result.data[index].tgl_data + '</td>' +
-                            '<td class="">' + result.data[index].ob_1 + '</td>' +
-                            '<td class="">' + result.data[index].ob_2 + '</td>' +
-                            '<td class="">' + result.data[index].coal_1 + '</td>' +
-                            '<td class="">' + result.data[index].coal_2 + '</td>' +
-                            '<td class="">' + result.data[index].ach_ob + '</td>' +
-                            '<td class="">' + result.data[index].ach_coal + '</td>' +
+                            '<td class="">' + number_format(result.data[index].ob_1,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].ob_2,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].sum_ob,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].plan_ob,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].coal_1,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].coal_2,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].sum_coal,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].plan_coal,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].ach_ob,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].ach_coal,0) + '</td>' +
                             '</tr>';
                         fullText += text
                     });
@@ -204,6 +216,30 @@
             stopOnFocus: true,
         }).showToast();
     };
+    
+    function number_format(number, decimals, dec_point, thousands_sep) {
+            // Strip all characters but numerical ones.
+            number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+            var n = !isFinite(+number) ? 0 : +number,
+                prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                s = '',
+                toFixedFix = function(n, prec) {
+                    var k = Math.pow(10, prec);
+                    return '' + Math.round(n * k) / k;
+                };
+            // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+            if (s[0].length > 3) {
+                s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+            }
+            if ((s[1] || '').length < prec) {
+                s[1] = s[1] || '';
+                s[1] += new Array(prec - s[1].length + 1).join('0');
+            }
+            return s.join(dec);
+        }
 </script>
 <script>
     /*!

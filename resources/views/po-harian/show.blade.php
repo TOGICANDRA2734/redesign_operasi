@@ -52,13 +52,14 @@
                         <th class="whitespace-nowrap text-center">No. Item</th>
                         <th class="whitespace-nowrap text-center">CN</th>
                         <th class="whitespace-nowrap text-center">Part Number</th>
+                        <th class="whitespace-nowrap text-center">Part Name</th>
                         <th class="whitespace-nowrap text-center">QTY RS</th>
                         <th class="whitespace-nowrap text-center">NO PO</th>
                         <th class="whitespace-nowrap text-center">Tanggal PO</th>
                         <th class="whitespace-nowrap text-center">Supplier</th>
                         <th class="whitespace-nowrap text-center">PN Interchange</th>
-                        <th class="whitespace-nowrap text-center">Estimasi Hari</th>
-                        <th class="whitespace-nowrap text-center">Estimasi Tanggal</th>
+                        {{-- <th class="whitespace-nowrap text-center">Estimasi Hari</th>
+                        <th class="whitespace-nowrap text-center">Estimasi Tanggal</th> --}}
                         <th class="whitespace-nowrap text-center">QTY PO</th>
                         <th class="whitespace-nowrap text-center">DOK MRS</th>
                         <th class="whitespace-nowrap text-center">NO MRS</th>

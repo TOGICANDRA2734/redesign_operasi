@@ -343,13 +343,15 @@ class BDHarianController extends Controller
             FROM unit_rssp a
             JOIN site b
             ON a.kodesite=b.kodesite
-            WHERE nom_unit='".$request->nom_unit."' AND a.kodesite='".$request->kodesite."'";
+            WHERE nom_unit='".$request->nom_unit."' AND a.kodesite='".$request->kodesite."'
+            ORDER BY a.status DESC";
         } else {
             $subquery = "SELECT nodokstream no_st, '', descript uraian_bd, IF(a.STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian, b.namasite namasite
             FROM unit_rssp a
             JOIN site b
             ON a.kodesite=b.kodesite
-            WHERE nom_unit='".$request->nom_unit."'";
+            WHERE nom_unit='".$request->nom_unit."'
+            ORDER BY a.status DESC";
         }
 
         $data = collect(DB::select($subquery));

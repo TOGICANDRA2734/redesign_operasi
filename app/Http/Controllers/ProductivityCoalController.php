@@ -82,12 +82,11 @@ class ProductivityCoalController extends Controller
             JOIN site B
             ON A.kodesite = B.kodesite                                             
             WHERE " . $tanggal . " AND del=0
-            GROUP BY a.kodesite
+            GROUP BY a.pit, 
             ORDER BY b.id";
         }
 
         $data = collect(DB::select($subquery));
-
         $site = Site::where('status_website', 1)->get();
 
         if ($request->has('kodesite') || $request->has('pilihBulan')) {

@@ -108,7 +108,7 @@ class DashboardController extends Controller
             ->get();
 
 
-        $subquery = "SELECT A.tgl, D.icon_cuaca icon,  A.ob ob_act, A.coal coal_act, B.ob ob_plan, B.coal coal_plan, ((A.ob/B.ob)*100)ob_ach,((A.coal/B.coal)*100)coal_ach, C.kodesite, C.namasite, C.gambar
+        $subquery = "SELECT A.tgl, D.icon_cuaca icon,  sum(A.ob) ob_act, sum(A.coal) coal_act, sum(B.ob) ob_plan, sum(B.coal) coal_plan, ((sum(A.ob)/sum(B.ob))*100)ob_ach,((sum(A.coal)/sum(B.coal))*100)coal_ach, C.kodesite, C.namasite, C.gambar
         FROM pma_dailyprod_tc A
         JOIN (SELECT * FROM pma_dailyprod_plan WHERE tgl=DATE_SUB(CURDATE(), INTERVAL 1 DAY) GROUP BY tgl, kodesite) B
         ON a.kodesite = b.kodesite

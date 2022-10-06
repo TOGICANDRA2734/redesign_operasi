@@ -245,23 +245,23 @@
                             '<td class="">' + result.data[index].dok_type + '</td>' +
                             '<td class="">' + result.data[index].dok_no + '</td>' +
                             '<td class="">' + result.data[index].dok_tgl + '</td>' +
-                            '<td class="">' + result.data[index].uraian + '</td>' +
+                            '<td class="">' + (result.data[index].uraian ? result.data[index].uraian : "")  + '</td>' +
                             '<td class="">' + result.data[index].namasite + '</td>' +
                             '<td class="whitespace-nowrap text-center">' + 
                                 '<a href="/super_admin/po-harian/' + result.data[index].id + '" class="btn px-2 btn-dark mr-1 mb-2">' + 
-                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="eye"></i> </span>' +
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="eye" class="lucide lucide-eye w-4 h-4" data-lucide="eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> </span>' +
                                 '</a>' + 
                                 '<a href="/super_admin/bd-harian-dok/' + result.data[index].id + '/edit" class="btn px-2 btn-warning  mr-1 mb-2">' + 
-                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="pencil"></i> </span>' + 
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="pencil" class="lucide lucide-pencil w-4 h-4" data-lucide="pencil"><line x1="18" y1="2" x2="22" y2="6"></line><path d="M7.5 20.5L19 9l-4-4L3.5 16.5 2 22z"></path></svg> </span>' + 
                                 '</a>' + 
                                 '<a onclick="deleteConfirmationDetail({{1}})" class="btn px-2 btn-danger mr-1 mb-2">' + 
-                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="trash"></i> </span>' + 
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="trash" class="lucide lucide-trash w-4 h-4" data-lucide="trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path></svg> </span>' + 
                                 '</a>' + 
                             '</td>' + 
                             '</tr>';
                         fullText += text
                     });
-                    $i("table tbody").html(fullText);
+                    $i("table tbody").append(fullText);
                     show_data();
                 }
             },
@@ -310,24 +310,24 @@
                             '<td class="">' + result.data[index].dok_type + '</td>' +
                             '<td class="">' + result.data[index].dok_no + '</td>' +
                             '<td class="">' + result.data[index].dok_tgl + '</td>' +
-                            '<td class="">' + result.data[index].uraian + '</td>' +
+                            '<td class="">' + (result.data[index].uraian ? result.data[index].uraian : "")  + '</td>' +
                             '<td class="">' + result.data[index].namasite + '</td>' +
                             '<td class="whitespace-nowrap text-center">' + 
                                 '<a href="/super_admin/po-harian/' + result.data[index].id + '" class="btn px-2 btn-dark mr-1 mb-2">' + 
-                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="eye"></i> </span>' +
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="eye" class="lucide lucide-eye w-4 h-4" data-lucide="eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> </span>' +
                                 '</a>' + 
                                 '<a href="/super_admin/bd-harian-dok/' + result.data[index].id + '/edit" class="btn px-2 btn-warning  mr-1 mb-2">' + 
-                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="pencil"></i> </span>' + 
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="pencil" class="lucide lucide-pencil w-4 h-4" data-lucide="pencil"><line x1="18" y1="2" x2="22" y2="6"></line><path d="M7.5 20.5L19 9l-4-4L3.5 16.5 2 22z"></path></svg> </span>' + 
                                 '</a>' + 
                                 '<a onclick="deleteConfirmationDetail({{1}})" class="btn px-2 btn-danger mr-1 mb-2">' + 
-                                    '<span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="trash"></i> </span>' + 
+                                    '<span class="w-5 h-5 flex items-center justify-center"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="trash" class="lucide lucide-trash w-4 h-4" data-lucide="trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path></svg> </span>' + 
                                 '</a>' + 
-                            '</td>' +
+                            '</td>' + 
                             '</tr>';
                         fullText += text
                     });
-                    $i("table tbody").html(fullText);
-                    show_data()
+                    $i("table tbody").append(fullText);
+                    show_data();
                 }
             },
             error: function(result) {

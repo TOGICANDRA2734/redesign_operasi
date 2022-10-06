@@ -317,6 +317,8 @@ Route::middleware('auth')->group(function() {
 
         // Historical Overhaul
         Route::resource('historical-overhaul', HistoricalOvhController::class);
+        Route::post('historical-ovh-filter', [HistoricalOvhController::class, 'showFilter'])->name('historical-ovh-show.filter');
+        
 
         // Pap
         Route::resource('pap', PapController::class);

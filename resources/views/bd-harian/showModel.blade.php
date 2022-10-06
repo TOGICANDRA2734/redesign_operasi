@@ -6,7 +6,7 @@
 
 @section('subcontent')
 <main class="h-full overflow-y-auto">
-    <div class="container mx-auto grid grid-cols-12 gap-4">
+    <div class="mx-auto grid grid-cols-12 gap-4">
         <div class="intro-y flex flex-col sm:flex-row items-center mt-8 col-span-12">
             <h2 class="text-lg font-medium mr-auto">
                 Populasi Unit - {{$data[0]->model}}            
@@ -29,11 +29,11 @@
 
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @foreach($dataRFU as $key => $dt)
-                            <tr class="group data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150" onclick="changeColor(this)">
-                                <td class="px-4 py-3 text-sm group-hover:bg-gray-400 group-hover:text-white">{{$key+1}}</td>
+                            <tr class="group data-row text-center text-gray-700 dark:text-gray-400 ease-in-out duration-150" onclick="changeColor(this)">
+                                <td class="px-4 py-3 text-sm">{{$key+1}}</td>
                                 @foreach($dt as $key => $d)
                                         @if(false === strtotime($d))
-                                            <td class="px-4 py-3 border group-hover:bg-gray-400 group-hover:text-white">
+                                            <td class="px-4 py-3 border">
                                                 @if(is_double($d))
                                                     {{number_format($d, 0, ',', '.')}}
                                                 @else
@@ -42,11 +42,11 @@
                                             </td>
                                         @else
                                             @if ($key == 'sn' or $key == 'engine_brand' or $key == 'id' or $key == 'namasite')
-                                                <td class="px-4 py-3 border group-hover:bg-gray-400 group-hover:text-white">
+                                                <td class="px-4 py-3 border">
                                                     {{$d}}
                                                 </td>
                                             @else
-                                                <td class="px-4 py-3 border group-hover:bg-gray-400 group-hover:text-white">
+                                                <td class="px-4 py-3 border">
                                                     <!-- Tanggal  -->
                                                     {{date_format(new DateTime($d), "d/m/Y")}}
                                                 </td>
@@ -75,11 +75,11 @@
 
                     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                         @foreach($dataBD as $key => $dt)
-                            <tr class="group data-row text-center text-gray-700 dark:text-gray-400 hover:bg-gray-400 hover:text-white ease-in-out duration-150" onclick="changeColor(this)">
-                                <td class="px-4 py-3 text-sm group-hover:bg-gray-400 group-hover:text-white">{{$key+1}}</td>
+                            <tr class="group data-row text-center text-gray-700 dark:text-gray-400 ease-in-out duration-150" onclick="changeColor(this)">
+                                <td class="px-4 py-3 text-sm">{{$key+1}}</td>
                                 @foreach($dt as $key => $d)
                                         @if(false === strtotime($d))
-                                            <td class="px-4 py-3 border group-hover:bg-gray-400 group-hover:text-white">
+                                            <td class="px-4 py-3 border">
                                                 @if(is_double($d))
                                                     {{number_format($d, 0, ',', '.')}}
                                                 @else
@@ -88,11 +88,11 @@
                                             </td>
                                         @else
                                             @if ($key == 'sn' or $key == 'engine_brand' or $key == 'id' or $key == 'namasite')
-                                                <td class="px-4 py-3 border group-hover:bg-gray-400 group-hover:text-white">
+                                                <td class="px-4 py-3 border">
                                                     {{$d}}
                                                 </td>
                                             @else
-                                                <td class="px-4 py-3 border group-hover:bg-gray-400 group-hover:text-white">
+                                                <td class="px-4 py-3 border">
                                                     <!-- Tanggal  -->
                                                     {{date_format(new DateTime($d), "d/m/Y")}}
                                                 </td>
@@ -112,10 +112,4 @@
         </div>
 </main>
 
-<script>
-    function changeColor(el) {
-        $('.data-row').removeClass('bg-gray-200', 'text-gray-700');
-        $(el).addClass('bg-gray-200', 'text-white');
-    };
-</script>
 @endsection

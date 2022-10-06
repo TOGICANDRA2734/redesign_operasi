@@ -14,6 +14,12 @@
         @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
         <div class="ml-auto mr-2 flex">
             <input type="text" name="cariNama" id="cariNama" placeholder="Cari Data" class="block shadow-sm border p-2 rounded-md w-30 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray mr-2">
+            <select id="pilihKomponen" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
+                <option value="">Pilih</option>
+                @foreach($komponen as $st)
+                <option value="{{$st->komponen}}">{{$st->komponen}}</option>
+                @endforeach
+            </select>
 
             <!-- BEGIN: Notification Content -->
             <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
@@ -118,22 +124,24 @@
 <script>
     $i = jQuery.noConflict();
 
-    $i('#cariNama').on('change', function() {
+    $i('#cariNama, #pilihKomponen').on('change', function() {
         $i.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
             }
         });
 
-        const cariNama = $i(this).val();
+        const cariNama = $i("#cariNama").val();
+        const pilihKomponen = $i("#pilihKomponen").val();
 
-        console.log("PILIH Nama", cariNama);
+        console.log("PILIH Nama", cariNama, pilihKomponen);
 
         $i.ajax({
             type: "POST",
-            url: 'http://127.0.0.1:8000/historical-unit-filter?layout=side-menu',
+            url: 'http://127.0.0.1:8000/historical-ovh-filter?layout=side-menu',
             data: {
-                'cariNama': cariNama
+                'cariNama': cariNama,
+                'pilihKomponen': pilihKomponen,
             },
             success: function(result) {
                 $i("table tbody ").empty();
@@ -145,13 +153,12 @@
                         text = '<tr class="text-center bg-white">' +
                             '<td class="">' + i + '</td>' +
                             '<td class="">' + result.data[index].nom_unit + '</td>' +
-                            '<td class="">' + result.data[index].type_unit + '</td>' +
+                            '<td class="">' + result.data[index].model + '</td>' +
+                            '<td class="">' + result.data[index].komponen + '</td>' +
+                            '<td class="">' + result.data[index].ovh_start + '</td>' +
+                            '<td class="">' + result.data[index].ovh_end + '</td>' +
                             '<td class="">' + result.data[index].hm + '</td>' +
-                            '<td class="cekTbModal">' + 
-                                '<a href="/super_admin/historical-unit/'+result.data[index].nom_unit+'" class="btn btn-dark mr-1 mb-2">' + 
-                                    '<i data-lucide="eye" class="w-5 h-5"></i>' + 
-                                '</a>' + 
-                            '</td>' + 
+                            '<td class="">' + result.data[index].remark + '</td>' +
                             '</tr>';
                         fullText += text
                     });

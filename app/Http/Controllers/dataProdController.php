@@ -348,7 +348,7 @@ class dataProdController extends Controller
 
     public function report(Request $request)
     {
-
+        
         if($request->has('pilihBulan')){
             $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
             $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
@@ -360,20 +360,28 @@ class dataProdController extends Controller
         if($request->has('kodesite') && $request->kodesite !== 'all'){
             $subquery = "SELECT tgl tgl_data,
             IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN ob END),1),'-') AS ob_1,
-            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN coal END),1),'-') AS coal_1,
             IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN ob END),1),'-') AS ob_2,
+            IFNULL(ROUND(SUM(OB),1),'-') AS sum_ob,
+            (SELECT SUM(OB) FROM PMA_DAILYPROD_PLAN WHERE TGL=TGL_DATA AND kodesite='".$request->kodesite."' GROUP BY TGL) plan_ob,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN coal END),1),'-') AS coal_1,
             IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN coal END),1),'-') AS coal_2,
-            ROUND(SUM(ob)/(SELECT SUM(ob) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1) ach_ob,
-            ROUND(SUM(coal)/(SELECT SUM(coal) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1)  ach_coal
+            IFNULL(ROUND(SUM(coal),1),'-') AS sum_coal,
+            (SELECT SUM(coal) FROM PMA_DAILYPROD_PLAN WHERE TGL=TGL_DATA AND kodesite='".$request->kodesite."' GROUP BY TGL) plan_coal,
+            ROUND(SUM(ob)/(SELECT SUM(ob) FROM pma_dailyprod_plan WHERE tgl=tgl_data AND kodesite='".$request->kodesite."' GROUP BY tgl) * 100,1) ach_ob,
+            ROUND(SUM(coal)/(SELECT SUM(coal) FROM pma_dailyprod_plan WHERE tgl=tgl_data AND kodesite='".$request->kodesite."' GROUP BY tgl) * 100,1)  ach_coal
             FROM pma_dailyprod_tc
             WHERE ".$tanggal." and kodesite='".$request->kodesite."'
             GROUP BY tgl";
         } else {
             $subquery = "SELECT tgl tgl_data,
             IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN ob END),1),'-') AS ob_1,
-            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN coal END),1),'-') AS coal_1,
             IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN ob END),1),'-') AS ob_2,
+            IFNULL(ROUND(SUM(OB),1),'-') AS sum_ob,
+            (SELECT SUM(OB) FROM PMA_DAILYPROD_PLAN WHERE TGL=TGL_DATA GROUP BY TGL) plan_ob,
+            IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN coal END),1),'-') AS coal_1,
             IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN coal END),1),'-') AS coal_2,
+            IFNULL(ROUND(SUM(coal),1),'-') AS sum_coal,
+            (SELECT SUM(coal) FROM PMA_DAILYPROD_PLAN WHERE TGL=TGL_DATA GROUP BY TGL) plan_coal,
             ROUND(SUM(ob)/(SELECT SUM(ob) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1) ach_ob,
             ROUND(SUM(coal)/(SELECT SUM(coal) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1)  ach_coal
             FROM pma_dailyprod_tc

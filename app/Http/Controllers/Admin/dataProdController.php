@@ -387,7 +387,7 @@ class dataProdController extends Controller
             $response['data'] = $data;
             return response()->json($response);
         } else {
-            return view('admin.data-prod.report', compact('data', 'site'));
+            return view('data-prod.report', compact('data', 'site'));
         }
     }
     

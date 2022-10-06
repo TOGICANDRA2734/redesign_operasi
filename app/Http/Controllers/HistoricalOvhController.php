@@ -15,8 +15,10 @@ class HistoricalOvhController extends Controller
      */
     public function index()
     {
-        $data = DB::table('plant_ovh')->select('*')->get();
-        return view('historical-overhaul.index', compact('data'));
+        $data = DB::table('plant_ovh')->select('*')->limit(250)->get();
+        $subquery = "SELECT DISTINCT komponen FROM plant_ovh ORDER BY komponen";
+        $komponen = collect(DB::select(DB::raw($subquery)));
+        return view('historical-overhaul.index', compact('data', 'komponen'));
     }
 
     /**
@@ -83,5 +85,29 @@ class HistoricalOvhController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function showFilter(Request $request)
+    {
+        $where = '';
+        
+        if(count($request->all()) > 1){
+            $where .= "WHERE ";
+            $where .= ($request->has('pilihKomponen') && !empty($request->pilihKomponen)) ? "komponen='" . $request->pilihKomponen . "'" : "";
+            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
+            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? "nom_unit='" . $request->cariNama . "'" : "";
+            $where .= "AND DEL=0";    
+        }
+        
+        $subquery = "SELECT *
+        FROM plant_ovh
+        ".$where."
+        ORDER BY nom_unit, model";
+
+        $data = collect(DB::select($subquery));
+
+        $response['data'] = $data;
+        return response()->json($response);
+        
     }
 }
