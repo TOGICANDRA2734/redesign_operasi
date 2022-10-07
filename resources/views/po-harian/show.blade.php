@@ -100,7 +100,7 @@
 
 <script>
     function deleteConfirmation(id) {
-        swal.fire({
+        Swal.fire({
             title: "Apakah anda yakin untuk menghapus data?",
             icon: 'question',
             text: "Data akan dihapus beserta Data Detail yang ada di dalamnya",

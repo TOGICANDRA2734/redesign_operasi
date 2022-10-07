@@ -76,14 +76,19 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white">
-                    @foreach ($data as $dt)
+                    @foreach ($data as $keys => $dt)
                         <tr>
+                            <td>
+                                {{$keys+1}}
+                            </td>
                             @foreach ($dt as $key => $d)
-                                @if ($key !='del')
+                            @if ($key !='del')
+                            @if ($key !='id')
                                     <td>
                                         {{$d}}
                                     </td>    
-                                @endif
+                                    @endif
+                                    @endif
                             @endforeach
                         </tr>
                     @endforeach
@@ -150,7 +155,7 @@
                     i=0;
                     $i.each(result.data, function(index) {
                         i +=1;
-                        text = '<tr class="text-center bg-white">' +
+                        text = '<tr class="bg-white">' +
                             '<td class="">' + i + '</td>' +
                             '<td class="">' + result.data[index].nom_unit + '</td>' +
                             '<td class="">' + result.data[index].model + '</td>' +

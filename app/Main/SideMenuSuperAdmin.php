@@ -244,7 +244,7 @@ class SideMenuSuperAdmin
                     'general-request' => [
                         'icon' => 'box',
                         'title' => 'General Request',
-                        'route_name' => 'super_admin.data-prod.report',
+                        'route_name' => 'super_admin.dokumen-gr.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],

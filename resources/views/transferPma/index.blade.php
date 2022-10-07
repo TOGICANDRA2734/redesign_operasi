@@ -33,6 +33,31 @@
                 </div>
 
                 <div class="mt-3">
+                    <label>Periode</label>
+                    <!-- BEGIN: Basic Select -->
+                    <div class="mt-2"> 
+                        <select data-placeholder="Pilih periode" name="periode" class="tom-select w-full @error('periode') border-danger @enderror">
+                            <option value="Januari">Januari</option>
+                            <option value="Februari">Februari</option>
+                            <option value="Maret">Maret</option>
+                            <option value="April">April</option>
+                            <option value="Mei">Mei</option>
+                            <option value="Juni">Juni</option>
+                            <option value="Juli">Juli</option>
+                            <option value="Agustus">Agustus</option>
+                            <option value="September">September</option>
+                            <option value="Oktober">Oktober</option>
+                            <option value="November">November</option>
+                            <option value="Desember">Desember</option>
+                        </select> 
+                        @error('periode')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
+                    </div>
+                    <!-- END: Basic Select -->
+                </div>
+
+                <div class="mt-3">
                     <label for="file_pma">File PMA (Rar & Zip)</label>
                     <div class="mt-2">
                         <input type="file" id="file_pma" name="file_pma" class="w-full @error('site') border-danger @enderror"/>
@@ -69,6 +94,7 @@
                         <th class="text-center whitespace-nowrap">Site</th>
                         <th class="text-center whitespace-nowrap">Tanggal</th>
                         <th class="text-center whitespace-nowrap">Waktu</th>
+                        <th class="text-center whitespace-nowrap">Periode Laporan</th>
                         <th class="text-center whitespace-nowrap">Status</th>
                     </tr>
                 </thead>
@@ -122,7 +148,7 @@
         const pond = FilePond.create(inputElement);
         pond.setOptions({
             server: {
-                url: 'http://127.0.0.1:8000upload',
+                url: 'http://127.0.0.1:8000/upload',
                 headers: {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }

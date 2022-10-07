@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\KendalaController as Admin_KendalaController;
 use App\Http\Controllers\Admin\ProductivityController as Admin_ProductivityController;
 use App\Http\Controllers\BDDokController;
 use App\Http\Controllers\BDHarianController;
+use App\Http\Controllers\DokumenGrController;
 use App\Http\Controllers\HistoricalOvhController;
 use App\Http\Controllers\HistoricalUnitController;
 use App\Http\Controllers\MohhController;
@@ -216,6 +217,9 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         // Pap
         Route::resource('pap', PapController::class);
         Route::post('pap-filter', [PapController::class, 'index'])->name('pap.filter');
+        
+        // Dokumen GR
+        Route::resource('dokumen-gr', DokumenGrController::class);
     });
 });
 
@@ -324,4 +328,7 @@ Route::middleware('auth')->group(function() {
         Route::resource('pap', PapController::class);
         Route::post('pap-filter', [PapController::class, 'index'])->name('pap.filter');
         Route::post('pap-get-bagian', [PapController::class, 'getPapBagian'])->name('pap.getPapBagian');
+        
+        // Dokumen GR
+        Route::resource('dokumen-gr', DokumenGrController::class);
 });

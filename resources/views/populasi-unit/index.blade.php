@@ -105,6 +105,9 @@
                             <a href="{{ route('super_admin.populasi-unit.edit', $data[$key]->id) }}" class="btn btn-warning mr-1 mb-2 p-1">
                                 <i data-lucide="edit" class="w-4 h-4"></i>
                             </a>
+                            <button onclick="deleteConfirmation({{$data[$key]->id}})" class="btn btn-danger mr-1 mb-2 p-1">
+                                <i data-lucide="trash" class="w-4 h-4"></i>
+                            </button>
                         </td>
                     </tr>
                     @endforeach
@@ -235,7 +238,51 @@
         return months;
     }
 </script>
+<script>
+    function deleteConfirmation(id) {
+        swal.fire({
+            title: "Apakah anda yakin untuk menghapus data?",
+            icon: 'question',
+            text: "Data akan dihapus beserta Data Detail yang ada di dalamnya",
+            type: "warning",
+            showCancelButton: !0,
+            confirmButtonText: "Ya",
+            cancelButtonText: "Tidak",
+            reverseButtons: !0
+        }).then(function(e) {
 
+            if (e.value === true) {
+                let token = $('meta[name="csrf-token"]').attr('content');
+                let _url = `/populasi-unit/delete/${id}`;
+
+                $.ajax({
+                    type: 'POST',
+                    url: _url,
+                    data: {
+                        _token: token
+                    },
+                    success: function(resp) {
+                        if (resp.success) {
+                            swal.fire("Data Berhasil dihapus!", resp.message, "success");
+                            location.replace(window.location.origin + "/populasi-unit");
+                        } else {
+                            swal.fire("Error!", 'Ada kesalahan dalam menghapus data', "error");
+                        }
+                    },
+                    error: function(resp) {
+                        swal.fire("Error!", 'Ada kesalahan dalam menghapus data', "error");
+                    }
+                });
+
+            } else {
+                e.dismiss;
+            }
+
+        }, function(dismiss) {
+            return false;
+        })
+    }
+</script>
 <!-- Filtering -->
 <script>
     $i = jQuery.noConflict();

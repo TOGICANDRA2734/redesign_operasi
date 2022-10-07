@@ -14,7 +14,7 @@ class TransferController extends Controller
     public function index(Request $request)
     {        
         $site = Site::where('status_website', 1)->orderBy('id')->get();
-        $data = DB::table('pma_transfer_file')->join('site', 'pma_transfer_file.kodesite', '=', 'site.kodesite')->select('site.namasite', 'pma_transfer_file.tgl', 'pma_transfer_file.waktu', 'pma_transfer_file.sv', 'pma_transfer_file.file')->orderBy('tgl', 'desc')->orderBy('site.kodesite')->orderBy('waktu', 'desc')->paginate(155);
+        $data = DB::table('pma_transfer_file')->join('site', 'pma_transfer_file.kodesite', '=', 'site.kodesite')->select('site.namasite', 'pma_transfer_file.tgl', 'pma_transfer_file.waktu', 'pma_transfer_file.periode', 'pma_transfer_file.sv', 'pma_transfer_file.file')->orderBy('tgl', 'desc')->orderBy('site.kodesite')->orderBy('waktu', 'desc')->paginate(155);
 
         return view('transferPma.index', compact('site', 'data'));
     }
@@ -23,6 +23,7 @@ class TransferController extends Controller
     {
         $request->validate([
             'site' => 'required|string',
+            'periode' => 'required|string',
             'file_pma' => 'required|file|mimes:rar,zip',
         ]);
 
@@ -37,6 +38,7 @@ class TransferController extends Controller
             'waktu' => date('h:i:s', strtotime(Carbon::now())),
             'file' => $namaFile,
             'kodesite' => $request->site,
+            'periode' => $request->periode,
         ]);
 
         // $temporaryFile = TemporaryFiles::where('folder', $request->file)->first();

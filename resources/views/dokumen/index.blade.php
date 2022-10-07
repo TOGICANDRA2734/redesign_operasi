@@ -1,204 +1,212 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-<title>PMA 2023</title>
+    <title>PMA 2023</title>
 @endsection
 
 @section('subcontent')
-    @if(Auth::user()->hasRole(['super_admin','admin']))
-    <div class="intro-y flex items-center mt-8">
-        <h2 class="text-lg font-medium mr-auto">Transaksi PAP</h2>
-    </div>
-    <div class="grid grid-cols-12 gap-6 mt-5">
-        <div class="intro-y col-span-12 ">
-            <!-- BEGIN: Form Layout -->
-            <form action="{{route('super_admin.pap.store')}}" method="POST" class="intro-y box p-5" enctype="multipart/form-data">
-                @csrf
-                <!-- BEGIN: Form Input FIle -->
-                <div class="mt-3">
-                    <label>Site</label>
-                    <!-- BEGIN: Basic Select -->
-                    <div class="mt-2"> 
-                        <select id="site" data-placeholder="Pilih site" name="site" class="tom-select w-full @error('site') border-danger @enderror">
-                            <option value="" selected disabled>Pilih Site</option>
-                            @foreach($site as $st)
-                            <option value="{{$st->kodesite}}">{{$st->namasite}} - {{$st->lokasi}}</option>
-                            @endforeach
-                        </select> 
-                        @error('site')
-                            <div class="text-danger mt-2">{{$message}}</div>
-                        @endif
-                    </div>
-                    <!-- END: Basic Select -->
-                </div>
-
-                <div class="mt-3">
-                    <label>Code Unit</label>
-                    <!-- BEGIN: Basic Select -->
-                    <div class="mt-2"> 
-                        <select id="nom_unit" data-placeholder="Pilih Code Unit" name="nom_unit" class=" w-full @error('nom_unit') border-danger @enderror">
-                            <option value="" selected disabled>Pilih Unit</option>
-                        </select> 
-                        @error('nom_unit')
-                            <div class="text-danger mt-2">{{$message}}</div>
-                        @endif
-                    </div>
-                    <!-- END: Basic Select -->
-                </div>
-
-                <div class="mt-3">
-                    <label>Kompartemen</label>
-                    <!-- BEGIN: Basic Select -->
-                    <div class="mt-2"> 
-                        <select id="kompartemen" data-placeholder="Pilih Kompartemen" name="kompartemen" class="w-full @error('kompartemen') border-danger @enderror">
-                            <option value="" selected disabled>Pilih Kompartemen</option>
-                        </select> 
-                        @error('kompartemen')
-                            <div class="text-danger mt-2">{{$message}}</div>
-                        @endif
-                    </div>
-                    <!-- END: Basic Select -->
-                </div>
-
-                <div class="mt-3">
-                    <label for="file_pap">File PAP (PDF)</label>
-                    <div class="mt-2">
-                        <input type="file" id="file_pap" name="file_pap" class="w-full @error('site') border-danger @enderror"/>
-                        <!-- <input name="file_pap" id="file_pap" type="file" class="form-control @error('file_pap') border-danger @enderror}}" /> 
-                        @error('file_pap')
-                            <div class="text-danger mt-2">{{$message}}</div>
-                        @endif -->
-                    </div>
-                </div>
-                <!-- END: Form Input File -->
-                <div class="mt-3">
-                    <button type="submit" class="btn btn-lg btn-primary w-full mr-1 mb-2 mt-2">Submit</button>
-                </div>
-            </form>
-            <!-- END: Form Layout -->
+    <!-- BEGIN: Notification Content -->
+    <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success"
+            data-lucide="check-circle"></i>
+        <div class="ml-4 mr-4">
+            <div class="font-medium">Data Berhasil Difilter!</div>
         </div>
     </div>
-    @endif
-@endsection
+    <!-- END: Notification Content -->
 
-@section('script')
-    <script src="{{ asset('dist/js/ckeditor-classic.js') }}"></script>
-    <!-- <script>
-        const inputElement = document.querySelector('input[id="file_pap"]');
-        const pond = FilePond.create(inputElement);
-        pond.setOptions({
-            server: {
-                url: 'http://127.0.0.1:8000/upload',
-                headers: {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-            }
-        })
-    </script> -->
+    <div class="">
+        <!-- Header -->
+        <div class="flex justify-between items-center py-4">
+            <!-- Title -->
+            <h2 class="text-lg font-medium truncate mr-5 ">
+                Monitor General Request
+            </h2>
+
+            <div class="ml-auto flex justify-center items-center">
+                <div class="mr-3 hidden" id="loading">
+                    <i data-loading-icon="tail-spin" class="w-5 h-5"></i>
+                </div>
+                <input type="text" name="cariGr" id="cariGr" placeholder="Cari Data" class="block shadow-sm border p-2 rounded-md w-30 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray mr-2">
+                <select id="pilihSite"
+                    class="block shadow-sm border p-2 mr-2 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray"
+                    name="kodesite" id="kodesite">
+                    <option value="">All Site</option>
+                    @foreach ($site as $st)
+                        <option value="{{ $st->kodesite }}">{{ $st->namasite }}</option>
+                    @endforeach
+                </select>
+                <select id="pilihStatus"
+                class="block shadow-sm border p-2 mr-2 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray"
+                name="status" id="status">
+                <option value="">Semua</option>
+                <option value="0">Sedang Diproses</option>
+                <option value="1">Dibatalkan</option>
+                <option value="2">Persetujuan Lengkap</option>
+            </select>
+
+            </div>
+        </div>
+        <hr class="mb-10">
+
+        <!-- Table -->
+        <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
+            <div class="w-full overflow-x-auto">
+                <table class="w-full table table-striped table-sm">
+                    <thead class="table-dark">
+                        <tr class="">
+                            <th class="whitespace-nowrap text-center">No</th>
+                            <th class="whitespace-nowrap text-center">Site</th>
+                            <th class="whitespace-nowrap text-center">No GR</th>
+                            <th class="whitespace-nowrap text-center">Tanggal</th>
+                            <th class="whitespace-nowrap text-center">Subject</th>
+                            @for ($i = 0; $i < 5; $i++)
+                                <th class="whitespace-nowrap text-center">D {{$i + 1}}</th>
+                            @endfor
+                            <th class="whitespace-nowrap text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($data as $key => $dt)
+                            <tr class="text-center bg-white">
+                                <td class="whitespace-nowrap text-center">
+                                    {{$key+1}}
+                                </td>
+                                <td class="whitespace-nowrap text-center">
+                                    {{$dt->site}}
+                                </td>
+                                <td class="whitespace-nowrap text-center">
+                                    {{$dt->no_gr}}
+                                </td>
+                                <td class="whitespace-nowrap text-center">
+                                    {{$dt->tgl_gr}}
+                                </td>
+                                <td class="whitespace-nowrap text-left">
+                                    {{$dt->subject_gr}}
+                                </td>
+                                <td class="whitespace-nowrap text-center">
+                                    <i data-lucide="{{$dt->chk_ttd1 == 0 ? "user-minus" : 'user-check'}}" class="w-4 h-4 mr-3 {{$dt->chk_ttd1 == 0 ? "text-danger" : 'text-success'}}"></i>
+                                </td>
+                                
+                                <td class="whitespace-nowrap text-center">
+                                    <i data-lucide="{{$dt->chk_ttd2 == 0 ? "user-minus" : 'user-check'}}" class="w-4 h-4 mr-3 {{$dt->chk_ttd2 == 0 ? "text-danger" : 'text-success'}}"></i>
+                                </td>
+                                
+                                <td class="whitespace-nowrap text-center">
+                                    <i data-lucide="{{$dt->chk_ttd3 == 0 ? "user-minus" : 'user-check'}}" class="w-4 h-4 mr-3 {{$dt->chk_ttd3 == 0 ? "text-danger" : 'text-success'}}"></i>
+                                </td>
+                                
+                                <td class="whitespace-nowrap text-center">
+                                    <i data-lucide="{{$dt->chk_ttd4 == 0 ? "user-minus" : 'user-check'}}" class="w-4 h-4 mr-3 {{$dt->chk_ttd4 == 0 ? "text-danger" : 'text-success'}}"></i>
+                                </td>
+                                
+                                <td class="whitespace-nowrap text-center">
+                                    <i data-lucide="{{$dt->chk_ttd5 == 0 ? "user-minus" : 'user-check'}}" class="w-4 h-4 mr-3 {{$dt->chk_ttd5 == 0 ? "text-danger" : 'text-success'}}"></i>
+                                </td>
+
+                                
+                                <td class="whitespace-nowrap text-center">
+                                    <p class="{{($dt->status === 0) ?  'text-black' : (($dt->status === 1 )? 'text-danger' : 'text-success')}}">
+                                        {{($dt->status === 0) ? 'Sedang Diproses' : (($dt->status === 1) ? 'Dibatalkan' : 'Selesai')}}
+                                    </p>
+                                </td>
+
+                            </tr>
+                        @endforeach
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {{-- Filter --}}
     <script>
         var $j = jQuery.noConflict();
 
-        $j('#tgl').on('change', function(){
-            console.log($j(this).val())
+        $j("#cariGr, #pilihSite, #pilihStatus").on('change', function() {
+            $j.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $j('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var cariGr = $j("#cariGr").val() ? $j("#cariGr").val() : "";
+            var pilihSite = $j("#pilihSite").val() ? $j("#pilihSite").val() : "";
+            var pilihStatus = $j("#pilihStatus").val() ? $j("#pilihStatus").val() : "";
+
+            $j("#loading").toggleClass('hidden');
+
             $j.ajax({
-                url: 'http://127.0.0.1:8000/dashboard/detail_filtered/',
-                type: 'GET',
-                dataType: 'json',
+                type: "GET",
+                url: 'http://127.0.0.1:8000/dokumen-gr?layout=side-menu',
                 data: {
-                    start: awal,
-                    end: akhir,
+                    'nomor': cariGr,
+                    'site': pilihSite,
+                    'status': pilihStatus,
                 },
                 success: function(response) {
-                    update_data(response)
+                    console.log(response);
+                    $j("#loading").toggleClass('hidden');
+                    $j("table tbody").empty();
+                    fullText = ""
+                    if (response) {
+                        i = 0;
+                        $j.each(response.data, function(index) {
+                            i += 1;
+                            text = '<tr class="text-center bg-white">' +
+                                
+                                '<td class="whitespace-nowrap text-center">' +
+                                    i + 
+                                '</td>' +
+                                '<td class="whitespace-nowrap text-center">' +
+                                    response.data[index].site + 
+                                '</td>' +
+                                '<td class="whitespace-nowrap text-center">' +
+                                    response.data[index].no_gr + 
+                                '</td>' +
+                                '<td class="whitespace-nowrap text-center">' +
+                                    response.data[index].tgl_gr + 
+                                '</td>' +
+                                '<td class="whitespace-nowrap text-center">' +
+                                    response.data[index].subject_gr + 
+                                '</td>' +
+                                '<td class="whitespace-nowrap text-center">' +
+                                    response.data[index].chk_ttd1 + 
+                                '</td>' +
+                                
+                                '<td class="whitespace-nowrap text-center">' +
+                                    response.data[index].chk_ttd2 + 
+                                '</td>' +
+                                
+                                '<td class="whitespace-nowrap text-center">' +
+                                    response.data[index].chk_ttd3 + 
+                                '</td>' +
+                                
+                                '<td class="whitespace-nowrap text-center">' +
+                                    response.data[index].chk_ttd4 + 
+                                '</td>' +
+                                
+                                '<td class="whitespace-nowrap text-center">' +
+                                    response.data[index].chk_ttd5 + 
+                                '</td>' +
+                                
+                                '<td class="whitespace-nowrap text-center">' +
+                                    response.data[index].status + 
+                                '</td>' +
+
+                                '</tr>';
+                            fullText += text
+                        });
+                        $j("table tbody").html(fullText);
+                        show_data();
+                    }
                 },
-            })
-            
-        })
-
-
-        $j('#nom_unit').on('change', function(){
-            console.log($j(this).val());
-            var nom_unit = $j(this).val();
-            let token = $j('meta[name="csrf-token"]').attr('content');
-
-            if(nom_unit) {
-                $j.ajax({
-                    url: 'http://127.0.0.1:8000/pap-get-bagian',
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        _token: token,
-                        nom_unit: nom_unit
-                    },
-                    success:function(response)
-                    {
-                        if(response){
-                            console.log('helo')
-                        $j('#kompartemen').empty();
-                        fullText = ""
-                        fullText += '<option value="" selected disabled>Pilih Kompartemen</option>'; 
-                        
-                        $j.each(response, function(key){
-                            text = '<option value="'+ response[key]['id'] +'">' + response[key]['bagian'] + '</option>';
-                            console.log('halo', key, response[key]['id'], response[key]['bagian'])
-                            fullText += text;
-                        });
-                        console.log(fullText);
-
-                        $j("#kompartemen").append(fullText);
-                        show_data();
-                    }else{
-                        console.log("heloo")
-                        $j('#kompartemen').empty();
-                    }
-                    }
-                });
-            }else{
-                $j('#kompartemen').empty();
-            }
-        })
-
-        $j('#site').on('change', function(){
-            console.log($j(this).val());
-            var site = $j(this).val();
-            let token = $j('meta[name="csrf-token"]').attr('content');
-
-            if(site) {
-                $j.ajax({
-                    url: 'http://127.0.0.1:8000/pap-get-bagian',
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        _token: token,
-                        site: site
-                    },
-                    success:function(response)
-                    {
-                        if(response){
-                            console.log('helo')
-                        $j('#nom_unit').empty();
-                        fullText = ""
-                        fullText += '<option value="" selected disabled>Pilih nom_unit</option>'; 
-                        
-                        $j.each(response, function(key){
-                            text = '<option value="'+ response[key]['nom_unit'] +'">' + response[key]['nom_unit'] + '</option>';
-                            console.log('halo', key, response[key]['nom_unit'], response[key]['nom_unit'])
-                            fullText += text;
-                        });
-                        console.log(fullText);
-
-                        $j("#nom_unit").append(fullText);
-                        show_data();
-                    }else{
-                        console.log("heloo")
-                        $j('#nom_unit').empty();
-                    }
-                    }
-                });
-            }else{
-                $j('#nom_unit').empty();
-            }
-        })
+                error: function(result) {
+                    console.log("error", result);
+                },
+            });
+        });
 
         function show_data() {
             Toastify({
@@ -213,7 +221,32 @@
                 stopOnFocus: true,
             }).showToast();
         };
+
+        function number_format(number, decimals, dec_point, thousands_sep) {
+            // Strip all characters but numerical ones.
+            number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+            var n = !isFinite(+number) ? 0 : +number,
+                prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                s = '',
+                toFixedFix = function(n, prec) {
+                    var k = Math.pow(10, prec);
+                    return '' + Math.round(n * k) / k;
+                };
+            // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+            if (s[0].length > 3) {
+                s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+            }
+            if ((s[1] || '').length < prec) {
+                s[1] = s[1] || '';
+                s[1] += new Array(prec - s[1].length + 1).join('0');
+            }
+            return s.join(dec);
+        }
     </script>
+
     <script>
         /*!
          * Toastify js 1.12.0

@@ -180,13 +180,6 @@ class PopulasiUnitController extends Controller
             'status_bagian' => $request->status_bagian,
             'status_kepemilikan' => $request->status_kepemilikan,
             'kodesite' => $request->kodesite,
-            // 'tgl' => $request->tgl,
-            // 'unit' => $request->unit,
-            // 'shift' => $request->shift,
-            // 'awal' => $request->awal,
-            // 'akhir' => $request->akhir,
-            // 'ket' => strtoupper($request->ket),
-            // 'kodesite' => $request->kodesite,
         ]);
 
         if($record){
@@ -221,18 +214,23 @@ class PopulasiUnitController extends Controller
         $subquery = "SELECT DISTINCT model FROM plant_populasi";
         $model = collect(DB::select($subquery));
 
-        $site = Site::where('status', 1)->get();
+        $site = Site::all();
 
-        $type_unit = "SELECT DISTINCT type_unit FROM plant_populasi";
+        $subquery = "SELECT DISTINCT type_unit FROM plant_populasi";
         $type_unit = collect(DB::select($subquery));
 
-        $engine_brand = "SELECT DISTINCT engine_brand FROM plant_populasi";
+        $subquery = "SELECT DISTINCT engine_brand FROM plant_populasi";
         $engine_brand = collect(DB::select($subquery));
 
-        $engine_model = "SELECT DISTINCT engine_model FROM plant_populasi";
+        $subquery = "SELECT DISTINCT engine_model FROM plant_populasi";
         $engine_model = collect(DB::select($subquery));
 
-        return view('populasi-unit.edit', compact('site', 'model', 'type_unit', 'engine_brand', 'engine_model'));
+        $subquery = "SELECT * FROM PLANT_POPULASI_BAGIAN WHERE del=0";
+        $status_bagian = collect(DB::select(DB::raw($subquery)));
+
+        $data = Plant_Populasi::findOrFail($id);
+
+        return view('populasi-unit.edit', compact('site', 'model', 'type_unit', 'engine_brand', 'engine_model', 'status_bagian', 'data'));
     }
     /**
      * Update the specified resource in storage.
@@ -244,28 +242,72 @@ class PopulasiUnitController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'pit' => 'required',
-            'ob' => 'required',
-            'coal' => 'required',
+            'model' => 'required',
+            'type_unit' => 'required',
+            'sn' => 'required',
+            'engine_brand' => 'required',
+            'engine_model' => 'required',
+            'engine_sn' => 'required',
+            // 'generator_brand' => 'required',
+            // 'generator_model' => 'required',
+            // 'generator_sn' => 'required',
+            // 'pump_merk' => 'required',
+            // 'pump_model' => 'required',
+            // 'pump_sn' => 'required',
+            // 'comp_merk' => 'required',
+            // 'comp_model' => 'required',
+            // 'comp_sn' => 'required',
+            // 'kapasitas' => 'required',
+            'HP' => 'required',
+            'do' => 'required',
+            // 'pic_1' => 'required',
+            // 'pic_2' => 'required',
+            // 'height' => 'required',
+            // 'width' => 'required',
+            // 'length' => 'required',
+            // 'fuel' => 'required',
+            'status_bagian' => 'required',
+            'status_kepemilikan' => 'required',
             'kodesite' => 'required',
-            'cuaca' => 'required',
         ]);
 
-        $record = dataProd::findOrFail($id);
+        $record = Plant_Populasi::findOrFail($id);
 
         $record->update([
-            'tgl'           => $request->tgl,
-            'pit'           => $request->pit,
-            'ob'            => $request->ob,
-            'coal'          => $request->coal,
-            'kodesite'      => $request->kodesite,
-            'cuaca'         => $request->cuaca,
+            'nom_unit'                  => $request->nom_unit,
+            'model'                     => $request->model,
+            'type_unit'                 => $request->type_unit,
+            'sn'                        => $request->sn,
+            'engine_brand'              => $request->engine_brand,
+            'engine_model'              => $request->engine_model,
+            'engine_sn'                 => $request->engine_sn,
+            'generator_brand'           => $request->generator_brand,
+            'generator_model'           => $request->generator_model,
+            'generator_sn'              => $request->generator_sn,
+            'pump_merk'                 => $request->pump_merk,
+            'pump_model'                => $request->pump_model,
+            'pump_sn'                   => $request->pump_sn,
+            'comp_merk'                 => $request->comp_merk,
+            'comp_model'                => $request->comp_model,
+            'comp_sn'                   => $request->comp_sn,
+            'kapasitas'                 => $request->kapasitas,
+            'HP'                        => $request->HP,
+            'DO'                        => $request->do,
+            'pic_1'                     => $request->pic_1,
+            'pic_2'                     => $request->pic_2,
+            'height'                    => $request->height,
+            'width'                     => $request->width,
+            'length'                    => $request->length,
+            'fuel'                      => $request->fuel,
+            'status_bagian'             => $request->status_bagian,
+            'status_kepemilikan'        => $request->status_kepemilikan,
+            'kodesite'                  => $request->kodesite,
         ]);
 
         if ($record) {
-            return redirect()->route('data-prod.index')->with(['success' => 'Data Berhasil Diupdate!']);
+            return redirect()->route('populasi-unit.index')->with(['success' => 'Data Berhasil Diupdate!']);
         } else {
-            return redirect()->route('data-prod.index')->with(['error' => 'Data Gagal Diupdate!']);
+            return redirect()->route('populasi-unit.edit', $request->id)->with(['error' => 'Data Gagal Diupdate!']);
         }
     }
 
@@ -292,5 +334,21 @@ class PopulasiUnitController extends Controller
         $response['data'] = $data;
         
         return response()->json($response);
+    }
+
+    public function delete($id)
+    {
+        $record = Plant_Populasi::findOrFail($id);
+        
+        $record->update([
+            'del' => 0,
+        ]);
+
+        
+        if ($record) {
+            return redirect()->route('populasi-unit.index')->with(['success' => 'Data Berhasil dihapus!']);
+        } else {
+            return redirect()->route('populasi-unit.index')->with(['error' => 'Data Gagal dihapus!']);
+        }
     }
 }

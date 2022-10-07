@@ -15,7 +15,7 @@ class HistoricalOvhController extends Controller
      */
     public function index()
     {
-        $data = DB::table('plant_ovh')->select('*')->limit(250)->get();
+        $data = DB::table('plant_ovh')->select('*')->orderBy('nom_unit')->orderBy('model')->orderBy('komponen')->orderBy('ovh_start')->limit(250)->get();
         $subquery = "SELECT DISTINCT komponen FROM plant_ovh ORDER BY komponen";
         $komponen = collect(DB::select(DB::raw($subquery)));
         return view('historical-overhaul.index', compact('data', 'komponen'));
@@ -94,15 +94,15 @@ class HistoricalOvhController extends Controller
         if(count($request->all()) > 1){
             $where .= "WHERE ";
             $where .= ($request->has('pilihKomponen') && !empty($request->pilihKomponen)) ? "komponen='" . $request->pilihKomponen . "'" : "";
-            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
-            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? "nom_unit='" . $request->cariNama . "'" : "";
+            $where .= ($request->has('cariNama') && !empty($request->pilihKomponen)) ? " AND " : "";
+            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? "nom_unit LIKE '%" . $request->cariNama . "%'" : "";
             $where .= "AND DEL=0";    
         }
         
         $subquery = "SELECT *
         FROM plant_ovh
         ".$where."
-        ORDER BY nom_unit, model";
+        ORDER BY nom_unit, model, komponen";
 
         $data = collect(DB::select($subquery));
 
