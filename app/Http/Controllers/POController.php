@@ -85,16 +85,14 @@ class POController extends Controller
         // WHERE nodokstream='".$id."'
         // GROUP BY c.item_code";
 
-        $subquery = "SELECT d.nodokstream, b.pr_DATE, a.sq_no, a.car_no, b.item_code, c.item_name, b.item_qty, b.pr_no, b.pr_date, b.address3 cekk, b.pr_desc4 desca, b.item_qty2 cekas, VOUCHER_DOC ,voucher_no ,voucher_date, a.item_qty cek
-        FROM  unit_in_trans a
-        JOIN unit_po_req b
-        ON a.pr_no=b.ref_no
-        JOIN unit_t_item c
-        ON a.item_code=c.item_code
-        JOIN (SELECT nodokstream FROM unit_rssp WHERE nodokstream='".$id."') d
-        ON b.ref_no=d.nodokstream
-        WHERE b.ref_no='".$id."'
-        GROUP BY c.item_code";
+        $subquery = "SELECT a.nodokstream, a.tgdok, a.item, a.nom_unit, a.pn, a.descript, a.qtyrs, b.pr_no, b.pr_date, b.address3, \"\", b.item_qty, c.voucher_doc, c.voucher_no, c.voucher_date, c.item_qty cek
+        FROM unit_rssp a
+        JOIN (SELECT pr_no, pr_date, address3, pr_desc4, item_qty, ref_no FROM unit_po_req) b
+        ON a.nodokstream=b.ref_no
+        JOIN (SELECT voucher_doc, voucher_no, voucher_date, item_qty, item_code, ref_no FROM unit_in_trans) c
+        ON b.pr_no=c.ref_no
+        WHERE a.nodokstream='".$id."'
+        GROUP BY c.voucher_doc";
 
         $data = DB::select(DB::raw($subquery));
         return view('po-harian.show', compact('data'));
