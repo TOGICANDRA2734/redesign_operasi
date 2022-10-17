@@ -7,6 +7,7 @@ use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PapController extends Controller
 {
@@ -15,12 +16,41 @@ class PapController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $subquery = "SELECT id, nom_unit FROM plant_pap WHERE del=0 GROUP BY nom_unit";
-        $data = collect(DB::select($subquery));
+        $data = Storage::disk('public')->files('dokumenPlantPap/example');
+        $d = [];
+        foreach($data as $dt){
+            foreach(explode('_', basename($dt)) as $word){
+                $d[] = $word;
+            }
+        }
+
+        $x = [];
+        for ($i=0; $i < count($d); $i=$i+4) { 
+            $x[] = $d[$i];
+            $x[] = $d[$i+1];
+        }
+        dd($x);
+
+
+        $cariNama = $request->has('cariNama') ? $request->cariNama : ''; 
+        $data = DB::table('plant_pap')
+        ->select('id','nom_unit')
+        ->when($cariNama, function($query, $cariNama){
+            $query->where('nom_unit', 'LIKE', '%' . $cariNama . '%');
+        })
+        ->orderBy('nom_unit')
+        ->get();
+
         $site  = Site::where('status',1)->get();
-        return view('pap.index', compact('site', 'data'));
+        if(count($request->all()) > 1){
+            $response['data'] = $data;
+            return response()->json($response);
+        }
+        else {
+            return view('pap.index', compact('site', 'data'));
+        }
     }
 
     /**

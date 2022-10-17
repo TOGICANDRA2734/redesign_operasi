@@ -84,8 +84,7 @@ class POController extends Controller
         // ON b.item_code=d.item_code
         // WHERE nodokstream='".$id."'
         // GROUP BY c.item_code";
-
-        $subquery = "SELECT a.nodokstream, a.tgdok, a.item, a.nom_unit, a.pn, a.descript, a.qtyrs, b.pr_no, b.pr_date, b.address3, \"\", b.item_qty, c.voucher_doc, c.voucher_no, c.voucher_date, c.item_qty cek
+        $subquery = "SELECT a.nodokstream, DATE_FORMAT(a.tgdok, \"%d-%m-%Y\"), a.item, a.nom_unit, a.pn, a.descript, a.qtyrs, b.pr_no, date_format(b.pr_date, \"%d-%m-%Y\"), b.address3, \"\", b.item_qty, c.voucher_doc, c.voucher_no, date_format(c.voucher_date, \"%d-%m-%Y\"), c.item_qty cek
         FROM unit_rssp a
         JOIN (SELECT pr_no, pr_date, address3, pr_desc4, item_qty, ref_no FROM unit_po_req) b
         ON a.nodokstream=b.ref_no

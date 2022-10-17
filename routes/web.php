@@ -328,6 +328,7 @@ Route::middleware('auth')->group(function() {
         Route::resource('pap', PapController::class);
         Route::post('pap-filter', [PapController::class, 'index'])->name('pap.filter');
         Route::post('pap-get-bagian', [PapController::class, 'getPapBagian'])->name('pap.getPapBagian');
+        Route::post('pap', [PapController::class, 'index'])->name('pap.showFilter');
         
         // Dokumen GR
         Route::resource('dokumen-gr', DokumenGrController::class);

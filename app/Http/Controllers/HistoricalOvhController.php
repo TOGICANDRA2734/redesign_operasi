@@ -15,7 +15,14 @@ class HistoricalOvhController extends Controller
      */
     public function index()
     {
-        $data = DB::table('plant_ovh')->select('*')->orderBy('nom_unit')->orderBy('model')->orderBy('komponen')->orderBy('ovh_start')->limit(250)->get();
+        $data = DB::table('plant_ovh')
+        ->selectRaw("nom_unit, model, komponen, date_format(ovh_start, \"%d-%m-%Y\"), date_format(ovh_end, \"%d-%m-%Y\"), hm, remark")
+        ->orderBy('nom_unit')
+        ->orderBy('hm')
+        ->orderBy('komponen')
+        ->orderBy('ovh_start')
+        ->limit(250)
+        ->get();
         $subquery = "SELECT DISTINCT komponen FROM plant_ovh ORDER BY komponen";
         $komponen = collect(DB::select(DB::raw($subquery)));
         return view('historical-overhaul.index', compact('data', 'komponen'));
@@ -99,7 +106,7 @@ class HistoricalOvhController extends Controller
             $where .= "AND DEL=0";    
         }
         
-        $subquery = "SELECT *
+        $subquery = "SELECT nom_unit, model, komponen, date_format(ovh_start, \"%d-%m-%Y\"), date_format(ovh_end, \"%d-%m-%Y\"), hm, remark
         FROM plant_ovh
         ".$where."
         ORDER BY nom_unit, model, komponen";

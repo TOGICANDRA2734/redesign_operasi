@@ -11,7 +11,6 @@
         <h2 class="text-lg font-medium ">
             Historical Overhaul
         </h2>
-        @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
         <div class="ml-auto mr-2 flex">
             <input type="text" name="cariNama" id="cariNama" placeholder="Cari Data" class="block shadow-sm border p-2 rounded-md w-30 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray mr-2">
             <select id="pilihKomponen" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
@@ -29,7 +28,6 @@
             </div> <!-- END: Notification Content -->
 
         </div>
-        @endif
         <a href="{{route('historical-overhaul.create')}}" class="btn px-2 box mr-2">
             <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
         </a>
@@ -68,7 +66,7 @@
                         <th rowspan="2" class="whitespace-nowrap text-center">Komponen</th>
                         <th colspan="2" class="whitespace-nowrap text-center">Ovh</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">HM</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Remark</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center" style="width: 40rem;">Remark</th>
                     </tr>
                     <tr>
                         <th class="whitespace-nowrap text-center">Start</th>
@@ -87,8 +85,8 @@
                                     <td>
                                         {{$d}}
                                     </td>    
-                                    @endif
-                                    @endif
+                            @endif
+                            @endif
                             @endforeach
                         </tr>
                     @endforeach

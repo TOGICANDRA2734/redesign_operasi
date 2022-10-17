@@ -170,9 +170,9 @@ class SideMenuSuperAdmin
                             'layout' => 'side-menu'
                         ],
                     ],
-                    'historical-unit' => [
+                    'historical-repair' => [
                         'icon' => 'box',
-                        'title' => 'Historical Unit',
+                        'title' => 'Historical Repair',
                         'route_name' => 'super_admin.historical-unit.index',
                         'params' => [
                             'layout' => 'side-menu'

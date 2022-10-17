@@ -79,7 +79,7 @@ class HistoricalUnitController extends Controller
         $subquery = "SELECT descript,
             CASE WHEN b.status=1 THEN 'RS'
             WHEN b.STATUS=6 THEN 'SR'
-            END 'SR/RS', 
+            END 'status_sr', 
             b.hm, 
             DATE_FORMAT(b.tgdok, '%d-%m-%Y') tanggal,
             mechanic,
@@ -90,8 +90,7 @@ class HistoricalUnitController extends Controller
             JOIN site c
             ON b.kodesite = c.kodesite
             WHERE a.nom_unit='" . $data[0]->nom_unit . "'
-            ORDER BY b.tgdok";
-
+            ORDER BY status_sr desc,b.tgdok desc, c.namasite asc";
         $data = DB::select($subquery);
 
         return view('historical-unit.show', compact('data', 'site','nom_unit'));

@@ -144,10 +144,10 @@
                 <thead class="table-dark">
                     <tr class="whitespace-nowrap text-center">
                         <th rowspan="2" class="whitespace-nowrap text-center w-5">No</th>
+                        <th colspan="3" class="whitespace-nowrap text-center">RS/SR/PP</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Item Code</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Item Name</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Deskripsi BD</th>
-                        <th colspan="3" class="whitespace-nowrap text-center">RS/SR/PP</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Part Number</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Progress</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
                         <th rowspan="2" class="whitespace-nowrap text-center w-[12rem]">Aksi</th>
@@ -171,12 +171,12 @@
                             <td>{{$d}}</td>
                         @endforeach --}}
                         <td class="whitespace-nowrap text-center">{{$key+1}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->no_st}}</td>
-                        <td class="whitespace-nowrap text-center"></td>
-                        <td class="whitespace-nowrap text-center">{{$dt->uraian_bd}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->dok_type}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->dok_no}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->dok_tgl}}</td>
+                        <td class="whitespace-nowrap text-center">{{$dt->no_st}}</td>
+                        <td class="whitespace-nowrap text-center">{{$dt->uraian_bd}}</td>
+                        <td class="whitespace-nowrap text-center">{{$dt->pn}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->uraian}}</td>
                         <td class="whitespace-nowrap text-center">{{$dt->namasite}}</td>
                         <td class="whitespace-nowrap text-center">

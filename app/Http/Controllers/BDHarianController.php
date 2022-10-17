@@ -69,7 +69,7 @@ class BDHarianController extends Controller
 
         $subquery = "SELECT e.status model, 
         b.kodesite site, 
-        COUNT(b.nom_unit) populasi,
+        COUNT(a.nom_unit) populasi,
         SUM(IF((C.nom_unit IS NULL OR (C.ket_tgl_rfu='RFU' AND C.status_bd=0)),1,0)) RFU,
         SUM(IF((C.nom_unit IS NOT NULL AND (C.ket_tgl_rfu<>'RFU' AND C.status_bd=1)),1,0)) BD,
         d.namasite namasite,
@@ -88,6 +88,7 @@ class BDHarianController extends Controller
         ON e.status=f.status
         GROUP BY a.status_bagian, b.kodesite
         ORDER BY d.id, a.status_bagian";
+        
         $dataCard = collect(DB::select($subquery));
         $dataCard = $dataCard->mapToGroups(function($data){
             return [$data->site => [
@@ -152,12 +153,12 @@ class BDHarianController extends Controller
         $nom_unit = DB::table('plant_status_bd')->select("nom_unit")->where('nom_unit', '=', $id)->get();
 
         // dataDok Baru
-        $subquery = "SELECT a.id id, nodokstream no_st, '', descript uraian_bd, IF(a.STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian, b.namasite
+        $subquery = "SELECT a.id id, nodokstream no_st, pn, descript uraian_bd, IF(a.STATUS=1, 'RS', 'SR') dok_type, no_rs dok_no, DATE_FORMAT(tgdok, '%d-%m-%Y') dok_tgl, keterangan uraian, b.namasite
             FROM unit_rssp a
             JOIN site b
             ON a.kodesite=b.kodesite
             WHERE nom_unit='".$nom_unit[0]->nom_unit."'
-            ORDER BY a.status DESC, tgdok DESC
+            ORDER BY a.status DESC, tgdok DESC, dok_no
         ";
 
         $dataDok=collect(DB::select($subquery));
@@ -400,12 +401,13 @@ class BDHarianController extends Controller
         JOIN plant_icon_unit f
         ON e.status=f.status
         WHERE d.namasite='".$request->site."' AND e.status LIKE '%".$request->model."%' AND C.nom_unit IS NULL OR (C.ket_tgl_rfu='RFU' AND C.status_bd=0)
-        ORDER BY d.id, a.status_bagian";
+        ORDER BY a.nom_unit, d.id, a.status_bagian";
         $dataRFU = collect(DB::select($subquery));
 
         
         $subquery = "SELECT a.nom_unit,
-        a.type_unit
+        a.type_unit,
+        c.keterangan
         FROM plant_populasi a
         JOIN plant_hm b
         ON a.nom_unit=b.nom_unit
@@ -418,7 +420,7 @@ class BDHarianController extends Controller
         JOIN plant_icon_unit f
         ON e.status=f.status
         WHERE d.namasite='".$request->site."' AND e.status LIKE '%".$request->model."%' AND C.nom_unit IS NOT NULL AND (C.ket_tgl_rfu<>'RFU' AND C.status_bd=1)
-        ORDER BY d.id, a.status_bagian";
+        ORDER BY a.nom_unit, d.id, a.status_bagian";
         $dataBD = collect(DB::select($subquery));
 
 

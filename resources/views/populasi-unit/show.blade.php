@@ -39,11 +39,13 @@
                     <i data-lucide="activity" class="w-5 h-5 mr-2"></i> OMM 
                 </a> 
                 <?php 
-                    $id = \DB::table('plant_status_bd')->select('id')->where('nom_unit', '=', $data[0]->nom_unit)->get();
+                    $id = \DB::table('plant_status_bd')->select('id')->where('nom_unit', '=', $data[0]->nom_unit)->get() !== null ?  \DB::table('plant_status_bd')->select('id')->where('nom_unit', '=', $data[0]->nom_unit)->get() : "NONE";
                 ?>
-                <a class="btn btn-warning mr-1 mb-2" href="{{route('super_admin.bd-harian-detail.index', $id[0]->id)}}" > 
-                    <i data-lucide="hard-drive" class="w-5 h-5 mr-2"></i> BD 
-                 </a>
+                @if (! $id)
+                    <a class="btn btn-warning mr-1 mb-2" href="{{route('super_admin.bd-harian-detail.index', $id[0]->id)}}" > 
+                        <i data-lucide="hard-drive" class="w-5 h-5 mr-2"></i> BD 
+                    </a>
+                @endif
             </div>
         </div>
         <hr class="mb-5">

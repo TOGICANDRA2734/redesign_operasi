@@ -69,6 +69,7 @@
                             <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">#</th>
                             <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Code Unit</th>
                             <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Type Unit</th>
+                            <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Keterangan BD</th>
                             <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Aksi</th>
                         </tr>
                     </thead>

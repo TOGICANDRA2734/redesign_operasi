@@ -9,7 +9,7 @@
     <!-- Header -->
     <div class="flex justify-between items-center mt-8 ">
         <h2 class="text-lg font-medium ">
-            Historical Unit
+            Historical RS/SR Unit
         </h2>
         @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
         <div class="ml-auto mr-2 flex">
