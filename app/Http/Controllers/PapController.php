@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PapBagian;
 use App\Models\Plant_Pap;
+use App\Models\Plant_Populasi;
+use App\Models\plantPapBagianTesting;
 use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,7 +21,7 @@ class PapController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Storage::disk('public')->files('dokumenPlantPap/example');
+        $data = Storage::disk('public')->files('dokumenPlantPap/pdf');
         $d = [];
         foreach($data as $dt){
             foreach(explode('_', basename($dt)) as $word){
@@ -27,13 +30,25 @@ class PapController extends Controller
         }
 
         $x = [];
-        for ($i=0; $i < count($d); $i=$i+4) { 
-            $x[] = $d[$i];
-            $x[] = $d[$i+1];
+        $storagePath = "dokumenPlantPap";
+        foreach ($data as $key => $dt) {
+            $kata = [];
+            foreach(explode('_', basename($dt)) as $d){
+                $kata[] = $d;
+            }
+
+            $model = Plant_Populasi::select('model')->where('nom_unit', $kata[0])->pluck('model');
+            $kodeBagian = PapBagian::select('id')->where('model', $model[0])->where('bagian', $kata[1])->pluck('id');
+            Storage::disk('public')->copy($dt, $storagePath . '/' . basename($dt));
+            Plant_Pap::create([
+                'nom_unit' => $kata[0],
+                'kode_bagian' => $kodeBagian[0],
+                'tgl' => date('Y-m-d', strtotime(substr($d[2], 0,2) . '-' . substr($d[2], 2,4) . '-' . '2022')),
+                'file' => basename($dt),
+            ]);   
         }
-        dd($x);
 
-
+        
         $cariNama = $request->has('cariNama') ? $request->cariNama : ''; 
         $data = DB::table('plant_pap')
         ->select('id','nom_unit')
@@ -173,5 +188,23 @@ class PapController extends Controller
         }
         
         return response()->json($type);
+    }
+
+
+    public function testingDropzone()
+    {
+
+        return view('pap.testing');
+    }
+
+    public function postDropzone(Request $request)
+    {
+        plantPapBagianTesting::create([
+            'nom_unit' => 'CEK',
+            'bagian' => 'model',
+        ]);
+
+
+        return 'Ashiap';
     }
 }

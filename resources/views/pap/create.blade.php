@@ -98,23 +98,6 @@
     <script>
         var $j = jQuery.noConflict();
 
-        $j('#tgl').on('change', function(){
-            console.log($j(this).val())
-            $j.ajax({
-                url: 'http://127.0.0.1:8000/dashboard/detail_filtered/',
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    start: awal,
-                    end: akhir,
-                },
-                success: function(response) {
-                    update_data(response)
-                },
-            })
-            
-        })
-
 
         $j('#nom_unit').on('change', function(){
             console.log($j(this).val());

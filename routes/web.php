@@ -332,4 +332,8 @@ Route::middleware('auth')->group(function() {
         
         // Dokumen GR
         Route::resource('dokumen-gr', DokumenGrController::class);
+
+        // Testing
+        Route::get('testing', [PapController::class, 'testingDropzone'])->name('pap.testing');
+        Route::post('post-testing', [PapController::class, 'postDropzone'])->name('pap.testing.store');
 });
