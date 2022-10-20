@@ -28,6 +28,8 @@ class PapController extends Controller
                 $d[] = $word;
             }
         }
+        ini_set('max_execution_time', 1000); // 5 minutes
+
 
         $x = [];
         $storagePath = "dokumenPlantPap";
@@ -40,14 +42,19 @@ class PapController extends Controller
             $model = Plant_Populasi::select('model')->where('nom_unit', $kata[0])->pluck('model');
             $kodeBagian = PapBagian::select('id')->where('model', $model[0])->where('bagian', $kata[1])->pluck('id');
             Storage::disk('public')->copy($dt, $storagePath . '/' . basename($dt));
-            Plant_Pap::create([
-                'nom_unit' => $kata[0],
-                'kode_bagian' => $kodeBagian[0],
-                'tgl' => date('Y-m-d', strtotime(substr($d[2], 0,2) . '-' . substr($d[2], 2,4) . '-' . '2022')),
-                'file' => basename($dt),
-            ]);   
+            
+            // CEK FIRST
+            $cekData = Plant_Pap::where('file', basename($dt))->first();
+            
+            if ($cekData === null) {
+                Plant_Pap::create([
+                    'nom_unit' => $kata[0],
+                    'kode_bagian' => $kodeBagian[0],
+                    'tgl' => date('Y-m-d', strtotime(substr($kata[2], 0,2) . '-' . substr($kata[2], 2,4) . '-' . '2022')),
+                    'file' => basename($dt),
+                ]);    
+            }
         }
-
         
         $cariNama = $request->has('cariNama') ? $request->cariNama : ''; 
         $data = DB::table('plant_pap')
