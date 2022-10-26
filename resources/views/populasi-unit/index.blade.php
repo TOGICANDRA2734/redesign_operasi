@@ -37,9 +37,27 @@
 
         </div>
         @endif
-        <a href="{{route('super_admin.populasi-unit.create')}}" class="btn px-2 box mr-2">
-            <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
-        </a>
+        
+        
+        <div class="dropdown mr-3">
+            <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
+                <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
+            </button>
+            <div class="dropdown-menu w-40">
+                <ul class="dropdown-content">
+                    <li>
+                        <a href="{{route('populasi-unit.create')}}" class="dropdown-item">
+                            Tambah Unit
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('hm.create')}}" class="dropdown-item">
+                            Tambah HM
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
         <div class="dropdown">
             <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">

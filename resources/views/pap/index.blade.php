@@ -56,7 +56,7 @@
     <!-- Table -->
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
         <div class="w-full overflow-x-auto max-h-[45rem]">
-            <table class="w-full table table-striped table-sm text-xs">
+            <table class="w-full table table-striped">
                 <thead class="table-dark">
                     <tr class="">
                         <th rowspan="2" class="whitespace-nowrap text-center">NO</th>

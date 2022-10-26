@@ -5,55 +5,86 @@
 @endsection
 
 @section('subcontent')
-<main class="h-full overflow-y-auto">
-    <div class="container px-6 mx-auto grid">
-        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Edit Unit
-        </h2>
 
-        <form
-            action="{{route('super_admin.bd-harian.update', $data->id)}}"
-            method="POST"
-            id="storeUtama"
-            class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg shadow-md dark:bg-gray-800"
-        >
+<!-- Title -->
+<div class="intro-y flex flex-col sm:flex-row items-center mt-8 col-span-12">
+    <h2 class="text-lg font-medium mr-auto">
+        Edit Unit
+    </h2>
+</div>
+<hr class="mb-10 col-span-12">
+
+
+<!-- Input Form -->
+<div class="intro-y col-span-12">
+    <div class="grid grid-cols-1 gap-3">
+        <!-- Start Form -->
+        <form action="{{route('bd-harian.update', $data->id)}}" method="POST" id="storeDok" class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg  dark:bg-gray-800">
             @csrf
             @method('PUT')
-            <label class="block mt-4 text-sm">
-                <span class="font-semibold text-gray-700 dark:text-gray-400">Code Unit</span>
-                <select class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="nom_unit" id="nom_unit">
-                    @foreach($nom_unit as $nu)
-                        <option value="{{$nu->Nom_unit}}" {{old('nom_unit', $data->nom_unit) == $nu->Nom_unit ? 'selected' : ''}}>{{$nu->Nom_unit}}</option>
-                    @endforeach
-                </select>
-            </label>
             
+            
+            <div>
+                <label class="block mt-1 text-sm">
+                    <span class="font-semibold text-gray-700 dark:text-gray-400">Site</span>
+                    <select data-placeholder="Pilih site" name="site" class="w-full @error('site') border-danger @enderror" aria-readonly>
+                        @foreach($site as $st)
+                            <option value="{{$st->kodesite}}" {{old('kode_bd', $st->kodesite) == $data->kodesite ? 'selected' : 'disabled'}}>{{$st->namasite}} - {{$st->lokasi}}</option>
+                        @endforeach
+                    </select> 
+                    
+                </label>
+            </div>
 
-            <label class="block mt-4 text-sm">
-                <span class="font-semibold text-gray-700 dark:text-gray-400">
-                    Tanggal Breakdown
-                </span>
-                <input value="{{old('tgl_bd', $data->tgl_bd)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl_bd" id="tgl_bd">
-            </label>
+            <div>
+                <label class="block mt-1 text-sm">
+                    <span class="font-semibold text-gray-700 dark:text-gray-400">Code Unit</span>
+                    <select data-placeholder="Pilih Code Unit" name="nom_unit" class="tom-select w-full @error('nom_unit') border-danger @enderror" >
+                        @foreach($nom_unit as $nu)
+                            <option value="{{$nu->Nom_unit}}" {{old('nom_unit', $data->nom_unit) == $nu->Nom_unit ? 'selected' : 'disabled'}}>{{$nu->Nom_unit}}</option>
+                        @endforeach
+                    </select> 
+                </label>
+            </div>
+            
+            <div>
+                <label class="block mt-1 text-sm">
+                    <span class="font-semibold text-gray-700 dark:text-gray-400">
+                        Tanggal Breakdown <span class="text-xs text-gray-500">(Bulan-Hari-Tahun)</span>
+                    </span>
+                    <input value="{{old('tgl_bd', $data->tgl_bd)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl_bd" id="tgl_bd">
+                    @error('tgl_bd')
+                        <div class="text-danger mt-2">{{$message}}</div>
+                    @endif
+                </label>
+            </div>            
 
-            <label class="block mt-4 text-sm">
-                <span class="font-semibold text-gray-700 dark:text-gray-400">
-                    Rencana RFU
-                </span>
-                <input value="{{old('tgl_rfu', $data->tgl_rfu)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl_rfu" id="tgl_rfu">
-            </label>
+            <div>
+                <label class="block mt-1 text-sm">
+                    <span class="font-semibold text-gray-700 dark:text-gray-400">
+                        Rencana RFU <span class="text-xs text-gray-500">(Bulan-Hari-Tahun)</span>
+                    </span>
+                    <input value="{{old('tgl_rfu', $data->tgl_rfu)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl_rfu" id="tgl_rfu">
+                    @error('tgl_rfu')
+                        <div class="text-danger mt-2">{{$message}}</div>
+                    @endif
+                </label>
+            </div>            
 
-            <label class="block mt-4 text-sm">
-                <span class="font-semibold text-gray-700 dark:text-gray-400">
+            <div>
+                <label for="crud-form-1" class="form-label">
                     Ket. Rencana RFU
-                </span>
+                </label>
                 <input value="{{old('ket_tgl_rfu', $data->ket_tgl_rfu)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="ket_tgl_rfu" id="ket_tgl_rfu">
-            </label>
+                @error('ket_tgl_rfu')
+                    <div class="text-danger mt-2">{{$message}}</div>
+                @endif
+            </div>
 
-            <label class="block mt-4 text-sm">
-                <span class="font-semibold text-gray-700 dark:text-gray-400">
-                    Status BD
-                </span>
+            <div>
+                <label for="crud-form-1" class="form-label">
+                    Kode BD
+                </label>
                 <select
                     name="kode_bd"
                     class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray"
@@ -62,43 +93,47 @@
                         <option value="{{$kb->kode_bd}}" {{old('kode_bd', $kb->kode_bd) == $data->kode_bd ? 'selected' : ''}}>{{$kb->kode_bd}}</option>
                     @endforeach
                 </select>
-            </label>
 
-            <label class="block mt-4 text-sm">
-                <span class="font-semibold text-gray-700 dark:text-gray-400">
+                @error('kode_bd')
+                    <div class="text-danger mt-2">{{$message}}</div>
+                @endif
+            </div>
+
+            <div>
+                <label for="crud-form-1" class="form-label">
                     HM
-                </span>
-                <input value="{{old('hm', $data->hm)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="hm" id="hm">
-            </label>
+                </label>
+                <input value="{{old('hm', $data->hm)}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="number" step="0.01" min="0" name="hm" id="hm">
+                @error('hm')
+                    <div class="text-danger mt-2">{{$message}}</div>
+                @endif
+            </div>
 
-            <label class="block mt-4 text-sm">
-                <span class="font-semibold text-gray-700 dark:text-gray-400">
+            <div>
+                <label for="crud-form-1" class="form-label">
                     PIC
-                </span>
+                </label>
                 <input value="{{old('pic', $data->pic)}}"  class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="pic" id="pic">
-            </label>
+                @error('PIC')
+                    <div class="text-danger mt-2">{{$message}}</div>
+                @endif
+            </div>
 
-            <label class="block mt-4 text-sm">
-                <span class="font-semibold text-gray-700 dark:text-gray-400">
-                    Site
-                </span>
+            <div>
+                <label for="crud-form-1" class="form-label">
+                    Keterangan
+                </label>
+                <input value="{{old('keterangan', $data->keterangan)}}"  class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="keterangan" id="keterangan">
+                @error('keterangan')
+                    <div class="text-danger mt-2">{{$message}}</div>
+                @endif
+            </div>
 
-                <select
-                    name="site"
-                    class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray"
-                >
-                    @foreach($site as $st)
-                        <option value="{{$st->kodesite}}" {{old('kode_bd', $st->kodesite) == $data->kodesite ? 'selected' : ''}}>{{$st->namasite}} - {{$st->lokasi}}</option>
-                    @endforeach
-                </select>
-            </label>
-
-
-            <button type="submit" class="px-5 py-3 mt-4 col-span-2 font-medium leading-5 text-white transition-colors duration-150 bg-stone-700 border border-transparent rounded-lg active:bg-stone-600 hover:bg-stone-900 focus:outline-none focus:shadow-outline-stone w-full">Submit</button>
+            <button class="col-span-2 btn btn-primary">
+                Submit
+            </button>
         </form>
-        
-    </div>    
-</main>
-
-
+    </div>
+</div>
 @endsection
+

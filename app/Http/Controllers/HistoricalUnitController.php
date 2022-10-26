@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plant_Populasi;
+use App\Models\RSSP;
 use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,16 +18,13 @@ class HistoricalUnitController extends Controller
     public function index(Request $request)
     {
         if($request->has('cariNama')){
-            $subquery = "SELECT a.nom_unit, type_unit, hm
-            FROM plant_populasi a
-            JOIN plant_hm b
-            on a.nom_unit=b.nom_unit
-            WHERE a.nom_unit LIKE '%".$request->cariNama."%'";
+            $subquery = "SELECT nodok, nom_unit, no_rs, nodokstream, tgdok, pn, descript, kodesite 
+            FROM unit_rssp 
+            WHERE nodokstream LIKE '%".$request->cariNama."%'";
         } else {
-            $subquery = "SELECT a.nom_unit, type_unit, hm
-            FROM plant_populasi a
-            JOIN plant_hm b
-            on a.nom_unit=b.nom_unit";
+            $subquery = "SELECT nodok, nom_unit, no_rs, nodokstream, tgdok, pn, descript, kodesite 
+            FROM unit_rssp
+            LIMIT 100";
         }
 
         $data = collect(DB::select($subquery));

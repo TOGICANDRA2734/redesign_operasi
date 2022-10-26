@@ -57,9 +57,14 @@
                 <thead class="table-dark">
                     <tr class="">
                         <th rowspan="2" class="whitespace-nowrap text-center">NO</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">No. Dok</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Code Unit</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Brand Type</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">HM</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">No. RS</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">No. Dok. Stream</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Tanggal Dok.</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Part Number</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Description</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -119,7 +124,7 @@
 
 <!-- Filtering -->
 <script>
-        $i = jQuery.noConflict();
+    $i = jQuery.noConflict();
 
     $i('#cariNama').on('change', function() {
         $i.ajaxSetup({
@@ -147,9 +152,14 @@
                         i +=1;
                         text = '<tr class="text-center bg-white">' +
                             '<td class="">' + i + '</td>' +
+                            '<td class="">' + result.data[index].nodok + '</td>' +
                             '<td class="">' + result.data[index].nom_unit + '</td>' +
-                            '<td class="">' + result.data[index].type_unit + '</td>' +
-                            '<td class="">' + result.data[index].hm + '</td>' +
+                            '<td class="">' + result.data[index].no_rs + '</td>' +
+                            '<td class="">' + result.data[index].nodokstream + '</td>' +
+                            '<td class="">' + result.data[index].tgdok + '</td>' +
+                            '<td class="">' + result.data[index].pn + '</td>' +
+                            '<td class="">' + result.data[index].descript + '</td>' +
+                            '<td class="">' + result.data[index].kodesite + '</td>' +
                             '<td class="cekTbModal">' + 
                                 '<a href="/super_admin/historical-unit/'+result.data[index].nom_unit+'" class="btn btn-dark mr-1 mb-2">' + 
                                     '<i data-lucide="eye" class="w-5 h-5"></i>' + 

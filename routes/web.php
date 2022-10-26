@@ -26,6 +26,7 @@ use App\Http\Controllers\BDHarianController;
 use App\Http\Controllers\DokumenGrController;
 use App\Http\Controllers\HistoricalOvhController;
 use App\Http\Controllers\HistoricalUnitController;
+use App\Http\Controllers\HMController;
 use App\Http\Controllers\MohhController;
 use App\Http\Controllers\PapController;
 use App\Http\Controllers\POController;
@@ -336,4 +337,9 @@ Route::middleware('auth')->group(function() {
         // Testing
         Route::get('testing', [PapController::class, 'testingDropzone'])->name('pap.testing');
         Route::post('post-testing', [PapController::class, 'postDropzone'])->name('pap.testing.store');
+
+        // HM Controller
+        Route::resource('hm', HMController::class);
+        Route::get('hm/edit_data/{id}', [HMController::class, 'edit_data'])->name('hm.edit.data');
+        Route::put('hm/update_data/{id}', [HMController::class, 'update_data'])->name('hm.update.data');
 });

@@ -16,7 +16,7 @@ class HistoricalOvhController extends Controller
     public function index()
     {
         $data = DB::table('plant_ovh')
-        ->selectRaw("nom_unit, model, komponen, date_format(ovh_start, \"%d-%m-%Y\"), date_format(ovh_end, \"%d-%m-%Y\"), hm, remark")
+        ->selectRaw("nom_unit, model, komponen, date_format(ovh_start, \"%d-%m-%Y\") ovh_start, date_format(ovh_end, \"%d-%m-%Y\") ovh_end, hm, remark")
         ->orderBy('nom_unit')
         ->orderBy('hm')
         ->orderBy('komponen')
@@ -106,7 +106,7 @@ class HistoricalOvhController extends Controller
             $where .= "AND DEL=0";    
         }
         
-        $subquery = "SELECT nom_unit, model, komponen, date_format(ovh_start, \"%d-%m-%Y\"), date_format(ovh_end, \"%d-%m-%Y\"), hm, remark
+        $subquery = "SELECT nom_unit, model, komponen, date_format(ovh_start, \"%d-%m-%Y\") ovh_start, date_format(ovh_end, \"%d-%m-%Y\") ovh_end, hm, remark
         FROM plant_ovh
         ".$where."
         ORDER BY nom_unit, model, komponen";

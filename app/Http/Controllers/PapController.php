@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class PapController extends Controller
 {
@@ -21,40 +22,40 @@ class PapController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Storage::disk('public')->files('dokumenPlantPap/pdf');
-        $d = [];
-        foreach($data as $dt){
-            foreach(explode('_', basename($dt)) as $word){
-                $d[] = $word;
-            }
-        }
-        ini_set('max_execution_time', 1000); // 5 minutes
+        // $data = Storage::disk('public')->files('dokumenPlantPap/pdf');
+        // $d = [];
+        // foreach($data as $dt){
+        //     foreach(explode('_', basename($dt)) as $word){
+        //         $d[] = $word;
+        //     }
+        // }
+        // ini_set('max_execution_time', 600000); // 5 minutes
 
 
-        $x = [];
-        $storagePath = "dokumenPlantPap";
-        foreach ($data as $key => $dt) {
-            $kata = [];
-            foreach(explode('_', basename($dt)) as $d){
-                $kata[] = $d;
-            }
+        // $x = [];
+        // $storagePath = "dokumenPlantPap";
+        // foreach ($data as $key => $dt) {
+        //     $kata = [];
+        //     foreach(explode('_', basename($dt)) as $d){
+        //         $kata[] = $d;
+        //     }
 
-            $model = Plant_Populasi::select('model')->where('nom_unit', $kata[0])->pluck('model');
-            $kodeBagian = PapBagian::select('id')->where('model', $model[0])->where('bagian', $kata[1])->pluck('id');
-            Storage::disk('public')->copy($dt, $storagePath . '/' . basename($dt));
+        //     // $model = Plant_Populasi::select('model')->where('nom_unit', $kata[0])->pluck('model');
+        //     // $kodeBagian = PapBagian::select('id')->where('model', $model[0])->where('bagian', $kata[1])->pluck('id');
+        //     // Storage::disk('public')->copy($dt, $storagePath . '/' . basename($dt));    
             
-            // CEK FIRST
-            $cekData = Plant_Pap::where('file', basename($dt))->first();
+        //     // CEK FIRST
+        //     $cekData = Plant_Pap::where('file', basename($dt))->first();
             
-            if ($cekData === null) {
-                Plant_Pap::create([
-                    'nom_unit' => $kata[0],
-                    'kode_bagian' => $kodeBagian[0],
-                    'tgl' => date('Y-m-d', strtotime(substr($kata[2], 0,2) . '-' . substr($kata[2], 2,4) . '-' . '2022')),
-                    'file' => basename($dt),
-                ]);    
-            }
-        }
+        //     if ($cekData === null) {
+        //         Plant_Pap::create([
+        //             'nom_unit' => $kata[0],
+        //             'kode_bagian' => $kodeBagian[0],
+        //             'tgl' => date('Y-m-d', strtotime(substr($kata[2], 0,2) . '-' . substr($kata[2], 2,4) . '-' . '2022')),
+        //             'file' => basename($dt),
+        //         ]);    
+        //     }
+        // }
         
         $cariNama = $request->has('cariNama') ? $request->cariNama : ''; 
         $data = DB::table('plant_pap')
@@ -62,6 +63,7 @@ class PapController extends Controller
         ->when($cariNama, function($query, $cariNama){
             $query->where('nom_unit', 'LIKE', '%' . $cariNama . '%');
         })
+        ->groupBy('nom_unit')
         ->orderBy('nom_unit')
         ->get();
 
@@ -137,7 +139,7 @@ class PapController extends Controller
     {
         $dataUnit = Plant_Pap::findOrFail($id);
     
-        $subquery = "SELECT bagian, date_format(tgl, '%d-%m-%Y'), a.id, namasite,  date_format(waktu, '%h:%i:%s'), file FROM plant_pap a JOIN site b ON a.kodesite=b.kodesite JOIN plant_pap_bagian c ON a.kode_bagian=c.id WHERE a.del=0 AND nom_unit='".$dataUnit->nom_unit."'" ;
+        $subquery = "SELECT bagian, date_format(tgl, '%d-%m-%Y'), a.id, file FROM plant_pap a  JOIN plant_pap_bagian c ON a.kode_bagian=c.id WHERE a.del=0 AND nom_unit='".$dataUnit->nom_unit."'" ;
         $data = collect(DB::select($subquery));
         $site = Site::where('status',1)->get();
         return view('pap.show',compact('site', 'data', 'dataUnit'));

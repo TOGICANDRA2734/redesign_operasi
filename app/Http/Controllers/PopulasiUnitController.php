@@ -37,7 +37,7 @@ class PopulasiUnitController extends Controller
                 ON b.kodesite = c.kodesite
                 WHERE b.kodesite='" . $request->kodesite . "' " . $nama . " " . $model . "";
         } else {
-            $subquery = "SELECT a.id id, a.nom_unit nom_unit, c.namasite namasite, DATE_FORMAT(do, '%d-%m-%Y') DO, model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM
+            $subquery = "SELECT a.id id, a.nom_unit nom_unit, c.namasite namasite, DATE_FORMAT(do, '%d-%m-%Y') DO, model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  (SELECT HM FROM PLANT_HM WHERE NOM_UNIT=A.NOM_UNIT ORDER BY TGL DESC LIMIT 1) HM, (SELECT KM FROM PLANT_HM WHERE NOM_UNIT=A.NOM_UNIT ORDER BY TGL DESC LIMIT 1) KM
                 FROM plant_populasi a
                 JOIN plant_HM b
                 ON  a.nom_unit=b.nom_unit
@@ -199,8 +199,9 @@ class PopulasiUnitController extends Controller
     public function show($id)
     {
         $data = DB::table('plant_populasi')->where('id', '=', $id)->get();
+        $dataHM = DB::table('plant_hm')->select(DB::raw('id, nom_unit, DATE_FORMAT(TGL, "%d-%m-%Y") tgl, hm'))->where('nom_unit', $data[0]->nom_unit)->get();
 
-        return view('populasi-unit.show', compact('data'));
+        return view('populasi-unit.show', compact('data', 'dataHM'));
     }
 
     /**

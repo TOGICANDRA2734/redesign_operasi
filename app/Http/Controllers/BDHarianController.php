@@ -181,7 +181,6 @@ class BDHarianController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'nom_unit' => 'required',
             'tgl_bd' => 'required',
@@ -277,7 +276,7 @@ class BDHarianController extends Controller
             'pic'               =>  $request->pic,
             'hm'                =>  $request->hm,
             'kodesite'          =>  $request->site,
-            'keterangan'        =>  "Testing",
+            'keterangan'        =>  $request->keterangan,
             'status_bd'         =>  $request->kode_bd[1],
         ]);
 
@@ -405,7 +404,8 @@ class BDHarianController extends Controller
         $dataRFU = collect(DB::select($subquery));
 
         
-        $subquery = "SELECT a.nom_unit,
+        $subquery = "SELECT c.id, 
+        a.nom_unit,
         a.type_unit,
         c.keterangan
         FROM plant_populasi a

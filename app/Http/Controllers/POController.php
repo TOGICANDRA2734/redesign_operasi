@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Plant_bd;
 use App\Models\Plant_bd_dok;
 use App\Models\PO;
+use App\Models\Site;
 use App\Models\unitPoReq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -92,9 +93,11 @@ class POController extends Controller
         ON b.pr_no=c.ref_no
         WHERE a.nodokstream='".$id."'
         GROUP BY c.voucher_doc";
-
+        
         $data = DB::select(DB::raw($subquery));
-        return view('po-harian.show', compact('data'));
+
+        $site = Site::all();
+        return view('po-harian.show', compact('data', 'site'));
     }
 
     /**

@@ -12,8 +12,9 @@
                 <h2 class="text-lg font-medium truncate mr-5">
                     Status Breakdown Harian
                 </h2>
-                <a href="" class="ml-auto flex items-center text-primary"> <i data-lucide="refresh-ccw"
-                        class="w-4 h-4 mr-3"></i> Reload Data </a>
+                <a href="{{route('bd-harian.create')}}" class="ml-auto btn px-2 box mr-2">
+                    <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
+                </a>
             </div>
             <hr class="col-span-12">
 
