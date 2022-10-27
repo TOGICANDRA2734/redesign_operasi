@@ -13,14 +13,14 @@
         </h2>
         @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin'))
         <div class="ml-auto mr-2 flex">
-            <input type="hidden" name="nom_unit" id="nom_unit" value="{{$nom_unit[0]}}"> 
+            {{-- <input type="hidden" name="nom_unit" id="nom_unit" value="{{$nom_unit[0]}}">  --}}
             <input type="text" name="cariNama" id="cariNama" placeholder="Cari Data" class="block shadow-sm border p-2 rounded-md w-30 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray mr-2">
-            <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
+            {{-- <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
                 <option value="">All Site</option>
                 @foreach($site as $st)
                 <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
                 @endforeach
-            </select>
+            </select> --}}
 
             <!-- BEGIN: Notification Content -->
             <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
@@ -62,13 +62,25 @@
             <table class="w-full table table-striped">
                 <thead class="table-dark">
                     <tr class="">
-                        <th rowspan="2" class="whitespace-nowrap text-center">NO</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Deskripsi</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">SR/RS</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">HM</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Tanggal Dokumentasi</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">PIC</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
+                        <th class="whitespace-nowrap text-center">#</th>
+                        <th class="whitespace-nowrap text-center">No RS</th>
+                        <th class="whitespace-nowrap text-center">Tanggal RS</th>
+                        <th class="whitespace-nowrap text-center">No. Item</th>
+                        <th class="whitespace-nowrap text-center">CN</th>
+                        <th class="whitespace-nowrap text-center">Part Number</th>
+                        <th class="whitespace-nowrap text-center">Part Name</th>
+                        <th class="whitespace-nowrap text-center">QTY RS</th>
+                        <th class="whitespace-nowrap text-center">NO PO</th>
+                        <th class="whitespace-nowrap text-center">Tanggal PO</th>
+                        <th class="whitespace-nowrap text-center">Supplier</th>
+                        <th class="whitespace-nowrap text-center">PN Interchange</th>
+                        {{-- <th class="whitespace-nowrap text-center">Estimasi Hari</th>
+                        <th class="whitespace-nowrap text-center">Estimasi Tanggal</th> --}}
+                        <th class="whitespace-nowrap text-Mcenter">QTY PO</th>
+                        <th class="whitespace-nowrap text-center">DOK MRS</th>
+                        <th class="whitespace-nowrap text-center">NO MRS</th>
+                        <th class="whitespace-nowrap text-center">TGL MRS</th>
+                        <th class="whitespace-nowrap text-center">QTY MRS</th>
                     </tr>
                 </thead>
                 <tbody>

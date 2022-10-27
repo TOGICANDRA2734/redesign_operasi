@@ -28,6 +28,9 @@ use App\Http\Controllers\HistoricalOvhController;
 use App\Http\Controllers\HistoricalUnitController;
 use App\Http\Controllers\HMController;
 use App\Http\Controllers\MohhController;
+use App\Http\Controllers\MPController;
+use App\Http\Controllers\MPKontrakController;
+use App\Http\Controllers\MPStatistikController;
 use App\Http\Controllers\PapController;
 use App\Http\Controllers\POController;
 use App\Http\Controllers\PopulasiUnitController;
@@ -319,9 +322,10 @@ Route::middleware('auth')->group(function() {
         Route::resource('historical-unit', HistoricalUnitController::class);
         Route::post('historical-unit-filter', [HistoricalUnitController::class, 'index'])->name('historical-unit.filter');
         Route::post('historical-unit-show-filter', [HistoricalUnitController::class, 'showFilter'])->name('historical-unit-show.filter');
+        Route::get('historical-unit-show/{id?}', [HistoricalUnitController::class, 'show'])->where('id', '.*')->name('historical-unit.show.example');
 
         // Historical Overhaul
-        Route::resource('historical-overhaul', HistoricalOvhController::class);
+        Route::resource('historical.overhaul', HistoricalOvhController::class);
         Route::post('historical-ovh-filter', [HistoricalOvhController::class, 'showFilter'])->name('historical-ovh-show.filter');
         
 
@@ -342,4 +346,13 @@ Route::middleware('auth')->group(function() {
         Route::resource('hm', HMController::class);
         Route::get('hm/edit_data/{id}', [HMController::class, 'edit_data'])->name('hm.edit.data');
         Route::put('hm/update_data/{id}', [HMController::class, 'update_data'])->name('hm.update.data');
+
+        // MP Controller
+        Route::resource('mp', MPController::class);
+
+        // MP KONTRAK Controller
+        Route::resource('mp-kontrak', MPKontrakController::class);
+
+        // MP Statistik Controller
+        Route::resource('mp-statistik', MPStatistikController::class);
 });

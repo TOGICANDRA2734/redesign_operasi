@@ -204,7 +204,7 @@ class SideMenuSuperAdmin
                     'laporan-actual' => [
                         'icon' => 'box',
                         'title' => 'Table MP',
-                        'route_name' => 'super_admin.data-prod.report',
+                        'route_name' => 'mp.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -212,15 +212,7 @@ class SideMenuSuperAdmin
                     'kontrak' => [
                         'icon' => 'box',
                         'title' => 'Kontrak',
-                        'route_name' => 'super_admin.data-prod.report',
-                        'params' => [
-                            'layout' => 'side-menu'
-                        ],
-                    ],
-                    'tambah-data-mp' => [
-                        'icon' => 'box',
-                        'title' => 'Tambah Data MP',
-                        'route_name' => 'super_admin.data-prod.report',
+                        'route_name' => 'mp-kontrak.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -228,7 +220,7 @@ class SideMenuSuperAdmin
                     'statistik' => [
                         'icon' => 'box',
                         'title' => 'Statistik',
-                        'route_name' => 'super_admin.data-prod.report',
+                        'route_name' => 'mp-statistik.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],

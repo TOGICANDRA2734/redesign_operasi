@@ -45,7 +45,7 @@
                         <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">PIT</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">AVG</th>
-                        <th colspan="14" class="whitespace-nowrap text-center">Waktu</th>
+                        <th colspan="24" class="whitespace-nowrap text-center">Waktu</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Jarak</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Remarks</th>
                         @if(Auth::user()->hasRole('super_admin'))
@@ -53,8 +53,8 @@
                         @endif
                     </tr>
                     <tr class="text-xs font-semibold tracking-wide text-center text-white uppercase border-b dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
-                        @for($i=5; $i<=18; $i++)
-                            <th class="whitespace-nowrap text-center">{{$i+1}}</th>
+                        @for($i=0; $i<24; $i++)
+                            <th class="whitespace-nowrap text-center">{{$i}}</th>
                         @endfor
                     </tr>
                 </thead>
@@ -103,7 +103,7 @@
                     @csrf
 
                     <select id="modal-form-6" class="form-select w-16" name="jam">
-                            @for($i=6; $i<=19; $i++)
+                            @for($i=0; $i<23; $i++)
                             <option value="{{$i}}" {{old('jam', substr($waktu,0,2)) == $i || old('jam', substr($waktu,1,1)) == $i ? 'selected' : ''}}>{{$i}}</option>
                             @endfor
                         </select> 

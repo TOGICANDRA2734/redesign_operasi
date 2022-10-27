@@ -68,30 +68,40 @@ class HistoricalUnitController extends Controller
      */
     public function show($id)
     {
-        $nom_unit = Plant_Populasi::select('nom_unit')->where('nom_unit', $id)->pluck('nom_unit');
-        $id = Plant_Populasi::where('nom_unit', $id)->get()->pluck('id');
-        $data = Plant_Populasi::findOrFail($id);
-        $site = Site::where('status', 1)->get();
+        // $nom_unit = Plant_Populasi::select('nom_unit')->where('nom_unit', $id)->pluck('nom_unit');
+        // $id = Plant_Populasi::where('nom_unit', $id)->get()->pluck('id');
+        // $data = Plant_Populasi::findOrFail($id);
+        // $site = Site::where('status', 1)->get();
 
         // Data
-        $subquery = "SELECT descript,
-            CASE WHEN b.status=1 THEN 'RS'
-            WHEN b.STATUS=6 THEN 'SR'
-            END 'status_sr', 
-            b.hm, 
-            DATE_FORMAT(b.tgdok, '%d-%m-%Y') tanggal,
-            mechanic,
-            c.namasite
-            FROM plant_populasi a
-            JOIN unit_rssp b
-            ON a.nom_unit = b.nom_unit
-            JOIN site c
-            ON b.kodesite = c.kodesite
-            WHERE a.nom_unit='" . $data[0]->nom_unit . "'
-            ORDER BY status_sr desc,b.tgdok desc, c.namasite asc";
-        $data = DB::select($subquery);
+        // $subquery = "SELECT descript,
+        //     CASE WHEN b.status=1 THEN 'RS'
+        //     WHEN b.STATUS=6 THEN 'SR'
+        //     END 'status_sr', 
+        //     b.hm, 
+        //     DATE_FORMAT(b.tgdok, '%d-%m-%Y') tanggal,
+        //     mechanic,
+        //     c.namasite
+        //     FROM plant_populasi a
+        //     JOIN unit_rssp b
+        //     ON a.nom_unit = b.nom_unit
+        //     JOIN site c
+        //     ON b.kodesite = c.kodesite
+        //     WHERE a.nom_unit='" . $data[0]->nom_unit . "'
+        //     ORDER BY status_sr desc,b.tgdok desc, c.namasite asc";
 
-        return view('historical-unit.show', compact('data', 'site','nom_unit'));
+        $subquery = "SELECT a.nodokstream, DATE_FORMAT(a.tgdok, \"%d-%m-%Y\"), a.item, a.nom_unit, a.pn, a.descript, a.qtyrs, b.pr_no, date_format(b.pr_date, \"%d-%m-%Y\"), b.address3, \"\", b.item_qty, c.voucher_doc, c.voucher_no, date_format(c.voucher_date, \"%d-%m-%Y\"), c.item_qty cek
+        FROM unit_rssp a
+        JOIN (SELECT pr_no, pr_date, address3, pr_desc4, item_qty, ref_no FROM unit_po_req) b
+        ON a.nodokstream=b.ref_no
+        JOIN (SELECT voucher_doc, voucher_no, voucher_date, item_qty, item_code, ref_no FROM unit_in_trans) c
+        ON b.pr_no=c.ref_no
+        WHERE a.nodokstream='".$id."'
+        GROUP BY c.voucher_doc";
+        $data = DB::select($subquery);
+        // dd($id,$data);
+
+        return view('historical-unit.show', compact('data'));
     }
 
     /**

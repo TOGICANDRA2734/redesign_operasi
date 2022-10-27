@@ -77,7 +77,7 @@
                         @endforeach
                         <td class="whitespace-nowrap text-center">
                             <!-- Detail -->
-                            <a href="{{route('super_admin.historical-unit.show', $dt->nom_unit)}}" class="btn btn-dark mr-1 mb-2">
+                            <a href="{{route('historical-unit.show.example', $dt->nodokstream)}}" class="btn btn-dark mr-1 mb-2">
                                 <i data-lucide="eye" class="w-5 h-5"></i>
                             </a>
                             <!-- End: Detail -->
