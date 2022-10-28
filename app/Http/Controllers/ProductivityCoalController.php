@@ -32,7 +32,7 @@ class ProductivityCoalController extends Controller
 
         if ($request->has('kodesite') && $request->kodesite !== 'all') {
             $subquery = "SELECT A.id,
-            DATE_FORMAT(tgl, '%d-%m-%Y') tanggal,    
+            DATE_FORMAT(tgl, \"%d-%m-%Y\") tanggal,    
             b.namasite,
             pit,
             ROUND(AVG(rit), 1) avg_rit,                                                        
@@ -69,7 +69,7 @@ class ProductivityCoalController extends Controller
             ORDER BY b.id";
         } else {
             $subquery = "SELECT A.id,
-            DATE_FORMAT(tgl, '%d-%m-%Y') tanggal,    
+            DATE_FORMAT(tgl, \"%d-%m-%Y\") tanggal,    
             b.namasite,
             pit,
             ROUND(AVG(rit), 1) avg_rit,                                                               
@@ -102,7 +102,7 @@ class ProductivityCoalController extends Controller
             JOIN site B
             ON A.kodesite = B.kodesite                                             
             WHERE " . $tanggal . " AND del=0
-            GROUP BY a.pit, 
+            GROUP BY a.pit
             ORDER BY b.id";
         }
 

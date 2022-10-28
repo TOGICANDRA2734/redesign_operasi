@@ -147,6 +147,16 @@
                             '<td class="">' + result.data[index].j12 + '</td>' +
                             '<td class="">' + result.data[index].j13 + '</td>' +
                             '<td class="">' + result.data[index].j14 + '</td>' +
+                            '<td class="">' + result.data[index].j15 + '</td>' +
+                            '<td class="">' + result.data[index].j16 + '</td>' +
+                            '<td class="">' + result.data[index].j17 + '</td>' +
+                            '<td class="">' + result.data[index].j18 + '</td>' +
+                            '<td class="">' + result.data[index].j19 + '</td>' +
+                            '<td class="">' + result.data[index].j20 + '</td>' +
+                            '<td class="">' + result.data[index].j21 + '</td>' +
+                            '<td class="">' + result.data[index].j22 + '</td>' +
+                            '<td class="">' + result.data[index].j23 + '</td>' +
+                            '<td class="">' + result.data[index].j24 + '</td>' +
                             '<td class="">' + result.data[index].dist + '</td>' +
                             '<td class="">' + result.data[index].ket + '</td>' +
                             '</tr>';
@@ -213,6 +223,16 @@
                             '<td class="">' + result.data[index].j12 + '</td>' +
                             '<td class="">' + result.data[index].j13 + '</td>' +
                             '<td class="">' + result.data[index].j14 + '</td>' +
+                            '<td class="">' + result.data[index].j15 + '</td>' +
+                            '<td class="">' + result.data[index].j16 + '</td>' +
+                            '<td class="">' + result.data[index].j17 + '</td>' +
+                            '<td class="">' + result.data[index].j18 + '</td>' +
+                            '<td class="">' + result.data[index].j19 + '</td>' +
+                            '<td class="">' + result.data[index].j20 + '</td>' +
+                            '<td class="">' + result.data[index].j21 + '</td>' +
+                            '<td class="">' + result.data[index].j22 + '</td>' +
+                            '<td class="">' + result.data[index].j23 + '</td>' +
+                            '<td class="">' + result.data[index].j24 + '</td>' +
                             '<td class="">' + result.data[index].dist + '</td>' +
                             '<td class="">' + result.data[index].ket + '</td>' +
                             '</tr>';
