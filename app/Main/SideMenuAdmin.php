@@ -116,6 +116,21 @@ class SideMenuAdmin
                     ],
                 ],
             ],
+            'devider',
+            'Manpower' => [
+                'icon' => 'sidebar',
+                'title' => 'Manpower',
+                'sub_menu' => [
+                    'general-request' => [
+                        'icon' => 'box',
+                        'title' => 'General Request',
+                        'route_name' => 'dokumen-gr.index',
+                        'params' => [ 
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 }

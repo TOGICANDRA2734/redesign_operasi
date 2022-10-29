@@ -24,7 +24,7 @@ class DokumenGrController extends Controller
             $where .= ($request->has('site') && !empty($request->site)) ? " AND " : "";
             $where .= ($request->has('site') && !empty($request->site)) ? "a.kodesite='" . $request->site . "'" : "";
             $where .= ($request->has('status') && !empty($request->status)) ? " AND " : "";
-            $where .= ($request->has('status') && !empty($request->status)) ? "a.status_gr=".$request->status." " : "";
+            $where .= ($request->has('status') && !empty($request->status)) ? "a.status=".$request->status." " : "";
         }
   
         // Filter

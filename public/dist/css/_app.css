@@ -2094,6 +2094,9 @@ select{
 .h-screen{
     height: 100vh;
 }
+.h-2{
+    height: 0.5rem;
+}
 .h-40{
     height: 10rem;
 }
@@ -2102,9 +2105,6 @@ select{
 }
 .h-1{
     height: 0.25rem;
-}
-.h-2{
-    height: 0.5rem;
 }
 .h-\[45rem\]{
     height: 45rem;
@@ -2184,14 +2184,17 @@ select{
 .w-32{
     width: 8rem;
 }
+.w-52{
+    width: 13rem;
+}
+.w-2{
+    width: 0.5rem;
+}
 .w-28{
     width: 7rem;
 }
 .w-12{
     width: 3rem;
-}
-.w-52{
-    width: 13rem;
 }
 .w-3\/4{
     width: 75%;
@@ -2204,9 +2207,6 @@ select{
 }
 .w-5\/6{
     width: 83.333333%;
-}
-.w-2{
-    width: 0.5rem;
 }
 .w-3{
     width: 0.75rem;

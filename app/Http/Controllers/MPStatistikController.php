@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MPStatistikController extends Controller
 {
@@ -13,7 +14,23 @@ class MPStatistikController extends Controller
      */
     public function index()
     {
-        return view('mpStatistik.index');
+        $dataTotal = DB::select(DB::raw('SELECT COUNT(id) jumlah, FORMAT(COUNT(id)/COUNT(id)*100,1) Persentase FROM mp_biodata WHERE del=1'));
+        $dataStatusKaryawan = DB::select("SELECT IF(sttpegawai<>'',sttpegawai,'NA') sttpegawai, COUNT(sttpegawai) jumlah, FORMAT(COUNT(sttpegawai)/(SELECT COUNT(ID) FROM MP_BIODATA WHERE DEL=1) * 100, 1) persentase FROM mp_biodata WHERE del=1 GROUP BY sttpegawai ORDER BY sttpegawai desc");
+        $dataKelamin = DB::select(DB::raw("SELECT kelamin, COUNT(kelamin) total, FORMAT(COUNT(kelamin)/(SELECT COUNT(ID) FROM MP_BIODATA WHERE DEL=1) * 100, 1) persentase FROM mp_biodata WHERE del=1 AND (kelamin='PRIA' OR kelamin='WANITA') GROUP BY kelamin"));
+        $dataUsia = DB::select(DB::raw("SELECT SUM(IF((DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0) < 20,1,0)) umur_20,
+        SUM(IF((DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0) >= 20 AND (DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0) < 30,1,0)) umur_30,
+        SUM(IF((DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0) >= 31 AND (DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0) <= 40,1,0)) umur_40,
+        SUM(IF((DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0) >= 41 AND (DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0) <= 50,1,0)) umur_50,
+        SUM(IF((DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0) >= 51 AND (DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0) <= 60,1,0)) umur_60,
+        SUM(IF((DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0) >= 61,1,0)) umur_70
+        FROM mp_biodata WHERE DEL=1"));
+        $dataJabatan = DB::select(DB::raw("SELECT JABATAN, COUNT(JABATAN) total, FORMAT(COUNT(jabatan)/(SELECT COUNT(ID) FROM MP_bIODATA WHERE DEL=1) * 100,1) PERSENTASE FROM MP_BIODATA WHERE DEL=1 GROUP BY JABATAN"));
+        $dataDept = DB::select(DB::raw("SELECT DEPT, COUNT(DEPT) total, FORMAT(COUNT(DEPT)/(SELECT COUNT(ID) FROM MP_bIODATA WHERE DEL=1) * 100,1) PERSENTASE FROM MP_BIODATA WHERE DEL=1 GROUP BY DEPT"));
+        $dataKec = DB::select(DB::raw("SELECT KEC, COUNT(KEC), COUNT(KEC)/(SELECT COUNT(ID) FROM MP_bIODATA WHERE DEL=1) * 100 PERSENTASE FROM MP_BIODATA WHERE DEL=1 GROUP BY KEC"));
+
+        $judulDataUsia = ['Dibawah Umur 20', '20 - 30 Tahun', '31 - 40 tahun', '41 - 50 tahun', '51 - 60 tahun', 'Diatas 61 tahun'];
+
+        return view('mpStatistik.index', compact('dataTotal', 'dataStatusKaryawan', 'dataKelamin', 'dataUsia', 'dataJabatan', 'dataDept', 'dataKec', 'judulDataUsia'));
     }
 
     /**
