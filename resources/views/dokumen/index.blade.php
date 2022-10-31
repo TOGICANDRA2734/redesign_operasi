@@ -59,7 +59,7 @@
                             <th class="whitespace-nowrap text-center">No GR</th>
                             <th class="whitespace-nowrap text-center">Tanggal</th>
                             <th class="whitespace-nowrap text-center">Subject</th>
-                            @for ($i = 0; $i < 5; $i++)
+                            @for ($i = 0; $i < 6; $i++)
                                 <th class="whitespace-nowrap text-center">D {{$i + 1}}</th>
                             @endfor
                             <th class="whitespace-nowrap text-center">Status</th>
@@ -84,26 +84,29 @@
                                     {{$dt->subject_gr}}
                                 </td>
                                 <td class="whitespace-nowrap text-center">
-                                    <i data-lucide="{{$dt->chk_ttd1 == 0 ? "user-minus" : 'user-check'}}" class="w-4 h-4 mr-3 {{$dt->chk_ttd1 == 0 ? "text-danger" : 'text-success'}}"></i>
+                                    <i data-lucide="{{$dt->chk_ttd1 == 0 ? "user-minus" : 'user-check'}}" class="tooltip w-4 h-4 {{$dt->chk_ttd1 == 0 ? "text-danger" : 'text-success'}}" title="{{$dt->nama_ttd1}}"></i>
                                 </td>
                                 
                                 <td class="whitespace-nowrap text-center">
-                                    <i data-lucide="{{$dt->chk_ttd2 == 0 ? "user-minus" : 'user-check'}}" class="w-4 h-4 mr-3 {{$dt->chk_ttd2 == 0 ? "text-danger" : 'text-success'}}"></i>
+                                    <i data-lucide="{{$dt->chk_ttd2 == 0 ? "user-minus" : 'user-check'}}" class="tooltip w-4 h-4 {{$dt->chk_ttd2 == 0 ? "text-danger" : 'text-success'}}" title="{{$dt->nama_ttd2}}"></i>
                                 </td>
                                 
                                 <td class="whitespace-nowrap text-center">
-                                    <i data-lucide="{{$dt->chk_ttd3 == 0 ? "user-minus" : 'user-check'}}" class="w-4 h-4 mr-3 {{$dt->chk_ttd3 == 0 ? "text-danger" : 'text-success'}}"></i>
+                                    <i data-lucide="{{$dt->chk_ttd3 == 0 ? "user-minus" : 'user-check'}}" class="tooltip w-4 h-4 {{$dt->chk_ttd3 == 0 ? "text-danger" : 'text-success'}}" title="{{$dt->nama_ttd3}}"></i>
                                 </td>
                                 
                                 <td class="whitespace-nowrap text-center">
-                                    <i data-lucide="{{$dt->chk_ttd4 == 0 ? "user-minus" : 'user-check'}}" class="w-4 h-4 mr-3 {{$dt->chk_ttd4 == 0 ? "text-danger" : 'text-success'}}"></i>
+                                    <i data-lucide="{{$dt->chk_ttd4 == 0 ? "user-minus" : 'user-check'}}" class="tooltip w-4 h-4 {{$dt->chk_ttd4 == 0 ? "text-danger" : 'text-success'}}" title="{{$dt->nama_ttd4}}"></i>
                                 </td>
                                 
                                 <td class="whitespace-nowrap text-center">
-                                    <i data-lucide="{{$dt->chk_ttd5 == 0 ? "user-minus" : 'user-check'}}" class="w-4 h-4 mr-3 {{$dt->chk_ttd5 == 0 ? "text-danger" : 'text-success'}}"></i>
+                                    <i data-lucide="{{$dt->chk_ttd5 == 0 ? "user-minus" : 'user-check'}}" class="tooltip w-4 h-4 {{$dt->chk_ttd5 == 0 ? "text-danger" : 'text-success'}}" title="{{$dt->nama_ttd5}}"></i>
                                 </td>
 
-                                
+                                <td class="whitespace-nowrap text-center">
+                                    <i data-lucide="{{$dt->chk_ttd6 == 0 ? "user-minus" : 'user-check'}}" class="tooltip w-4 h-4 {{$dt->chk_ttd6 == 0 ? "text-danger" : 'text-success'}}" title="{{$dt->nama_ttd6}}"></i>
+                                </td>
+
                                 <td class="whitespace-nowrap text-center">
                                     <p class="{{($dt->status === 0) ?  'text-black' : (($dt->status === 1 )? 'text-danger' : 'text-success')}}">
                                         {{($dt->status === 0) ? 'Sedang Diproses' : (($dt->status === 1) ? 'Dibatalkan' : 'Selesai')}}
@@ -153,15 +156,16 @@
                     if (response) {
                         i = 0;
                         $j.each(response.data, function(index) {
-                            var icon_chk_ttd1 = (response.data[index].chk_ttd1 == 0) ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-minus" data-lucide="user-minus" class="lucide lucide-user-minus w-4 h-4 mr-3 text-danger"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-check" data-lucide="user-check" class="lucide lucide-user-check w-4 h-4 mr-3 text-success"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>'
-                            var icon_chk_ttd2 = (response.data[index].chk_ttd2 == 0) ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-minus" data-lucide="user-minus" class="lucide lucide-user-minus w-4 h-4 mr-3 text-danger"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-check" data-lucide="user-check" class="lucide lucide-user-check w-4 h-4 mr-3 text-success"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>'
-                            var icon_chk_ttd3 = (response.data[index].chk_ttd3 == 0) ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-minus" data-lucide="user-minus" class="lucide lucide-user-minus w-4 h-4 mr-3 text-danger"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-check" data-lucide="user-check" class="lucide lucide-user-check w-4 h-4 mr-3 text-success"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>'
-                            var icon_chk_ttd4 = (response.data[index].chk_ttd4 == 0) ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-minus" data-lucide="user-minus" class="lucide lucide-user-minus w-4 h-4 mr-3 text-danger"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-check" data-lucide="user-check" class="lucide lucide-user-check w-4 h-4 mr-3 text-success"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>'
-                            var icon_chk_ttd5 = (response.data[index].chk_ttd5 == 0) ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-minus" data-lucide="user-minus" class="lucide lucide-user-minus w-4 h-4 mr-3 text-danger"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-check" data-lucide="user-check" class="lucide lucide-user-check w-4 h-4 mr-3 text-success"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>'                            
+                            var icon_chk_ttd1 = (response.data[index].chk_ttd1 == 0) ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-minus" data-lucide="user-minus" class="lucide lucide-user-minus w-4 h-4 text-danger"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-check" data-lucide="user-check" class="lucide lucide-user-check w-4 h-4 text-success"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>'
+                            var icon_chk_ttd2 = (response.data[index].chk_ttd2 == 0) ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-minus" data-lucide="user-minus" class="lucide lucide-user-minus w-4 h-4 text-danger"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-check" data-lucide="user-check" class="lucide lucide-user-check w-4 h-4 text-success"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>'
+                            var icon_chk_ttd3 = (response.data[index].chk_ttd3 == 0) ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-minus" data-lucide="user-minus" class="lucide lucide-user-minus w-4 h-4 text-danger"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-check" data-lucide="user-check" class="lucide lucide-user-check w-4 h-4 text-success"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>'
+                            var icon_chk_ttd4 = (response.data[index].chk_ttd4 == 0) ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-minus" data-lucide="user-minus" class="lucide lucide-user-minus w-4 h-4 text-danger"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-check" data-lucide="user-check" class="lucide lucide-user-check w-4 h-4 text-success"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>'
+                            var icon_chk_ttd5 = (response.data[index].chk_ttd5 == 0) ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-minus" data-lucide="user-minus" class="lucide lucide-user-minus w-4 h-4 text-danger"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-check" data-lucide="user-check" class="lucide lucide-user-check w-4 h-4 text-success"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>'                            
+                            var icon_chk_ttd6 = (response.data[index].chk_ttd6 == 0) ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-minus" data-lucide="user-minus" class="lucide lucide-user-minus w-4 h-4 text-danger"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="user-check" data-lucide="user-check" class="lucide lucide-user-check w-4 h-4 text-success"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>'                            
 
                             
-                            var icon_status = (response.data[index].status === 0) ? 'Sedang Diproses' : ((response.data[index].status === 1) ? 'Dibatalkan' : 'Selesai');
-                            var icon_status_text = (response.data[index].status === 0) ?  'text-black' : ((response.data[index].status === 1 )? 'text-danger' : 'text-success');
+                            var icon_status = (response.data[index].status == 0) ? 'Sedang Diproses' : ((response.data[index].status == 1) ? 'Dibatalkan' : 'Selesai');
+                            var icon_status_text = (response.data[index].status == 0) ?  'text-black' : ((response.data[index].status == 1 )? 'text-danger' : 'text-success');
 
                             i += 1;
                             text = '<tr class="text-center bg-white">' +
@@ -178,7 +182,7 @@
                                 '<td class="whitespace-nowrap text-center">' +
                                     response.data[index].tgl_gr + 
                                 '</td>' +
-                                '<td class="whitespace-nowrap text-center">' +
+                                '<td class="whitespace-nowrap text-left">' +
                                     response.data[index].subject_gr + 
                                 '</td>' +
                                 '<td class="whitespace-nowrap text-center">' +
@@ -199,6 +203,10 @@
                                 
                                 '<td class="whitespace-nowrap text-center">' +
                                     icon_chk_ttd5 + 
+                                '</td>' +
+                                
+                                '<td class="whitespace-nowrap text-center">' +
+                                    icon_chk_ttd6 + 
                                 '</td>' +
                                 
                                 '<td class="whitespace-nowrap text-center">' +

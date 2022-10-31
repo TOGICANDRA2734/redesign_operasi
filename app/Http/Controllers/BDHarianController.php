@@ -70,15 +70,15 @@ class BDHarianController extends Controller
         $subquery = "SELECT e.status model, 
         b.kodesite site, 
         COUNT(a.nom_unit) populasi,
-        SUM(IF((C.nom_unit IS NULL OR (C.ket_tgl_rfu='RFU' AND C.status_bd=0)),1,0)) RFU,
-        SUM(IF((C.nom_unit IS NOT NULL AND (C.ket_tgl_rfu<>'RFU' AND C.status_bd=1)),1,0)) BD,
+        SUM(IF((C.nom_unit IS NULL OR (C.ket_tgl_rfu='RFU')),1,0)) RFU,
+        SUM(IF((C.nom_unit IS NOT NULL AND (C.ket_tgl_rfu<>'RFU')),1,0)) BD,
         d.namasite namasite,
         d.gambar gambar,
         f.gambar icon_unit
         FROM plant_populasi a
         JOIN plant_hm b
         ON a.nom_unit=b.nom_unit
-        LEFT JOIN plant_status_bd c
+        LEFT JOIN (SELECT * FROM plant_status_bd GROUP BY NOM_UNIT) c
         ON a.nom_unit=c.nom_unit
         JOIN site d
         ON b.kodesite=d.kodesite

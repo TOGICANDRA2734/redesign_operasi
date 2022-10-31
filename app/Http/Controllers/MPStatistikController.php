@@ -30,7 +30,42 @@ class MPStatistikController extends Controller
 
         $judulDataUsia = ['Dibawah Umur 20', '20 - 30 Tahun', '31 - 40 tahun', '41 - 50 tahun', '51 - 60 tahun', 'Diatas 61 tahun'];
 
-        return view('mpStatistik.index', compact('dataTotal', 'dataStatusKaryawan', 'dataKelamin', 'dataUsia', 'dataJabatan', 'dataDept', 'dataKec', 'judulDataUsia'));
+        // Data Chart
+        // Data Status Karyawan
+        $dataChartStatusKaryawan =[];
+        foreach ($dataStatusKaryawan as $key => $value) {
+            $dataChartStatusKaryawan['label'][] = $value->sttpegawai;
+            $dataChartStatusKaryawan['data'][] = $value->jumlah;
+        }
+        $dataChartStatusKaryawan = json_encode($dataChartStatusKaryawan);
+
+        // Data Usia
+        $dataChartUsiaKaryawan =[];
+        $i = 0;
+        foreach ($dataUsia[0] as $key => $value) {
+            $dataChartUsiaKaryawan['label'][] = $judulDataUsia[$i];
+            $dataChartUsiaKaryawan['data'][] = $value;
+            $i++;
+        }
+        $dataChartUsiaKaryawan = json_encode($dataChartUsiaKaryawan);
+
+        // Data Usia
+        $dataChartDept =[];
+        foreach ($dataDept as $key => $value) {
+            $dataChartDept['label'][] = $value->DEPT;
+            $dataChartDept['data'][] = $value->total;
+        }
+        $dataChartDept = json_encode($dataChartDept);
+        
+        // Data Kelamin
+        $dataChartKelamin =[];
+        foreach ($dataKelamin as $key => $value) {
+            $dataChartKelamin['label'][] = $value->kelamin;
+            $dataChartKelamin['data'][] = $value->total;
+        }
+        $dataChartKelamin = json_encode($dataChartKelamin);
+
+        return view('mpStatistik.index', compact('dataTotal', 'dataStatusKaryawan', 'dataKelamin', 'dataUsia', 'dataJabatan', 'dataDept', 'dataKec', 'judulDataUsia', 'dataChartStatusKaryawan', 'dataChartUsiaKaryawan', 'dataChartDept', 'dataChartKelamin'));
     }
 
     /**

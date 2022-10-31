@@ -23,18 +23,18 @@ class DokumenGrController extends Controller
             $where .= ($request->has('nomor')) ? "WHERE no_gr= '" . $request->nomor . "' OR subject_gr LIKE '%" . $request->nomor. "%' " : "";
             $where .= ($request->has('site') && !empty($request->site)) ? " AND " : "";
             $where .= ($request->has('site') && !empty($request->site)) ? "a.kodesite='" . $request->site . "'" : "";
-            $where .= ($request->has('status') && !empty($request->status)) ? " AND " : "";
-            $where .= ($request->has('status') && !empty($request->status)) ? "a.status=".$request->status." " : "";
+            $where .= ($request->has('status')) ? " AND " : "";
+            $where .= ($request->has('status')) ? "a.status=". (int) $request->status."" : "";
         }
   
         // Filter
-        $subquery = "SELECT b.namasite site, no_gr, DATE_FORMAT(tgl_gr, \"%d\/%m\/%Y\") tgl_gr, subject_gr, chk_ttd1, chk_ttd2, chk_ttd3, chk_ttd4, chk_ttd5, a.status status
+        $subquery = "SELECT b.namasite site, no_gr, DATE_FORMAT(tgl_gr, \"%d\/%m\/%Y\") tgl_gr, subject_gr, chk_ttd1, chk_ttd2, chk_ttd3, chk_ttd4, chk_ttd5, chk_ttd6, nama_ttd1, nama_ttd2, nama_ttd3, nama_ttd4, nama_ttd5, nama_ttd6,  a.status status
         FROM dokumen_gr a
         JOIN site b
         ON a.kodesite=b.kodesite
         ".$where."
-        ORDER BY a.kodesite, no_gr, a.status
-        LIMIT 50";
+        ORDER BY  a.status, a.kodesite, no_gr
+        LIMIT 75";
 
         // Parameter 
         $site = Site::where('status', 1)->get();

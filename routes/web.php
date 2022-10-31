@@ -86,6 +86,8 @@ Route::middleware(['auth', 'role:user'])->group(function() {
         Route::post('search', [SearchController::class, 'index'])->name('search.index');
         Route::get('transfer-pma', [TransferController::class, 'index'])->name('transferPma.index');
         Route::resource('productivity_coal', ProductivityCoalController::class);
+        Route::resource('historical-overhaul', HistoricalOvhController::class);
+
 
     });
 });
@@ -126,6 +128,8 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
         Route::post('transfer-pma', [TransferController::class, 'store'])->name('transferPma.store');
         Route::put('transfer-pma', [TransferController::class, 'update'])->name('transferPma.update');
         Route::post('transfer-pma-upload',  [UploadController::class, 'store'])->name('upload.store');
+        Route::resource('historical-overhaul', HistoricalOvhController::class);
+
     });
 });
 
@@ -224,6 +228,9 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         
         // Dokumen GR
         Route::resource('dokumen-gr', DokumenGrController::class);
+
+        Route::resource('historical-overhaul', HistoricalOvhController::class);
+
     });
 });
 
@@ -325,7 +332,7 @@ Route::middleware('auth')->group(function() {
         Route::get('historical-unit-show/{id?}', [HistoricalUnitController::class, 'show'])->where('id', '.*')->name('historical-unit.show.example');
 
         // Historical Overhaul
-        Route::resource('historical.overhaul', HistoricalOvhController::class);
+        Route::resource('historical-overhaul', HistoricalOvhController::class);
         Route::post('historical-ovh-filter', [HistoricalOvhController::class, 'showFilter'])->name('historical-ovh-show.filter');
         
 

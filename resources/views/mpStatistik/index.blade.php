@@ -69,8 +69,8 @@
                         </h2>
                     </div>
                     <div class="intro-y box p-5 mt-5">
-                        <div class="mt-3">
-                            <canvas id="report-pie-chart" height="213"></canvas>
+                        <div class="my-3">
+                            <canvas id="dataStatusKaryawan" height="250"></canvas>
                         </div>
                         @foreach ($dataStatusKaryawan as $dt )
                         <div class="w-52 sm:w-auto mx-auto mt-5">
@@ -93,7 +93,7 @@
                     </div>
                     <div class="intro-y box p-5 mt-5">
                         <div class="mt-3">
-                            <canvas id="report-pie-chart" height="213"></canvas>
+                            <canvas id="dataUsia" height="250"></canvas>
                         </div>
                         @php
                             $i = 0;
@@ -121,7 +121,7 @@
                     </div>
                     <div class="intro-y box p-5 mt-5">
                         <div class="mt-3">
-                            <canvas id="report-pie-chart" height="213"></canvas>
+                            <canvas id="dataDept" height="250"></canvas>
                         </div>
                         @foreach ($dataDept as $dt)                            
                         <div class="w-52 sm:w-auto mx-auto mt-5">
@@ -143,7 +143,7 @@
                     </div>
                     <div class="intro-y box p-5 mt-5">
                         <div class="mt-3">
-                            <canvas id="report-donut-chart" height="213"></canvas>
+                            <canvas id="dataKelamin" height="213"></canvas>
                         </div>
                         @foreach ($dataKelamin as $dt)                            
                         <div class="w-52 sm:w-auto mx-auto mt-8">
@@ -162,64 +162,161 @@
         </div>
     </div>
 
-    <script>
-        $(".detailBtn").on("click", function() {
-            var id = $(this).data("id");
-            var url = $(this).data("url");
-            console.log(id, url);
+<!-- Chart -->
+<script>
+    $(function() {
+        var $j = jQuery.noConflict();
 
-            $i = jQuery.noConflict();
-            $i.ajax({
-                url: url,
-                type: 'GET',
-                dataType: 'json',
-                data: [],
-                success: function(response) {
-                    console.log()
-                    var fullText = "";
-                    if (response) {
-                        i = 0;
-                        $i(".modal-header h2").html("Data Personal - " + response.record1[0].nama)
-                        $i.each(response.record1[0], function(index, data) {
 
-                            fullText += "<tr> " +
-                                "<th class='whitespace-nowrap bg-dark text-white'>" + response
-                                .judulrecord1[i] + "</th>" +
-                                "<td>" + data + " </td>" +
-                                "</tr>"
-                            i += 1;
-                        });
-                        $i(".table-detail-1 tbody").html(fullText);
+        // Get the Status Karyawan Data
+        var dataStatusKaryawan = JSON.parse(`<?php echo $dataChartStatusKaryawan; ?>`);
+        var ctx = $("#dataStatusKaryawan");
 
-                        i = 0;
-                        fullText = "";
-                        $i.each(response.record2[0], function(index, data) {
-                            fullText += "<tr> " +
-                                "<th class='whitespace-nowrap bg-dark text-white'>" + response
-                                .judulrecord2[i] + "</th>" +
-                                "<td>" + data + " </td>" +
-                                "</tr>"
-                            i += 1;
-                        });
-                        $i(".table-detail-2 tbody").html(fullText);
+        //Multi Chart
+        var data = {
+            labels: dataStatusKaryawan.label,
+            datasets: [{
+                type: 'pie',
+                label: 'Status Karyawan',
+                data: dataStatusKaryawan.data,
+                backgroundColor: ['#FF731D', '#1746A2', '#FFCA03', '#4E6C50', '#EEEDDE']
+            }]
+        };
 
-                        i = 0;
-                        fullText = "";
+        //options
+        var options = {
+            maintainAspectRatio: false,
+            title: {
+                display: true,
+                position: "top",
+                text: "",
+                fontSize: 18,
+                fontColor: "#111"
+            },
+            legend: {
+                display: false
+            }
+        };
 
-                        $i.each(response.record3[0], function(index, data) {
+        //   Create Mixed Chart
+        var chart1 = new Chart(ctx, {
+            type: "pie",
+            data: data,
+            options: options
+        });
 
-                            fullText += "<tr> " +
-                                "<th class='whitespace-nowrap bg-dark text-white'>" + response
-                                .judulrecord3[i] + "</th>" +
-                                "<td>" + data + " </td>" +
-                                "</tr>"
-                            i += 1;
-                        });
-                        $i(".table-detail-3 tbody").html(fullText);
-                    }
-                },
-            })
+        // Usia
+        var dataUsia = JSON.parse(`<?php echo $dataChartUsiaKaryawan; ?>`);
+        var ctx = $("#dataUsia");
 
-        })
-    </script>
+        //Multi Chart
+        var data = {
+            labels: dataUsia.label,
+            datasets: [{
+                type: 'pie',
+                label: 'Usia Karyawan',
+                data: dataUsia.data,
+                backgroundColor: ['#FF731D', '#1746A2', '#FFCA03', '#4E6C50', '#EEEDDE']
+            }]
+        };
+
+        //options
+        var options = {
+            maintainAspectRatio: false,
+            title: {
+                display: true,
+                position: "top",
+                text: "",
+                fontSize: 18,
+                fontColor: "#111"
+            },
+            legend: {
+                display: false
+            }
+        };
+
+        //   Create Mixed Chart
+        var chart2 = new Chart(ctx, {
+            type: "pie",
+            data: data,
+            options: options
+        });
+
+        
+        // Usia
+        var dataDept = JSON.parse(`<?php echo $dataChartDept; ?>`);
+        var ctx = $("#dataDept");
+
+        //Multi Chart
+        var data = {
+            labels: dataDept.label,
+            datasets: [{
+                type: 'pie',
+                label: 'Departemen Karyawan',
+                data: dataDept.data,
+                backgroundColor: [ '#1746A2', '#FF731D',  '#FFCA03', '#4E6C50', '#EEEDDE','#EEEDDE','#E0DDAA','#203239','#141E27','#61764B','#9BA17B','#CFB997','#FAD6A5']
+            }]
+        };
+
+        //options
+        var options = {
+            maintainAspectRatio: false,
+            title: {
+                display: true,
+                position: "top",
+                text: "",
+                fontSize: 18,
+                fontColor: "#111"
+            },
+            legend: {
+                display: false
+            }
+        };
+
+        //   Create Mixed Chart
+        var chart3 = new Chart(ctx, {
+            type: "pie",
+            data: data,
+            options: options
+        });
+
+        // Data Usia
+        // Usia
+        var dataKelamin = JSON.parse(`<?php echo $dataChartKelamin; ?>`);
+        var ctx = $("#dataKelamin");
+
+        //Multi Chart
+        var data = {
+            labels: dataKelamin.label,
+            datasets: [{
+                type: 'pie',
+                label: 'Departemen Karyawan',
+                data: dataKelamin.data,
+                backgroundColor: [ '#1746A2', '#FF731D', '#FFCA03', '#4E6C50', '#EEEDDE','#EEEDDE','#E0DDAA','#203239','#141E27','#61764B','#9BA17B','#CFB997','#FAD6A5']
+            }]
+        };
+
+        //options
+        var options = {
+            maintainAspectRatio: false,
+            title: {
+                display: true,
+                position: "top",
+                text: "",
+                fontSize: 18,
+                fontColor: "#111"
+            },
+            legend: {
+                display: false
+            }
+        };
+
+        //   Create Mixed Chart
+        var chart3 = new Chart(ctx, {
+            type: "pie",
+            data: data,
+            options: options
+        });
+    })
+</script>
 @endsection

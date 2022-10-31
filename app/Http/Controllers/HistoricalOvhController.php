@@ -101,7 +101,7 @@ class HistoricalOvhController extends Controller
         if(count($request->all()) > 1){
             $where .= "WHERE ";
             $where .= ($request->has('pilihKomponen') && !empty($request->pilihKomponen)) ? "komponen='" . $request->pilihKomponen . "'" : "";
-            $where .= ($request->has('cariNama') && !empty($request->pilihKomponen)) ? " AND " : "";
+            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
             $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? "nom_unit LIKE '%" . $request->cariNama . "%'" : "";
             $where .= "AND DEL=0";    
         }
@@ -115,6 +115,5 @@ class HistoricalOvhController extends Controller
 
         $response['data'] = $data;
         return response()->json($response);
-        
     }
 }
