@@ -6,8 +6,6 @@ use App\Exports\DataProdExport;
 use App\Models\dataProd;
 use App\Models\Site;
 use Carbon\Carbon;
-use DateInterval;
-use DatePeriod;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,11 +24,11 @@ class dataProdController extends Controller
     {
         $where = "";
 
-        if (count($request->all()) > 1) {              
-            $where = "kodesite='" . $request->pilihSite . "' and ";
-            $bulan = Carbon::now();
-            $where .= "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'"; 
-
+        if ($request->has('pilihBulan')) {                         
+            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
+            $bulanAwal = date('Y-m-d', strtotime($bulan->startOfMonth()->copy()));
+            $bulanAkhir = date('Y-m-d', strtotime($bulan->endOfMonth()->copy()));
+            $where =  "TGL BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
         } else {    
             $bulan = Carbon::now();
             $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
@@ -66,18 +64,21 @@ class dataProdController extends Controller
             $site = DB::table('site')->select('namasite', 'kodesite')->where('kodesite', '=', Auth::user()->kodesite)->get();
         }
 
-        $begin = new DateTime( Carbon::now()->startOfMonth() );
-        $end   = new DateTime( Carbon::now()->endOfMonth() );
+        $begin = $request->has('pilihBulan') ? new DateTime($bulanAwal) : new DateTime( Carbon::now()->startOfMonth() );
+        $end   = $request->has('pilihBulan') ? new DateTime($bulanAkhir) : new DateTime( Carbon::now()->endOfMonth() );
         $period = [];
+        $periodInput = [];
+
 
         for($i = $begin; $i <= $end; $i->modify('+1 day')){
-            $period[] = $i->format("Y-m-d");
+            $period[] = $i->format("d-m-Y");
+            $periodInput[] = $i->format('Y-m-d');
         }
 
-
-        if ($request->has('pilihSite')) {
+        if ($request->has('pilihBulan')) {
             $response['data'] = $data;
             $response['period'] = $period;
+            $response['periodInput'] = $periodInput;
             return response()->json($response);
         } else {
             return view('data-prod.index', compact('data', 'site', 'period'));

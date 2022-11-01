@@ -111,18 +111,6 @@
                                 <div class="mt-0.5 text-slate-500">ACH</div>
                             </div>
                         </div>
-                        <div class="dropdown md:ml-auto mt-5 md:mt-0">
-                            <button class="dropdown-toggle btn btn-outline-secondary font-normal" aria-expanded="false" data-tw-toggle="dropdown">
-                                Filter Site<i data-lucide="chevron-down" class="w-4 h-4 ml-2"></i>
-                            </button>
-                            <div class="dropdown-menu w-40">
-                                <ul class="dropdown-content overflow-y-auto h-32">
-                                    @foreach($data as $dt)
-                                    <li><a href="{{route('dashboard.filtered', $dt->namasite)}}" class="dropdown-item">{{$dt->namasite}}</a></li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                     <div class="relative h-16 w-full sm:h-full" style="position: relative; height: 30vh; width: 100%;">
                         <canvas id="overburden" class="mt-6"></canvas>
@@ -163,18 +151,6 @@
                                 <div class="mt-0.5 text-slate-500">ACH</div>
                             </div>
                         </div>
-                        <div class="dropdown md:ml-auto mt-5 md:mt-0">
-                            <button class="dropdown-toggle btn btn-outline-secondary font-normal" aria-expanded="false" data-tw-toggle="dropdown">
-                                Filter Site <i data-lucide="chevron-down" class="w-4 h-4 ml-2"></i>
-                            </button>
-                            <div class="dropdown-menu w-40">
-                                <ul class="dropdown-content overflow-y-auto h-32">
-                                    @foreach($data as $dt)
-                                    <li><a href="{{route('dashboard.filtered', $dt->namasite)}}" class="dropdown-item">{{$dt->namasite}}</a></li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                     <div class="relative h-16 w-full sm:h-full" style="position: relative; height: 30vh; width: 100%;">
                         <canvas id="coal" class="mt-6"></canvas>
@@ -192,7 +168,7 @@
                     </h2>
                     <div class="ml-auto mr-2 flex">
                         <form method="POST" action="#" class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
-                            <div id="CoalRange" class="form-control box p-2">
+                            <div id="ProduksiRange" class="form-control box p-2">
                                 <i class="fa fa-calendar"></i>&nbsp;
                                 <span></span> <i class="fa fa-caret-down"></i>
                             </div>
@@ -203,24 +179,11 @@
                             <div class="ml-4 mr-4">
                                 <div class="font-medium">Data Berhasil Difilter!</div>
                             </div>
-                        </div> <!-- END: Notification Content -->
+                        </div> 
+                        <!-- END: Notification Content -->
 
                     </div>
                 </div>
-                <!-- <div class="intro-y flex items-center h-10">
-                    <h2 class="text-lg font-medium truncate mr-5">Produksi</h2>
-                    <div class="dropdown ml-auto mt-0 bg-white">
-                        <button class="dropdown-toggle btn btn-outline-secondary font-normal" aria-expanded="false" data-tw-toggle="dropdown">
-                            Filter <i data-lucide="chevron-down" class="w-4 h-4 ml-2"></i>
-                        </button>
-                        <div class="dropdown-menu w-40">
-                            <ul class="dropdown-content overflow-y-auto h-32">
-                                <li><a href="" class="dropdown-item">Shift 1</a></li>
-                                <li><a href="" class="dropdown-item">Shift 2</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div> -->
 
                 <div class="overflow-x-auto mt-4">
                     <table class="table rounded-lg">
@@ -280,7 +243,7 @@
                 <div class="intro-y flex items-center h-10">
                     <h2 class="text-lg font-medium truncate mr-5">Kendala</h2>
                     <form method="POST" action="#" class="sm:ml-auto mt-3 sm:mt-0 relative text-slate-500">
-                        <div id="CoalRange" class="form-control box p-2">
+                        <div id="KendalaRange" class="form-control box p-2">
                             <i class="fa fa-calendar"></i>&nbsp;
                             <span></span> <i class="fa fa-caret-down"></i>
                         </div>
@@ -389,7 +352,7 @@
 
             if (awal !== null && akhir !== null) {
                 $i.ajax({
-                    url: 'http://127.0.0.1:8000dashboard/detail_filtered/',
+                    url: 'http://ptrci.co.id/datacenter/publicdashboard/detail_filtered/',
                     type: 'GET',
                     dataType: 'json',
                     data: {
@@ -405,6 +368,56 @@
 
         });
 
+
+        // Coal Range
+        $j('#CoalRange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Hari Ini': [moment(), moment()],
+                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+            console.log(start, end, label)
+        });
+
+        // Produksi Range
+        $j('#ProduksiRange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Hari Ini': [moment(), moment()],
+                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+            console.log(start, end, label)
+        });
+
+        // Kendala Range
+        $j('#KendalaRange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Hari Ini': [moment(), moment()],
+                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+            console.log(start, end, label)
+        });
+
+        
         function update_data(response) {
             // OVERBURDEN
             var data_prod_ob = response['data_prod_ob'];
@@ -439,23 +452,7 @@
             $j("#coalPlan").append(number_format(response['data_detail_coal_plan'][0].coal, 1));
             $j("#coalAch").append(number_format((response['data_detail_coal_prod'][0].coal / response['data_detail_coal_plan'][0].coal) * 100, 1) + '%');
         }
-        // Coal Range
-
-        // Overburden Range
-        $j('#CoalRange').daterangepicker({
-            startDate: start,
-            endDate: end,
-            ranges: {
-                'Hari Ini': [moment(), moment()],
-                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
-                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
-                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
-                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            }
-        }, function(start, end, label) {
-            console.log(start, end, label)
-        });
+        
 
         // OVERBURDEN
         //get the OB data

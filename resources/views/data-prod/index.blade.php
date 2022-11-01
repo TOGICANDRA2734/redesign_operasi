@@ -22,18 +22,18 @@
                 Produksi Actual - {{ Auth::user()->kodesite != 'X' ? $site[0]->namasite : 'HO - All Site' }}
             </h2>
 
-            <div class="ml-auto flex justify-center items-center">
-                <div class="mr-3 hidden" id="loading">
-                    <i data-loading-icon="tail-spin" class="w-5 h-5"></i>
-                </div>
-                <select id="pilihSite"
-                    class="block shadow-sm border p-2 mr-2 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray"
-                    name="kodesite" id="kodesite">
-                    <option value="">All Site</option>
-                    @foreach ($site as $st)
-                        <option value="{{ $st->kodesite }}">{{ $st->namasite }}</option>
-                    @endforeach
-                </select>
+
+            <div class="ml-auto flex items-center">
+                <i data-loading-icon="oval" class="w-7 h-7 mr-3 hidden" id="loading"></i> 
+                <input type="month" name="pilihBulan" id="pilihBulan" class="shadow-sm border p-2 rounded-md w-30  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray">
+                <input type="hidden" name="bulan" value="{{route('data-prod.index')}}" id="route">
+                <!-- BEGIN: Notification Content -->
+                <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
+                    <div class="ml-4 mr-4">
+                        <div class="font-medium">Data Berhasil Difilter!</div>
+                    </div>
+                </div> <!-- END: Notification Content -->
+    
             </div>
         </div>
         <hr class="mb-10">
@@ -77,7 +77,7 @@
                                 </td>
                             </tr>
                         @endforeach
-
+                        
 
                     </tbody>
                 </table>
@@ -87,71 +87,51 @@
 
     {{-- Filter --}}
     <script>
-        var $j = jQuery.noConflict();
+        var $i = jQuery.noConflict();
 
-        $j("#pilihSite").on('change', function() {
-            $j.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $j('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            var pilihSite = $j("#pilihSite").val() ? $j("#pilihSite").val() : "";
-            console.log(pilihSite);
-
-            $j("#loading").toggleClass('hidden');
-
-            $j.ajax({
-                type: "GET",
-                url: 'http://127.0.0.1:8000/data-prod-filter?layout=side-menu',
-                data: {
-                    'pilihSite': pilihSite,
-
-                },
-                success: function(response) {
-                    console.log(response['period'][0]);
-                    $j("#loading").toggleClass('hidden');
-                    $j("table tbody").empty();
-                    fullText = ""
-                    if (response) {
-                        i = 0;
-                        $j.each(response.data, function(index) {
-                            i += 1;
-                            text = '<tr class="text-center bg-white">' +
-                                '<td class="whitespace-nowrap text-center">' +
-                                    response['period'][index] + '</td>' +
-                                '<td class="whitespace-nowrap text-center">' +
-                                number_format(response
-                                    .data[index].ob_s1, 0) + '</td>' +
-                                '<td class="whitespace-nowrap text-center">' +
-                                number_format(response
-                                    .data[index].ob_s2, 0) + '</td>' +
-                                '<td class="whitespace-nowrap text-center">' +
-                                number_format(response
-                                    .data[index].coal_s1, 0) + '</td>' +
-                                '<td class="whitespace-nowrap text-center">' +
-                                number_format(response
-                                    .data[index].coal_s2, 0) + '</td>' +
-                                number_format(response
-                                    .data[index].ltr_wh, 0) + '</td>' +
-                                '<td class="whitespace-nowrap text-center">' +
-                                '<a href="/data-prod/' + response['period'][index] +
-                                '/edit" class="btn btn-warning text-white"><i class="fa-solid fa-pencil"></i></a>' +
-                                '</td>' +
-
-                                '</tr>';
-                            fullText += text
-                        });
-                        $j("table tbody").html(fullText);
-                        show_data();
-                    }
-                },
-                error: function(result) {
-                    console.log("error", result);
-                },
-            });
+        $i('#pilihBulan').on('change', function() {
+        $i = jQuery.noConflict();
+        $i.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
+            }
         });
 
+        const pilihBulan = $i(this).val();
+        var url = $("#route").val()
+
+        $i.ajax({
+            type: "POST",
+            url: url,
+            data: {
+                'pilihBulan': pilihBulan,
+            },
+            success: function(result) {
+                console.log(result.period[0]);
+
+                $i("table tbody").empty();
+                fullText = "";
+                if (result) {
+                    $i.each(result.data, function(index) {
+                        text = '<tr class="text-center bg-white">' +
+                            '<td class="">' + result.period[index] + '</td>' +
+                            '<td class="">' + number_format(result.data[index].ob_s1,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].ob_s2,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].coal_s1,0) + '</td>' +
+                            '<td class="">' + number_format(result.data[index].coal_s2,0) + '</td>' +
+                            '<td class="">' + '<a href="http://ptrci.co.id/datacenter/public/data-prod/' + result.periodInput[index] +'/edit" class="btn btn-warning text-white"><i class="fa-solid fa-pencil"></i></a>' + '</td>' +
+                            '</tr>';
+                        fullText += text
+                    });
+                    $i("table tbody").html(fullText);
+                    show_data()
+                }
+            },
+            error: function(result) {
+                console.log("error", result);
+            },
+        });
+    })
         function show_data() {
             Toastify({
                 node: $("#success-notification-content")

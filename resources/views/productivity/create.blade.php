@@ -81,7 +81,7 @@
                     </tr>
                     @endforeach
                     <tr class="text-center">
-                        <td colspan="22">
+                        <td colspan="38">
                             <span class="font-bold">Total Produksi</span>: {{number_format($totalDataPty[0]->total_pty) }}
                         </td>
                     </tr>

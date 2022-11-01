@@ -244,6 +244,7 @@ Route::middleware('auth')->group(function() {
         Route::get('dashboard/detail/{site}', [DashboardController::class, 'show'])->name('dashboard.show');
         Route::get('dashboard/detail_filtered/', [DashboardController::class, 'show_data_filtered'])->name('dashboard.show.filtered');
         Route::resource('data-prod', dataProdController::class);
+        Route::post('data-prod', [dataProdController::class, 'index'])->name('data-prod.filter.month');
         Route::get('data-prod-excel-generator', [dataProdController::class, 'export_data'])->name('export_data.index');
         Route::get('data-prod/create_data/{tgl}', [dataProdController::class, 'create_data'])->name('create_data.index');
         Route::put('data-prod/update_data/{data_prod}', [dataProdController::class, 'update_data'])->name('update_data.index');

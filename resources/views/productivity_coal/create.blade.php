@@ -74,7 +74,7 @@
                     </tr>
                     @endforeach
                     <tr class="text-center">
-                        <td colspan="21">
+                        <td colspan="34">
                             <span class="font-bold">Total Produksi</span>: {{number_format($totalDataCoal[0]->total_rit) }}
                         </td>
                     </tr>
