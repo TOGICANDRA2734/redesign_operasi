@@ -75,6 +75,8 @@
                         <th class="whitespace-nowrap text-center capitalize">Masa Kerja</th>
                         <th class="whitespace-nowrap text-center capitalize">Pensiun</th>
                         <th class="whitespace-nowrap text-center capitalize">Habis Kontrak</th>
+                        <th class="whitespace-nowrap text-center capitalize">Status Kontrak</th>
+                        <th class="whitespace-nowrap text-center capitalize">Status Pensiun</th>
                         <th class="whitespace-nowrap text-center capitalize">Keterangan</th>
                     </tr>
                 </thead>
@@ -83,7 +85,12 @@
                         <tr class="bg-white text-center">
                             <td>{{ $key + 1 }}</td>
                             @foreach ($dt as $k => $d)
-                                @if ($k != 'id')
+                                @if ($k == 'skpkwt' or $k == 'skpensiun')
+                                    <td>
+                                        {{-- btn-rounded-success btn-rounded-pending btn-rounded-danger --}}
+                                        <button class="btn {{($d==='Kontrak Habis' or $d==='Pensiun') ? 'btn-rounded-danger' : ( ($d==='Dibawah Kontrak' or $d==='Belum Pensiun') ? 'btn-rounded-success' :'btn-rounded-pending')}} w-24 mr-1 mb-2">{{$d}}</button> 
+                                    </td>
+                                @elseif ($k != 'id')
                                     <td>{{$d}}@if($k == 'lengkap')%@endif
                                     </td>
                                 @endif

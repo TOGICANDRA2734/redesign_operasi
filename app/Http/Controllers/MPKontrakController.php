@@ -14,9 +14,8 @@ class MPKontrakController extends Controller
      */
     public function index()
     {
-        $subquery = "SELECT id, site, nik, nama, dept, jabatan, statuskary, tgllahir, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0 umur, mulaikerja, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),mulaikerja)), '%Y') + 0 masa_kerja, tglpensiun, akhirpkwt, keterangan
-        FROM mp_biodata
-        LIMIT 100";
+        $subquery = "SELECT id, site, nik, nama, dept, jabatan, statuskary, DATE_FORMAT(tgllahir, \"%d-%m-%Y\") tgllahir, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0 umur, DATE_FORMAT(mulaikerja, \"%d-%m-%Y\") mulaikerja, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),mulaikerja)), '%Y') + 0 masa_kerja, DATE_FORMAT(tglpensiun, \"%d-%m-%Y\") tglpensiun, akhirpkwt, keterangan, IF(akhirpkwt < NOW(), \"Kontrak Habis\", (IF(akhirpkwt >= NOW() + INTERVAL 1 MONTH, \"Dibawah Kontrak\", \"Kontrak Habis dalam 1 Bulan\"))) skpkwt, IF(tglpensiun < NOW(), \"Pensiun\", (IF(tglpensiun >= NOW() + INTERVAL 6 MONTH, \"Belum Pensiun\", \"Segera Pensiun\"))) skpensiun 
+        FROM mp_biodata_local";
         $data = DB::select(DB::raw($subquery));
         return view('mpKontrak.index', compact('data'));
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Site;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -11,40 +12,60 @@ class MohhController extends Controller
 {
     public function index(Request $request)
     {
-        if($request && $request->has('cari_1') || $request->has('cari_2')){
-            if($request->has('cari_1')){
-                $cari = "nom_unit LIKE '%".$request->cari_1."%' and";                
-            } else if($request->has('cari_2')){
-                $cari = "nom_unit LIKE '%".$request->cari_2."%' and";                
-            }
-        } else{
-            $cari = "";
+        $where = '';
+        if (count($request->all()) > 1) {              
+            $bulan = $request->has('bulan') ? Carbon::createFromFormat('Y-m', $request->bulan) : Carbon::now();
+
+            // Where
+            $where .= ($request->has('cari_1')) ? "nom_unit LIKE '%".$request->cari_1."%' " : "";
+            $where .= ($request->has('cari_2') & $request->has('cari_1')) ? " AND " : "";
+            $where .= ($request->has('cari_2') & !empty($request->cari_2)) ? "Nom_unit LIKE '%".$request->cari_2."%' " : "";
+            $where .= ($request->has('bulan') & $request->has('cari_2') & !empty($request->cari_2)) ? " AND " : "";
+            $where .= ($request->has('bulan')) ? "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'" : "";
+            $where .= ($request->has('kodesite')) ? " AND " : "";
+            $where .= ($request->has('kodesite')) ? "tp.nom_unit LIKE '%" . $request->kodesite . "%'" : "";
+            $where .= (count($request->except('_token'))) > 0 ? "AND " : "";
+            $where .= "DEL=0";
+
+        } else {
+            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
         }
 
-        if($request && $request->has('bulan')){
-            $bulan = Carbon::parse($request->bulan);
-            $awal = $bulan->startOfMonth()->copy();
-            $akhir = $bulan->endOfMonth()->copy();
 
-            if(!$request->has('kodesite')){
-                $tanggal =  "TGL BETWEEN '" . $awal . "' AND '" . $akhir . "'";              
-            } else {
-                $tanggal =  "TGL BETWEEN '" . $awal . "' AND '" . $akhir . "' and";              
-            }
-        } else{
-            $bulan = Carbon::now();
-            if(!$request->has('kodesite')){
-                $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";    
-            } else {
-                $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "' and";    
-            }
-        }
+        // if($request && $request->has('cari_1') || $request->has('cari_2')){
+        //     if($request->has('cari_1')){
+        //         $cari = "nom_unit LIKE '%".$request->cari_1."%' and";                
+        //     } else if($request->has('cari_2')){
+        //         $cari = "nom_unit LIKE '%".$request->cari_2."%' and";                
+        //     }
+        // } else{
+        //     $cari = "";
+        // }
 
-        if($request && $request->has('kodesite')){
-            $site = "kodesite='".$request->kodesite."'";                
-        } else{
-            $site = "";
-        }
+        // if($request && $request->has('bulan')){
+        //     $bulan = Carbon::parse($request->bulan);
+        //     $awal = $bulan->startOfMonth()->copy();
+        //     $akhir = $bulan->endOfMonth()->copy();
+
+        //     if(!$request->has('kodesite')){
+        //         $tanggal =  "TGL BETWEEN '" . $awal . "' AND '" . $akhir . "'";              
+        //     } else {
+        //         $tanggal =  "TGL BETWEEN '" . $awal . "' AND '" . $akhir . "' and";              
+        //     }
+        // } else{
+        //     $bulan = Carbon::now();
+        //     if(!$request->has('kodesite')){
+        //         $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";    
+        //     } else {
+        //         $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "' and";    
+        //     }
+        // }
+
+        // if($request && $request->has('kodesite')){
+        //     $site = "kodesite='".$request->kodesite."'";                
+        // } else{
+        //     $site = "";
+        // }
 
         $subquery = "WITH summ AS                                                     
         (                                                               
@@ -85,7 +106,7 @@ class MohhController extends Controller
         round(SUM(jam),0) x_total,                                                   
         '2' urut                                                         
         FROM pma_tp                                                       
-        WHERE ".$cari." ".$tanggal." ".$site." 
+        WHERE ".$where." 
         GROUP BY nom_unit                                                
                                                                          
         UNION ALL                                                        
@@ -127,7 +148,7 @@ class MohhController extends Controller
         round(SUM(jam),0) x_total,                                                       
         '1' urut                                                         
         FROM pma_a2b                                                      
-        WHERE ".$cari." ".$tanggal." ".$site." 
+        WHERE ".$where." 
         GROUP BY nom_unit                                                
         )                                                                
         SELECT                                                           
@@ -168,7 +189,6 @@ class MohhController extends Controller
         urut                                                             
         FROM summ                                                        
         ORDER BY urut,nom_unit";
-
         $data = collect(DB::select($subquery));
 
         $site = Site::where('status_website', 1)->get();

@@ -116,6 +116,19 @@
                 </div> <!-- END: Modal Header -->
                 <!-- BEGIN: Modal Body -->
                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                    
+                    <div class="col-span-12 mx-auto">
+                        <div class="flex justify-center flex-col items-center">
+                            <div class="w-36 h-36 sm:w-40 sm:h-40 flex-none lg:w-52 lg:h-52 image-fit relative">
+                                <img alt="User Profile" class="rounded-full" src="dist/images/profile-10.jpg">
+                            </div>
+                            <div class="text-center">
+                                <div class="w-24 sm:w-40 truncate sm:whitespace-normal font-medium text-lg">Al Pacino</div>
+                                <div class="text-slate-500">Software Engineer</div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <ul class="nav nav-tabs col-span-12" role="tablist">
                         <li id="example-1-tab" class="nav-item flex-1" role="presentation"> <button
                                 class="nav-link w-full py-2 active" data-tw-toggle="pill" data-tw-target="#example-tab-1"
@@ -192,7 +205,8 @@
                     var fullText = "";
                     if (response) {
                         i = 0;
-                        $i(".modal-header h2").html("Data Personal - " + response.record1[0].nama)
+                        $i(".modal-header h2").html("Data Personal")
+                        
                         $i.each(response.record1[0], function(index, data) {
                             
                             fullText += "<tr> "+
