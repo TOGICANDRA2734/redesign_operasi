@@ -17,7 +17,6 @@ class ProductivityImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-
         return new Productivity([
             'nom_unit' => $row['nom_unit'],
             'pit' => $row['pit'],
@@ -25,7 +24,7 @@ class ProductivityImport implements ToModel, WithHeadingRow
             'dist' => $row['jarak'],
             'ket' => $row['keterangan'],
             'jam' => $row['jam'],
-            'tgl' => Carbon::now(),
+            'tgl' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tgl'])),
             'type' => substr($row['nom_unit'], 0, 4),
             'kodesite' => Auth::user()->kodesite,
             'admin' => Auth::user()->username,

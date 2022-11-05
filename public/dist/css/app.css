@@ -866,48 +866,6 @@ select{
 }
 /* Button Elevated */
 /* Button Rounded */
-.btn-rounded-primary{
-    --tw-border-opacity: 1;
-    border-color: rgb(var(--color-primary) / var(--tw-border-opacity));
-    --tw-bg-opacity: 1;
-    background-color: rgb(var(--color-primary) / var(--tw-bg-opacity));
-    --tw-text-opacity: 1;
-    color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-.dark .btn-rounded-primary{
-    --tw-border-opacity: 1;
-    border-color: rgb(var(--color-primary) / var(--tw-border-opacity));
-}
-.btn-rounded-primary{
-    border-radius: 9999px;
-}
-.btn-rounded-secondary{
-    border-color: rgb(var(--color-secondary) / 0.7);
-    background-color: rgb(var(--color-secondary) / 0.7);
-    --tw-text-opacity: 1;
-    color: rgb(var(--color-slate-500) / var(--tw-text-opacity));
-}
-.dark .btn-rounded-secondary{
-    --tw-border-opacity: 1;
-    border-color: rgb(var(--color-darkmode-400) / var(--tw-border-opacity));
-    --tw-bg-opacity: 1;
-    background-color: rgb(var(--color-darkmode-400) / var(--tw-bg-opacity));
-    --tw-text-opacity: 1;
-    color: rgb(var(--color-slate-300) / var(--tw-text-opacity));
-}
-.btn-rounded-secondary:hover:not(:disabled){
-    --tw-border-opacity: 1;
-    border-color: rgb(var(--color-slate-100) / var(--tw-border-opacity));
-    --tw-bg-opacity: 1;
-    background-color: rgb(var(--color-slate-100) / var(--tw-bg-opacity));
-}
-.dark .btn-rounded-secondary:hover:not(:disabled){
-    border-color: rgb(var(--color-darkmode-300) / 0.8);
-    background-color: rgb(var(--color-darkmode-300) / 0.8);
-}
-.btn-rounded-secondary{
-    border-radius: 9999px;
-}
 .btn-rounded-success{
     --tw-border-opacity: 1;
     border-color: rgb(var(--color-success) / var(--tw-border-opacity));
@@ -921,21 +879,6 @@ select{
     border-color: rgb(var(--color-success) / var(--tw-border-opacity));
 }
 .btn-rounded-success{
-    border-radius: 9999px;
-}
-.btn-rounded-warning{
-    --tw-border-opacity: 1;
-    border-color: rgb(var(--color-warning) / var(--tw-border-opacity));
-    --tw-bg-opacity: 1;
-    background-color: rgb(var(--color-warning) / var(--tw-bg-opacity));
-    --tw-text-opacity: 1;
-    color: rgb(var(--color-slate-900) / var(--tw-text-opacity));
-}
-.dark .btn-rounded-warning{
-    --tw-border-opacity: 1;
-    border-color: rgb(var(--color-warning) / var(--tw-border-opacity));
-}
-.btn-rounded-warning{
     border-radius: 9999px;
 }
 .btn-rounded-pending{
@@ -966,27 +909,6 @@ select{
     border-color: rgb(var(--color-danger) / var(--tw-border-opacity));
 }
 .btn-rounded-danger{
-    border-radius: 9999px;
-}
-.btn-rounded-dark{
-    --tw-border-opacity: 1;
-    border-color: rgb(var(--color-dark) / var(--tw-border-opacity));
-    --tw-bg-opacity: 1;
-    background-color: rgb(var(--color-dark) / var(--tw-bg-opacity));
-    --tw-text-opacity: 1;
-    color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-.dark .btn-rounded-dark{
-    border-color: transparent;
-    --tw-bg-opacity: 1;
-    background-color: rgb(var(--color-darkmode-800) / var(--tw-bg-opacity));
-    --tw-text-opacity: 1;
-    color: rgb(var(--color-slate-300) / var(--tw-text-opacity));
-}
-.dark .btn-rounded-dark:hover:not(:disabled){
-    background-color: rgb(var(--color-darkmode-800) / 0.7);
-}
-.btn-rounded-dark{
     border-radius: 9999px;
 }
 /* Button Elevated Rounded */
