@@ -90,7 +90,7 @@
                         <th rowspan="2" class="whitespace-nowrap text-center">NO</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Nom Unit</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Model</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">DO</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center" style="width: 7rem;">DO</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">SITE</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Type Unit</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">S/N</th>

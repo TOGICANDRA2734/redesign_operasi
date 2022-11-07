@@ -2347,11 +2347,11 @@ select{
 .gap-6{
     gap: 1.5rem;
 }
-.gap-3{
-    gap: 0.75rem;
-}
 .gap-5{
     gap: 1.25rem;
+}
+.gap-3{
+    gap: 0.75rem;
 }
 .gap-4{
     gap: 1rem;
@@ -2497,13 +2497,13 @@ select{
     --tw-bg-opacity: 1;
     background-color: rgb(254 202 202 / var(--tw-bg-opacity));
 }
-.bg-primary{
-    --tw-bg-opacity: 1;
-    background-color: rgb(var(--color-primary) / var(--tw-bg-opacity));
-}
 .bg-white{
     --tw-bg-opacity: 1;
     background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+.bg-primary{
+    --tw-bg-opacity: 1;
+    background-color: rgb(var(--color-primary) / var(--tw-bg-opacity));
 }
 .bg-red-600{
     --tw-bg-opacity: 1;

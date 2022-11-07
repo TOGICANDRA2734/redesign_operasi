@@ -6,6 +6,7 @@ use App\Models\dataProd;
 use App\Models\Plant_Populasi;
 use App\Models\Site;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PopulasiUnitController extends Controller
@@ -92,10 +93,11 @@ class PopulasiUnitController extends Controller
      */
     public function create()
     {
+        $status = Auth::user()->kodesite === "X" ? 1 : 0;
         $subquery = "SELECT DISTINCT model FROM plant_populasi";
         $model = collect(DB::select($subquery));
 
-        $site = Site::where('status', 1)->get();
+        $site = $status ? Site::where('status', 1)->get() : Site::where('kodesite', Auth::user()->kodesite)->get();
 
         $subquery = "SELECT DISTINCT type_unit FROM plant_populasi";
         $type_unit = collect(DB::select($subquery));

@@ -43,6 +43,8 @@
                         <th rowspan="2" class="whitespace-nowrap text-center">#</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Bagian</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">Tanggal</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Status</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Rekomendasi</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">File</th>
                         <th rowspan="2" class="whitespace-nowrap text-center">AKSI</th>
                     </tr>

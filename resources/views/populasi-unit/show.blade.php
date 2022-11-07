@@ -35,7 +35,7 @@
             </h3>
 
             <div>
-                <a href="{{route('hm.edit', $data[0]->id)}}" class="btn px-2 box mr-2">
+                <a href="{{route('hm.create')}}" class="btn px-2 box mr-2">
                     <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
                 </a>
                 <a href="https://drive.google.com/file/d/1DWyJjaSfIWxXk8GwVe-zmsnpqkG3fsYq/view?usp=sharing" class="mr-3 btn btn-primary mb-2"> 
@@ -56,7 +56,7 @@
         <div class="grid grid-cols-12 gap-5">
             {{-- Data Unit --}}
             <div class="w-full overflow-x-auto col-span-6">
-                <table class="w-full table table-striped text-xs">
+                <table class="w-full table table-striped text-xs border">
                     <tbody>
                         <tr class="bg-white text-center">
                             <th class="w-10 border">Code Unit</th>
@@ -154,18 +154,18 @@
 
             {{-- Data HM Unit --}}
             <div class="w-full overflow-x-auto col-span-6">
-                <table class="w-full table table-striped text-xs">
+                <table class="w-full table table-striped text-xs border">
                     <tbody>
                         @foreach ($dataHM as $key => $dt)
                             <tr class="bg-white text-center">
-                                <th class="w-28 border">HM {{$key + 1}} <br> ({{$dt->tgl}})</th>
-                                <td>{{ number_format($dt->hm) }}</td>
-                                <td class="whitespace-nowrap text-center">
+                                <th class="w-2/12 border">HM {{$key + 1}} <br> ({{$dt->tgl}})</th>
+                                <td class="w-8/12 text-sm">{{ number_format($dt->hm) }}</td>
+                                <td class="whitespace-nowrap text-center w-2/12">
                                     <a href="{{ route('hm.edit.data', $dt->id) }}" class="btn btn-warning text-white">
                                         <i class="fa-solid fa-pencil"></i>
                                     </a>
-                                    <a href="{{ route('hm.edit.data', $dt->id) }}" class="btn btn-warning text-white">
-                                        <i class="fa-solid fa-pencil"></i>
+                                    <a href="{{ route('hm.edit.data', $dt->id) }}" class="btn btn-danger text-white">
+                                        <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </td>
                             </tr>

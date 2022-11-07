@@ -29,14 +29,24 @@
                         <thead class="table-dark sticky top-0">
                             <tr
                                 class="text-xs font-semibold tracking-wide text-center text-white uppercase dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
-                                <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">#</th>
-                                <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Code
-                                    Unit</th>
-                                <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Type
-                                    Unit</th>
-                                <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">
-                                    Keterangan BD</th>
-                                <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Aksi
+                                <th rowspan="2" class="">#</th>
+                                <th rowspan="2" class="">Code Unit</th>
+                                <th rowspan="2" class="">Type Unit</th>
+                                <th colspan="3" class="">Tanggal</th>
+                                <th rowspan="2" class="">KODE BD</th>
+                                <th rowspan="2" class="">PIC</th>
+                                <th rowspan="2" class="">Keterangan</th>
+                                <th rowspan="2" class="">Aksi</th>
+                            </tr>
+                            <tr>
+                                <th class=" text-center" style="width: 7rem;">
+                                    BD
+                                </th>
+                                <th class=" text-center" style="width: 7rem;">
+                                    Plan RFU
+                                </th>
+                                <th class=" text-center">
+                                    Keterangan RFU
                                 </th>
                             </tr>
                         </thead>
@@ -104,10 +114,10 @@
                         <thead class="table-dark sticky top-0">
                             <tr
                                 class="text-xs font-semibold tracking-wide text-center text-white uppercase dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
-                                <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">#</th>
-                                <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Code
+                                <th rowspan="2" class="">#</th>
+                                <th rowspan="2" class="">Code
                                     Unit</th>
-                                <th rowspan="2" class="px-2 py-1 md:px-4 md:py-3 border-b border-r border-stone">Type
+                                <th rowspan="2" class="">Type
                                     Unit</th>
                             </tr>
                         </thead>

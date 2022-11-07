@@ -7,6 +7,7 @@ use App\Models\Plant_Populasi;
 use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class BDHarianController extends Controller
@@ -120,13 +121,17 @@ class BDHarianController extends Controller
     public function create()
     {
         // Data Utama
-        $nom_unit = DB::table("plant_populasi")->select("Nom_unit")->get();
+        $status = Auth::user()->kodesite === 'X' ? 1 : 0;
+
+        $site = $status ? DB::table('site')->select('kodesite', 'namasite', 'lokasi')->where('status', '=', 1)->get() : DB::table('site')->select('kodesite', 'namasite', 'lokasi')->where('status', '=', 1)->where('kodesite', '=', Auth::user()->kodesite)->get() ;
+        $nom_unit = $status ? DB::table("plant_populasi")->select("Nom_unit")->get() : DB::table("plant_populasi")->select("Nom_unit")->where('kodesite', '=', Auth::user()->kodesite)->get() ;
         $kode_bd = DB::table("kode_bd")->select("kode_bd", "deskripsi_bd")->where('kode_bd', '<>', 'NA')->get();
         $dok_type = DB::table("plant_status_bd_dok")->select(DB::raw("DISTINCT dok_type"))->get();
         $dok_tiket = DB::table("plant_status_bd_dok")->select(DB::raw("DISTINCT id_tiket"))->get();
-        $site = DB::table('site')->select('kodesite', 'namasite', 'lokasi')->where('status', '=', 1)->get();
 
-        return view('bd-harian.create', compact('nom_unit', 'kode_bd', 'dok_type', 'dok_tiket', 'site'));
+        $dataTable = DB::table("plant_status_bd")->select(DB::raw("id, nom_unit, DATE_FORMAT(tgl_bd,\"%d-%m-%Y\") tgl_bd, DATE_FORMAT(tgl_rfu,\"%d-%m-%Y\") tgl_rfu, ket_tgl_rfu, kode_bd, pic, hm, keterangan"))->orderBy('id', 'desc')->limit(5)->get();
+
+        return view('bd-harian.create', compact('nom_unit', 'kode_bd', 'dok_type', 'dok_tiket', 'site','dataTable'));
     }
 
     /**
@@ -183,8 +188,8 @@ class BDHarianController extends Controller
     {
         $request->validate([
             'nom_unit' => 'required',
-            'tgl_bd' => 'required',
-            'tgl_rfu' => 'required',
+            'tgl_bd' => 'required|date',
+            'tgl_rfu' => 'required|date|after_or_equal:tgl_bd',
             'ket_tgl_rfu' => 'required',
             'kode_bd' => 'required',
             'pic' => 'required',
@@ -207,10 +212,10 @@ class BDHarianController extends Controller
 
 
         if($record){
-            return redirect()->route('super_admin.bd-harian.index')->with(['success' => 'Data Berhasil Ditambah!']);;
+            return redirect()->route('bd-harian.create')->with(['success' => 'Data Berhasil Ditambah!']);;
         }
         else{
-            return redirect()->route('super_admin.bd-harian.index')->with(['error' => 'Data Gagal Ditambah!']);;
+            return redirect()->route('bd-harian.create')->with(['error' => 'Data Gagal Ditambah!']);;
         }
     }
 
@@ -407,6 +412,11 @@ class BDHarianController extends Controller
         $subquery = "SELECT c.id, 
         a.nom_unit,
         a.type_unit,
+        date_format(c.tgl_bd, \"%d-%m-%Y\") tgl_bd,
+        date_format(c.tgl_rfu, \"%d-%m-%Y\") tgl_rfu,
+        c.ket_tgl_rfu,
+        c.kode_bd,
+        c.pic,
         c.keterangan
         FROM plant_populasi a
         JOIN plant_hm b

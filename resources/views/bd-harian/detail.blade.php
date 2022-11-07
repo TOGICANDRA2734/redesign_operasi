@@ -140,61 +140,66 @@
             </div>
             <hr class="my-5 intro-y">
 
-            <table class="w-full table table-striped mt-10 intro-y">
-                <thead class="table-dark">
-                    <tr class="whitespace-nowrap text-center">
-                        <th rowspan="2" class="whitespace-nowrap text-center w-5">No</th>
-                        <th colspan="3" class="whitespace-nowrap text-center">RS/SR/PP</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Item Code</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Item Name</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Part Number</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Progress</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center w-[12rem]">Aksi</th>
-                    </tr>
-                    <tr class="whitespace-nowrap text-center">
-                        <th class="whitespace-nowrap text-center">Type</th>
-                        <th class="whitespace-nowrap text-center">No.</th>
-                        <th class="whitespace-nowrap text-center">Tanggal</th>
-                    </tr>
-                </thead>
+            
+            <div class="w-full overflow-hidden rounded-lg shadow-xs">
+                <div class="w-full overflow-x-auto max-h-[45rem]">
+                    <table class="w-full table table-striped intro-y ">
+                        <thead class="table-dark">
+                            <tr class="whitespace-nowrap text-center">
+                                <th rowspan="2" class="whitespace-nowrap text-center w-5">No</th>
+                                <th colspan="3" class="whitespace-nowrap text-center">RS/SR/PP</th>
+                                <th rowspan="2" class="whitespace-nowrap text-center">Item Code</th>
+                                <th rowspan="2" class="whitespace-nowrap text-center">Item Name</th>
+                                <th rowspan="2" class="whitespace-nowrap text-center">Part Number</th>
+                                <th rowspan="2" class="whitespace-nowrap text-center">Progress</th>
+                                <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
+                                <th rowspan="2" class="whitespace-nowrap text-center w-[12rem]">Aksi</th>
+                            </tr>
+                            <tr class="whitespace-nowrap text-center">
+                                <th class="whitespace-nowrap text-center">Type</th>
+                                <th class="whitespace-nowrap text-center">No.</th>
+                                <th class="whitespace-nowrap text-center">Tanggal</th>
+                            </tr>
+                        </thead>
 
-                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                    @if($dataDok == "Data Kosong")
-                    <div class="bg-red-600 text-white text-center p-3 font-semibold">
-                        Data Kosong
-                    </div>
-                    @else
-                    @foreach($dataDok as $key => $dt)
-                    <tr class="whitespace-nowrap text-center">
-                        {{-- @foreach ($dt as $d)
-                            <td>{{$d}}</td>
-                        @endforeach --}}
-                        <td class="whitespace-nowrap text-center">{{$key+1}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->dok_type}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->dok_no}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->dok_tgl}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->no_st}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->uraian_bd}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->pn}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->uraian}}</td>
-                        <td class="whitespace-nowrap text-center">{{$dt->namasite}}</td>
-                        <td class="whitespace-nowrap text-center">
-                            <a href="{{route('super_admin.po-harian-show.example', $dt->no_st)}}" class="btn px-2 btn-dark mr-1 mb-2">
-                                <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="eye"></i> </span>
-                            </a>
-                            <a href="{{route('super_admin.bd-harian-dok.edit', $dt->no_st)}}" class="btn px-2 btn-warning  mr-1 mb-2">
-                                <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="pencil"></i> </span>
-                            </a>
-                            <a onclick="deleteConfirmationDetail({{$dt->no_st}})" class="btn px-2 btn-danger mr-1 mb-2">
-                                <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="trash"></i> </span>
-                            </a>
-                        </td>
-                    </tr>
-                    @endforeach
-                    @endif
-                </tbody>
-            </table>
+                        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                            @if($dataDok == "Data Kosong")
+                            <div class="bg-red-600 text-white text-center p-3 font-semibold">
+                                Data Kosong
+                            </div>
+                            @else
+                            @foreach($dataDok as $key => $dt)
+                            <tr class="whitespace-nowrap text-center">
+                                {{-- @foreach ($dt as $d)
+                                    <td>{{$d}}</td>
+                                @endforeach --}}
+                                <td class="whitespace-nowrap text-center">{{$key+1}}</td>
+                                <td class="whitespace-nowrap text-center">{{$dt->dok_type}}</td>
+                                <td class="whitespace-nowrap text-center">{{$dt->dok_no}}</td>
+                                <td class="whitespace-nowrap text-center">{{$dt->dok_tgl}}</td>
+                                <td class="whitespace-nowrap text-center">{{$dt->no_st}}</td>
+                                <td class="whitespace-nowrap text-center">{{$dt->uraian_bd}}</td>
+                                <td class="whitespace-nowrap text-center">{{$dt->pn}}</td>
+                                <td class="whitespace-nowrap text-center">{{$dt->uraian}}</td>
+                                <td class="whitespace-nowrap text-center">{{$dt->namasite}}</td>
+                                <td class="whitespace-nowrap text-center">
+                                    <a href="{{route('super_admin.po-harian-show.example', $dt->no_st)}}" class="btn px-2 btn-dark mr-1 mb-2">
+                                        <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="eye"></i> </span>
+                                    </a>
+                                    <a href="{{route('super_admin.bd-harian-dok.edit', $dt->no_st)}}" class="btn px-2 btn-warning  mr-1 mb-2">
+                                        <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="pencil"></i> </span>
+                                    </a>
+                                    <a onclick="deleteConfirmationDetail({{$dt->no_st}})" class="btn px-2 btn-danger mr-1 mb-2">
+                                        <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="trash"></i> </span>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

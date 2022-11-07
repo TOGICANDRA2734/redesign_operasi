@@ -117,6 +117,100 @@ class SideMenuAdmin
                 ],
             ],
             'devider',
+            'Transaksi Plant' => [
+                'icon' => 'sidebar',
+                'title' => 'Transaksi Plant',
+                'sub_menu' => [
+                    'breakdown-harian' => [
+                        'icon' => 'box',
+                        'title' => 'Status BD Harian',
+                        'route_name' => 'bd-harian.create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'populasi-unit' => [
+                        'icon' => 'box',
+                        'title' => 'Populasi unit',
+                        'route_name' => 'populasi-unit.create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'hm-unit' => [
+                        'icon' => 'box',
+                        'title' => 'HM Unit',
+                        'route_name' => 'hm.create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'historical-overhaul' => [
+                        'icon' => 'box',
+                        'title' => 'Historical Overhaul',
+                        'route_name' => 'historical-overhaul.create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'program-analisa-pelumasan' => [
+                        'icon' => 'box',
+                        'title' => 'Program Analisa Pelumas (PAP)',
+                        'route_name' => 'pap.create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ],
+            ],
+            'devider',
+            'Laporan Plant' => [
+                'icon' => 'sidebar',
+                'title' => 'Laporan Plant',
+                'sub_menu' => [
+                    'breakdown-harian' => [
+                        'icon' => 'box',
+                        'title' => 'Status BD Harian',
+                        'route_name' => 'bd-harian.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'populasi-unit' => [
+                        'icon' => 'box',
+                        'title' => 'Populasi unit',
+                        'route_name' => 'populasi-unit.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'historical-repair' => [
+                        'icon' => 'box',
+                        'title' => 'Historical Repair',
+                        'route_name' => 'historical-unit.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'historical-overhaul' => [
+                        'icon' => 'box',
+                        'title' => 'Historical Overhaul',
+                        'route_name' => 'historical-overhaul.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'program-analisa-pelumasan' => [
+                        'icon' => 'box',
+                        'title' => 'Program Analisa Pelumas (PAP)',
+                        'route_name' => 'pap.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ],
+            ],
+            'devider',
             'Manpower' => [
                 'icon' => 'sidebar',
                 'title' => 'Manpower',

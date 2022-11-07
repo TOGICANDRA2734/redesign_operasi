@@ -6,79 +6,118 @@
 
 @section('subcontent')
     @if(Auth::user()->hasRole(['super_admin','admin']))
-    <div class="intro-y flex items-center mt-8">
-        <h2 class="text-lg font-medium mr-auto">Transaksi PAP</h2>
-    </div>
-    <div class="grid grid-cols-12 gap-6 mt-5">
-        <div class="intro-y col-span-12 ">
-            <!-- BEGIN: Form Layout -->
-            <form action="{{route('super_admin.pap.store')}}" method="POST" class="intro-y box p-5" enctype="multipart/form-data">
-                @csrf
-                <!-- BEGIN: Form Input FIle -->
-                <div class="mt-3">
-                    <label>Site</label>
-                    <!-- BEGIN: Basic Select -->
-                    <div class="mt-2"> 
-                        <select id="site" data-placeholder="Pilih site" name="site" class="tom-select w-full @error('site') border-danger @enderror">
-                            <option value="" selected disabled>Pilih Site</option>
-                            @foreach($site as $st)
-                            <option value="{{$st->kodesite}}">{{$st->namasite}} - {{$st->lokasi}}</option>
+        <div class="intro-y flex items-center mt-8">
+            <h2 class="text-lg font-medium mr-auto">Transaksi PAP</h2>
+        </div>
+        <hr class="w-full">
+        <div class="grid grid-cols-12 gap-6 my-5">
+            <div class="intro-y col-span-12 ">
+                <!-- BEGIN: Form Layout -->
+                <form action="{{route('super_admin.pap.store')}}" method="POST" class="intro-y box p-5" enctype="multipart/form-data">
+                    @csrf
+                    <!-- BEGIN: Form Input FIle -->
+                    <div class="mt-3">
+                        <label>Site</label>
+                        <!-- BEGIN: Basic Select -->
+                        <div class="mt-2"> 
+                            <select id="site" data-placeholder="Pilih site" name="site" class="tom-select w-full @error('site') border-danger @enderror">
+                                <option value="" selected disabled>Pilih Site</option>
+                                @foreach($site as $st)
+                                <option value="{{$st->kodesite}}">{{$st->namasite}} - {{$st->lokasi}}</option>
+                                @endforeach
+                            </select> 
+                            @error('site')
+                                <div class="text-danger mt-2">{{$message}}</div>
+                            @endif
+                        </div>
+                        <!-- END: Basic Select -->
+                    </div>
+
+                    <div class="mt-3">
+                        <label>Code Unit</label>
+                        <!-- BEGIN: Basic Select -->
+                        <div class="mt-2"> 
+                            <select id="nom_unit" data-placeholder="Pilih Code Unit" name="nom_unit" class=" w-full @error('nom_unit') border-danger @enderror">
+                                <option value="" selected disabled>Pilih Unit</option>
+                            </select> 
+                            @error('nom_unit')
+                                <div class="text-danger mt-2">{{$message}}</div>
+                            @endif
+                        </div>
+                        <!-- END: Basic Select -->
+                    </div>
+
+                    <div class="mt-3">
+                        <label>Kompartemen</label>
+                        <!-- BEGIN: Basic Select -->
+                        <div class="mt-2"> 
+                            <select id="kompartemen" data-placeholder="Pilih Kompartemen" name="kompartemen" class="w-full @error('kompartemen') border-danger @enderror">
+                                <option value="" selected disabled>Pilih Kompartemen</option>
+                            </select> 
+                            @error('kompartemen')
+                                <div class="text-danger mt-2">{{$message}}</div>
+                            @endif
+                        </div>
+                        <!-- END: Basic Select -->
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="file_pap">File PAP (PDF)</label>
+                        <div class="mt-2">
+                            <input type="file" id="file_pap" name="file_pap" class="w-full @error('site') border-danger @enderror"/>
+                            <!-- <input name="file_pap" id="file_pap" type="file" class="form-control @error('file_pap') border-danger @enderror}}" /> 
+                            @error('file_pap')
+                                <div class="text-danger mt-2">{{$message}}</div>
+                            @endif -->
+                        </div>
+                    </div>
+                    <!-- END: Form Input File -->
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-lg btn-primary w-full mr-1 mb-2 mt-2">Submit</button>
+                    </div>
+                </form>
+                <!-- END: Form Layout -->
+            </div>
+        </div>
+    @endif
+
+    
+    <!-- Table -->
+    <div class="intro-y w-full mb-8 overflow-hidden rounded-lg shadow-xs">
+        <div class="w-full overflow-x-auto max-h-[45rem]">
+            <table class="w-full table table-striped">
+                <thead class="table-dark">
+                    <tr class="">
+                        <th rowspan="2" class="whitespace-nowrap text-center">#</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Code Unit</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Bagian</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Tanggal</th>
+                        <th rowspan="2" class="whitespace-nowrap text-center">Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($data as $key => $dt)
+                        <tr class="bg-white text-center">
+                            <td>{{ $key + 1 }}</td>
+                            @foreach ($dt as $k => $d)
+                                @if ($k != 'id')
+                                    <td>{{ $d }}</td>
+                                @endif
                             @endforeach
-                        </select> 
-                        @error('site')
-                            <div class="text-danger mt-2">{{$message}}</div>
-                        @endif
-                    </div>
-                    <!-- END: Basic Select -->
-                </div>
+                            <td class="cekTbModal flex justify-center">
+                                <a href="{{ route('super_admin.pap.show', $data[$key]->id) }}"
+                                    class="btn btn-dark mr-1 mb-2 p-1">
+                                    <i data-lucide="eye" class="w-4 h-4"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
 
-                <div class="mt-3">
-                    <label>Code Unit</label>
-                    <!-- BEGIN: Basic Select -->
-                    <div class="mt-2"> 
-                        <select id="nom_unit" data-placeholder="Pilih Code Unit" name="nom_unit" class=" w-full @error('nom_unit') border-danger @enderror">
-                            <option value="" selected disabled>Pilih Unit</option>
-                        </select> 
-                        @error('nom_unit')
-                            <div class="text-danger mt-2">{{$message}}</div>
-                        @endif
-                    </div>
-                    <!-- END: Basic Select -->
-                </div>
-
-                <div class="mt-3">
-                    <label>Kompartemen</label>
-                    <!-- BEGIN: Basic Select -->
-                    <div class="mt-2"> 
-                        <select id="kompartemen" data-placeholder="Pilih Kompartemen" name="kompartemen" class="w-full @error('kompartemen') border-danger @enderror">
-                            <option value="" selected disabled>Pilih Kompartemen</option>
-                        </select> 
-                        @error('kompartemen')
-                            <div class="text-danger mt-2">{{$message}}</div>
-                        @endif
-                    </div>
-                    <!-- END: Basic Select -->
-                </div>
-
-                <div class="mt-3">
-                    <label for="file_pap">File PAP (PDF)</label>
-                    <div class="mt-2">
-                        <input type="file" id="file_pap" name="file_pap" class="w-full @error('site') border-danger @enderror"/>
-                        <!-- <input name="file_pap" id="file_pap" type="file" class="form-control @error('file_pap') border-danger @enderror}}" /> 
-                        @error('file_pap')
-                            <div class="text-danger mt-2">{{$message}}</div>
-                        @endif -->
-                    </div>
-                </div>
-                <!-- END: Form Input File -->
-                <div class="mt-3">
-                    <button type="submit" class="btn btn-lg btn-primary w-full mr-1 mb-2 mt-2">Submit</button>
-                </div>
-            </form>
-            <!-- END: Form Layout -->
+                </tbody>
+            </table>
         </div>
     </div>
-    @endif
+    <!-- End Table -->
 @endsection
 
 @section('script')

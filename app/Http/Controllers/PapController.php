@@ -84,10 +84,17 @@ class PapController extends Controller
      */
     public function create()
     {
+        $data = DB::table('plant_pap')
+        ->select(DB::raw('plant_pap.id, nom_unit, plant_pap_bagian.bagian, date_format(tgl, "%d-%m-%Y") tgl'))
+        ->join('plant_pap_bagian', 'plant_pap.kode_bagian', '=', 'plant_pap_bagian.id')
+        ->groupBy('nom_unit')
+        ->orderBy('nom_unit')
+        ->limit(5)
+        ->get();
         $subquery = "SELECT * FROM plant_populasi WHERE del=0" ;
         $nom_unit = collect(DB::select($subquery));
         $site = Site::where('status',1)->get();
-        return view('pap.create', compact('site', 'nom_unit'));
+        return view('pap.create', compact('site', 'nom_unit', 'data'));
     }
 
     /**
@@ -114,18 +121,15 @@ class PapController extends Controller
         $record = Plant_Pap::create([
             'nom_unit' => $request->nom_unit,
             'tgl' => date('Y-m-d', strtotime(Carbon::now())),
-            'waktu' => date('h:i:s', strtotime(Carbon::now())),
             'file' => $namaFile,
             'kode_bagian' => $request->kompartemen,
-            'kodesite' => $request->site,
-            'del' => 0
         ]);
 
         if($record){
-            return redirect()->route('super_admin.pap.index')->with(['success' => 'Data Berhasil Ditambah!']);
+            return redirect()->route('pap.create')->with(['success' => 'Data Berhasil Ditambah!']);
         }
         else{
-            return redirect()->route('super_admin.pap.create')->with(['error' => 'Data Gagal Ditambah!']);
+            return redirect()->route('pap.create')->with(['error' => 'Data Gagal Ditambah!']);
         }
     }
 
@@ -139,7 +143,7 @@ class PapController extends Controller
     {
         $dataUnit = Plant_Pap::findOrFail($id);
     
-        $subquery = "SELECT bagian, date_format(tgl, '%d-%m-%Y'), a.id, file FROM plant_pap a  JOIN plant_pap_bagian c ON a.kode_bagian=c.id WHERE a.del=0 AND nom_unit='".$dataUnit->nom_unit."'" ;
+        $subquery = "SELECT bagian, date_format(tgl, '%d-%m-%Y'), a.id, file, status, keterangan FROM plant_pap a  JOIN plant_pap_bagian c ON a.kode_bagian=c.id WHERE a.del=0 AND nom_unit='".$dataUnit->nom_unit."'" ;
         $data = collect(DB::select($subquery));
         $site = Site::where('status',1)->get();
         return view('pap.show',compact('site', 'data', 'dataUnit'));
@@ -187,12 +191,12 @@ class PapController extends Controller
     public function getPapBagian(Request $request)
     {
         if($request->has('nom_unit')){
-            $subquery = "SELECT model FROM plant_populasi WHERE del=0 AND nom_unit='".$request->nom_unit."'";
-            $type = DB::select(DB::raw($subquery));
-            $subquery = "SELECT id, bagian FROM plant_pap_bagian WHERE del=0 AND model LIKE '%".$type[0]->model."%'";
+            $subquery = "SELECT model FROM plant_populasi WHERE del=0 AND nom_unit LIKE '%".substr($request->nom_unit,0,4)."%'";
+            $nom_unit = DB::select(DB::raw($subquery));
+            $subquery = "SELECT id, bagian FROM plant_pap_bagian WHERE del=0 AND model LIKE '%".$nom_unit[0]->model."%' ORDER BY bagian";
             $type = DB::select(DB::raw($subquery));    
         } else if($request->has('site')) {
-            $subquery = "SELECT nom_unit FROM plant_populasi WHERE del=0 AND kodesite='".$request->site."'";
+            $subquery = "SELECT nom_unit FROM plant_populasi WHERE del=0 AND kodesite='".$request->site."' order BY nom_unit";
             $type = DB::select(DB::raw($subquery));
         }
         

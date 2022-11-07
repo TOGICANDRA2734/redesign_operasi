@@ -384,7 +384,6 @@
             <div class="mt-3">
                 <label for="crud-form-5" class="form-label">Site</label>
                 <select data-placeholder="Pilih Site" class="tom-select w-full" id="crud-form-5" name="kodesite">
-                    <option value="" selected disabled>-</option>
                     @foreach ($site as $dt)
                         <option value="{{$dt->kodesite}}" class="uppercase">{{$dt->namasite}}</option>                    
                     @endforeach

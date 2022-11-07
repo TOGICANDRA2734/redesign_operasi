@@ -127,9 +127,11 @@ class HMController extends Controller
 
     public function edit_data($id)
     {
+        $status = Auth::user()->kodesite === 'X' ? 1 : 0;
+        $site = $status ? Site::select('*')->get() : Site::select('*')->where('kodesite', Auth::user()->kodesite)->get();
+
         $dataEdit = PlantHM::findOrFail($id);
         $waktu = Carbon::now();
-        $site = Site::select('*')->get();
         $data = PlantHM::select(DB::raw('nom_unit, date_format(tgl, "%d-%m-%Y") tgl, hm, km, kodesite'))->where('nom_unit', $dataEdit->nom_unit)->get();
         $nom_unit = strtolower(Auth::user()->kodesite) === 'x' ? Plant_Populasi::select('nom_unit')->get() : Plant_Populasi::select('nom_unit')->where('kodesite', Auth::user()->kodesite)->get() ;
         return view('hm.edit_data', compact('waktu', 'site', 'data', 'nom_unit', 'dataEdit', 'id'));

@@ -10,16 +10,6 @@ class PlantOvh extends Model
     use HasFactory;
 
     protected $table='plant_ovh';
-    protected $fillable= [
-        'id',
-        'nom_unit',
-        'model',
-        'komponen',
-        'ovh_start',
-        'ovh_finish',
-        'hm',
-        'remark',
-        'del',
-    ];
+    protected $guarded = [];
     public $timestamps =false;
 }

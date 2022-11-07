@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Plant_Populasi;
 use App\Models\PlantOvh;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +36,17 @@ class HistoricalOvhController extends Controller
      */
     public function create()
     {
-        //
+        $data = DB::table('plant_ovh')
+        ->selectRaw("nom_unit, model, komponen, date_format(ovh_start, \"%d-%m-%Y\") ovh_start, date_format(ovh_end, \"%d-%m-%Y\") ovh_end, hm, remark")
+        ->orderBy('id', 'desc')
+        ->limit(5)
+        ->get();
+        $subquery = "SELECT DISTINCT komponen FROM plant_ovh ORDER BY komponen";
+        $komponen = collect(DB::select(DB::raw($subquery)));
+        $nom_unit = Plant_Populasi::select('nom_unit')->where('del', 0)->get();
+        $model = Plant_Populasi::select('model')->where('del', 0)->groupBy('model')->get();
+        $komponen = PlantOvh::select('komponen')->where('del', 0)->groupBy('komponen')->get();
+        return view('historical-overhaul.create', compact('data', 'komponen', 'nom_unit', 'model', 'komponen'));
     }
 
     /**
@@ -46,7 +57,33 @@ class HistoricalOvhController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom_unit' => 'required',
+            'komponen' => 'required',
+            'start' => 'required|date',
+            'finish' => 'date|after_or_equal:start',
+            'hm' => 'required',
+            'remark' => 'required',
+        ]);
+
+        $model = PlantOvh::select('model')->where('nom_unit', 'like', '%'.substr($request->nom_unit,0,4).'%')->limit(1)->get();
+        $record = PlantOvh::create([
+            'nom_unit' => $request->nom_unit,
+            'model' => strtoupper($model[0]->model),
+            'komponen' => $request->komponen,
+            'ovh_start' => $request->start,
+            'ovh_end' => $request->finish,
+            'hm' => $request->hm,
+            'remark' => $request->remark,
+            'status' => 1
+        ]);
+
+        if($record){
+            return redirect()->route('historical-overhaul.create')->with(['success' => 'Data Berhasil Ditambah!']);
+        }
+        else{
+            return redirect()->route('historical-overhaul.create')->with(['error' => 'Data Gagal Ditambah!']);
+        }
     }
 
     /**
@@ -96,12 +133,13 @@ class HistoricalOvhController extends Controller
 
     public function showFilter(Request $request)
     {
+        
         $where = '';
         
         if(count($request->all()) > 1){
             $where .= "WHERE ";
             $where .= ($request->has('pilihKomponen') && !empty($request->pilihKomponen)) ? "komponen='" . $request->pilihKomponen . "'" : "";
-            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
+            $where .= (!empty($request->pilihKomponen) && $request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
             $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? "nom_unit LIKE '%" . $request->cariNama . "%'" : "";
             $where .= "AND DEL=0";    
         }
