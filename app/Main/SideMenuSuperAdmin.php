@@ -99,6 +99,60 @@ class SideMenuSuperAdmin
                             'layout' => 'side-menu'
                         ],
                     ],
+                    'PMA' => [
+                        'icon' => 'sidebar',
+                        'title' => 'PMA',
+                        'sub_menu' => [
+                            'mohh-harian' => [
+                                'icon' => 'box',
+                                'title' => 'MOHH Harian',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'super_admin.mohh.index',
+                            ],
+                            'rep-harian' => [
+                                'icon' => 'box',
+                                'title' => 'Report Harian',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'super_admin.rep.index',
+                            ],
+                            'daily-produksi' => [
+                                'icon' => 'box',
+                                'title' => 'Daily Produksi',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'daily-production.index',
+                            ],
+                            'fuel-daily' => [
+                                'icon' => 'box',
+                                'title' => 'Fuel Daily',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'fuel-daily.index',
+                            ],
+                            'fuel-unit' => [
+                                'icon' => 'box',
+                                'title' => 'Fuel Unit',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'fuel-unit.index',
+                            ],
+                            'cost-part' => [
+                                'icon' => 'box',
+                                'title' => 'Cost Part',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'cost-part.index',
+                            ],
+                        ],
+                    ],
                 ],
             ],
             'devider',
@@ -130,23 +184,6 @@ class SideMenuSuperAdmin
                         ],
                     ],
                     
-                    'mohh-harian' => [
-                        'icon' => 'box',
-                        'title' => 'MOHH Harian',
-                        'params' => [
-                            'layout' => 'side-menu'
-                        ],
-                        'route_name' => 'super_admin.mohh.index',
-                    ],
-                    
-                    'rep-harian' => [
-                        'icon' => 'box',
-                        'title' => 'Report Harian',
-                        'params' => [
-                            'layout' => 'side-menu'
-                        ],
-                        'route_name' => 'super_admin.rep.index',
-                    ],
                 ],
             ],
             'devider',

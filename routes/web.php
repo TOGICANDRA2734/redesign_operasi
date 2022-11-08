@@ -23,7 +23,11 @@ use App\Http\Controllers\Admin\KendalaController as Admin_KendalaController;
 use App\Http\Controllers\Admin\ProductivityController as Admin_ProductivityController;
 use App\Http\Controllers\BDDokController;
 use App\Http\Controllers\BDHarianController;
+use App\Http\Controllers\CostPartController;
+use App\Http\Controllers\DailyProduksiController;
 use App\Http\Controllers\DokumenGrController;
+use App\Http\Controllers\FuelDailyController;
+use App\Http\Controllers\FuelUnitController;
 use App\Http\Controllers\HistoricalOvhController;
 use App\Http\Controllers\HistoricalUnitController;
 use App\Http\Controllers\HMController;
@@ -363,4 +367,16 @@ Route::middleware('auth')->group(function() {
 
         // MP Statistik Controller
         Route::resource('mp-statistik', MPStatistikController::class);
+
+        // Daily Produksi Controller - PMA TP
+        Route::resource('daily-production', DailyProduksiController::class);
+
+        // Fuel Daily Controller
+        Route::resource('fuel-daily', FuelDailyController::class);
+        
+        // Fuel Daily Controller
+        Route::resource('fuel-unit', FuelUnitController::class);
+        
+        // Fuel Daily Controller
+        Route::resource('cost-part', CostPartController::class);
 });

@@ -111,20 +111,21 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <!-- BEGIN: Modal Header -->
-                <div class="modal-header">
-                    <h2 class="font-medium text-base mr-auto"></h2>
+                <div class="modal-header flex justify-between">
+                    <h2 class="font-medium text-base mr-auto text-center"></h2>
+                    <p class="text-center" id="metadata"></p>
                 </div> <!-- END: Modal Header -->
                 <!-- BEGIN: Modal Body -->
                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
                     
                     <div class="col-span-12 mx-auto">
                         <div class="flex justify-center flex-col items-center">
-                            <div class="w-36 h-36 sm:w-40 sm:h-40 flex-none lg:w-52 lg:h-52 image-fit relative">
-                                <img alt="User Profile" class="rounded-full" src="dist/images/profile-10.jpg">
+                            <div class="w-36 h-36 sm:w-40 sm:h-40 flex-none lg:w-52 lg:h-52 image-fit relative" id="fotoProfil">
+                                
                             </div>
                             <div class="text-center">
-                                <div class="w-24 sm:w-40 truncate sm:whitespace-normal font-medium text-lg">Al Pacino</div>
-                                <div class="text-slate-500">Software Engineer</div>
+                                <div class="w-24 sm:w-40 truncate sm:whitespace-normal font-medium text-lg" id="nama"></div>
+                                <div class="text-slate-500" id="dept"></div>
                             </div>
                         </div>
                     </div>
@@ -192,7 +193,6 @@
         $(".detailBtn").on("click", function() {
             var id = $(this).data("id");
             var url = $(this).data("url");
-            console.log(id, url);
 
             $i = jQuery.noConflict();
             $i.ajax({
@@ -201,10 +201,27 @@
                 dataType: 'json',
                 data: [],
                 success: function(response) {
-                    console.log()
                     var fullText = "";
                     if (response) {
+                        // Input Header
+                        var text = response.foto1 ? "<img alt=\"User Profile\" class=\"rounded-full\" id=\"gambar\" src=\"http://ptrci.co.id/manpower/"+response.foto1+"\">" : "<img alt=\"User Profile\" class=\"rounded-full\" id=\"gambar\" src=\"https://eu.ui-avatars.com/api/?name='"+response.recordDataProfil[0].nama+"'&background=0D8ABC&color=fff\">";
+                        $i('#fotoProfil').empty();
+                        $i('#fotoProfil').append(text);
+                        
+                        // Nama
+                        $i('#nama').empty();
+                        $i('#nama').append(response.recordDataProfil[0].nama);
+
+                        // Dept dan posisi
+                        $i("#dept").empty()
+                        $i("#dept").append(response.recordDataProfil[0].dept + " - " + response.recordDataProfil[0].jabatan)
+
+                        // Metadata
+                        $i("#metadata").empty();
+                        $i("#metadata").append(response.metadata[0].user + " - " + response.metadata[0].time)
+
                         i = 0;
+                        $i(".modal-header h2").empty()
                         $i(".modal-header h2").html("Data Personal")
                         
                         $i.each(response.record1[0], function(index, data) {
@@ -215,6 +232,7 @@
                                         "</tr>"
                             i +=1;
                         });
+                        $i(".table-detail-1 tbody").empty();
                         $i(".table-detail-1 tbody").html(fullText);
 
                         i = 0;
@@ -226,6 +244,7 @@
                                         "</tr>"
                             i +=1;
                         });
+                        $i(".table-detail-2 tbody").empty();
                         $i(".table-detail-2 tbody").html(fullText);
 
                         i = 0;
@@ -239,6 +258,7 @@
                                         "</tr>"
                             i +=1;
                         });
+                        $i(".table-detail-3 tbody").empty();
                         $i(".table-detail-3 tbody").html(fullText);
                     }
                 },

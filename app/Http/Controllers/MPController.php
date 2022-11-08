@@ -123,18 +123,23 @@ class MPController extends Controller
      */
     public function show($id)
     {
-        $record1 = Manpower::select(DB::raw('nik, nama, tempatlahir, tgllahir, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), \'%Y\') + 0 Umur, agama, warganegara, pendidikan, gol, ibukandung,  statusnikah, sttkeluarga, kelamin, rhesus, noktp, nokk, nonpwp, nobpjstk, nobpjskes, norek, nosimpol, typesimpol, masasimpol, faskes, alamatktp, provktp, kabktp, kecktp, kelktp, alamat, prov, kab, kec, kel'))->where('id', $id)->get();
-        $record2 = Manpower::select(DB::raw('dept, sttpegawai, jabatan,  vaksin1, gol, grade, statuskary, mulaikerja, akhirpkwt, tglpensiun, emailkary, namaistri, namaanak1, namaanak2, namaanak3, tlpserumah, hubkel, telptakrmh, hubkel2, keterangan'))->where('id', $id)->get();
-        $record3 = Manpower::select(DB::raw('foto1, foto2, ktp'))->where('id', $id)->get();
+        $record1 = Manpower::select(DB::raw('nama, tempatlahir, tgllahir, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), \'%Y\') + 0 Umur, agama, warganegara, pendidikan, gol, statusnikah, sttkeluarga, kelamin, rhesus, nobpjstk, nobpjskes, norek, faskes, alamatktp, provktp, kabktp, kecktp, kelktp, alamat, prov, kab, kec, kel'))->where('id', $id)->get();
+        $record2 = Manpower::select(DB::raw('dept, sttpegawai, jabatan,  vaksin1, gol, grade, statuskary, mulaikerja, akhirpkwt, tglpensiun, emailkary, keterangan'))->where('id', $id)->get();
+        $record3 = Manpower::select(DB::raw('foto1, foto2'))->where('id', $id)->get();
+        $recordDataProfil = Manpower::select(DB::raw('nama, dept, jabatan'))->where('id', $id)->get();
+        $metadata = Manpower::select(DB::raw('user, time'))->where('id', $id)->get();
         
         $data['record1'] = $record1;
         $data['record2'] = $record2;
         $data['record3'] = $record3;
+        $data['recordDataProfil'] = $recordDataProfil;
+        $data['foto1'] = $record3[0]->foto1; 
+        $data['metadata'] = $metadata; 
         
 
-        $data['judulrecord1'] = ['NIK', 'Nama', 'Tempat Lahir', 'Tanggal Lahir', 'Umur', 'Agama', 'Warga Negara', 'Pendidikan', 'Gol. Darah', 'Nama Ibu',  'Status', 'Status Keluarga', 'Jenis Kelamin', 'Rhesus', 'No. KTP', 'No. KK', 'No. NPWP', 'No. BPJSTK', 'No. BPJSKES', 'No. Rek', 'No. Simpol', 'Tipe Simpol', 'Masa Simpol', 'Faskes', 'Alamat KTP', 'Provinsi KTP', 'Kabupaten KTP', 'Kecamatan KTP', 'Kelurahan KTP', 'Alamat', 'Provinsi', 'Kabupaten ', 'Kecamatan', 'Kelurahan'];
-        $data['judulrecord2'] = ['Departemen', 'Status Pegawai', 'Jabatan',  'Vaksin 1', 'Golongan Karyawan', 'Grade', 'Status Karyawan', 'Mulai Kerja', 'Akhir PKWT', 'Tanggal Pensiun', 'Email Karyawan', 'Nama Istri', 'Nama Anak 1', 'Nama Anak 2', 'Nama Anak 3', 'Telepon Rumah', 'Hubungan Keluarga', 'Telepon Rumah', 'Hubungan Keluarga 2', 'Keterangan'];
-        $data['judulrecord3'] = ['foto1', 'foto2', 'ktp'];
+        $data['judulrecord1'] = ['Nama', 'Tempat Lahir', 'Tanggal Lahir', 'Umur', 'Agama', 'Warga Negara', 'Pendidikan', 'Gol. Darah',  'Status', 'Status Keluarga', 'Jenis Kelamin', 'Rhesus', 'No. BPJSTK', 'No. BPJSKES', 'No. Rek', 'Faskes', 'Alamat KTP', 'Provinsi KTP', 'Kabupaten KTP', 'Kecamatan KTP', 'Kelurahan KTP', 'Alamat', 'Provinsi', 'Kabupaten ', 'Kecamatan', 'Kelurahan'];
+        $data['judulrecord2'] = ['Departemen', 'Status Pegawai', 'Jabatan',  'Vaksin 1', 'Golongan Karyawan', 'Grade', 'Status Karyawan', 'Mulai Kerja', 'Akhir PKWT', 'Tanggal Pensiun', 'Email Karyawan', 'Keterangan'];
+        $data['judulrecord3'] = ['foto1', 'foto2'];
         return response()->json($data);
     }
 
