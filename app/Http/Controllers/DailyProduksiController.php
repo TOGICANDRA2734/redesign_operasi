@@ -16,79 +16,52 @@ class DailyProduksiController extends Controller
      */
     public function index(Request $request)
     {
-        $whereTp = '';
-        $whereA2b = '';
-        $whereFuel = '';
+        $where1 = '';
+        $where2 = '';
 
         if (count($request->all()) > 1) {              
-            // WhereTP
-            $whereTp .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
-            $whereTp .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $whereTp .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
-            $whereTp .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
-            $whereTp .= ($request->has('cariNama') && !empty($request->cariNama)) ? "tp.nom_unit LIKE '%" . $request->cariNama . "%'" : "";
-            $whereTp .= "AND DEL=0";
+            // Where 1
+            $where1 .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
+            $where1 .= " AND DEL=0";
 
-            // WhereA2b
-            $whereA2b .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
-            $whereA2b .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $whereA2b .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
-            $whereA2b .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
-            $whereA2b .= ($request->has('cariNama') && !empty($request->cariNama)) ? "a2b.nom_unit LIKE '%" . $request->cariNama . "%'" : "";
-            $whereA2b .= "AND DEL=0";
-
-
-            // WherePmaFuel
-            $whereFuel .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
-            $whereFuel .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $whereFuel .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
-            $whereFuel .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
-            $whereFuel .= ($request->has('cariNama') && !empty($request->cariNama)) ? "pma_fuel.nom_unit LIKE '%" . $request->cariNama . "%'" : "";
-            $whereFuel .= "AND DEL=0";
+            // Where 2
+            $where2 .= ($request->has('start') && $request->has('end')) ? "a.TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "a.kodesite='" . $request->pilihSite . "'" : "";
+            $where2 .= " AND a.DEL=0";
         } else {
-            $whereTp .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
-            $whereA2b .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
-            $whereFuel .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
+            $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
+            $where2 .= "a.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND a.DEL=0";
         }
 
         $site = Site::where('status_website', 1)->get();
-        $subquery = "WITH summ AS
-        (
-        SELECT
-        A.tgl,
-        DATE_FORMAT(A.tgl,'%a') hari,
-        A.bcm ob_act,
-        B.ob ob_pln,
-        B.coal coal_pln,
-        C.coal coal_act
-        
+        $subquery = "SELECT DATE_FORMAT(a.tgl, \"%d-%m-%Y\") tgl_format,
+        DATE_FORMAT(a.tgl, \"%a\") hari,
+        IFNULL(b.ob,0) ob_plan,
+        IFNULL(SUM(a.bcm),0) ob_act,
+        IFNULL(SUM(a.bcm)/b.ob* 100,0) ob_ach,
+        IFNULL(b.coal,0) coal_plan,
+        IFNULL(c.coal,0) coal_act,
+        IFNULL(c.coal/b.coal* 100,0) coal_ach
         FROM pma_tp A
-        
-        LEFT JOIN (SELECT * FROM pma_dailyprod_tc WHERE tgl BETWEEN '2022-07-01' AND '2022-09-01' AND kodesite='I') C ON C.tgl=A.tgl
-        LEFT JOIN (SELECT * FROM pma_dailyprod_plan WHERE tgl BETWEEN '2022-07-01' AND '2022-09-01' AND kodesite='I') B ON B.tgl=A.tgl
-        
-        WHERE a.tgl BETWEEN '2022-07-01' AND '2022-09-01' AND a.kodesite='I'
+        LEFT JOIN (SELECT SUM(coal) coal, tgl  FROM pma_dailyprod_tc WHERE ".$where1." GROUP BY TGL) C ON C.tgl=A.tgl
+        LEFT JOIN (SELECT SUM(ob) ob, sum(coal) coal, tgl FROM pma_dailyprod_plan WHERE ".$where1." GROUP BY TGL) B ON B.tgl=A.tgl
+        WHERE ".$where2."
         GROUP BY A.tgl
-        )
-        SELECT
-            Date_format(tgl, \"%d-%m-%Y\") tgl_format,
-            hari,
-            FORMAT(IFNULL(ob_pln,0),1) ob_plan,
-            FORMAT(IFNULL(ob_act,0),1) ob_act,
-            FORMAT(IFNULL(ob_act/ob_pln * 100,0),1) ob_ach,
-            FORMAT(IFNULL(coal_pln,0),1) coal_plan,
-            FORMAT(IFNULL(coal_act,0),1) coal_act,
-            FORMAT(IFNULL(coal_act/coal_pln  *100, 0),1) coal_ach
-        FROM summ
-        ORDER BY year(tgl), month(tgl), day(tgl)";
-
+        ORDER BY YEAR(a.tgl), MONTH(a.tgl), DAY(a.tgl)";
         $data = collect(DB::select($subquery));
 
-        if ($request->has('start') || $request->has('end') || $request->has('pilihSite') || $request->has('cariNama')) {
+        // TODO collect all the data for total OB, coal, ach
+        $total = ['ob_plan' => $data->sum('ob_plan'), 'ob_act' => $data->sum('ob_act'), 'ob_ach' => $data->sum('ob_ach'), 'coal_plan' => $data->sum('coal_plan'), 'coal_act' => $data->sum('coal_act'), 'coal_ach' => $data->sum('coal_ach')];
+
+        if (count($request->all()) > 1) {
             $response['data'] = $data;
+            $response['total'] = $total;
             return response()->json($response);
         } else {
-            return view('daily-production.index', compact('site', 'data'));
+            return view('daily-production.index', compact('site', 'data', 'total'));
         }
     }
 

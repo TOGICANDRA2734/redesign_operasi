@@ -6,8 +6,8 @@
 
 @section('subcontent')
         <!-- BEGIN: Notification Content -->
-        <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success"
-            data-lucide="check-circle"></i>
+    <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success"
+        data-lucide="check-circle"></i>
         <div class="ml-4 mr-4">
             <div class="font-medium">Data Berhasil Difilter!</div>
         </div>
@@ -16,7 +16,7 @@
 
     <div class="grid grid-cols-12 gap-5">
         <!-- Header -->
-        <div class="flex justify-between items-center col-span-12">
+        <div class="flex justify-between items-center col-span-12 mt-5">
             <!-- Title -->
             <h2 class="text-lg font-medium truncate mr-5 ">
                 Daily Production
@@ -26,6 +26,11 @@
                 <div class="mr-3 hidden" id="loading">
                     <i data-loading-icon="tail-spin" class="w-5 h-5"></i>
                 </div>
+
+                {{-- Url Rujukan --}}
+                <input type="hidden" name="url" value="{{route('daily-production.index')}}" id="urlFilter">
+
+                {{-- Pilih Site --}}
                 <select id="pilihSite"
                     class="block shadow-sm p-2 mr-2 rounded-md w-20  text-sm dark:text-gray-300 dark-gray-600 dark:bg-gray-700 form-multiselect focus-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray"
                     name="kodesite" id="kodesite">
@@ -34,12 +39,13 @@
                         <option value="{{ $st->kodesite }}">{{ $st->namasite }}</option>
                     @endforeach
                 </select>
-                <input type="text" name="cariNama" id="cariNama" placeholder="Cari Data"
-                    class="block shadow-sm p-2 rounded-md w-30 text-sm dark:text-gray-300 dark-gray-600 dark:bg-gray-700 form-multiselect focus-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray mr-2">
+
+                {{-- Filter Tanggal --}}
                 <div id="filterTanggal" class="form-control box p-2 ml-auto w-10 flex mr-2">
                     <i class="fa fa-calendar"></i>&nbsp;
                     <span></span> <i class="fa fa-caret-down"></i>
                 </div>
+
                 <div class="dropdown">
                     <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
                         <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4"
@@ -58,53 +64,41 @@
                 </div>
             </div>
         </div>
-        <hr class="mb-3 col-span-12">
+        <hr class="col-span-12">
 
-        <div class="col-span-12 sm:col-span-6 2xl:col-span-4 intro-y">
-            <div class="box p-5 zoom-in">
-                <div class="flex items-center">
-                    <div class="w-2/4 flex-none">
-                        <div class="text-lg font-medium truncate">Total Overburden</div>
-                        <div class="text-slate-500 mt-1">xxxx BCM</div>
+        <div class="col-span-12 grid grid-cols-12 gap-5">
+            <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
+                <div class="box p-5 zoom-in">
+                    <div class="flex items-center">
+                        <div class="w-2/4 flex-none">
+                            <div class="text-lg font-medium truncate">Total Overburden</div>
+                            <div class="text-slate-500 mt-1" id="actualOB">Actual: {{$total['ob_act']}} BCM</div>
+                            <div class="text-slate-500 mt-1" id="planOB">Plan: {{$total['ob_plan']}} BCM</div>
+                        </div>
+                        <div class="flex-none ml-auto relative">
+                            <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
+                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0" id="achOB">{{$total['ob_plan']}}%</div>
+                        </div>
                     </div>
-                    <div class="flex-none ml-auto relative">
-                        <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
-                        <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0">20%</div>
+                </div>
+            </div>
+            
+            <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
+                <div class="box p-5 zoom-in">
+                    <div class="flex items-center">
+                        <div class="w-2/4 flex-none">
+                            <div class="text-lg font-medium truncate">Total Coal</div>
+                            <div class="text-slate-500 mt-1" id="actualCoal">Actual: {{$total['coal_act']}} BCM</div>
+                            <div class="text-slate-500 mt-1" id="planCoal">Plan: {{$total['coal_plan']}} BCM</div>
+                        </div>
+                        <div class="flex-none ml-auto relative">
+                            <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
+                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0" id="achCoal">{{$total['coal_plan']}}%</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <div class="col-span-12 sm:col-span-6 2xl:col-span-4 intro-y">
-            <div class="box p-5 zoom-in">
-                <div class="flex items-center">
-                    <div class="w-2/4 flex-none">
-                        <div class="text-lg font-medium truncate">Total Coal</div>
-                        <div class="text-slate-500 mt-1">300 MT</div>
-                    </div>
-                    <div class="flex-none ml-auto relative">
-                        <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
-                        <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0">20%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-span-12 sm:col-span-6 2xl:col-span-4 intro-y">
-            <div class="box p-5 zoom-in">
-                <div class="flex items-center">
-                    <div class="w-2/4 flex-none">
-                        <div class="text-lg font-medium truncate">Achivement</div>
-                        <div class="text-slate-500 mt-1">300 %</div>
-                    </div>
-                    <div class="flex-none ml-auto relative">
-                        <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
-                        <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0">20%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         
         <!-- Table -->
         <div class="w-full mb-8 col-span-12 overflow-hidden rounded-lg shadow-xs">
@@ -176,258 +170,61 @@
             var pilihSite = $j("#pilihSite").val() ? $j("#pilihSite").val() : "";
             var cariNama = $j("#cariNama").val() ? $j("#cariNama").val() : "";
             $j("#loading").toggleClass('hidden');
-            console.log("Pilih Semua", pilihSite, cariNama, awal, akhir);
 
+            var url = $j("#urlFilter").val();
+            console.log(url);
 
             if (awal !== null && akhir !== null) {
                 $j.ajax({
-                    url: 'http://127.0.0.1:8000/rep-harian?layout=side-menu',
+                    url: url,
                     type: 'GET',
                     dataType: 'json',
                     data: {
                         start: awal,
                         end: akhir,
                         pilihSite: pilihSite,
-                        cariNama: cariNama,
                     },
                     success: function(response) {
+                        console.log(response)
+
                         $j("#loading").toggleClass('hidden');
-                        console.log(response);
+                        // JANGAN LUPA COPY KE SEBELAH
+                        // OB CARD
+                        $j("#actualOB").empty();
+                        $j("#planOB").empty();
+                        $j("#achOB").empty();
+
+                        $j("#actualOB").append("Actual: " + number_format(response.total.ob_act, 0) + " BCM");
+                        $j("#planOB").append("Plan: " + number_format(response.total.ob_plan, 0) + " BCM");
+                        $j("#achOB").append(number_format(response.total.ob_ach, 0) + "%");
+
+                        // Coal Card
+                        $j("#actualCoal").empty();
+                        $j("#planCoal").empty();
+                        $j("#achCoal").empty();
+
+                        $j("#actualCoal").append("Actual: " + number_format(response.total.coal_act, 0) + " MT");
+                        $j("#planCoal").append("Plan: " + number_format(response.total.coal_plan, 0) + " MT");
+                        $j("#achCoal").append(number_format(response.total.coal_ach, 0) + "%");
+
                         $j("table tbody").empty();
                         fullText = ""
                         if (response) {
-                        i = 0;
-                        $j.each(response.data, function(index) {
-                            i += 1;
-                            if (response.data[index].nom_unit == 'SUB TOTAL') {
-                                text = '<tr class="text-center bg-gray-600 text-white">' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    i +
-                                    '</td>' +
-                                    '<td class="whitespace-nowrap text-center sticky left-0 z-20 bg-gray-600 text-white">' +
-                                    response
-                                    .data[index].nom_unit + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ob, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].gen, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].trav, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].rent, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].coal, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].totalwh, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bd, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].mohh, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ma, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ut, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s00, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s01, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s02, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s03, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s04, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s05, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s06, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s07, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s08, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s09, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s10, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s11, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s12, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s13, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s14, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s15, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s16, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s17, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ritasi, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].jarak, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].pty, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].liter, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_wh, 0) + '</td>' +
-                                    '</tr>';
-                            } else {
-                                text = '<tr class="text-center bg-white">' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    i +
-                                    '</td>' +
-                                    '<td class="whitespace-nowrap text-center sticky left-0 z-20 bg-white">' +
-                                    response
-                                    .data[index].nom_unit + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ob, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].gen, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].trav, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].rent, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].coal, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].totalwh, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bd, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].mohh, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ma, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ut, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s00, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s01, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s02, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s03, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s04, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s05, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s06, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s07, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s08, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s09, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s10, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s11, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s12, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s13, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s14, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s15, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s16, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s17, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ritasi, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].jarak, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].pty, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].liter, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_wh, 0) + '</td>' +
-                                    '</tr>';
-                            }
+
+                        var i=1;
+                        $j.each(response.data, function(index, data) {
+                            text = "<tr class=\"text-center bg-white\">"
+
+                            // Add Index
+                            text += "<td class=\"whitespace-nowrap text-center\"> " + i + "</td>"
+
+                            i++;
+                            
+                            $j.each(data, function(i, d){
+                                text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"
+                            })
+
+                            text += "</tr>"
                             fullText += text
                         });
                         $j("table tbody").html(fullText);
@@ -437,285 +234,7 @@
                 })
             }
         });
-
-        $j("#cariNama, #pilihSite").on('change', function() {
-            $j.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $j('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            var awal = moment($j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") ? moment(
-                $j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") : "";
-            var akhir = moment($j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") ? moment(
-                $j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") : "";
-            var cariNama = $j("#cariNama").val() ? $j("#cariNama").val() : "";
-            var pilihSite = $j("#pilihSite").val() ? $j("#pilihSite").val() : "";
-
-
-            $j("#loading").toggleClass('hidden');
-            console.log("Pilih Semua", pilihSite, cariNama, awal, akhir);
-
-            $j.ajax({
-                type: "GET",
-                url: 'http://127.0.0.1:8000/rep-harian?layout=side-menu',
-                data: {
-                    'start': awal,
-                    'end': akhir,
-                    'pilihSite': pilihSite,
-                    'cariNama': cariNama,
-
-                },
-                success: function(response) {
-                    $j("#loading").toggleClass('hidden');
-                    console.log(response)
-                    $j("table tbody").empty();
-                    fullText = ""
-                    if (response) {
-                        i = 0;
-                        $j.each(response.data, function(index) {
-                            i += 1;
-                            if (response.data[index].nom_unit == 'SUB TOTAL') {
-                                text = '<tr class="text-center bg-gray-600 text-white">' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    i +
-                                    '</td>' +
-                                    '<td class="whitespace-nowrap text-center sticky left-0 z-20 bg-gray-600 text-white">' +
-                                    response
-                                    .data[index].nom_unit + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ob, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].gen, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].trav, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].rent, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].coal, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].totalwh, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bd, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].mohh, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ma, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ut, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s00, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s01, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s02, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s03, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s04, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s05, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s06, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s07, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s08, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s09, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s10, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s11, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s12, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s13, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s14, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s15, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s16, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s17, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ritasi, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].jarak, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].pty, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].liter, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_wh, 0) + '</td>' +
-                                    '</tr>';
-                            } else {
-                                text = '<tr class="text-center bg-white">' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    i +
-                                    '</td>' +
-                                    '<td class="whitespace-nowrap text-center sticky left-0 z-20 bg-white">' +
-                                    response
-                                    .data[index].nom_unit + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ob, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].gen, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].trav, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].rent, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].coal, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].totalwh, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bd, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].mohh, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ma, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ut, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s00, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s01, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s02, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s03, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s04, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s05, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s06, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s07, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s08, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s09, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s10, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s11, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s12, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s13, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s14, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s15, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s16, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s17, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ritasi, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].jarak, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].pty, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].liter, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_wh, 0) + '</td>' +
-                                    '</tr>';
-                            }
-                            fullText += text
-                        });
-                        $j("table tbody").html(fullText);
-                        show_data();
-                    }
-                },
-                error: function(result) {
-                    console.log("error", result);
-                },
-            });
-        });
-
+        
         // Pilih Site
         $j("#pilihSite").on('change', function() {
             $j.ajaxSetup({
@@ -725,258 +244,42 @@
             });
 
             var pilihSite = $j("#pilihSite").val() ? $j("#pilihSite").val() : "";
+            var awal = moment($j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") ? moment($j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") : "";
+            var akhir = moment($j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") ? moment($j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") : "";
+            console.log(awal,akhir)
+
+            var url = $j("#urlFilter").val();
 
             $j("#loading").toggleClass('hidden');
-            console.log("Pilih Semua", pilihSite, cariNama, awal, akhir);
 
             $j.ajax({
                 type: "GET",
-                url: 'http://127.0.0.1:8000/rep-harian?layout=side-menu',
+                url: url,
                 data: {
                     'start': awal,
                     'end': akhir,
                     'pilihSite': pilihSite,
-                    'cariNama': cariNama,
-
                 },
                 success: function(response) {
-                    console.log(response);
                     $j("#loading").toggleClass('hidden');
                     $j("table tbody").empty();
                     fullText = ""
+                    i=1
                     if (response) {
-                        i = 0;
-                        $j.each(response.data, function(index) {
-                            i += 1;
-                            if (response.data[index].nom_unit == 'SUB TOTAL') {
-                                text = '<tr class="text-center bg-gray-600 text-white">' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    i +
-                                    '</td>' +
-                                    '<td class="whitespace-nowrap text-center sticky left-0 z-20 bg-gray-600 text-white">' +
-                                    response
-                                    .data[index].nom_unit + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ob, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].gen, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].trav, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].rent, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].coal, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].totalwh, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bd, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].mohh, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ma, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ut, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s00, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s01, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s02, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s03, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s04, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s05, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s06, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s07, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s08, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s09, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s10, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s11, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s12, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s13, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s14, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s15, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s16, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s17, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ritasi, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].jarak, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].pty, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].liter, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_wh, 0) + '</td>' +
-                                    '</tr>';
-                            } else {
-                                text = '<tr class="text-center bg-white">' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    i +
-                                    '</td>' +
-                                    '<td class="whitespace-nowrap text-center sticky left-0 z-20 bg-white">' +
-                                    response
-                                    .data[index].nom_unit + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ob, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].gen, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].trav, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].rent, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].coal, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].totalwh, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bd, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].mohh, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ma, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ut, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s00, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s01, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s02, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s03, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s04, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s05, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s06, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s07, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s08, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s09, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s10, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s11, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s12, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s13, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s14, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s15, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s16, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].s17, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ritasi, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].jarak, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].pty, 2) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].liter, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_bcm, 0) + '</td>' +
-                                    '<td class="whitespace-nowrap text-center">' +
-                                    number_format(response
-                                        .data[index].ltr_wh, 0) + '</td>' +
-                                    '</tr>';
-                            }
+                        $j.each(response.data, function(index, data) {
+                            text = "<tr class=\"text-center bg-white\">"
+
+                            // Add Index
+                            text += "<td class=\"whitespace-nowrap text-center\"> " + i + "</td>"
+
+                            i++;
+
+                            $j.each(data, function(i, d){
+                                text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"
+                            })
+
+                            text += "</tr>"
+                            
                             fullText += text
                         });
                         $j("table tbody").html(fullText);

@@ -1882,11 +1882,11 @@ select{
 .z-50{
     z-index: 50;
 }
-.z-20{
-    z-index: 20;
-}
 .z-10{
     z-index: 10;
+}
+.z-20{
+    z-index: 20;
 }
 .z-30{
     z-index: 30;
@@ -2530,10 +2530,6 @@ select{
     --tw-bg-opacity: 1;
     background-color: rgb(68 64 60 / var(--tw-bg-opacity));
 }
-.bg-gray-600{
-    --tw-bg-opacity: 1;
-    background-color: rgb(75 85 99 / var(--tw-bg-opacity));
-}
 .bg-success{
     --tw-bg-opacity: 1;
     background-color: rgb(var(--color-success) / var(--tw-bg-opacity));
@@ -2585,6 +2581,10 @@ select{
 .bg-amber-400{
     --tw-bg-opacity: 1;
     background-color: rgb(251 191 36 / var(--tw-bg-opacity));
+}
+.bg-gray-600{
+    --tw-bg-opacity: 1;
+    background-color: rgb(75 85 99 / var(--tw-bg-opacity));
 }
 .bg-slate-300{
     --tw-bg-opacity: 1;
@@ -2670,10 +2670,6 @@ select{
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
-.py-4{
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
 .px-3{
     padding-left: 0.75rem;
     padding-right: 0.75rem;
@@ -2685,6 +2681,10 @@ select{
 .px-10{
     padding-left: 2.5rem;
     padding-right: 2.5rem;
+}
+.py-4{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 .py-5{
     padding-top: 1.25rem;

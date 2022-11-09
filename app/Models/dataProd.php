@@ -10,14 +10,6 @@ class dataProd extends Model
     use HasFactory;
 
     protected $table = 'pma_dailyprod_tc';
-    protected $fillable = [
-        'tgl',
-        'pit',
-        'ob',
-        'coal',
-        'shift',
-        'cuaca',
-        'kodesite'
-    ];
+    protected $guarded = [];
     public $timestamps = false;
 }

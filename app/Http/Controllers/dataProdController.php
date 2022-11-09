@@ -69,7 +69,6 @@ class dataProdController extends Controller
         $period = [];
         $periodInput = [];
 
-
         for($i = $begin; $i <= $end; $i->modify('+1 day')){
             $period[] = $i->format("d-m-Y");
             $periodInput[] = $i->format('Y-m-d');
@@ -270,6 +269,7 @@ class dataProdController extends Controller
             'kodesite' => 'required',
             'cuaca' => 'required',
         ]);
+
 
         // Record Pit
         $pit = DB::table('pma_dailyprod_tc')->select(DB::raw('DISTINCT pit'))->where('kodesite', '=',Auth::user()->kodesite)->orderBy('pit')->get();
