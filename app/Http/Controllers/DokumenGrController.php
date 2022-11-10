@@ -20,11 +20,12 @@ class DokumenGrController extends Controller
 
         if (count($request->all()) > 1) {              
             // WhereTP
-            $where .= ($request->has('nomor')) ? "WHERE no_gr= '" . $request->nomor . "' OR subject_gr LIKE '%" . $request->nomor. "%' " : "";
-            $where .= ($request->has('site') && !empty($request->site)) ? " AND " : "";
+            $where .= "WHERE ";
+            $where .= ($request->has('nomor') && !empty($request->nomor)) ? "no_gr= '" . $request->nomor . "' OR subject_gr LIKE '%" . $request->nomor. "%' " : "";
+            $where .= ($request->has('nomor') && !empty($request->nomor) && $request->has('site') && !empty($request->site)) ? " AND " : "";
             $where .= ($request->has('site') && !empty($request->site)) ? "a.kodesite='" . $request->site . "'" : "";
-            $where .= ($request->has('status')) ? " AND " : "";
-            $where .= ($request->has('status')) ? "a.status=". (int) $request->status."" : "";
+            $where .= ($request->has('site') && !empty($request->site) && $request->has('status') && !empty($request->status)) ? " AND " : "";
+            $where .= ($request->has('status') && !empty($request->status)) ? "a.status=". (int) $request->status."" : "";
         }
   
         // Filter
@@ -33,8 +34,7 @@ class DokumenGrController extends Controller
         JOIN site b
         ON a.kodesite=b.kodesite
         ".$where."
-        ORDER BY  a.status, a.kodesite, no_gr
-        LIMIT 75";
+        ORDER BY  a.status, a.kodesite, no_gr";
 
         // Parameter 
         $site = Site::where('status', 1)->get();

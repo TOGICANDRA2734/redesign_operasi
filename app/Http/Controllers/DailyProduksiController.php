@@ -54,7 +54,7 @@ class DailyProduksiController extends Controller
         $data = collect(DB::select($subquery));
 
         // TODO collect all the data for total OB, coal, ach
-        $total = ['ob_plan' => $data->sum('ob_plan'), 'ob_act' => $data->sum('ob_act'), 'ob_ach' => $data->sum('ob_ach'), 'coal_plan' => $data->sum('coal_plan'), 'coal_act' => $data->sum('coal_act'), 'coal_ach' => $data->sum('coal_ach')];
+        $total = ['ob_plan' => $data->sum('ob_plan'), 'ob_act' => $data->sum('ob_act'), 'ob_ach' => $data->sum('ob_plan') === 0 ? 0 : $data->sum('ob_act') / $data->sum('ob_plan') * 100, 'coal_plan' => $data->sum('coal_plan'), 'coal_act' => $data->sum('coal_act'), 'coal_ach' => $data->sum('coal_plan') === 0 ? 0: $data->sum('coal_act')/$data->sum('coal_plan') * 100];
 
         if (count($request->all()) > 1) {
             $response['data'] = $data;

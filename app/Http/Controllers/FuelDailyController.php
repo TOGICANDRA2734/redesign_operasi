@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Site;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class FuelDailyController extends Controller
@@ -11,9 +13,30 @@ class FuelDailyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('fuel-daily.index');
+        $where1 = '';
+        $where2 = '';
+
+        if (count($request->all()) > 1) {              
+            // Where 1
+            $where1 .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
+            $where1 .= " AND DEL=0";
+
+            // Where 2
+            $where2 .= ($request->has('start') && $request->has('end')) ? "a.TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "a.kodesite='" . $request->pilihSite . "'" : "";
+            $where2 .= " AND a.DEL=0";
+        } else {
+            $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
+            $where2 .= "a.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND a.DEL=0";
+        }
+
+        $site = Site::where('status_website', 1)->get();
+        return view('fuel-daily.index', compact('site'));
     }
 
     /**

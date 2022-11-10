@@ -196,7 +196,7 @@
 
                         $j("#actualOB").append("Actual: " + number_format(response.total.ob_act, 0) + " BCM");
                         $j("#planOB").append("Plan: " + number_format(response.total.ob_plan, 0) + " BCM");
-                        $j("#achOB").append(number_format(response.total.ob_ach, 0) + "%");
+                        $j("#achOB").append(number_format(response.total.ob_ach, 1) + "%");
 
                         // Coal Card
                         $j("#actualCoal").empty();
@@ -205,7 +205,7 @@
 
                         $j("#actualCoal").append("Actual: " + number_format(response.total.coal_act, 0) + " MT");
                         $j("#planCoal").append("Plan: " + number_format(response.total.coal_plan, 0) + " MT");
-                        $j("#achCoal").append(number_format(response.total.coal_ach, 0) + "%");
+                        $j("#achCoal").append(number_format(response.total.coal_ach, 1) + "%");
 
                         $j("table tbody").empty();
                         fullText = ""
@@ -221,7 +221,13 @@
                             i++;
                             
                             $j.each(data, function(i, d){
-                                text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"
+                                if(i === 'tgl_format' || i === 'hari'){
+                                    text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
+                                } else if(i === 'ob_ach' || i === 'coal_ach'){
+                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
+                                } else {
+                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
+                                }
                             })
 
                             text += "</tr>"
@@ -262,6 +268,26 @@
                 },
                 success: function(response) {
                     $j("#loading").toggleClass('hidden');
+
+                    // JANGAN LUPA COPY KE SEBELAH
+                        // OB CARD
+                        $j("#actualOB").empty();
+                        $j("#planOB").empty();
+                        $j("#achOB").empty();
+
+                        $j("#actualOB").append("Actual: " + number_format(response.total.ob_act, 0) + " BCM");
+                        $j("#planOB").append("Plan: " + number_format(response.total.ob_plan, 0) + " BCM");
+                        $j("#achOB").append(number_format(response.total.ob_ach, 1) + "%");
+
+                        // Coal Card
+                        $j("#actualCoal").empty();
+                        $j("#planCoal").empty();
+                        $j("#achCoal").empty();
+
+                        $j("#actualCoal").append("Actual: " + number_format(response.total.coal_act, 0) + " MT");
+                        $j("#planCoal").append("Plan: " + number_format(response.total.coal_plan, 0) + " MT");
+                        $j("#achCoal").append(number_format(response.total.coal_ach, 1) + "%");
+
                     $j("table tbody").empty();
                     fullText = ""
                     i=1
@@ -275,7 +301,13 @@
                             i++;
 
                             $j.each(data, function(i, d){
-                                text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"
+                                if(i === 'tgl_format' || i === 'hari'){
+                                    text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
+                                } else if(i === 'ob_ach' || i === 'coal_ach'){
+                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
+                                } else {
+                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
+                                }
                             })
 
                             text += "</tr>"
