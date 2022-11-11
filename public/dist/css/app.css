@@ -2170,6 +2170,9 @@ select{
 .max-h-96{
     max-height: 24rem;
 }
+.max-h-\[40rem\]{
+    max-height: 40rem;
+}
 .max-h-\[30rem\]{
     max-height: 30rem;
 }
