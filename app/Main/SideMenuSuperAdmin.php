@@ -121,7 +121,7 @@ class SideMenuSuperAdmin
                             ],
                             'daily-produksi' => [
                                 'icon' => 'box',
-                                'title' => 'Daily Production',
+                                'title' => 'Laporan Harian Truck Count PMA',
                                 'params' => [
                                     'layout' => 'side-menu'
                                 ],
@@ -129,7 +129,7 @@ class SideMenuSuperAdmin
                             ],
                             'monthly-produksi' => [
                                 'icon' => 'box',
-                                'title' => 'Monthly Production',
+                                'title' => 'Laporan Bulanan Truck Count PMA',
                                 'params' => [
                                     'layout' => 'side-menu'
                                 ],
@@ -137,7 +137,7 @@ class SideMenuSuperAdmin
                             ],
                             'fuel-daily' => [
                                 'icon' => 'box',
-                                'title' => 'Fuel Daily',
+                                'title' => 'Laporan Solar Harian',
                                 'params' => [
                                     'layout' => 'side-menu'
                                 ],
@@ -145,7 +145,7 @@ class SideMenuSuperAdmin
                             ],
                             'fuel-unit' => [
                                 'icon' => 'box',
-                                'title' => 'Fuel Unit',
+                                'title' => 'Laporan Solar Unit',
                                 'params' => [
                                     'layout' => 'side-menu'
                                 ],
@@ -158,6 +158,22 @@ class SideMenuSuperAdmin
                                     'layout' => 'side-menu'
                                 ],
                                 'route_name' => 'cost-part.index',
+                            ],
+                            'laporan-bulanan-budget' => [
+                                'icon' => 'box',
+                                'title' => 'Produksi Bulanan',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'laporan-bulanan.index',
+                            ],
+                            'laporan-bulanan-target-customer' => [
+                                'icon' => 'box',
+                                'title' => 'Produksi Bulanan Customer',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'laporan-customer.index',
                             ],
                         ],
                     ],

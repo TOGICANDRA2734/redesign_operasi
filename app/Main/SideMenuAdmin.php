@@ -70,22 +70,23 @@ class SideMenuAdmin
                     'laporan-actual' => [
                         'icon' => 'box',
                         'title' => 'Produksi Truck Count',
-                        'route_name' => 'admin.data-prod.report',
+                        'route_name' => 'super_admin.data-prod.report',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
                     ],
                     'laporan-productivity' => [
                         'icon' => 'box',
-                        'title' => 'Productivity',
-                        'route_name' => 'admin.productivity.index',
+                        'title' => 'Laporan Productivity',
+                        'route_name' => 'super_admin.productivity.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
                     ],
+                    
                     'laporan-produksi-coal' => [
                         'icon' => 'inbox',
-                        'route_name' => 'admin.productivity_coal.index',
+                        'route_name' => 'super_admin.productivity_coal.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -93,10 +94,88 @@ class SideMenuAdmin
                     ],
                     'laporan-kendala' => [
                         'icon' => 'box',
-                        'title' => 'Kendala',
-                        'route_name' => 'admin.kendala.index',
+                        'title' => 'Laporan Kendala',
+                        'route_name' => 'super_admin.kendala.index',
                         'params' => [
                             'layout' => 'side-menu'
+                        ],
+                    ],
+                    'PMA' => [
+                        'icon' => 'sidebar',
+                        'title' => 'PMA',
+                        'sub_menu' => [
+                            'mohh-harian' => [
+                                'icon' => 'box',
+                                'title' => 'MOHH Harian',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'super_admin.mohh.index',
+                            ],
+                            'rep-harian' => [
+                                'icon' => 'box',
+                                'title' => 'Report Harian',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'super_admin.rep.index',
+                            ],
+                            'daily-produksi' => [
+                                'icon' => 'box',
+                                'title' => 'Laporan Harian Truck Count PMA',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'daily-production.index',
+                            ],
+                            'monthly-produksi' => [
+                                'icon' => 'box',
+                                'title' => 'Laporan Bulanan Truck Count PMA',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'monthly-production.index',
+                            ],
+                            'fuel-daily' => [
+                                'icon' => 'box',
+                                'title' => 'Laporan Solar Harian',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'fuel-daily.index',
+                            ],
+                            'fuel-unit' => [
+                                'icon' => 'box',
+                                'title' => 'Laporan Solar Unit',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'fuel-unit.index',
+                            ],
+                            'cost-part' => [
+                                'icon' => 'box',
+                                'title' => 'Cost Part',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'cost-part.index',
+                            ],
+                            'laporan-bulanan-budget' => [
+                                'icon' => 'box',
+                                'title' => 'Produksi Bulanan',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'laporan-bulanan.index',
+                            ],
+                            'laporan-bulanan-target-customer' => [
+                                'icon' => 'box',
+                                'title' => 'Produksi Bulanan Customer',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'laporan-customer.index',
+                            ],
                         ],
                     ],
                 ],

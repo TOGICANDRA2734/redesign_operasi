@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class MonthlyProductionController extends Controller
+class LaporanTargetCustomer extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -44,7 +44,7 @@ class MonthlyProductionController extends Controller
 
         // Data OB 
         $subquery = "SELECT DATE_FORMAT(a.tgl, '%b, %Y') periode, 
-        d.namasite,
+        d.namasite nama,
         SUM(a.ob) budget_ob, 
         SUM(a.coal) budget_coal, 
         b.ob joint_survey_ob,
@@ -55,14 +55,14 @@ class MonthlyProductionController extends Controller
         SUM(c.coal) invoice_coal,
         FORMAT(c.ob/SUM(a.ob) * 100,1) ach_inv_ob,
         FORMAT(c.coal/SUM(a.coal) * 100,1) ach_inv_coal
-        FROM pma_budget a
-        JOIN (SELECT tgl, kodesite, SUM(ob) ob, SUM(coal) coal FROM pma_joint_survey WHERE del=0 GROUP BY tgl, kodesite) b 
+        FROM pma_target_customer a
+        JOIN (SELECT tgl, kodesite, SUM(ob) ob, SUM(coal) coal FROM pma_joint_survey WHERE ".$where1." GROUP BY tgl, kodesite) b 
         ON a.kodesite=b.kodesite AND a.tgl=b.tgl
-        JOIN (SELECT tgl, kodesite, SUM(ob) ob, SUM(coal) coal FROM pma_invoice WHERE del=0 GROUP BY tgl, kodesite) c 
+        JOIN (SELECT tgl, kodesite, SUM(ob) ob, SUM(coal) coal FROM pma_invoice WHERE ".$where1." GROUP BY tgl, kodesite) c 
         ON a.kodesite=c.kodesite AND a.tgl=c.tgl
         JOIN (SELECT namasite, kodesite FROM site) d
         ON a.kodesite=d.kodesite
-        WHERE a.del=0
+        WHERE ".$where2."
         GROUP BY a.tgl, a.kodesite";
         $data = collect(DB::select($subquery));
 
@@ -77,7 +77,7 @@ class MonthlyProductionController extends Controller
             $response['data'] = $data;
             return response()->json($response);
         } else {
-            return view('monthly-production.index', compact('site', 'data'));
+            return view('laporan-customer.index', compact('site', 'data'));
         }
     }
 

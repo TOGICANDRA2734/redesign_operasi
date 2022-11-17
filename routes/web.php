@@ -31,6 +31,8 @@ use App\Http\Controllers\FuelUnitController;
 use App\Http\Controllers\HistoricalOvhController;
 use App\Http\Controllers\HistoricalUnitController;
 use App\Http\Controllers\HMController;
+use App\Http\Controllers\LaporanBulananController;
+use App\Http\Controllers\LaporanTargetCustomer;
 use App\Http\Controllers\MohhController;
 use App\Http\Controllers\MonthlyProductionController;
 use App\Http\Controllers\MPController;
@@ -383,4 +385,10 @@ Route::middleware('auth')->group(function() {
         
         // Cost Part Controller
         Route::resource('cost-part', CostPartController::class);
+
+        // Laporan Bulanan Controller
+        Route::resource('laporan-bulanan', LaporanBulananController::class);
+
+        // Laporan Customer Controller
+        Route::resource('laporan-customer', LaporanTargetCustomer::class);
 });
