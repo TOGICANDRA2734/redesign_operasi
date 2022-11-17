@@ -32,6 +32,7 @@ use App\Http\Controllers\HistoricalOvhController;
 use App\Http\Controllers\HistoricalUnitController;
 use App\Http\Controllers\HMController;
 use App\Http\Controllers\MohhController;
+use App\Http\Controllers\MonthlyProductionController;
 use App\Http\Controllers\MPController;
 use App\Http\Controllers\MPKontrakController;
 use App\Http\Controllers\MPStatistikController;
@@ -371,12 +372,15 @@ Route::middleware('auth')->group(function() {
         // Daily Produksi Controller - PMA TP
         Route::resource('daily-production', DailyProduksiController::class);
 
+        // Daily Produksi Controller - PMA TP
+        Route::resource('monthly-production', MonthlyProductionController::class);
+
         // Fuel Daily Controller
         Route::resource('fuel-daily', FuelDailyController::class);
         
-        // Fuel Daily Controller
+        // Fuel Unit Controller
         Route::resource('fuel-unit', FuelUnitController::class);
         
-        // Fuel Daily Controller
+        // Cost Part Controller
         Route::resource('cost-part', CostPartController::class);
 });

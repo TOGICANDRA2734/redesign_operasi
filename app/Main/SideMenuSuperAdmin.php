@@ -121,11 +121,19 @@ class SideMenuSuperAdmin
                             ],
                             'daily-produksi' => [
                                 'icon' => 'box',
-                                'title' => 'Daily Produksi',
+                                'title' => 'Daily Production',
                                 'params' => [
                                     'layout' => 'side-menu'
                                 ],
                                 'route_name' => 'daily-production.index',
+                            ],
+                            'monthly-produksi' => [
+                                'icon' => 'box',
+                                'title' => 'Monthly Production',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'monthly-production.index',
                             ],
                             'fuel-daily' => [
                                 'icon' => 'box',

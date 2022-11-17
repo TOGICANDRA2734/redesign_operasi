@@ -28,7 +28,7 @@
                 </div>
 
                 {{-- Url Rujukan --}}
-                <input type="hidden" name="url" value="{{route('daily-production.index')}}" id="urlFilter">
+                <input type="hidden" name="url" value="{{route('fuel-unit.index')}}" id="urlFilter">
 
                 {{-- Pilih Site --}}
                 <select id="pilihSite"
@@ -65,6 +65,41 @@
             </div>
         </div>
         <hr class="col-span-12">
+
+        <div class="col-span-12 grid grid-cols-12 gap-5">
+            <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
+                <div class="box p-5 zoom-in">
+                    <div class="flex items-center">
+                        <div class="w-2/4 flex-none">
+                            <div class="text-lg font-medium truncate">Total Overburden</div>
+                            <div class="text-slate-500 mt-1" id="actualOB">Actual:M</div>
+                            <div class="text-slate-500 mt-1" id="planOB">Plan:CM</div>
+                        </div>
+                        <div class="flex-none ml-auto relative">
+                            <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
+                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0" id="achOB"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
+                <div class="box p-5 zoom-in">
+                    <div class="flex items-center">
+                        <div class="w-2/4 flex-none">
+                            <div class="text-lg font-medium truncate">Total Coal</div>
+                            <div class="text-slate-500 mt-1" id="actualCoal">Actual:BCM</div>
+                            <div class="text-slate-500 mt-1" id="planCoal">Plan: BCM</div>
+                        </div>
+                        <div class="flex-none ml-auto relative">
+                            <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
+                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0" id="achCoal">%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Table -->
         <div class="w-full mb-8 col-span-12 overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-auto h-[45rem]">
@@ -73,13 +108,17 @@
                         <tr class="">
                             <th class="whitespace-nowrap text-center">#</th>
                             <th class="whitespace-nowrap text-center">Nom Unit</th>
+                            <th class="whitespace-nowrap text-center">Bulan</th>
                             <th class="whitespace-nowrap text-center">Fuel</th>
+                            <th class="whitespace-nowrap text-center">Price</th>
                             <th class="whitespace-nowrap text-center">WH</th>
-                            <th class="whitespace-nowrap text-center">Liter/HRS</th>
+                            <th class="whitespace-nowrap text-center">Liter/Hours</th>
+                            <th class="whitespace-nowrap text-center">Price/Hours</th>
+                            <th class="whitespace-nowrap text-center">Site</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($data as $key => $dt)
+                        @foreach ($data as $key => $dt)
                             <tr class="text-center bg-white">
                                 <td class="whitespace-nowrap text-center">
                                     {{ $key + 1 }}
@@ -90,7 +129,7 @@
                                     </td>
                                 @endforeach
                             </tr>
-                        @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -145,22 +184,7 @@
                         $j("#loading").toggleClass('hidden');
                         // JANGAN LUPA COPY KE SEBELAH
                         // OB CARD
-                        $j("#actualOB").empty();
-                        $j("#planOB").empty();
-                        $j("#achOB").empty();
 
-                        $j("#actualOB").append("Actual: " + number_format(response.total.ob_act, 0) + " BCM");
-                        $j("#planOB").append("Plan: " + number_format(response.total.ob_plan, 0) + " BCM");
-                        $j("#achOB").append(number_format(response.total.ob_ach, 1) + "%");
-
-                        // Coal Card
-                        $j("#actualCoal").empty();
-                        $j("#planCoal").empty();
-                        $j("#achCoal").empty();
-
-                        $j("#actualCoal").append("Actual: " + number_format(response.total.coal_act, 0) + " MT");
-                        $j("#planCoal").append("Plan: " + number_format(response.total.coal_plan, 0) + " MT");
-                        $j("#achCoal").append(number_format(response.total.coal_ach, 1) + "%");
 
                         $j("table tbody").empty();
                         fullText = ""
@@ -176,9 +200,9 @@
                             i++;
                             
                             $j.each(data, function(i, d){
-                                if(i === 'tgl_format' || i === 'hari'){
+                                if(i === 'tgl' || i === 'nom_unit'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
-                                } else if(i === 'ob_ach' || i === 'coal_ach'){
+                                } else if(i === 'liter_hour' || i === 'price_hour'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
                                 } else {
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
@@ -226,22 +250,6 @@
 
                     // JANGAN LUPA COPY KE SEBELAH
                         // OB CARD
-                        $j("#actualOB").empty();
-                        $j("#planOB").empty();
-                        $j("#achOB").empty();
-
-                        $j("#actualOB").append("Actual: " + number_format(response.total.ob_act, 0) + " BCM");
-                        $j("#planOB").append("Plan: " + number_format(response.total.ob_plan, 0) + " BCM");
-                        $j("#achOB").append(number_format(response.total.ob_ach, 1) + "%");
-
-                        // Coal Card
-                        $j("#actualCoal").empty();
-                        $j("#planCoal").empty();
-                        $j("#achCoal").empty();
-
-                        $j("#actualCoal").append("Actual: " + number_format(response.total.coal_act, 0) + " MT");
-                        $j("#planCoal").append("Plan: " + number_format(response.total.coal_plan, 0) + " MT");
-                        $j("#achCoal").append(number_format(response.total.coal_ach, 1) + "%");
 
                     $j("table tbody").empty();
                     fullText = ""
@@ -256,14 +264,15 @@
                             i++;
 
                             $j.each(data, function(i, d){
-                                if(i === 'tgl_format' || i === 'hari'){
+                                if(i === 'tgl' || i === 'nom_unit'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
-                                } else if(i === 'ob_ach' || i === 'coal_ach'){
+                                } else if(i === 'liter_hour' || i === 'price_hour'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
                                 } else {
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
                                 }
                             })
+
 
                             text += "</tr>"
                             

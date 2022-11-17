@@ -33,11 +33,11 @@ class DailyProduksiController extends Controller
             $where2 .= " AND a.DEL=0";
         } else {
             
-            $where1 .= "TGL BETWEEN '2022-09-01' AND '2022-09-31' and kodesite='g' AND DEL=0 ";
-            $where2 .= "a.TGL BETWEEN '2022-09-01' AND '2022-09-31' AND a.DEL=0";
+            // $where1 .= "TGL BETWEEN '2022-09-01' AND '2022-09-31' and kodesite='g' AND DEL=0 ";
+            // $where2 .= "a.TGL BETWEEN '2022-09-01' AND '2022-09-31' AND a.DEL=0";
 
-            // $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
-            // $where2 .= "a.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND a.DEL=0";
+            $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
+            $where2 .= "a.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND a.DEL=0";
         }
 
         $site = Site::where('status_website', 1)->get();

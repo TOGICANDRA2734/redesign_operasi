@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FuelUnitController extends Controller
 {
@@ -17,26 +18,96 @@ class FuelUnitController extends Controller
     {
         $where1 = '';
         $where2 = '';
+        $where3 = '';
 
         if (count($request->all()) > 1) {              
             // Where 1
             $where1 .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
             $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
             $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
-            $where1 .= " AND DEL=0";
 
             // Where 2
             $where2 .= ($request->has('start') && $request->has('end')) ? "a.TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
             $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
             $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "a.kodesite='" . $request->pilihSite . "'" : "";
-            $where2 .= " AND a.DEL=0";
+            
+            // Where 3
+            $where3 .= ($request->has('start') && $request->has('end')) ? "e.TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where3 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where3 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "e.kodesite='" . $request->pilihSite . "'" : "";
         } else {
-            $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
-            $where2 .= "a.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND a.DEL=0";
+            $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            $where2 .= "a.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            $where3 .= "e.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
         }
 
         $site = Site::where('status_website', 1)->get();
-        return view('fuel-unit.index', compact('site'));
+
+        $subquery = "-- PMA_A2B
+        (
+        SELECT a.nom_unit, 
+        DATE_FORMAT(a.tgl, '%b') tgl, 
+        FORMAT(SUM(ltr),0) liter, 
+        FORMAT(SUM(price),0) price, 
+        FORMAT(b.jam, 0) jam,
+        FORMAT(SUM(ltr)/b.jam, 1) ltr_hour,
+        FORMAT(SUM(price)/b.jam,1) price_hour,
+        namasite
+        FROM fuel_monthly a
+        JOIN (SELECT nom_unit, 
+        MONTH(tgl) tgl, 
+        SUM(jam) jam 
+        FROM pma_a2b 
+        WHERE ".$where1."
+        GROUP BY MONTH(tgl), 
+        nom_unit) b
+        ON a.nom_unit=b.nom_unit 
+        JOIN (SELECT namasite, kodesite FROM site ) c 
+        ON a.kodesite=c.kodesite
+        JOIN (SELECT * FROM unit_urut) d
+        ON LEFT(a.nom_unit,4)=kode_left
+        WHERE ".$where2."
+        GROUP BY MONTH(a.tgl), a.nom_unit 
+        ORDER BY gol, MONTH(a.tgl), a.nom_unit 
+        )
+        
+        UNION ALL
+        
+        (
+        -- PMA_TP
+        SELECT e.nom_unit, 
+        DATE_FORMAT(e.tgl, '%b') tgl, 
+        FORMAT(SUM(ltr),0) liter, 
+        FORMAT(SUM(price),0) price, 
+        FORMAT(f.jam, 0) jam,
+        FORMAT(SUM(ltr)/f.jam, 1) ltr_hour,
+        FORMAT(SUM(price)/f.jam,1) price_hour,
+        namasite
+        FROM (SELECT * FROM fuel_monthly) e
+        JOIN (SELECT nom_unit, 
+        MONTH(tgl) tgl, 
+        SUM(jam) jam 
+        FROM pma_tp
+        WHERE ".$where1."
+        GROUP BY MONTH(tgl), 
+        nom_unit) f
+        ON e.nom_unit=f.nom_unit 
+        JOIN (SELECT namasite, kodesite FROM site ) g
+        ON e.kodesite=g.kodesite
+        JOIN (SELECT * FROM unit_urut) h
+        ON LEFT(e.nom_unit,4)=kode_left
+        WHERE ".$where3."
+        GROUP BY MONTH(e.tgl), e.nom_unit 
+        ORDER BY gol, MONTH(e.tgl), e.nom_unit 
+        )";
+        $data = collect(DB::select(DB::raw($subquery)));
+
+        if (count($request->all()) > 1) {
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('fuel-unit.index', compact('data', 'site'));
+        }
     }
 
     /**
