@@ -57,7 +57,7 @@
                                             </div>
                                         </div>
                                         <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                                            <div class="text-slate-500">Plant RFU</div>
+                                            <div class="text-slate-500">Plan RFU</div>
                                             <div class="mt-1.5 flex items-center">
                                                 <div class="text-base">{{$data[0]->tgl_rfu_format}}</div>
                                             </div>

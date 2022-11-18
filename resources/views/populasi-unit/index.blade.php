@@ -35,6 +35,8 @@
                 </div>
             </div> <!-- END: Notification Content -->
 
+            <input type="hidden" name="url" id="url" value="{{route('populasi-unit.index')}}">
+
         </div>
         @endif
         
@@ -305,7 +307,7 @@
 <script>
     $i = jQuery.noConflict();
 
-    $i('#pilihSite').on('change', function() {
+    $i('#pilihSite', '#cariNama').on('change', function() {
         $i.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
@@ -316,6 +318,8 @@
         const cariNama = $i('#cariNama').val() ? $i('#cariNama').val() : "";
         const pilihModel = $i('#pilihModel').val() ? $i('#pilihModel').val() : "";
 
+        var url = $i("#url").val();
+
         if (kodesite == null || kodesite == '') {
             kodesite = 'all';
         }
@@ -324,7 +328,7 @@
 
         $i.ajax({
             type: "POST",
-            url: 'http://127.0.0.1:8000/populasi_unit_filter?layout=side-menu',
+            url: url,
             data: {
                 'kodesite': kodesite,
                 'cariNama': cariNama,
@@ -353,14 +357,17 @@
                             '<td class="">' + result.data[index].fuel + '</td>' +
                             '<td class="">' + result.data[index].HM + '</td>' +
                             '<td class="">' + result.data[index].KM + '</td>' +
-                            '<td class="cekTbModal">' + 
-                                '<a href="/super_admin/populasi-unit/'+result.data[index].id+'" class="btn btn-dark mr-1 mb-2">' + 
-                                    '<i data-lucide="eye" class="w-5 h-5"></i>' + 
-                                '</a>' + 
-                                '<a href="/super_admin/populasi-unit/'+result.data[index].id+'/edit" class="btn btn-warning mr-1 mb-2">' + 
-                                    '<i data-lucide="edit" class="w-5 h-5"></i>' + 
-                                '</a>' + 
-                            '</td>' + 
+                            '<td class="cekTbModal flex">' +
+                                '<a href="http://127.0.0.1:8000/populasi-unit/'+ result.data[index].id+'" class="btn btn-dark mr-1 mb-2 p-1">'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="eye" data-lucide="eye" class="lucide lucide-eye w-4 h-4"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
+                                '</a>'+
+                                '<a href="http://127.0.0.1:8000/populasi-unit/'+ result.data[index].id+'/edit" class="btn btn-warning mr-1 mb-2 p-1">'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="edit" data-lucide="edit" class="lucide lucide-edit w-4 h-4"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>'+
+                                '</a>'+
+                                '<button onclick="deleteConfirmation('+ result.data[index].id+')" class="btn btn-danger mr-1 mb-2 p-1">'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="trash" data-lucide="trash" class="lucide lucide-trash w-4 h-4"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path></svg>'+
+                                '</button>'+
+                            '</td>' +
                             '</tr>';
                         fullText += text
                     });
@@ -374,74 +381,6 @@
         });
     })
 
-    $i('#cariNama').on('change', function() {
-        $i = jQuery.noConflict();
-        $i.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var kodesite = $i('#pilihSite').val();
-        if (kodesite == null || kodesite == '') {
-            kodesite = 'all';
-        }
-        const cariNama = $i(this).val();
-        const pilihModel = $i("#pilihModel").val();
-        
-
-        console.log("PILIH Nama", kodesite, cariNama);
-
-        $i.ajax({
-            type: "POST",
-            url: 'http://127.0.0.1:8000/populasi_unit_filter?layout=side-menu',
-            data: {
-                'cariNama': cariNama,
-                'kodesite': kodesite,
-                'pilihModel': pilihModel,
-            },
-            success: function(result) {
-                $i("table tbody ").empty();
-                fullText = ""
-                if (result) {
-                    i=0;
-                    $i.each(result.data, function(index) {
-                        i +=1;
-                        text = '<tr class="text-center bg-white">' +
-                            '<td class="">' + i + '</td>' +
-                            '<td class="">' + result.data[index].nom_unit + '</td>' +
-                            '<td class="">' + result.data[index].model + '</td>' +
-                            '<td class="">' + result.data[index].DO + '</td>' +
-                            '<td class="">' + result.data[index].namasite + '</td>' +
-                            '<td class="">' + result.data[index].type_unit + '</td>' +
-                            '<td class="">' + result.data[index].sn + '</td>' +
-                            '<td class="">' + result.data[index].engine_brand + '</td>' +
-                            '<td class="">' + result.data[index].engine_model + '</td>' +
-                            '<td class="">' + result.data[index].engine_sn + '</td>' +
-                            '<td class="">' + result.data[index].hp + '</td>' +
-                            '<td class="">' + result.data[index].fuel + '</td>' +
-                            '<td class="">' + result.data[index].HM + '</td>' +
-                            '<td class="">' + result.data[index].KM + '</td>' +
-                            '<td class="cekTbModal">' + 
-                                '<a href="/super_admin/populasi-unit/'+result.data[index].id+'" class="btn btn-dark mr-1 mb-2">' + 
-                                    '<i data-lucide="eye" class="w-5 h-5"></i>' + 
-                                '</a>' + 
-                                '<a href="/super_admin/populasi-unit/'+result.data[index].id+'/edit" class="btn btn-warning mr-1 mb-2">' + 
-                                    '<i data-lucide="edit" class="w-5 h-5"></i>' + 
-                                '</a>' + 
-                            '</td>' + 
-                            '</tr>';
-                        fullText += text
-                    });
-                    $i("table tbody").html(fullText);
-                    show_data()
-                }
-            },
-            error: function(result) {
-                console.log("error", result);
-            },
-        });
-    })
 
     function show_data() {
         Toastify({

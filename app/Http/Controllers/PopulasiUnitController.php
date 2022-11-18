@@ -30,15 +30,47 @@ class PopulasiUnitController extends Controller
         // dd($model);
 
         if ($request->has('kodesite') && $request->kodesite !== 'all') {
-            $subquery = "SELECT a.id id, a.nom_unit nom_unit, c.namasite namasite, DATE_FORMAT(do, '%d-%m-%Y') DO, model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  HM, KM
-                FROM plant_populasi a
-                JOIN plant_HM b
-                ON  a.nom_unit=b.nom_unit
-                JOIN site c
-                ON b.kodesite = c.kodesite
-                WHERE b.kodesite='" . $request->kodesite . "' " . $nama . " " . $model . "";
+            $subquery = "SELECT a.id id, 
+            a.nom_unit nom_unit, 
+            model, 
+            DATE_FORMAT(do, '%d-%m-%Y') DO, 
+            c.namasite namasite, 
+            type_unit,
+            sn,
+            engine_brand,
+            engine_model,
+            engine_sn,
+            hp,
+            fuel,
+            (SELECT HM 
+                FROM PLANT_HM 
+                WHERE NOM_UNIT=A.NOM_UNIT 
+                ORDER BY TGL 
+                DESC LIMIT 1) HM, 
+            (SELECT KM 
+                FROM PLANT_HM 
+                WHERE NOM_UNIT=A.NOM_UNIT
+                ORDER BY TGL DESC LIMIT 1) KM
+            FROM plant_populasi a
+            JOIN plant_HM b
+            ON  a.nom_unit=b.nom_unit
+            JOIN site c
+            ON b.kodesite = c.kodesite
+            WHERE b.kodesite='" . $request->kodesite . "' " . $nama . " " . $model . "";
         } else {
-            $subquery = "SELECT a.id id, a.nom_unit nom_unit, c.namasite namasite, DATE_FORMAT(do, '%d-%m-%Y') DO, model, type_unit, sn, engine_brand, engine_model, engine_sn, hp, fuel,  (SELECT HM FROM PLANT_HM WHERE NOM_UNIT=A.NOM_UNIT ORDER BY TGL DESC LIMIT 1) HM, (SELECT KM FROM PLANT_HM WHERE NOM_UNIT=A.NOM_UNIT ORDER BY TGL DESC LIMIT 1) KM
+            $subquery = "SELECT a.id id, 
+            a.nom_unit nom_unit, 
+            model, 
+            DATE_FORMAT(do, '%d-%m-%Y') DO, 
+            c.namasite namasite, 
+            type_unit,
+            sn,
+            engine_brand,
+            engine_model,
+            engine_sn,
+            hp,
+            fuel, 
+            (SELECT HM FROM PLANT_HM WHERE NOM_UNIT=A.NOM_UNIT ORDER BY TGL DESC LIMIT 1) HM, (SELECT KM FROM PLANT_HM WHERE NOM_UNIT=A.NOM_UNIT ORDER BY TGL DESC LIMIT 1) KM
                 FROM plant_populasi a
                 JOIN plant_HM b
                 ON  a.nom_unit=b.nom_unit

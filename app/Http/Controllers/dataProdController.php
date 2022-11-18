@@ -272,7 +272,7 @@ class dataProdController extends Controller
 
 
         // Record Pit
-        $pit = DB::table('pma_dailyprod_tc')->select(DB::raw('DISTINCT pit'))->where('kodesite', '=',Auth::user()->kodesite)->orderBy('pit')->get();
+        $pit = DB::table('pma_dailyprod_tc')->select(DB::raw('DISTINCT pit'))->where('kodesite', '=',Auth::user()->kodesite)->whereMonth('tgl', DB::raw('MONTH("'.$request->tgl.'")'))->orderBy('pit')->get();
         
         foreach($pit as $key => $pt){
             $record = dataProd::all()->where('kodesite', '=', $request->kodesite)->where('pit',  '=',$pt->pit)->where('tgl', '=', $request->tgl);

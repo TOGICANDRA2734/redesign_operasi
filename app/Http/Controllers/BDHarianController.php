@@ -69,25 +69,23 @@ class BDHarianController extends Controller
         $site = Site::where('status_website', 1)->get();
 
         $subquery = "SELECT e.status model, 
-        b.kodesite site, 
+        a.kodesite site, 
         COUNT(a.nom_unit) populasi,
-        SUM(IF((C.nom_unit IS NULL OR (C.ket_tgl_rfu='RFU')),1,0)) RFU,
-        SUM(IF((C.nom_unit IS NOT NULL AND (C.ket_tgl_rfu<>'RFU')),1,0)) BD,
+        SUM(IF((C.nom_unit IS NULL OR (C.kode_bd='RFU')),1,0)) RFU,
+        SUM(IF((C.nom_unit IS NOT NULL AND (C.kode_bd<>'RFU')),1,0)) BD,
         d.namasite namasite,
         d.gambar gambar,
         f.gambar icon_unit
         FROM plant_populasi a
-        JOIN plant_hm b
-        ON a.nom_unit=b.nom_unit
         LEFT JOIN (SELECT * FROM plant_status_bd GROUP BY NOM_UNIT) c
         ON a.nom_unit=c.nom_unit
         JOIN site d
-        ON b.kodesite=d.kodesite
+        ON a.kodesite=d.kodesite
         JOIN plant_populasi_bagian e
         ON e.id = a.status_bagian
         JOIN plant_icon_unit f
         ON e.status=f.status
-        GROUP BY a.status_bagian, b.kodesite
+        GROUP BY a.status_bagian, a.kodesite
         ORDER BY d.id, a.status_bagian";
         
         $dataCard = collect(DB::select($subquery));

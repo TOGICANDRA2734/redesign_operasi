@@ -278,7 +278,6 @@ class dataProdController extends Controller
         foreach($pit as $key => $pt){
             $record = dataProd::all()->where('kodesite', '=', $request->kodesite)->where('pit',  '=',$pt->pit)->where('tgl', '=', $request->tgl);
             
-            
             foreach($record as $r)
             {   
                 $data = dataProd::findOrFail($r->id);

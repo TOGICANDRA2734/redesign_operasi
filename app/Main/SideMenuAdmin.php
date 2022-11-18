@@ -70,7 +70,7 @@ class SideMenuAdmin
                     'laporan-actual' => [
                         'icon' => 'box',
                         'title' => 'Produksi Truck Count',
-                        'route_name' => 'super_admin.data-prod.report',
+                        'route_name' => 'data-prod.report',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -78,7 +78,7 @@ class SideMenuAdmin
                     'laporan-productivity' => [
                         'icon' => 'box',
                         'title' => 'Laporan Productivity',
-                        'route_name' => 'super_admin.productivity.index',
+                        'route_name' => 'productivity.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -86,7 +86,7 @@ class SideMenuAdmin
                     
                     'laporan-produksi-coal' => [
                         'icon' => 'inbox',
-                        'route_name' => 'super_admin.productivity_coal.index',
+                        'route_name' => 'productivity_coal.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -95,7 +95,7 @@ class SideMenuAdmin
                     'laporan-kendala' => [
                         'icon' => 'box',
                         'title' => 'Laporan Kendala',
-                        'route_name' => 'super_admin.kendala.index',
+                        'route_name' => 'kendala.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],
@@ -110,7 +110,7 @@ class SideMenuAdmin
                                 'params' => [
                                     'layout' => 'side-menu'
                                 ],
-                                'route_name' => 'super_admin.mohh.index',
+                                'route_name' => 'mohh.index',
                             ],
                             'rep-harian' => [
                                 'icon' => 'box',
@@ -118,7 +118,7 @@ class SideMenuAdmin
                                 'params' => [
                                     'layout' => 'side-menu'
                                 ],
-                                'route_name' => 'super_admin.rep.index',
+                                'route_name' => 'rep.index',
                             ],
                             'daily-produksi' => [
                                 'icon' => 'box',
