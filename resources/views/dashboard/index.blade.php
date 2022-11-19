@@ -1,7 +1,7 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-<title>PMA 2023</title>
+    <title>PMA 2023</title>
 @endsection
 
 @section('subcontent')
@@ -18,6 +18,7 @@
                     </a>
                 </div>
                 <div class="grid grid-cols-12 gap-6 mt-5">
+                    <input type="hidden" name="url" id="url" value="{{route('dashboard.show.filtered')}}">
                     @foreach($data as $dt)
                     <!-- START: Card Dashboard -->
                     <div class="col-span-12 sm:col-span-6 xl:col-span-2 intro-y">
@@ -101,16 +102,12 @@
                             </div>
                         </div>
                         <div class="dropdown md:ml-auto mt-5 md:mt-0">
-                            <button class="dropdown-toggle btn btn-outline-secondary font-normal" aria-expanded="false" data-tw-toggle="dropdown">
-                                Filter Site<i data-lucide="chevron-down" class="w-4 h-4 ml-2"></i>
-                            </button>
-                            <div class="dropdown-menu w-40">
-                                <ul class="dropdown-content overflow-y-auto h-32">
-                                    @foreach($data as $dt)
-                                    <li><a href="{{route('dashboard.filtered', $dt->namasite)}}" class="dropdown-item">{{$dt->namasite}}</a></li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                            <select id="obPilihSite" class="form-select mt-2 sm:mr-2" aria-label="Default select example">
+                                <option value="">All Site</option>
+                                @foreach($data as $dt)
+                                    <option value="{{$dt->kodesite}}">{{$dt->namasite}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="relative h-16 w-full sm:h-full" style="position: relative; height: 30vh; width: 100%;">
@@ -153,16 +150,12 @@
                             </div>
                         </div>
                         <div class="dropdown md:ml-auto mt-5 md:mt-0">
-                            <button class="dropdown-toggle btn btn-outline-secondary font-normal" aria-expanded="false" data-tw-toggle="dropdown">
-                                Filter Site <i data-lucide="chevron-down" class="w-4 h-4 ml-2"></i>
-                            </button>
-                            <div class="dropdown-menu w-40">
-                                <ul class="dropdown-content overflow-y-auto h-32">
-                                    @foreach($data as $dt)
-                                    <li><a href="{{route('dashboard.filtered', $dt->namasite)}}" class="dropdown-item">{{$dt->namasite}}</a></li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                            <select id="coalPilihSite" class="form-select mt-2 sm:mr-2" aria-label="Default select example">
+                                <option value="">All Site</option>
+                                @foreach($data as $dt)
+                                    <option value="{{$dt->kodesite}}">{{$dt->namasite}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="relative h-16 w-full sm:h-full" style="position: relative; height: 30vh; width: 100%;">
@@ -317,6 +310,8 @@
         var start = moment().subtract(29, 'days');
         var end = moment();
 
+        var url = $j("#url").val();
+
         // Overburden Range
         $j('#OverburdenRange').daterangepicker({
             startDate: start,
@@ -333,17 +328,19 @@
 
             var awal = start.format("YYYY-MM-DD");
             var akhir = end.format("YYYY-MM-DD");
+            var site = $j("obPilihSite").val()
 
             var $i = jQuery.noConflict();
 
             if (awal !== null && akhir !== null) {
                 $i.ajax({
-                    url: 'http://127.0.0.1:8000dashboard/detail_filtered/',
+                    url: url,
                     type: 'GET',
                     dataType: 'json',
                     data: {
                         start: awal,
                         end: akhir,
+                        site: site
                     },
                     success: function(response) {
                         update_data(response)
@@ -351,6 +348,80 @@
                 })
             }
         });
+
+        // Coal Range
+        // Overburden Range
+        $j('#CoalRange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Hari Ini': [moment(), moment()],
+                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, function(start, end, label) {
+
+            var awal = start.format("YYYY-MM-DD");
+            var akhir = end.format("YYYY-MM-DD");
+            var site = $j("obPilihSite").val();
+
+            var $i = jQuery.noConflict();
+
+            if (awal !== null && akhir !== null) {
+                $i.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        start: awal,
+                        end: akhir,
+                        site: site
+                    },
+                    success: function(response) {
+                        update_data(response)
+                    },
+                })
+            }
+        });
+
+        // Pilih Site
+        $j("#obPilihSite", "#coalPilihSite").on('change', function() {
+            $j.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $j('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            console.log()
+
+            var site = $j("#obPilihSite").val() ? $j("#obPilihSite").val() : "";
+            var awal = moment($j('#OverburdenRange').data('daterangepicker').startDate).format("YYYY-MM-DD") ? moment($j('#OverburdenRange').data('daterangepicker').startDate).format("YYYY-MM-DD") : "";
+            var akhir = moment($j('#OverburdenRange').data('daterangepicker').endDate).format("YYYY-MM-DD") ? moment($j('#OverburdenRange').data('daterangepicker').endDate).format("YYYY-MM-DD") : "";
+            console.log(awal,akhir)
+
+            var url = $j("#url").val();
+
+            $j("#loading").toggleClass('hidden');
+
+            $j.ajax({
+                type: "GET",
+                url: url,
+                data: {
+                    'start': awal,
+                    'end': akhir,
+                    'site': site,
+                },
+                success: function(response) {
+                    update_data(response)
+                },
+                error: function(result) {
+                    console.log("error", result);
+                },
+            });
+        });
+
 
         function update_data(response) {
             // OVERBURDEN
@@ -379,30 +450,13 @@
             $j("#coalPlan").empty();
             $j("#coalAch").empty();
 
-            $j("#obAct").append(number_format(response['data_detail_OB_prod'][0].OB, 1));
-            $j("#obPlan").append(number_format(response['data_detail_OB_plan'][0].OB, 1));
-            $j("#obAch").append(number_format((response['data_detail_OB_prod'][0].OB / response['data_detail_OB_plan'][0].OB) * 100, 1) + '%');
-            $j("#coalAct").append(number_format(response['data_detail_coal_prod'][0].coal, 1));
-            $j("#coalPlan").append(number_format(response['data_detail_coal_plan'][0].coal, 1));
-            $j("#coalAch").append(number_format((response['data_detail_coal_prod'][0].coal / response['data_detail_coal_plan'][0].coal) * 100, 1) + '%');
+            $j("#obAct").append(number_format(response['data_detail_OB_prod'], 1));
+            $j("#obPlan").append(number_format(response['data_detail_OB_plan'], 1));
+            $j("#obAch").append(number_format((response['data_detail_OB_prod'] / response['data_detail_OB_plan']) * 100, 1) + '%');
+            $j("#coalAct").append(number_format(response['data_detail_coal_prod'], 1));
+            $j("#coalPlan").append(number_format(response['data_detail_coal_plan'], 1));
+            $j("#coalAch").append(number_format((response['data_detail_coal_prod'] / response['data_detail_coal_plan']) * 100, 1) + '%');
         }
-        // Coal Range
-
-        // Overburden Range
-        $j('#CoalRange').daterangepicker({
-            startDate: start,
-            endDate: end,
-            ranges: {
-                'Hari Ini': [moment(), moment()],
-                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
-                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
-                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
-                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            }
-        }, function(start, end, label) {
-            console.log(start, end, label)
-        });
 
         // OVERBURDEN
         //get the OB data
@@ -529,7 +583,6 @@
             }
             return s.join(dec);
         }
-
     });
 </script>
 @endsection

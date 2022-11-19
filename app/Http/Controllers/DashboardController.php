@@ -16,10 +16,6 @@ class DashboardController extends Controller
          * Overburden Data
          */
 
-        // dd(Auth::user()->getRoleNames()[0]);
-
-        // dd($request);
-
         $bulan = Carbon::now();
 
         $record_OB_prod = DB::table('pma_dailyprod_tc')
@@ -220,8 +216,6 @@ class DashboardController extends Controller
         GROUP BY A.kodesite
         ORDER BY b.id";
         $totalDataRitSite = collect(DB::select($subquery));
-
-        // dd($data_detail_OB_prod, $data_detail_OB_plan, $data_prod_ob, $data_plan_ob, $data_detail_coal_prod, $data_detail_coal_plan, $data_prod_coal, $data_plan_coal, $data, $dataPty, $totalDataPty, $dataCoal, $totalDataCoal, $totalDataPtySite, $totalDataRitSite);
 
         return view('dashboard.index', compact('data_detail_OB_prod', 'data_detail_OB_plan', 'data_prod_ob', 'data_plan_ob', 'data_detail_coal_prod', 'data_detail_coal_plan', 'data_prod_coal', 'data_plan_coal', 'data', 'dataPty', 'totalDataPty', 'dataCoal', 'totalDataCoal', 'totalDataPtySite', 'totalDataRitSite'));
     }
@@ -696,47 +690,37 @@ class DashboardController extends Controller
     
     public function show_data_filtered(Request $request)
     {   
+        $where1 = '';
 
-        $bulan = Carbon::now();
-
-        $site=$request->site ? "AND A.kodesite = '".$request->site."'" : ''; 
-        $pit=$request->pit ? "AND A.pit='".$request->pit."'" : '';
-        $start=$request->start ? $request->start : '';
-        $end=$request->end ? $request->end : '';
-
-        if($start != null ){
-            $tanggal =  "TGL BETWEEN '" . $start . "' AND '" . $end . "'";
-            $tanggalKedua =  "A.TGL BETWEEN '" . $start . "' AND '" . $end . "'";    
-        }
-        else {
-            $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
-            $tanggalKedua =  "A.TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";    
+        if (count($request->all()) > 1) {              
+            // Where 1
+            $where1 .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where1 .= ($request->has('site') && !empty($request->site)) ? " AND " : "";
+            $where1 .= ($request->has('site') && !empty($request->site)) ? "kodesite='" . $request->site . "'" : "";
+            $where1 .= " AND DEL=0";
+        } else {
+            $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfYear() . "' AND '" . Carbon::now()->endOfYear() . "' AND DEL=0";
         }
 
-        $record_OB_prod = DB::table('pma_dailyprod_tc')
-        ->select(DB::raw('RIGHT(tgl,2) as prod_tgl, SUM(OB) as OB'))
-        ->when($start, function($q) use($start, $end){
-            $q->whereBetween('tgl', [$start, $end]);
-        })
-        ->when(!$start, function($q) use($bulan){
-            $q->whereBetween('tgl', [$bulan->startOfMonth()->copy(), $bulan->endOfMonth()->copy()]);
-        })
-        ->groupBy('tgl')
-        ->orderBy('tgl')
-        ->get();
+        // Data Produksi TC OB
+        $subquery = "SELECT RIGHT(tgl,2) as prod_tgl,
+        SUM(OB) as OB 
+        from PMA_DAILYPROD_TC 
+        where ".$where1." 
+        group by tgl 
+        order by tgl asc";
+        $record_OB_prod = collect(DB::select($subquery));
 
-        $record_OB_plan = DB::table('pma_dailyprod_plan')
-        ->select(DB::raw('RIGHT(tgl,2) as prod_tgl, SUM(OB) as OB'))
-        ->whereBetween('tgl', [$bulan->startOfMonth()->copy(), $bulan->endOfMonth()->copy()])
-        ->when($start, function($q) use($start, $end){
-            $q->whereBetween('tgl', [$start, $end]);
-        })
-        ->when(!$start, function($q) use($bulan){
-            $q->whereBetween('tgl', [$bulan->startOfMonth()->copy(), $bulan->endOfMonth()->copy()]);
-        })
-        ->groupBy('tgl')
-        ->orderBy('tgl')
-        ->get();
+        $subquery = "SELECT RIGHT(tgl,2) as prod_tgl,
+        SUM(OB) as OB 
+        from PMA_DAILYPROD_PLAN 
+        where ".$where1." 
+        group by tgl 
+        order by tgl asc";
+        $record_OB_plan = collect(DB::select($subquery));
+
+        $data_detail_OB_prod = $record_OB_prod->sum('OB');
+        $data_detail_OB_plan = $record_OB_plan->sum('OB');
 
         $data_prod_ob = [];
         $data_plan_ob = [];
@@ -751,57 +735,26 @@ class DashboardController extends Controller
             $data_plan_ob['data'][] = $row->OB;
         }
 
-        // $data_prod_ob = json_encode($data_prod_ob);
-        // $data_plan_ob = json_encode($data_plan_ob);
-
-
-        $data_detail_OB_prod = DB::table('pma_dailyprod_tc')
-            ->select(DB::raw('SUM(OB) as OB'))
-            ->when($start, function($q) use($start, $end){
-                $q->whereBetween('tgl', [$start, $end]);
-            })
-            ->when(!$start, function($q) use($bulan){
-                $q->whereBetween('tgl', [$bulan->startOfMonth()->copy(), $bulan->endOfMonth()->copy()]);
-            })
-            ->get();
-
-        $data_detail_OB_plan = DB::table('pma_dailyprod_plan')
-            ->select(DB::raw('SUM(OB) as OB'))
-            ->when($start, function($q) use($start, $end){
-                $q->whereBetween('tgl', [$start, $end]);
-            })
-            ->when(!$start, function($q) use($bulan){
-                $q->whereBetween('tgl', [$bulan->startOfMonth()->copy(), $bulan->endOfMonth()->copy()]);
-            })
-            ->get();
-
-
         /**
          * Coal Data
          */
-        $record_coal_prod = DB::table('pma_dailyprod_tc')
-            ->select(DB::raw('RIGHT(tgl,2) as prod_tgl, SUM(coal) as coal'))
-            ->when($start, function($q) use($start, $end){
-                $q->whereBetween('tgl', [$start, $end]);
-            })
-            ->when(!$start, function($q) use($bulan){
-                $q->whereBetween('tgl', [$bulan->startOfMonth()->copy(), $bulan->endOfMonth()->copy()]);
-            })
-            ->groupBy('tgl')
-            ->orderBy('tgl')
-            ->get();
+        $subquery = "SELECT RIGHT(tgl,2) as prod_tgl, SUM(coal) as coal 
+        FROM pma_dailyprod_tc
+        WHERE ".$where1."
+        GROUP BY `tgl` 
+        ORDER BY `tgl` asc";
+        $record_coal_prod = collect(DB::select($subquery));
 
-        $record_coal_plan = DB::table('pma_dailyprod_plan')
-            ->select(DB::raw('RIGHT(tgl,2) as prod_tgl, SUM(coal) as coal'))
-            ->when($start, function($q) use($start, $end){
-                $q->whereBetween('tgl', [$start, $end]);
-            })
-            ->when(!$start, function($q) use($bulan){
-                $q->whereBetween('tgl', [$bulan->startOfMonth()->copy(), $bulan->endOfMonth()->copy()]);
-            })
-            ->groupBy('tgl')
-            ->orderBy('tgl')
-            ->get();
+
+        $subquery = "SELECT RIGHT(tgl,2) as prod_tgl, SUM(coal) as coal 
+        FROM pma_dailyprod_plan
+        WHERE ".$where1."
+        GROUP BY `tgl` 
+        ORDER BY `tgl` asc";
+        $record_coal_plan = collect(DB::select($subquery));
+
+        $data_detail_coal_prod = $record_coal_prod->sum('coal');
+        $data_detail_coal_plan = $record_coal_plan->sum('coal');
 
         $data_prod_coal = [];
         $data_plan_coal = [];
@@ -816,30 +769,6 @@ class DashboardController extends Controller
             $data_plan_coal['data'][] = $row->coal;
         }
 
-        // $data_prod_coal = json_encode($data_prod_coal);
-        // $data_plan_coal = json_encode($data_plan_coal);
-
-        $data_detail_coal_prod = DB::table('pma_dailyprod_tc')
-            ->select(DB::raw('SUM(coal) as coal'))
-            ->when($start, function($q) use($start, $end){
-                $q->whereBetween('tgl', [$start, $end]);
-            })
-            ->when(!$start, function($q) use($bulan){
-                $q->whereBetween('tgl', [$bulan->startOfMonth()->copy(), $bulan->endOfMonth()->copy()]);
-            })
-            ->get();
-
-        $data_detail_coal_plan = DB::table('pma_dailyprod_plan')
-            ->select(DB::raw('SUM(coal) as coal'))
-            ->when($start, function($q) use($start, $end){
-                $q->whereBetween('tgl', [$start, $end]);
-            })
-            ->when(!$start, function($q) use($bulan){
-                $q->whereBetween('tgl', [$bulan->startOfMonth()->copy(), $bulan->endOfMonth()->copy()]);
-            })
-            ->get();        
-
-
         // Fetch all records
         $response['data_detail_OB_prod'] = $data_detail_OB_prod;
         $response['data_detail_OB_plan'] = $data_detail_OB_plan;
@@ -849,8 +778,8 @@ class DashboardController extends Controller
         $response['data_detail_coal_plan'] = $data_detail_coal_plan;
         $response['data_prod_coal'] = $data_prod_coal;
         $response['data_plan_coal'] = $data_plan_coal;
-        $response['start'] = $start;
-        $response['end'] = $end;
+        $response['start'] = $request->start;
+        $response['end'] = $request->end;
         return response()->json($response);
     }
 }

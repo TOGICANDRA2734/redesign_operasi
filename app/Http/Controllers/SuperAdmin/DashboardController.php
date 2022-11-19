@@ -14,7 +14,6 @@ class DashboardController extends Controller
         /**
          * Overburden Data
          */
-
         $bulan = Carbon::now();
 
         $record_OB_prod = DB::table('pma_dailyprod_tc')
