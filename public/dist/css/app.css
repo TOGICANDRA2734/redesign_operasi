@@ -16211,6 +16211,9 @@ html body{
     .sm\:mt-5{
         margin-top: 1.25rem;
     }
+    .sm\:mr-2{
+        margin-right: 0.5rem;
+    }
     .sm\:mt-2{
         margin-top: 0.5rem;
     }
@@ -16231,9 +16234,6 @@ html body{
     }
     .sm\:mr-1{
         margin-right: 0.25rem;
-    }
-    .sm\:mr-2{
-        margin-right: 0.5rem;
     }
     .sm\:block{
         display: block;

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Plant_bd;
 use App\Models\Plant_Populasi;
+use App\Models\PlantOvh;
 use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -283,6 +285,19 @@ class BDHarianController extends Controller
             'status_bd'         =>  $request->kode_bd[1],
         ]);
 
+        $model = PlantOvh::select('model')->where('nom_unit', 'like', '%'.substr($request->nom_unit,0,4).'%')->limit(1)->get();
+        if($request->kode_bd === 'RFU'){
+            PlantOvh::create([
+                'nom_unit'          =>  $request->nom_unit,
+                'model'             =>  $model[0]->model,
+                'komponen'          =>  "DIFF CENTER",
+                'ovh_start'             =>  $request->tgl_bd,
+                'ovh_end'            =>  $request->tgl_rfu ? $request->tgl_rfu : Carbon::now(),
+                'hm'                =>  $request->hm,
+                'remark'            =>  $request->keterangan,
+            ]);
+        }
+
         if($record){
             return redirect()->route('super_admin.bd-harian.index')->with(['success' => 'Data Berhasil Diupdate!']);
         }
@@ -364,48 +379,57 @@ class BDHarianController extends Controller
     } 
 
     public function showModel(Request $request)
-    {
+    {   
+        $where = '';
+        
+        if($request->has('cari')){
+            $where .= "and ";
+            $where .= ($request->has('cari') && !empty($request->cari)) ? "a.nom_unit LIKE '%" . $request->cari . "%'" : "";
+            $where .= (!empty($request->cari) && $request->has('cari') && !empty($request->cari)) ? " OR " : "";
+            $where .= ($request->has('cari') && !empty($request->cari)) ? "keterangan LIKE '%" . $request->cari . "%'" : "";
+            // Last Condition
+            $where .= "AND a.DEL=0";    
+        }
+
+        $model = DB::table("plant_populasi_bagian")->select('id')->where('status','=',$request->model)->pluck('id');
+
         $subquery = "SELECT e.status model, 
-        b.kodesite site, 
-        COUNT(b.nom_unit) populasi,
-        SUM(IF((C.nom_unit IS NULL OR (C.ket_tgl_rfu='RFU' AND C.status_bd=0)),1,0)) RFU,
-        SUM(IF((C.nom_unit IS NOT NULL AND (C.ket_tgl_rfu<>'RFU' AND C.status_bd=1)),1,0)) BD,
+        a.kodesite site, 
+        COUNT(a.nom_unit) populasi,        
+        SUM(IF((C.nom_unit IS NULL OR (C.kode_bd='RFU')),1,0)) RFU,
+        SUM(IF((C.nom_unit IS NOT NULL AND (C.kode_bd<>'RFU')),1,0)) BD,
         d.namasite namasite,
         d.gambar gambar,
         f.gambar icon_unit
         FROM plant_populasi a
-        JOIN plant_hm b
-        ON a.nom_unit=b.nom_unit
         LEFT JOIN plant_status_bd c
         ON a.nom_unit=c.nom_unit
         JOIN site d
-        ON b.kodesite=d.kodesite
+        ON a.kodesite=d.kodesite
         JOIN plant_populasi_bagian e
         ON e.id = a.status_bagian
         JOIN plant_icon_unit f
         ON e.status=f.status
-        WHERE d.namasite='".$request->site."' AND e.status LIKE '%".$request->model."%'
-        GROUP BY a.status_bagian, b.kodesite
+        WHERE d.namasite='".$request->site."' AND e.id=".$model[0]."
+        GROUP BY a.status_bagian, a.kodesite
         ORDER BY d.id, a.status_bagian";
         $data = collect(DB::select($subquery));
 
         $subquery = "SELECT a.nom_unit,
         a.type_unit
         FROM plant_populasi a
-        JOIN plant_hm b
-        ON a.nom_unit=b.nom_unit
         LEFT JOIN plant_status_bd c
         ON a.nom_unit=c.nom_unit
         JOIN site d
-        ON b.kodesite=d.kodesite
+        ON a.kodesite=d.kodesite
         JOIN plant_populasi_bagian e
         ON e.id = a.status_bagian
         JOIN plant_icon_unit f
         ON e.status=f.status
-        WHERE d.namasite='".$request->site."' AND e.status LIKE '%".$request->model."%' AND C.nom_unit IS NULL OR (C.ket_tgl_rfu='RFU' AND C.status_bd=0)
+        WHERE d.namasite='".$request->site."' AND e.id=".$model[0]." AND (C.nom_unit IS NULL OR (C.kode_bd='RFU'))
+        group by a.nom_unit
         ORDER BY a.nom_unit, d.id, a.status_bagian";
         $dataRFU = collect(DB::select($subquery));
-
         
         $subquery = "SELECT c.id, 
         a.nom_unit,
@@ -422,16 +446,29 @@ class BDHarianController extends Controller
         LEFT JOIN plant_status_bd c
         ON a.nom_unit=c.nom_unit
         JOIN site d
-        ON b.kodesite=d.kodesite
+        ON a.kodesite=d.kodesite
         JOIN plant_populasi_bagian e
         ON e.id = a.status_bagian
         JOIN plant_icon_unit f
         ON e.status=f.status
-        WHERE d.namasite='".$request->site."' AND e.status LIKE '%".$request->model."%' AND C.nom_unit IS NOT NULL AND (C.ket_tgl_rfu<>'RFU' AND C.status_bd=1)
+        WHERE d.namasite='".$request->site."' AND e.id=".$model[0]." and (C.nom_unit IS NOT NULL AND (C.kode_bd<>'RFU')) ".$where."
+        group by c.id
         ORDER BY a.nom_unit, d.id, a.status_bagian";
         $dataBD = collect(DB::select($subquery));
+        // Site
+        $site = Site::all()->where('status', 1);
 
+        // Data Filter
+        $siteMenu = $request->site;
+        $model = DB::table('Plant_populasi_bagian')->select('status')->where('id', '=', $model[0])->pluck('status');
+        $model = $model[0];
+                
 
-        return view('bd-harian.showModel', compact('data', 'dataRFU', 'dataBD'));
+        if ($request->has('cari')) {
+            $response['data'] = $dataBD;
+            return response()->json($response);
+        } else {
+            return view('bd-harian.showModel', compact('data', 'dataRFU', 'dataBD', 'site', 'siteMenu', 'model'));
+        }
     }
 }

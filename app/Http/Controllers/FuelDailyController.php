@@ -36,6 +36,8 @@ class FuelDailyController extends Controller
         }
 
         $site = Site::where('status_website', 1)->get();
+
+        
         return view('fuel-daily.index', compact('site'));
     }
 
