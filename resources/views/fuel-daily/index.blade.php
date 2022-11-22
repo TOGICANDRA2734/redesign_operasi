@@ -28,7 +28,7 @@
                 </div>
 
                 {{-- Url Rujukan --}}
-                <input type="hidden" name="url" value="{{route('daily-production.index')}}" id="urlFilter">
+                <input type="hidden" name="url" value="{{route('fuel-daily.index')}}" id="urlFilter">
 
                 {{-- Pilih Site --}}
                 <select id="pilihSite"
@@ -65,8 +65,8 @@
             </div>
         </div>
         <hr class="col-span-12">
-{{-- 
-        <div class="col-span-12 grid grid-cols-12 gap-5">
+
+        {{-- <div class="col-span-12 grid grid-cols-12 gap-5">
             <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
                 <div class="box p-5 zoom-in">
                     <div class="flex items-center">
@@ -98,8 +98,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-         --}}
+        </div> --}}
+        
         <!-- Table -->
         <div class="w-full mb-8 col-span-12 overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-auto h-[45rem]">
@@ -108,13 +108,18 @@
                         <tr class="">
                             <th class="whitespace-nowrap text-center">#</th>
                             <th class="whitespace-nowrap text-center" style="width:7rem">Tanggal</th>
-                            <th class="whitespace-nowrap text-center">Fuel</th>
                             <th class="whitespace-nowrap text-center">Produksi</th>
+                            <th class="whitespace-nowrap text-center">WH</th>
+                            <th class="whitespace-nowrap text-center">Jam OB</th>
+                            <th class="whitespace-nowrap text-center">Jam Coal</th>
+                            <th class="whitespace-nowrap text-center">Solar</th>
+                            <th class="whitespace-nowrap text-center">Liter/Jam</th>
                             <th class="whitespace-nowrap text-center">Liter/BCM</th>
+                            <th class="whitespace-nowrap text-center">Liter/MT</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($data as $key => $dt)
+                        @foreach ($data as $key => $dt)
                             <tr class="text-center bg-white">
                                 <td class="whitespace-nowrap text-center">
                                     {{ $key + 1 }}
@@ -125,7 +130,7 @@
                                     </td>
                                 @endforeach
                             </tr>
-                        @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -180,22 +185,22 @@
                         $j("#loading").toggleClass('hidden');
                         // JANGAN LUPA COPY KE SEBELAH
                         // OB CARD
-                        $j("#actualOB").empty();
-                        $j("#planOB").empty();
-                        $j("#achOB").empty();
+                        // $j("#actualOB").empty();
+                        // $j("#planOB").empty();
+                        // $j("#achOB").empty();
 
-                        $j("#actualOB").append("Actual: " + number_format(response.total.ob_act, 0) + " BCM");
-                        $j("#planOB").append("Plan: " + number_format(response.total.ob_plan, 0) + " BCM");
-                        $j("#achOB").append(number_format(response.total.ob_ach, 1) + "%");
+                        // $j("#actualOB").append("Actual: " + number_format(response.total.ob_act, 0) + " BCM");
+                        // $j("#planOB").append("Plan: " + number_format(response.total.ob_plan, 0) + " BCM");
+                        // $j("#achOB").append(number_format(response.total.ob_ach, 1) + "%");
 
-                        // Coal Card
-                        $j("#actualCoal").empty();
-                        $j("#planCoal").empty();
-                        $j("#achCoal").empty();
+                        // // Coal Card
+                        // $j("#actualCoal").empty();
+                        // $j("#planCoal").empty();
+                        // $j("#achCoal").empty();
 
-                        $j("#actualCoal").append("Actual: " + number_format(response.total.coal_act, 0) + " MT");
-                        $j("#planCoal").append("Plan: " + number_format(response.total.coal_plan, 0) + " MT");
-                        $j("#achCoal").append(number_format(response.total.coal_ach, 1) + "%");
+                        // $j("#actualCoal").append("Actual: " + number_format(response.total.coal_act, 0) + " MT");
+                        // $j("#planCoal").append("Plan: " + number_format(response.total.coal_plan, 0) + " MT");
+                        // $j("#achCoal").append(number_format(response.total.coal_ach, 1) + "%");
 
                         $j("table tbody").empty();
                         fullText = ""
@@ -211,7 +216,7 @@
                             i++;
                             
                             $j.each(data, function(i, d){
-                                if(i === 'tgl_format' || i === 'hari'){
+                                if(i === 'tgl'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
                                 } else if(i === 'ob_ach' || i === 'coal_ach'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
@@ -257,31 +262,33 @@
                     'pilihSite': pilihSite,
                 },
                 success: function(response) {
-                    $j("#loading").toggleClass('hidden');
+                        console.log(response)
 
-                    // JANGAN LUPA COPY KE SEBELAH
+                        $j("#loading").toggleClass('hidden');
+                        // JANGAN LUPA COPY KE SEBELAH
                         // OB CARD
-                        $j("#actualOB").empty();
-                        $j("#planOB").empty();
-                        $j("#achOB").empty();
+                        // $j("#actualOB").empty();
+                        // $j("#planOB").empty();
+                        // $j("#achOB").empty();
 
-                        $j("#actualOB").append("Actual: " + number_format(response.total.ob_act, 0) + " BCM");
-                        $j("#planOB").append("Plan: " + number_format(response.total.ob_plan, 0) + " BCM");
-                        $j("#achOB").append(number_format(response.total.ob_ach, 1) + "%");
+                        // $j("#actualOB").append("Actual: " + number_format(response.total.ob_act, 0) + " BCM");
+                        // $j("#planOB").append("Plan: " + number_format(response.total.ob_plan, 0) + " BCM");
+                        // $j("#achOB").append(number_format(response.total.ob_ach, 1) + "%");
 
-                        // Coal Card
-                        $j("#actualCoal").empty();
-                        $j("#planCoal").empty();
-                        $j("#achCoal").empty();
+                        // // Coal Card
+                        // $j("#actualCoal").empty();
+                        // $j("#planCoal").empty();
+                        // $j("#achCoal").empty();
 
-                        $j("#actualCoal").append("Actual: " + number_format(response.total.coal_act, 0) + " MT");
-                        $j("#planCoal").append("Plan: " + number_format(response.total.coal_plan, 0) + " MT");
-                        $j("#achCoal").append(number_format(response.total.coal_ach, 1) + "%");
+                        // $j("#actualCoal").append("Actual: " + number_format(response.total.coal_act, 0) + " MT");
+                        // $j("#planCoal").append("Plan: " + number_format(response.total.coal_plan, 0) + " MT");
+                        // $j("#achCoal").append(number_format(response.total.coal_ach, 1) + "%");
 
-                    $j("table tbody").empty();
-                    fullText = ""
-                    i=1
-                    if (response) {
+                        $j("table tbody").empty();
+                        fullText = ""
+                        if (response) {
+
+                        var i=1;
                         $j.each(response.data, function(index, data) {
                             text = "<tr class=\"text-center bg-white\">"
 
@@ -289,25 +296,22 @@
                             text += "<td class=\"whitespace-nowrap text-center\"> " + i + "</td>"
 
                             i++;
-
+                            
                             $j.each(data, function(i, d){
-                                if(i === 'tgl_format' || i === 'hari'){
+                                if(i === 'tgl'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
-                                } else if(i === 'ob_ach' || i === 'coal_ach'){
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
                                 } else {
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
+                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,2) + "</td>"
                                 }
                             })
 
                             text += "</tr>"
-                            
                             fullText += text
                         });
                         $j("table tbody").html(fullText);
                         show_data();
                     }
-                },
+                    },
                 error: function(result) {
                     console.log("error", result);
                 },

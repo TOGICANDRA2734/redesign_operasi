@@ -79,9 +79,9 @@ class DailyProduksiController extends Controller
         GROUP BY nom_unit) summ";
         $jumlahUnit = collect(DB::select($subquery));
         
-
         // Downfall
         // Total Schedule Hours
+        dd($wh, $jumlahUnit);
         $totalScheduleHours = ((($wh[0]->sun + $wh[0]->mon + $wh[0]->fri + $wh[0]->days) * 24) * $jumlahUnit[0]->jml);
         // dd($wh[0]->sun, $wh[0]->mon, $wh[0]->fri, $wh[0]->days, ($wh[0]->sun + $wh[0]->mon + $wh[0]->fri + $wh[0]->days), $jumlahUnit[0]->jml, $totalScheduleHours);
 
@@ -143,7 +143,6 @@ class DailyProduksiController extends Controller
                 'bcm' => '',
             ],
         ];
-         
 
         if (count($request->all()) > 1) {
             $response['data'] = $data;
