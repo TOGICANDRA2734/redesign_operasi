@@ -350,9 +350,8 @@ class dataProdController extends Controller
     public function report(Request $request)
     {
         
-        if($request->has('pilihBulan')){
-            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
-            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+        if($request->has('start')){
+            $tanggal =  "tgl BETWEEN '" . $request->start . "' AND '" . $request->end . "'";
         } else {
             $bulan = Carbon::now();
             $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";        
@@ -392,13 +391,26 @@ class dataProdController extends Controller
 
         $data = collect(DB::select($subquery));
 
+        $totalProduksi = [
+            'ob' => [
+                'act' => number_format($data->sum('sum_ob'),1),
+                'plan' => number_format($data->sum('plan_ob'),1),
+            ],
+            'coal' => [
+                'act' => number_format($data->sum('sum_coal'),1),
+                'plan' => number_format($data->sum('plan_coal'),1),
+            ]
+        ];
+
+
         $site = Site::select('namasite', 'lokasi', 'kodesite')->where('status_website', 1)->get();
 
-        if($request->has('kodesite') || $request->has('pilihBulan')){
+        if($request->has('kodesite') || $request->has('start')){
             $response['data'] = $data;
+            $response['total'] = $totalProduksi;
             return response()->json($response);
         } else {
-            return view('data-prod.report', compact('data', 'site'));
+            return view('data-prod.report', compact('data', 'site', 'totalProduksi'));
         }
     }
 

@@ -14,7 +14,15 @@
         {{-- @if(strtolower(Auth::user()->kodesite)=='x' or Auth::user()->hasRole('super_admin')) --}}
         <div class="ml-auto mr-2 flex items-center">
             <i data-loading-icon="oval" class="w-7 h-7 mr-3 hidden" id="loading"></i> 
-            <input type="month" name="pilihBulan" id="pilihBulan" class="mr-3 shadow-sm border p-2 rounded-md w-30  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray">
+            
+            {{-- Url Rujukan --}}
+            <input type="hidden" name="url" value="{{route('data-prod.index')}}" id="urlFilter">
+
+            {{-- Filter Tanggal --}}
+            <div id="filterTanggal" class="form-control box p-2 ml-auto w-10 flex mr-2">
+                <i class="fa fa-calendar"></i>&nbsp;
+                <span></span> <i class="fa fa-caret-down"></i>
+            </div>
 
             <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
                 <option value="">All Site</option>
@@ -52,6 +60,33 @@
         </div>
     </div>
     <hr class="mb-10">
+
+    <div class="col-span-12 grid grid-cols-12 gap-5 mb-10">
+            <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
+                <div class="box p-5 zoom-in">
+                    <div class="flex items-center">
+                        <div class="w-2/4 flex-none">
+                            <div class="text-lg font-medium truncate">Total Overburden</div>
+                            <div class="text-slate-500 mt-1" id="actualOB">Actual: {{$totalProduksi["ob"]["act"]}} BCM</div>
+                            <div class="text-slate-500 mt-1" id="planOB">Plan: {{$totalProduksi["ob"]["plan"]}} BCM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
+                <div class="box p-5 zoom-in">
+                    <div class="flex items-center">
+                        <div class="w-2/4 flex-none">
+                            <div class="text-lg font-medium truncate">Total Coal</div>
+                            <div class="text-slate-500 mt-1" id="actualCoal">Actual: {{$totalProduksi["coal"]["act"]}} MT</div>
+                            <div class="text-slate-500 mt-1" id="planCoal">Plan: {{$totalProduksi["coal"]["plan"]}} MT</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     <!-- Table -->
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
@@ -95,8 +130,91 @@
 
 <!-- Filtering -->
 <script>
-    $('#pilihSite').on('change', function() {
-        $i = jQuery.noConflict();
+    $i = jQuery.noConflict();
+
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
+    // Overburden Range
+    $i('#filterTanggal').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+            'Hari Ini': [moment(), moment()],
+            'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+            '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+            'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+            'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month')
+                .endOf('month')
+            ]
+        }
+    }, function(start, end, label) {
+        var $j = jQuery.noConflict();
+        var awal = start.format("YYYY-MM-DD");
+        var akhir = end.format("YYYY-MM-DD");
+        var pilihSite = $j("#pilihSite").val() ? $j("#pilihSite").val() : "";
+        $j("#loading").toggleClass('hidden');
+
+        var url = $j("#urlFilter").val();
+
+        if (awal !== null && akhir !== null) {
+            $j.ajax({
+                url: url,
+                type: 'POST',   
+                dataType: 'json',
+                data: {
+                    start: awal,
+                    end: akhir,
+                    pilihSite: pilihSite,
+                },
+                success: function(response) {
+                    $i.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $i("table tbody").empty();
+
+                    // Fill Total
+                    $i("#actualOB").empty();
+                    $i("#actualCoal").empty();
+                    $i("#planCoal").empty();
+                    $i("#planOB").empty();
+
+                    $i("#actualOB").append("Actual: " + result.total["ob"]["act"] + " BCM");
+                    $i("#actualCoal").append("Actual: " + result.total["coal"]["act"] + " MT");
+                    $i("#planOB").append("Plan: " + result.total["ob"]["plan"] + " BCM");
+                    $i("#planCoal").append("Plan: " + result.total["coal"]["plan"] + " MT");
+
+                    fullText = ""
+                    if (result) {
+                        $i.each(result.data, function(index) {
+                            text = '<tr class="text-center bg-white">' +
+                                '<td class="">' + result.data[index].tgl_data + '</td>' +
+                                '<td class="">' + number_format(result.data[index].ob_1,0) + '</td>' +
+                                '<td class="">' + number_format(result.data[index].ob_2,0) + '</td>' +
+                                '<td class="">' + number_format(result.data[index].sum_ob,0) + '</td>' +
+                                '<td class="">' + number_format(result.data[index].plan_ob,0) + '</td>' +
+                                '<td class="">' + number_format(result.data[index].coal_1,0) + '</td>' +
+                                '<td class="">' + number_format(result.data[index].coal_2,0) + '</td>' +
+                                '<td class="">' + number_format(result.data[index].sum_coal,0) + '</td>' +
+                                '<td class="">' + number_format(result.data[index].plan_coal,0) + '</td>' +
+                                '<td class="">' + number_format(result.data[index].ach_ob,0) + '</td>' +
+                                '<td class="">' + number_format(result.data[index].ach_coal,0) + '</td>' +
+                                '</tr>';
+                            fullText += text
+                        });
+                        $i("table tbody").html(fullText);
+                        show_data();
+                    }
+                },
+            })
+        }
+    });
+
+    $i('#pilihSite').on('change', function() {
         $i.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
@@ -104,8 +222,10 @@
         });
 
         var kodesite = $i(this).val();
-        $bulan = new Date();
-        const pilihBulan = $i('#pilihBulan').val() ? $i('#pilihBulan').val() : $bulan.getFullYear() + '-' + ($bulan.getMonth() + 1).toString();
+        var awal = moment($i('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") ? moment($$i('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") : "";
+        var akhir = moment($i('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") ? moment($$i('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") : "";
+        console.log(awal,akhir)
+
 
         if (kodesite == null || kodesite == '') {
             kodesite = 'all';
@@ -117,11 +237,24 @@
             type: "POST",
             url: 'http://127.0.0.1:8000/data-prod-report?layout=side-menu',
             data: {
-                'kodesite': kodesite,
-                'pilihBulan': pilihBulan
+                'start': awal,
+                'end': akhir,
+                'pilihSite': pilihSite,
             },
             success: function(result) {
                 $i("table tbody").empty();
+
+                // Fill Total
+                $i("#actualOB").empty();
+                $i("#actualCoal").empty();
+                $i("#planCoal").empty();
+                $i("#planOB").empty();
+
+                $i("#actualOB").append("Actual: " + result.total["ob"]["act"] + " BCM");
+                $i("#actualCoal").append("Actual: " + result.total["coal"]["act"] + " MT");
+                $i("#planOB").append("Plan: " + result.total["ob"]["plan"] + " BCM");
+                $i("#planCoal").append("Plan: " + result.total["coal"]["plan"] + " MT");
+
                 fullText = ""
                 if (result) {
                     $i.each(result.data, function(index) {
@@ -150,58 +283,6 @@
         });
     })
 
-    $('#pilihBulan').on('change', function() {
-        $i = jQuery.noConflict();
-        $i.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var kodesite = $i('#pilihSite').val();
-        if (kodesite == null || kodesite == '') {
-            kodesite = 'all';
-        }
-        const pilihBulan = $i(this).val();
-
-        console.log("PILIH BULAN", kodesite, pilihBulan);
-
-        $i.ajax({
-            type: "POST",
-            url: 'http://127.0.0.1:8000/data-prod-report?layout=side-menu',
-            data: {
-                'pilihBulan': pilihBulan,
-                'kodesite': kodesite,
-            },
-            success: function(result) {
-                $i("table tbody ").empty();
-                fullText = ""
-                if (result) {
-                    $i.each(result.data, function(index) {
-                        text = '<tr class="text-center bg-white">' +
-                            '<td class="">' + result.data[index].tgl_data + '</td>' +
-                            '<td class="">' + number_format(result.data[index].ob_1,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].ob_2,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].sum_ob,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].plan_ob,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].coal_1,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].coal_2,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].sum_coal,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].plan_coal,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].ach_ob,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].ach_coal,0) + '</td>' +
-                            '</tr>';
-                        fullText += text
-                    });
-                    $i("table tbody").html(fullText);
-                    show_data()
-                }
-            },
-            error: function(result) {
-                console.log("error", result);
-            },
-        });
-    })
 
     function show_data() {
         Toastify({

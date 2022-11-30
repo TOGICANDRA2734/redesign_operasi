@@ -175,6 +175,30 @@ class SideMenuSuperAdmin
                                 ],
                                 'route_name' => 'laporan-customer.index',
                             ],
+                            'populasi-do' => [
+                                'icon' => 'box',
+                                'title' => 'Populasi DO',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'populasi-do.index',
+                            ],
+                            'versatility' => [
+                                'icon' => 'box',
+                                'title' => 'Versatility',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'versatility.index',
+                            ],
+                            'distance-harian' => [
+                                'icon' => 'box',
+                                'title' => 'Distance Harian',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'distance-harian.index',
+                            ],
                         ],
                     ],
                 ],

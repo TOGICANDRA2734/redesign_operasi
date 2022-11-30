@@ -19,7 +19,7 @@
         <div class="flex justify-between items-center col-span-12 mt-5">
             <!-- Title -->
             <h2 class="text-lg font-medium truncate mr-5 ">
-                Monthly Production
+                Laporan Versatility
             </h2>
 
             <div class="ml-auto flex justify-center items-center">
@@ -28,7 +28,7 @@
                 </div>
 
                 {{-- Url Rujukan --}}
-                <input type="hidden" name="url" value="{{route('monthly-production.index')}}" id="urlFilter">
+                <input type="hidden" name="url" value="{{route('fuel-daily.index')}}" id="urlFilter">
 
                 {{-- Pilih Site --}}
                 <select id="pilihSite"
@@ -66,18 +66,18 @@
         </div>
         <hr class="col-span-12">
 
-        <div class="col-span-12 grid grid-cols-12 gap-5">
+        {{-- <div class="col-span-12 grid grid-cols-12 gap-5">
             <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
                 <div class="box p-5 zoom-in">
                     <div class="flex items-center">
                         <div class="w-2/4 flex-none">
                             <div class="text-lg font-medium truncate">Total Overburden</div>
-                            <div class="text-slate-500 mt-1" id="actualOB">Actual: M</div>
-                            <div class="text-slate-500 mt-1" id="planOB">Plan: CM</div>
+                            <div class="text-slate-500 mt-1" id="actualOB">Actual: {{$total['ob_act']}} BCM</div>
+                            <div class="text-slate-500 mt-1" id="planOB">Plan: {{$total['ob_plan']}} BCM</div>
                         </div>
                         <div class="flex-none ml-auto relative">
                             <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
-                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0" id="achOB"></div>
+                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0" id="achOB">{{$total['ob_plan']}}%</div>
                         </div>
                     </div>
                 </div>
@@ -88,17 +88,17 @@
                     <div class="flex items-center">
                         <div class="w-2/4 flex-none">
                             <div class="text-lg font-medium truncate">Total Coal</div>
-                            <div class="text-slate-500 mt-1" id="actualCoal">Actual: BCM</div>
-                            <div class="text-slate-500 mt-1" id="planCoal">Plan:  BCM</div>
+                            <div class="text-slate-500 mt-1" id="actualCoal">Actual: {{$total['coal_act']}} BCM</div>
+                            <div class="text-slate-500 mt-1" id="planCoal">Plan: {{$total['coal_plan']}} BCM</div>
                         </div>
                         <div class="flex-none ml-auto relative">
                             <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
-                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0" id="achCoal">%</div>
+                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0" id="achCoal">{{$total['coal_plan']}}%</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         
         <!-- Table -->
         <div class="w-full mb-8 col-span-12 overflow-hidden rounded-lg shadow-xs">
@@ -106,21 +106,40 @@
                 <table class="w-full table table-sm">
                     <thead class="table-dark sticky left-0 top-0 z-50">
                         <tr class="">
-                            <th rowspan="2" class="whitespace-nowrap text-center">#</th>
-                            <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
-                            <th rowspan="2" class="whitespace-nowrap text-center">Bulan</th>
-                            <th colspan="3" class="whitespace-nowrap text-center">Overburden</th>
-                            <th colspan="3" class="whitespace-nowrap text-center">Coal</th>
-                        </tr>
-                        <tr>
-                            <th class="whitespace-nowrap text-center">Plan</th>
-                            <th class="whitespace-nowrap text-center">Actual</th>
-                            <th class="whitespace-nowrap text-center">ACH (%)</th>
-                            <th class="whitespace-nowrap text-center">Plan</th>
-                            <th class="whitespace-nowrap text-center">Actual</th>
-                            <th class="whitespace-nowrap text-center">ACH (%)</th>
-
-
+                            <th class="whitespace-nowrap text-center">#</th>
+                            <th class="whitespace-nowrap text-center" style="width:7rem">Nama</th>
+                            <th class="whitespace-nowrap text-center">NIK</th>
+                            <th class="whitespace-nowrap text-center">Grade</th>
+                            <td class="whitespace-nowrap text-center">D375</td> 
+                            <td class="whitespace-nowrap text-center">D155</td> 
+                            <td class="whitespace-nowrap text-center">D85</td> 
+                            <td class="whitespace-nowrap text-center">PC1250</td> 
+                            <td class="whitespace-nowrap text-center">CE6015</td> 
+                            <td class="whitespace-nowrap text-center">PC400</td> 
+                            <td class="whitespace-nowrap text-center">R480LC</td> 
+                            <td class="whitespace-nowrap text-center">HD_785</td> 
+                            <td class="whitespace-nowrap text-center">775_F</td> 
+                            <td class="whitespace-nowrap text-center">A40_G</td> 
+                            <td class="whitespace-nowrap text-center">MR_4040</td> 
+                            <td class="whitespace-nowrap text-center">MR_3939</td> 
+                            <td class="whitespace-nowrap text-center">LG_DW_90</td> 
+                            <td class="whitespace-nowrap text-center">DM_45</td> 
+                            <td class="whitespace-nowrap text-center">D245_S</td> 
+                            <td class="whitespace-nowrap text-center">WOLF</td> 
+                            <td class="whitespace-nowrap text-center">GD_825</td> 
+                            <td class="whitespace-nowrap text-center">GD_755</td> 
+                            <td class="whitespace-nowrap text-center">GD_705</td> 
+                            <td class="whitespace-nowrap text-center">14_M</td> 
+                            <td class="whitespace-nowrap text-center">SEM_921</td> 
+                            <td class="whitespace-nowrap text-center">G_425</td> 
+                            <td class="whitespace-nowrap text-center">SD_100_D</td> 
+                            <td class="whitespace-nowrap text-center">SAKAI</td> 
+                            <td class="whitespace-nowrap text-center">611_E</td> 
+                            <td class="whitespace-nowrap text-center">PC_200</td> 
+                            <td class="whitespace-nowrap text-center">PC_210</td> 
+                            <td class="whitespace-nowrap text-center">PC_300</td> 
+                            <td class="whitespace-nowrap text-center">966_H</td> 
+                            <td class="whitespace-nowrap text-center">WA_380_6</td> 
                         </tr>
                     </thead>
                     <tbody>
@@ -129,10 +148,21 @@
                                 <td class="whitespace-nowrap text-center">
                                     {{ $key + 1 }}
                                 </td>
-                                @foreach ($dt as $d)
-                                    <td class="whitespace-nowrap text-center">
-                                        {{ $d }}
-                                    </td>
+                                @foreach ($dt as $k => $d)
+                                    @if($k == 'nama' || $k == 'nik' || $k == 'grade')
+                                        <td class="whitespace-nowrap text-center">
+                                            {{$d}}
+                                        </td>
+                                    @else
+                                        <td class="whitespace-nowrap text-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="h-5 w-5">
+                                                <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                                                @if($d == 1)
+                                                    <path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                                @endif
+                                            </svg>
+                                        </td>
+                                    @endif
                                 @endforeach
                             </tr>
                         @endforeach
@@ -189,6 +219,23 @@
 
                         $j("#loading").toggleClass('hidden');
                         // JANGAN LUPA COPY KE SEBELAH
+                        // OB CARD
+                        // $j("#actualOB").empty();
+                        // $j("#planOB").empty();
+                        // $j("#achOB").empty();
+
+                        // $j("#actualOB").append("Actual: " + number_format(response.total.ob_act, 0) + " BCM");
+                        // $j("#planOB").append("Plan: " + number_format(response.total.ob_plan, 0) + " BCM");
+                        // $j("#achOB").append(number_format(response.total.ob_ach, 1) + "%");
+
+                        // // Coal Card
+                        // $j("#actualCoal").empty();
+                        // $j("#planCoal").empty();
+                        // $j("#achCoal").empty();
+
+                        // $j("#actualCoal").append("Actual: " + number_format(response.total.coal_act, 0) + " MT");
+                        // $j("#planCoal").append("Plan: " + number_format(response.total.coal_plan, 0) + " MT");
+                        // $j("#achCoal").append(number_format(response.total.coal_ach, 1) + "%");
 
                         $j("table tbody").empty();
                         fullText = ""
@@ -204,7 +251,7 @@
                             i++;
                             
                             $j.each(data, function(i, d){
-                                if(i === 'tgl_format' || i === 'hari'){
+                                if(i === 'tgl'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
                                 } else if(i === 'ob_ach' || i === 'coal_ach'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
@@ -250,14 +297,33 @@
                     'pilihSite': pilihSite,
                 },
                 success: function(response) {
-                    $j("#loading").toggleClass('hidden');
+                        console.log(response)
 
-                    // JANGAN LUPA COPY KE SEBELAH
+                        $j("#loading").toggleClass('hidden');
+                        // JANGAN LUPA COPY KE SEBELAH
+                        // OB CARD
+                        // $j("#actualOB").empty();
+                        // $j("#planOB").empty();
+                        // $j("#achOB").empty();
 
-                    $j("table tbody").empty();
-                    fullText = ""
-                    i=1
-                    if (response) {
+                        // $j("#actualOB").append("Actual: " + number_format(response.total.ob_act, 0) + " BCM");
+                        // $j("#planOB").append("Plan: " + number_format(response.total.ob_plan, 0) + " BCM");
+                        // $j("#achOB").append(number_format(response.total.ob_ach, 1) + "%");
+
+                        // // Coal Card
+                        // $j("#actualCoal").empty();
+                        // $j("#planCoal").empty();
+                        // $j("#achCoal").empty();
+
+                        // $j("#actualCoal").append("Actual: " + number_format(response.total.coal_act, 0) + " MT");
+                        // $j("#planCoal").append("Plan: " + number_format(response.total.coal_plan, 0) + " MT");
+                        // $j("#achCoal").append(number_format(response.total.coal_ach, 1) + "%");
+
+                        $j("table tbody").empty();
+                        fullText = ""
+                        if (response) {
+
+                        var i=1;
                         $j.each(response.data, function(index, data) {
                             text = "<tr class=\"text-center bg-white\">"
 
@@ -265,25 +331,22 @@
                             text += "<td class=\"whitespace-nowrap text-center\"> " + i + "</td>"
 
                             i++;
-
+                            
                             $j.each(data, function(i, d){
-                                if(i === 'tgl_format' || i === 'hari'){
+                                if(i === 'tgl'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
-                                } else if(i === 'ob_ach' || i === 'coal_ach'){
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
                                 } else {
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
+                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,2) + "</td>"
                                 }
                             })
 
                             text += "</tr>"
-                            
                             fullText += text
                         });
                         $j("table tbody").html(fullText);
                         show_data();
                     }
-                },
+                    },
                 error: function(result) {
                     console.log("error", result);
                 },

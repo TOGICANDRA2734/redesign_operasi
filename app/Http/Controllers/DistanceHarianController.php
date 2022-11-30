@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class FuelDailyController extends Controller
+class DistanceHarianController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,65 +18,43 @@ class FuelDailyController extends Controller
     {
         $where1 = '';
         $where2 = '';
+        $where3 = '';
 
         if (count($request->all()) > 1) {              
             // Where 1
             $where1 .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
             $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
             $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
-            $where1 .= " AND DEL=0";
 
             // Where 2
-            $where2 .= ($request->has('start') && $request->has('end')) ? "tp.TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where2 .= ($request->has('start') && $request->has('end')) ? "a.TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
             $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "tp.kodesite='" . $request->pilihSite . "'" : "";
-            $where2 .= " AND tp.DEL=0";
+            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "a.kodesite='" . $request->pilihSite . "'" : "";
+            
+            // Where 3
+            $where3 .= ($request->has('start') && $request->has('end')) ? "e.TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where3 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where3 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "e.kodesite='" . $request->pilihSite . "'" : "";
         } else {
-            // $where1 .= "TGL BETWEEN '2022-10-01' AND '2022-10-31' AND DEL=0";
-            // $where2 .= "tp.TGL BETWEEN '2022-10-01' AND '2022-10-31' AND tp.DEL=0";
-
-            $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
-            $where2 .= "tp.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND tp.DEL=0";
+            $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            $where2 .= "a.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            $where3 .= "e.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
         }
 
         $site = Site::where('status_website', 1)->get();
 
-        $subquery = "SELECT DATE_FORMAT(tp.tgl, \"%d-%m-%Y\") tgl,
-        FORMAT(SUM(bcm),2) bcm,
-        FORMAT(SUM(IF(LEFT(aktivitas,1)='0', jam, 0)),2) wh,
-        FORMAT(SUM(IF(aktivitas='001', jam, 0)),2) jam_ob,
-        FORMAT(SUM(IF(aktivitas='003' OR aktivitas='004', jam, 0)),2) jam_coal,
-        FORMAT(fuel.qty,2) solar,
-        FORMAT(fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0)),2) liter_per_jam,
-        FORMAT(SUM(IF(aktivitas='001', jam, 0))  * (fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0))) / SUM(bcm),2) liter_bcm,
-        FORMAT(SUM(IF(aktivitas='003' OR aktivitas='004', jam, 0))  * (fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0)))/c.coal,2) liter_coal
-        FROM pma_tp tp
-        JOIN (SELECT SUM(qty) qty, tgl
-        FROM pma_fuel 
-        WHERE ".$where1."
-        GROUP BY tgl) fuel
-        ON tp.tgl=fuel.tgl
-        JOIN (SELECT SUM(coal) coal, tgl
-        FROM pma_dailyprod_plan
-        WHERE ".$where1."
-        GROUP BY tgl) c
-        ON tp.tgl=c.tgl
-        WHERE ".$where2."
-        GROUP BY tp.tgl";
-        $data = collect(DB::select($subquery));
-        
-        // $totalProduksiOB = $data->sum('bcm');
-        // $totalWH = $data->sum('wh');
-        // $totalJamOb = $data->sum('jam_ob');
-        // $totalJamCoal = $data->sum('jam_coal');
-        // $totalSolar = $data->sum('solar');
-        // $totalSolarPerJam = $totalSolar / $totalWH;
+        $subquery = "SELECT tgl, 
+        SUM(bcm),
+        FORMAT(SUM(distbcm)/SUM(bcm),0) jarak
+        FROM PMA_TP
+        GROUP BY tgl";
+        $data = collect(DB::select(DB::raw($subquery)));
 
-        if (count($request->all()) > 1) {              
+        if (count($request->all()) > 1) {
             $response['data'] = $data;
             return response()->json($response);
         } else {
-            return view('fuel-daily.index', compact('site', 'data'));
+            return view('distance-harian.index', compact('data', 'site'));
         }
     }
 

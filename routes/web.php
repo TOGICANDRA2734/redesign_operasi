@@ -25,6 +25,7 @@ use App\Http\Controllers\BDDokController;
 use App\Http\Controllers\BDHarianController;
 use App\Http\Controllers\CostPartController;
 use App\Http\Controllers\DailyProduksiController;
+use App\Http\Controllers\DistanceHarianController;
 use App\Http\Controllers\DokumenGrController;
 use App\Http\Controllers\FuelDailyController;
 use App\Http\Controllers\FuelUnitController;
@@ -40,6 +41,7 @@ use App\Http\Controllers\MPKontrakController;
 use App\Http\Controllers\MPStatistikController;
 use App\Http\Controllers\PapController;
 use App\Http\Controllers\POController;
+use App\Http\Controllers\PopulasiDOController;
 use App\Http\Controllers\PopulasiUnitController;
 use App\Http\Controllers\POTransaksiController;
 use App\Http\Controllers\ProductivityCoalController;
@@ -48,6 +50,7 @@ use App\Http\Controllers\RepHarController;
 use App\Http\Controllers\User\dataProdController as User_dataProdController;
 use App\Http\Controllers\User\KendalaController as User_KendalaController;
 use App\Http\Controllers\User\ProductivityController as User_ProductivityController;
+use App\Http\Controllers\VersatilityController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -391,4 +394,14 @@ Route::middleware('auth')->group(function() {
 
         // Laporan Customer Controller
         Route::resource('laporan-customer', LaporanTargetCustomer::class);
+
+        // DO Controller
+        Route::resource('populasi-do', PopulasiDOController::class);
+
+        // Versatility Controller
+        Route::resource('versatility', VersatilityController::class);
+        
+        // Distance Harian Controller
+        Route::resource('distance-harian', DistanceHarianController::class);
+
 });

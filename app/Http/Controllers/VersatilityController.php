@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class FuelDailyController extends Controller
+class VersatilityController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,42 +41,47 @@ class FuelDailyController extends Controller
 
         $site = Site::where('status_website', 1)->get();
 
-        $subquery = "SELECT DATE_FORMAT(tp.tgl, \"%d-%m-%Y\") tgl,
-        FORMAT(SUM(bcm),2) bcm,
-        FORMAT(SUM(IF(LEFT(aktivitas,1)='0', jam, 0)),2) wh,
-        FORMAT(SUM(IF(aktivitas='001', jam, 0)),2) jam_ob,
-        FORMAT(SUM(IF(aktivitas='003' OR aktivitas='004', jam, 0)),2) jam_coal,
-        FORMAT(fuel.qty,2) solar,
-        FORMAT(fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0)),2) liter_per_jam,
-        FORMAT(SUM(IF(aktivitas='001', jam, 0))  * (fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0))) / SUM(bcm),2) liter_bcm,
-        FORMAT(SUM(IF(aktivitas='003' OR aktivitas='004', jam, 0))  * (fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0)))/c.coal,2) liter_coal
-        FROM pma_tp tp
-        JOIN (SELECT SUM(qty) qty, tgl
-        FROM pma_fuel 
-        WHERE ".$where1."
-        GROUP BY tgl) fuel
-        ON tp.tgl=fuel.tgl
-        JOIN (SELECT SUM(coal) coal, tgl
-        FROM pma_dailyprod_plan
-        WHERE ".$where1."
-        GROUP BY tgl) c
-        ON tp.tgl=c.tgl
-        WHERE ".$where2."
-        GROUP BY tp.tgl";
+        $subquery = "SELECT nama,
+        nik,
+        grade,
+        D375,
+        D155,
+        D85,
+        PC1250,
+        CE6015,
+        PC400,
+        R480LC,
+        HD_785,
+        775_F,
+        A40_G,
+        MR_4040,
+        MR_3939,
+        LG_DW_90,
+        DM_45,
+        D245_S,
+        WOLF,
+        GD_825,
+        GD_755,
+        GD_705,
+        14_M,
+        SEM_921,
+        G_425,
+        SD_100_D,
+        SAKAI,
+        611_E,
+        PC_200,
+        PC_210,
+        PC_300,
+        966_H,
+        WA_380_6
+        FROM pma_versatility";
         $data = collect(DB::select($subquery));
-        
-        // $totalProduksiOB = $data->sum('bcm');
-        // $totalWH = $data->sum('wh');
-        // $totalJamOb = $data->sum('jam_ob');
-        // $totalJamCoal = $data->sum('jam_coal');
-        // $totalSolar = $data->sum('solar');
-        // $totalSolarPerJam = $totalSolar / $totalWH;
 
         if (count($request->all()) > 1) {              
             $response['data'] = $data;
             return response()->json($response);
         } else {
-            return view('fuel-daily.index', compact('site', 'data'));
+            return view('versatility.index', compact('site', 'data'));
         }
     }
 

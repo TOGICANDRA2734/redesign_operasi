@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class FuelDailyController extends Controller
+class PopulasiDOController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,37 +32,28 @@ class FuelDailyController extends Controller
             $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "tp.kodesite='" . $request->pilihSite . "'" : "";
             $where2 .= " AND tp.DEL=0";
         } else {
-            // $where1 .= "TGL BETWEEN '2022-10-01' AND '2022-10-31' AND DEL=0";
-            // $where2 .= "tp.TGL BETWEEN '2022-10-01' AND '2022-10-31' AND tp.DEL=0";
-
             $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
             $where2 .= "tp.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND tp.DEL=0";
         }
 
         $site = Site::where('status_website', 1)->get();
 
-        $subquery = "SELECT DATE_FORMAT(tp.tgl, \"%d-%m-%Y\") tgl,
-        FORMAT(SUM(bcm),2) bcm,
-        FORMAT(SUM(IF(LEFT(aktivitas,1)='0', jam, 0)),2) wh,
-        FORMAT(SUM(IF(aktivitas='001', jam, 0)),2) jam_ob,
-        FORMAT(SUM(IF(aktivitas='003' OR aktivitas='004', jam, 0)),2) jam_coal,
-        FORMAT(fuel.qty,2) solar,
-        FORMAT(fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0)),2) liter_per_jam,
-        FORMAT(SUM(IF(aktivitas='001', jam, 0))  * (fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0))) / SUM(bcm),2) liter_bcm,
-        FORMAT(SUM(IF(aktivitas='003' OR aktivitas='004', jam, 0))  * (fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0)))/c.coal,2) liter_coal
-        FROM pma_tp tp
-        JOIN (SELECT SUM(qty) qty, tgl
-        FROM pma_fuel 
-        WHERE ".$where1."
-        GROUP BY tgl) fuel
-        ON tp.tgl=fuel.tgl
-        JOIN (SELECT SUM(coal) coal, tgl
-        FROM pma_dailyprod_plan
-        WHERE ".$where1."
-        GROUP BY tgl) c
-        ON tp.tgl=c.tgl
-        WHERE ".$where2."
-        GROUP BY tp.tgl";
+        $subquery = "SELECT a.nom_unit, 
+        DATE_FORMAT(DO, \"%d-%m-%Y\") tgl,
+        DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), DO)),\"%y\") umur,
+        (SELECT FORMAT(hm,1) hm 
+        FROM plant_hm 
+        WHERE nom_unit=a.nom_unit 
+        ORDER BY tgl DESC 
+        LIMIT 1) hm,
+        FORMAT((DATEDIFF(NOW(), DO) * 24 - b.bd) / (DATEDIFF(NOW(), DO) * 24) * 100,1) MA,
+        format(bcm,1) bcm,
+        (SELECT namasite FROM site where kodesite=a.kodesite) site
+        FROM plant_populasi a
+        JOIN (SELECT  nom_unit, SUM(IF(LEFT(aktivitas,1)='B',jam, 0)) bd, SUM(bcm) bcm FROM pma_tp GROUP BY nom_unit) b
+        ON a.nom_unit = b.nom_unit
+        GROUP BY a.nom_unit
+        ORDER BY a.nom_unit";
         $data = collect(DB::select($subquery));
         
         // $totalProduksiOB = $data->sum('bcm');
@@ -76,7 +67,7 @@ class FuelDailyController extends Controller
             $response['data'] = $data;
             return response()->json($response);
         } else {
-            return view('fuel-daily.index', compact('site', 'data'));
+            return view('populasiDO.index', compact('site', 'data'));
         }
     }
 

@@ -19,7 +19,7 @@
         <div class="flex justify-between items-center col-span-12 mt-5">
             <!-- Title -->
             <h2 class="text-lg font-medium truncate mr-5 ">
-                Monthly Production
+                Distance Harian
             </h2>
 
             <div class="ml-auto flex justify-center items-center">
@@ -28,7 +28,7 @@
                 </div>
 
                 {{-- Url Rujukan --}}
-                <input type="hidden" name="url" value="{{route('monthly-production.index')}}" id="urlFilter">
+                <input type="hidden" name="url" value="{{route('distance-harian.index')}}" id="urlFilter">
 
                 {{-- Pilih Site --}}
                 <select id="pilihSite"
@@ -71,9 +71,9 @@
                 <div class="box p-5 zoom-in">
                     <div class="flex items-center">
                         <div class="w-2/4 flex-none">
-                            <div class="text-lg font-medium truncate">Total Overburden</div>
-                            <div class="text-slate-500 mt-1" id="actualOB">Actual: M</div>
-                            <div class="text-slate-500 mt-1" id="planOB">Plan: CM</div>
+                            <div class="text-lg font-medium truncate">Akumulasi Distance/OB</div>
+                            <div class="text-slate-500 mt-1" id="actualOB">Distance:M</div>
+                            <div class="text-slate-500 mt-1" id="planOB">Produksi:BCM</div>
                         </div>
                         <div class="flex-none ml-auto relative">
                             <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
@@ -89,7 +89,7 @@
                         <div class="w-2/4 flex-none">
                             <div class="text-lg font-medium truncate">Total Coal</div>
                             <div class="text-slate-500 mt-1" id="actualCoal">Actual: BCM</div>
-                            <div class="text-slate-500 mt-1" id="planCoal">Plan:  BCM</div>
+                            <div class="text-slate-500 mt-1" id="planCoal">Plan: BCM</div>
                         </div>
                         <div class="flex-none ml-auto relative">
                             <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
@@ -99,28 +99,21 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Table -->
         <div class="w-full mb-8 col-span-12 overflow-hidden rounded-lg shadow-xs">
             <div class="w-full overflow-auto h-[45rem]">
                 <table class="w-full table table-sm">
                     <thead class="table-dark sticky left-0 top-0 z-50">
                         <tr class="">
-                            <th rowspan="2" class="whitespace-nowrap text-center">#</th>
-                            <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
-                            <th rowspan="2" class="whitespace-nowrap text-center">Bulan</th>
-                            <th colspan="3" class="whitespace-nowrap text-center">Overburden</th>
-                            <th colspan="3" class="whitespace-nowrap text-center">Coal</th>
-                        </tr>
-                        <tr>
-                            <th class="whitespace-nowrap text-center">Plan</th>
-                            <th class="whitespace-nowrap text-center">Actual</th>
-                            <th class="whitespace-nowrap text-center">ACH (%)</th>
-                            <th class="whitespace-nowrap text-center">Plan</th>
-                            <th class="whitespace-nowrap text-center">Actual</th>
-                            <th class="whitespace-nowrap text-center">ACH (%)</th>
-
-
+                            <th class="whitespace-nowrap text-center">#</th>
+                            <th class="whitespace-nowrap text-center" style="width: 7rem">Tanggal</th>
+                            <th class="whitespace-nowrap text-center">Distance</th>
+                            <th class="whitespace-nowrap text-center">OB</th>
+                            {{-- <th class="whitespace-nowrap text-center">Price</th> --}}
+                            {{-- <th class="whitespace-nowrap text-center">WH</th> --}}
+                            <th class="whitespace-nowrap text-center">Distance/BCM</th>
+                            <th class="whitespace-nowrap text-center">Site</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -189,6 +182,8 @@
 
                         $j("#loading").toggleClass('hidden');
                         // JANGAN LUPA COPY KE SEBELAH
+                        // OB CARD
+
 
                         $j("table tbody").empty();
                         fullText = ""
@@ -204,9 +199,9 @@
                             i++;
                             
                             $j.each(data, function(i, d){
-                                if(i === 'tgl_format' || i === 'hari'){
+                                if(i === 'tgl' || i === 'nom_unit'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
-                                } else if(i === 'ob_ach' || i === 'coal_ach'){
+                                } else if(i === 'liter_hour' || i === 'price_hour'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
                                 } else {
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
@@ -253,6 +248,7 @@
                     $j("#loading").toggleClass('hidden');
 
                     // JANGAN LUPA COPY KE SEBELAH
+                        // OB CARD
 
                     $j("table tbody").empty();
                     fullText = ""
@@ -267,14 +263,15 @@
                             i++;
 
                             $j.each(data, function(i, d){
-                                if(i === 'tgl_format' || i === 'hari'){
+                                if(i === 'tgl' || i === 'nom_unit'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
-                                } else if(i === 'ob_ach' || i === 'coal_ach'){
+                                } else if(i === 'liter_hour' || i === 'price_hour'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
                                 } else {
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
                                 }
                             })
+
 
                             text += "</tr>"
                             
