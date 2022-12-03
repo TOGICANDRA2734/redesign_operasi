@@ -24,13 +24,15 @@ class ProductivityController extends Controller
      */
     public function index(Request $request)
     {
+        $where = '';
 
-        if ($request->has('pilihBulan')) {
-            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
-            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+        if (count($request->all()) > 1) {              
+            // Where 1
+            $where .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "a.kodesite='" . $request->pilihSite . "'" : "";
         } else {
-            $bulan = Carbon::now();
-            $tanggal =  "tgl=CURDATE()";
+            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
         }
 
         if ($request->has('kodesite') && $request->kodesite !== 'all') {
@@ -64,14 +66,14 @@ class ProductivityController extends Controller
             IFNULL(SUM(CASE WHEN jam = 21 THEN pty END),'-') j22,                          
             IFNULL(SUM(CASE WHEN jam = 22 THEN pty END),'-') j23,                          
             IFNULL(SUM(CASE WHEN jam = 23 THEN pty END),'-') j24,                          
-            (SELECT dist FROM pma_dailyprod_pty X WHERE " . $tanggal . " AND nom_unit=A.nom_unit AND dist IS NOT NULL AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE " . $tanggal . " AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) dist,
-            (SELECT ket FROM pma_dailyprod_pty X WHERE " . $tanggal . " AND nom_unit=A.nom_unit AND ket IS NOT NULL  AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE " . $tanggal . " AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) ket
+            (SELECT dist FROM pma_dailyprod_pty X WHERE " . $where . " AND nom_unit=A.nom_unit AND dist IS NOT NULL AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE " . $where . " AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) dist,
+            (SELECT ket FROM pma_dailyprod_pty X WHERE " . $where . " AND nom_unit=A.nom_unit AND ket IS NOT NULL  AND del=0 AND jam=(SELECT MAX(jam) FROM pma_dailyprod_pty WHERE " . $where . " AND nom_unit=x.nom_unit) ORDER BY nom_unit DESC LIMIT 1) ket
             FROM pma_dailyprod_pty A
             JOIN site B
             ON A.kodesite = B.kodesite                
             JOIN plant_tipe_unit C
             ON LEFT(A.nom_unit,4)= C.kode                
-            WHERE " . $tanggal . " AND del=0 AND C.gol_1='2' and a.kodesite='" . $request->kodesite . "'
+            WHERE " . $where . " AND del=0 AND C.gol_1='2' and a.kodesite='" . $request->kodesite . "'
             GROUP BY a.kodesite, nom_unit,TYPE
             ORDER BY b.id, tgl, nom_unit";
         } else {
@@ -112,16 +114,17 @@ class ProductivityController extends Controller
             ON A.kodesite = B.kodesite                
             JOIN plant_tipe_unit C
             ON LEFT(A.nom_unit,4)= C.kode                
-            WHERE " . $tanggal . " AND del=0 AND C.gol_1='2'
+            WHERE " . $where . " AND del=0 AND C.gol_1='2'
             GROUP BY a.kodesite, nom_unit,TYPE
             ORDER BY b.id, tgl, nom_unit";
         }
 
         $data = collect(DB::select($subquery));
+        // dd($data, $subquery, $request);
 
         $site = Site::where('status_website', 1)->get();
 
-        if ($request->has('kodesite') || $request->has('pilihBulan')) {
+        if (count($request->all()) > 1) {
             $response['data'] = $data;
             return response()->json($response);
         } else {

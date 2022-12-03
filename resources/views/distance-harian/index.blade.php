@@ -5,9 +5,9 @@
 @endsection
 
 @section('subcontent')
-        <!-- BEGIN: Notification Content -->
+    <!-- BEGIN: Notification Content -->
     <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success"
-        data-lucide="check-circle"></i>
+            data-lucide="check-circle"></i>
         <div class="ml-4 mr-4">
             <div class="font-medium">Data Berhasil Difilter!</div>
         </div>
@@ -28,7 +28,7 @@
                 </div>
 
                 {{-- Url Rujukan --}}
-                <input type="hidden" name="url" value="{{route('distance-harian.index')}}" id="urlFilter">
+                <input type="hidden" name="url" value="{{ route('distance-harian.index') }}" id="urlFilter">
 
                 {{-- Pilih Site --}}
                 <select id="pilihSite"
@@ -66,7 +66,7 @@
         </div>
         <hr class="col-span-12">
 
-        <div class="col-span-12 grid grid-cols-12 gap-5">
+        {{-- <div class="col-span-12 grid grid-cols-12 gap-5">
             <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
                 <div class="box p-5 zoom-in">
                     <div class="flex items-center">
@@ -77,12 +77,13 @@
                         </div>
                         <div class="flex-none ml-auto relative">
                             <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
-                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0" id="achOB"></div>
+                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0"
+                                id="achOB"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
                 <div class="box p-5 zoom-in">
                     <div class="flex items-center">
@@ -93,12 +94,13 @@
                         </div>
                         <div class="flex-none ml-auto relative">
                             <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
-                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0" id="achCoal">%</div>
+                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0"
+                                id="achCoal">%</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Table -->
         <div class="w-full mb-8 col-span-12 overflow-hidden rounded-lg shadow-xs">
@@ -110,8 +112,6 @@
                             <th class="whitespace-nowrap text-center" style="width: 7rem">Tanggal</th>
                             <th class="whitespace-nowrap text-center">Distance</th>
                             <th class="whitespace-nowrap text-center">OB</th>
-                            {{-- <th class="whitespace-nowrap text-center">Price</th> --}}
-                            {{-- <th class="whitespace-nowrap text-center">WH</th> --}}
                             <th class="whitespace-nowrap text-center">Distance/BCM</th>
                             <th class="whitespace-nowrap text-center">Site</th>
                         </tr>
@@ -124,7 +124,11 @@
                                 </td>
                                 @foreach ($dt as $d)
                                     <td class="whitespace-nowrap text-center">
-                                        {{ $d }}
+                                        @if (gettype($d) === 'double')
+                                            {{number_format($d,0)}}
+                                        @else
+                                            {{$d}}
+                                        @endif
                                     </td>
                                 @endforeach
                             </tr>
@@ -133,6 +137,9 @@
                 </table>
             </div>
         </div>
+    </div>
+    <div class="w-full flex text-slate-500 text-xs sm:text-sm">
+        Total Distance: <span id="totalDist">{{$total['dist']}}</span>  | Total Produksi: <span id="totalProd">{{$total['prod']}}</span> BCM | Total Distance/BCM: <span id="totalDistProd">{{$total['dist_prod']}}</span>
     </div>
 
     {{-- Filter --}}
@@ -184,41 +191,47 @@
                         // JANGAN LUPA COPY KE SEBELAH
                         // OB CARD
 
+                        $j("#totalDist").empty();
+                        $j("#totalProd").empty();
+                        $j("#totalDistProd").empty();
+
+                        
+                        $j("#totalDist").append(response.total.dist);
+                        $j("#totalProd").append(response.total.prod);
+                        $j("#totalDistProd").append(response.total.dist_prod);
+
 
                         $j("table tbody").empty();
                         fullText = ""
                         if (response) {
 
-                        var i=1;
-                        $j.each(response.data, function(index, data) {
-                            text = "<tr class=\"text-center bg-white\">"
+                            var i = 1;
+                            $j.each(response.data, function(index, data) {
+                                text = "<tr class=\"text-center bg-white\">"
 
-                            // Add Index
-                            text += "<td class=\"whitespace-nowrap text-center\"> " + i + "</td>"
+                                // Add Index
+                                text += "<td class=\"whitespace-nowrap text-center\"> " + i +
+                                    "</td>"
 
-                            i++;
-                            
-                            $j.each(data, function(i, d){
-                                if(i === 'tgl' || i === 'nom_unit'){
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
-                                } else if(i === 'liter_hour' || i === 'price_hour'){
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
-                                } else {
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
-                                }
-                            })
+                                i++;
 
-                            text += "</tr>"
-                            fullText += text
-                        });
-                        $j("table tbody").html(fullText);
-                        show_data();
-                    }
+                                $j.each(data, function(i, d) {
+                                    text +=
+                                        "<td class=\"whitespace-nowrap text-center\"> " +
+                                        d + "</td>"
+                                })
+
+                                text += "</tr>"
+                                fullText += text
+                            });
+                            $j("table tbody").html(fullText);
+                            show_data();
+                        }
                     },
                 })
             }
         });
-        
+
         // Pilih Site
         $j("#pilihSite").on('change', function() {
             $j.ajaxSetup({
@@ -228,9 +241,11 @@
             });
 
             var pilihSite = $j("#pilihSite").val() ? $j("#pilihSite").val() : "";
-            var awal = moment($j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") ? moment($j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") : "";
-            var akhir = moment($j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") ? moment($j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") : "";
-            console.log(awal,akhir)
+            var awal = moment($j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") ? moment(
+                $j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") : "";
+            var akhir = moment($j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") ? moment(
+                $j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") : "";
+            console.log(awal, akhir)
 
             var url = $j("#urlFilter").val();
 
@@ -245,36 +260,34 @@
                     'pilihSite': pilihSite,
                 },
                 success: function(response) {
-                    $j("#loading").toggleClass('hidden');
+                    console.log(response)
 
+                    $j("#loading").toggleClass('hidden');
                     // JANGAN LUPA COPY KE SEBELAH
-                        // OB CARD
+                    // OB CARD
+
 
                     $j("table tbody").empty();
                     fullText = ""
-                    i=1
                     if (response) {
+
+                        var i = 1;
                         $j.each(response.data, function(index, data) {
                             text = "<tr class=\"text-center bg-white\">"
 
                             // Add Index
-                            text += "<td class=\"whitespace-nowrap text-center\"> " + i + "</td>"
+                            text += "<td class=\"whitespace-nowrap text-center\"> " + i +
+                                "</td>"
 
                             i++;
 
-                            $j.each(data, function(i, d){
-                                if(i === 'tgl' || i === 'nom_unit'){
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
-                                } else if(i === 'liter_hour' || i === 'price_hour'){
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
-                                } else {
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
-                                }
+                            $j.each(data, function(i, d) {
+                                text +=
+                                    "<td class=\"whitespace-nowrap text-center\"> " +
+                                    d + "</td>"
                             })
 
-
                             text += "</tr>"
-                            
                             fullText += text
                         });
                         $j("table tbody").html(fullText);

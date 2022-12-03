@@ -16,7 +16,7 @@
             <i data-loading-icon="oval" class="w-7 h-7 mr-3 hidden" id="loading"></i> 
             
             {{-- Url Rujukan --}}
-            <input type="hidden" name="url" value="{{route('data-prod.index')}}" id="urlFilter">
+            <input type="hidden" name="url" value="{{route('data-prod.report')}}" id="urlFilter">
 
             {{-- Filter Tanggal --}}
             <div id="filterTanggal" class="form-control box p-2 ml-auto w-10 flex mr-2">
@@ -24,7 +24,7 @@
                 <span></span> <i class="fa fa-caret-down"></i>
             </div>
 
-            <select id="pilihSite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
+            <select id="kodesite" class="block shadow-sm border p-2 mr-0 rounded-md w-20  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="kodesite" id="kodesite">
                 <option value="">All Site</option>
                 @foreach($site as $st)
                 <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
@@ -64,11 +64,14 @@
     <div class="col-span-12 grid grid-cols-12 gap-5 mb-10">
             <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
                 <div class="box p-5 zoom-in">
-                    <div class="flex items-center">
+                    <div class="flex items-center justify-between">
                         <div class="w-2/4 flex-none">
                             <div class="text-lg font-medium truncate">Total Overburden</div>
-                            <div class="text-slate-500 mt-1" id="actualOB">Actual: {{$totalProduksi["ob"]["act"]}} BCM</div>
-                            <div class="text-slate-500 mt-1" id="planOB">Plan: {{$totalProduksi["ob"]["plan"]}} BCM</div>
+                            <div class="text-slate-500 mt-1" id="actualOB">Actual: {{number_format($totalProduksi["ob"]["act"],0)}} BCM</div>
+                            <div class="text-slate-500 mt-1" id="planOB">Plan: {{number_format($totalProduksi["ob"]["plan"],0)}} BCM</div>
+                        </div>
+                        <div>
+                            <div class="relative text-2xl 2xl:text-3xl font-medium leading-6 pl-3 2xl:pl-4" id="achOB">{{number_format($totalProduksi["ob"]["act"] / $totalProduksi["ob"]["plan"] * 100,0)}}%</div>
                         </div>
                     </div>
                 </div>
@@ -76,11 +79,14 @@
             
             <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
                 <div class="box p-5 zoom-in">
-                    <div class="flex items-center">
+                    <div class="flex items-center justify-between">
                         <div class="w-2/4 flex-none">
                             <div class="text-lg font-medium truncate">Total Coal</div>
-                            <div class="text-slate-500 mt-1" id="actualCoal">Actual: {{$totalProduksi["coal"]["act"]}} MT</div>
-                            <div class="text-slate-500 mt-1" id="planCoal">Plan: {{$totalProduksi["coal"]["plan"]}} MT</div>
+                            <div class="text-slate-500 mt-1" id="actualCoal">Actual: {{number_format($totalProduksi["coal"]["act"],0)}} MT</div>
+                            <div class="text-slate-500 mt-1" id="planCoal">Plan: {{number_format($totalProduksi["coal"]["plan"],0)}} MT</div>
+                        </div>
+                        <div>
+                            <div class="relative text-2xl 2xl:text-3xl font-medium leading-6 pl-3 2xl:pl-4" id="achCoal">{{number_format($totalProduksi["coal"]["act"] / $totalProduksi["coal"]["plan"] * 100,0)}}%</div>
                         </div>
                     </div>
                 </div>
@@ -114,13 +120,19 @@
                 </thead>
                 <tbody>
                     @foreach($data as $dt)
-                    <tr class="text-center bg-white">
-                        @foreach($dt as $d)
-                        <td class="">
-                            {{$d}}
-                        </td>
-                        @endforeach
-                    </tr>
+                        <tr class="text-center bg-white">
+                            @foreach($dt as $k => $d)
+                                @if($k === 'tgl_data')
+                                    <td class="">
+                                        {{$d}}
+                                    </td>
+                                @else
+                                    <td class="">
+                                        {{number_format($d,0)}}
+                                    </td>
+                                @endif
+                            @endforeach
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -130,13 +142,18 @@
 
 <!-- Filtering -->
 <script>
-    $i = jQuery.noConflict();
+    var $j = jQuery.noConflict();
+    $j.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $j('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
     var start = moment().subtract(29, 'days');
     var end = moment();
 
     // Overburden Range
-    $i('#filterTanggal').daterangepicker({
+    $j('#filterTanggal').daterangepicker({
         startDate: start,
         endDate: end,
         ranges: {
@@ -153,136 +170,112 @@
         var $j = jQuery.noConflict();
         var awal = start.format("YYYY-MM-DD");
         var akhir = end.format("YYYY-MM-DD");
-        var pilihSite = $j("#pilihSite").val() ? $j("#pilihSite").val() : "";
+        var kodesite = $j("#kodesite").val() ? $j("#kodesite").val() : "";
+        console.log(kodesite)
         $j("#loading").toggleClass('hidden');
 
         var url = $j("#urlFilter").val();
+        console.log(url);
 
         if (awal !== null && akhir !== null) {
             $j.ajax({
                 url: url,
-                type: 'POST',   
+                type: 'GET',
                 dataType: 'json',
                 data: {
                     start: awal,
                     end: akhir,
-                    pilihSite: pilihSite,
+                    kodesite: kodesite,
                 },
                 success: function(response) {
-                    $i.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-
-                    $i("table tbody").empty();
-
-                    // Fill Total
-                    $i("#actualOB").empty();
-                    $i("#actualCoal").empty();
-                    $i("#planCoal").empty();
-                    $i("#planOB").empty();
-
-                    $i("#actualOB").append("Actual: " + result.total["ob"]["act"] + " BCM");
-                    $i("#actualCoal").append("Actual: " + result.total["coal"]["act"] + " MT");
-                    $i("#planOB").append("Plan: " + result.total["ob"]["plan"] + " BCM");
-                    $i("#planCoal").append("Plan: " + result.total["coal"]["plan"] + " MT");
-
-                    fullText = ""
-                    if (result) {
-                        $i.each(result.data, function(index) {
-                            text = '<tr class="text-center bg-white">' +
-                                '<td class="">' + result.data[index].tgl_data + '</td>' +
-                                '<td class="">' + number_format(result.data[index].ob_1,0) + '</td>' +
-                                '<td class="">' + number_format(result.data[index].ob_2,0) + '</td>' +
-                                '<td class="">' + number_format(result.data[index].sum_ob,0) + '</td>' +
-                                '<td class="">' + number_format(result.data[index].plan_ob,0) + '</td>' +
-                                '<td class="">' + number_format(result.data[index].coal_1,0) + '</td>' +
-                                '<td class="">' + number_format(result.data[index].coal_2,0) + '</td>' +
-                                '<td class="">' + number_format(result.data[index].sum_coal,0) + '</td>' +
-                                '<td class="">' + number_format(result.data[index].plan_coal,0) + '</td>' +
-                                '<td class="">' + number_format(result.data[index].ach_ob,0) + '</td>' +
-                                '<td class="">' + number_format(result.data[index].ach_coal,0) + '</td>' +
-                                '</tr>';
-                            fullText += text
-                        });
-                        $i("table tbody").html(fullText);
-                        show_data();
-                    }
+                    process_data(response)
                 },
             })
         }
     });
 
-    $i('#pilihSite').on('change', function() {
-        $i.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
-            }
-        });
+    // Pilih Site
+    $j("#kodesite").on('change', function() {
 
-        var kodesite = $i(this).val();
-        var awal = moment($i('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") ? moment($$i('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") : "";
-        var akhir = moment($i('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") ? moment($$i('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") : "";
-        console.log(awal,akhir)
+        var kodesite = $j("#kodesite").val() ? $j("#kodesite").val() : "";
+        console.log(kodesite)
 
+        var awal = moment($j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") ? moment(
+            $j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") : "";
+        var akhir = moment($j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") ? moment(
+            $j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") : "";
+        console.log(awal, akhir)
 
-        if (kodesite == null || kodesite == '') {
-            kodesite = 'all';
-        }
+        var url = $j("#urlFilter").val();
 
-        console.log("PILIH Site", kodesite, pilihBulan);
+        $j("#loading").toggleClass('hidden');
 
-        $i.ajax({
-            type: "POST",
-            url: 'http://127.0.0.1:8000/data-prod-report?layout=side-menu',
+        $j.ajax({
+            type: "GET",
+            url: url,
             data: {
                 'start': awal,
                 'end': akhir,
-                'pilihSite': pilihSite,
+                'kodesite': kodesite,
             },
-            success: function(result) {
-                $i("table tbody").empty();
-
-                // Fill Total
-                $i("#actualOB").empty();
-                $i("#actualCoal").empty();
-                $i("#planCoal").empty();
-                $i("#planOB").empty();
-
-                $i("#actualOB").append("Actual: " + result.total["ob"]["act"] + " BCM");
-                $i("#actualCoal").append("Actual: " + result.total["coal"]["act"] + " MT");
-                $i("#planOB").append("Plan: " + result.total["ob"]["plan"] + " BCM");
-                $i("#planCoal").append("Plan: " + result.total["coal"]["plan"] + " MT");
-
-                fullText = ""
-                if (result) {
-                    $i.each(result.data, function(index) {
-                        text = '<tr class="text-center bg-white">' +
-                            '<td class="">' + result.data[index].tgl_data + '</td>' +
-                            '<td class="">' + number_format(result.data[index].ob_1,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].ob_2,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].sum_ob,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].plan_ob,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].coal_1,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].coal_2,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].sum_coal,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].plan_coal,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].ach_ob,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].ach_coal,0) + '</td>' +
-                            '</tr>';
-                        fullText += text
-                    });
-                    $i("table tbody").html(fullText);
-                    show_data();
-                }
+            success: function(response) {
+                process_data(response)
             },
             error: function(result) {
                 console.log("error", result);
             },
         });
-    })
+    });
 
+    function process_data(response) {
+        console.log(response)
+
+        $j("#loading").toggleClass('hidden');
+
+        // Sum Total
+        // Empty Data
+        $j("#actualOB").empty();
+        $j("#planOB").empty();
+        $j("#achOB").empty();
+        $j("#actualCoal").empty();
+        $j("#planCoal").empty();
+        $j("#achCoal").empty();
+
+        // Filling the Data
+        $j("#actualOB").append('Actual: ' + number_format(response.total.ob['act'],0) + ' BCM');
+        $j("#planOB").append('Plan: ' + number_format(response.total.ob['plan'],0) + ' BCM');
+        $j("#actualCoal").append('Actual: ' + number_format(response.total.coal['act'],0) + ' MT');
+        $j("#planCoal").append('Plan: ' + number_format(response.total.coal['plan'],0) + ' MT');
+        $j("#achOB").append(number_format(response.total.ob['act'] / response.total.ob['plan'] * 100, 0) + '%');
+        $j("#achCoal").append(number_format(response.total.coal['act'] / response.total.coal['plan'] * 100, 0) + '%');
+        
+        $j("table tbody").empty();
+        fullText = ""
+        if (response) {
+
+            var i = 1;
+            $j.each(response.data, function(index, data) {
+                text = "<tr class=\"text-center bg-white\">"
+
+                $j.each(data, function(i, d) {
+                    if(i !== 'tgl_data'){
+                        text +=
+                        "<td class=\"whitespace-nowrap text-center\"> " +
+                        number_format(d,0) + "</td>"
+                    } else {
+                        text +=
+                        "<td class=\"whitespace-nowrap text-center\"> " +
+                        d + "</td>"
+                    }
+                })
+
+                text += "</tr>"
+                fullText += text
+            });
+            $j("table tbody").html(fullText);
+            show_data();
+        }
+    }
 
     function show_data() {
         Toastify({
@@ -322,6 +315,9 @@
             return s.join(dec);
         }
 </script>
+
+
+
 <script>
     /*!
      * Toastify js 1.12.0

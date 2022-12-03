@@ -16,45 +16,44 @@ class DistanceHarianController extends Controller
      */
     public function index(Request $request)
     {
-        $where1 = '';
-        $where2 = '';
-        $where3 = '';
+        $where = '';
 
         if (count($request->all()) > 1) {              
-            // Where 1
-            $where1 .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
-            $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
-
-            // Where 2
-            $where2 .= ($request->has('start') && $request->has('end')) ? "a.TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
-            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "a.kodesite='" . $request->pilihSite . "'" : "";
-            
-            // Where 3
-            $where3 .= ($request->has('start') && $request->has('end')) ? "e.TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
-            $where3 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $where3 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "e.kodesite='" . $request->pilihSite . "'" : "";
+            // Where
+            $where .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
         } else {
-            $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
-            $where2 .= "a.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
-            $where3 .= "e.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            // $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            $where .= "tgl BETWEEN '2022-01-01' AND '2022-01-31'";
         }
 
         $site = Site::where('status_website', 1)->get();
 
-        $subquery = "SELECT tgl, 
-        SUM(bcm),
-        FORMAT(SUM(distbcm)/SUM(bcm),0) jarak
-        FROM PMA_TP
-        GROUP BY tgl";
+        $subquery = "SELECT DATE_FORMAT(tgl, \"%d-%m-%Y\") tgl, 
+        SUM(distbcm) jarak,
+        SUM(bcm) ob,
+        (SUM(distbcm) / SUM(bcm)) dist_bcm,
+        (SELECT namasite FROM site WHERE kodesite=pma_tp.kodesite) site
+        FROM pma_tp
+        WHERE ".$where."
+        GROUP BY tgl, kodesite
+        ORDER BY kodesite, tgl
+        ";
         $data = collect(DB::select(DB::raw($subquery)));
+
+        $total = [
+            'dist' => number_format($data->sum('jarak'),0),
+            'prod' => number_format($data->sum('ob'),0),
+            'dist_prod' => number_format($data->sum('jarak') / $data->sum('ob'),0),
+        ];
 
         if (count($request->all()) > 1) {
             $response['data'] = $data;
+            $response['total'] = $total;
             return response()->json($response);
         } else {
-            return view('distance-harian.index', compact('data', 'site'));
+            return view('distance-harian.index', compact('data', 'site', 'total'));
         }
     }
 

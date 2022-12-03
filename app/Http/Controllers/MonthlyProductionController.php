@@ -43,17 +43,17 @@ class MonthlyProductionController extends Controller
         $site = Site::where('status_website', 1)->get();
 
         // Data OB 
-        $subquery = "SELECT DATE_FORMAT(a.tgl, '%b, %Y') periode, 
-        d.namasite,
+        $subquery = "SELECT d.namasite namasite,
+        DATE_FORMAT(a.tgl, '%b, %Y') periode, 
         SUM(a.ob) budget_ob, 
-        SUM(a.coal) budget_coal, 
         b.ob joint_survey_ob,
-        b.coal joint_survey_coal,
         FORMAT(b.ob/SUM(a.ob) * 100,1) ach_js_ob,
-        FORMAT(b.coal/SUM(a.coal) * 100,1) ach_js_coal,
         SUM(c.ob) invoice_ob,
-        SUM(c.coal) invoice_coal,
         FORMAT(c.ob/SUM(a.ob) * 100,1) ach_inv_ob,
+        SUM(a.coal) budget_coal, 
+        b.coal joint_survey_coal,
+        FORMAT(b.coal/SUM(a.coal) * 100,1) ach_js_coal,
+        SUM(c.coal) invoice_coal,
         FORMAT(c.coal/SUM(a.coal) * 100,1) ach_inv_coal
         FROM pma_budget a
         JOIN (SELECT tgl, kodesite, SUM(ob) ob, SUM(coal) coal FROM pma_joint_survey WHERE del=0 GROUP BY tgl, kodesite) b 

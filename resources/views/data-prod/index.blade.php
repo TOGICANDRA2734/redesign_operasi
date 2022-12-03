@@ -14,35 +14,99 @@
     </div>
     <!-- END: Notification Content -->
 
-    <div class="">
+    <div class="grid grid-cols-12 gap-5">
         <!-- Header -->
-        <div class="flex justify-between items-center py-4">
+        <div class="flex justify-between items-center col-span-12 mt-5">
             <!-- Title -->
             <h2 class="text-lg font-medium truncate mr-5 ">
                 Produksi Actual - {{ Auth::user()->kodesite != 'X' ? $site[0]->namasite : 'HO - All Site' }}
             </h2>
 
+            <div class="ml-auto flex justify-center items-center">
+                <div class="mr-3 hidden" id="loading">
+                    <i data-loading-icon="tail-spin" class="w-5 h-5"></i>
+                </div>
 
-            <div class="ml-auto flex items-center">
-                <i data-loading-icon="oval" class="w-7 h-7 mr-3 hidden" id="loading"></i> 
-                <input type="month" name="pilihBulan" id="pilihBulan" class="shadow-sm border p-2 rounded-md w-30  text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray">
-                <input type="hidden" name="bulan" value="{{route('data-prod.index')}}" id="route">
-                <!-- BEGIN: Notification Content -->
-                <div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
-                    <div class="ml-4 mr-4">
-                        <div class="font-medium">Data Berhasil Difilter!</div>
+                {{-- Url Rujukan --}}
+                <input type="hidden" name="url" value="{{ route('data-prod.index') }}" id="urlFilter">
+
+                {{-- Pilih Site --}}
+                <select id="pilihSite"
+                    class="block shadow-sm p-2 mr-2 rounded-md w-20  text-sm dark:text-gray-300 dark-gray-600 dark:bg-gray-700 form-multiselect focus-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray"
+                    name="kodesite" id="kodesite">
+                    <option value="">All Site</option>
+                    @foreach ($site as $st)
+                        <option value="{{ $st->kodesite }}">{{ $st->namasite }}</option>
+                    @endforeach
+                </select>
+
+                {{-- Filter Tanggal --}}
+                <div id="filterTanggal" class="form-control box p-2 ml-auto w-10 flex mr-2">
+                    <i class="fa fa-calendar"></i>&nbsp;
+                    <span></span> <i class="fa fa-caret-down"></i>
+                </div>
+
+                <div class="dropdown">
+                    <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
+                        <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4"
+                                data-lucide="download"></i> </span>
+                    </button>
+                    <div class="dropdown-menu w-40">
+                        <ul class="dropdown-content">
+                            <li>
+                                <a href="" class="dropdown-item"> EXCEL </a>
+                            </li>
+                            <li>
+                                <a href="" class="dropdown-item"> PDF </a>
+                            </li>
+                        </ul>
                     </div>
-                </div> <!-- END: Notification Content -->
-    
+                </div>
             </div>
         </div>
-        <hr class="mb-10">
+        <hr class="col-span-12">
+
+        {{-- <div class="col-span-12 grid grid-cols-12 gap-5">
+            <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
+                <div class="box p-5 zoom-in">
+                    <div class="flex items-center">
+                        <div class="w-2/4 flex-none">
+                            <div class="text-lg font-medium truncate">Akumulasi Distance/OB</div>
+                            <div class="text-slate-500 mt-1" id="actualOB">Distance:M</div>
+                            <div class="text-slate-500 mt-1" id="planOB">Produksi:BCM</div>
+                        </div>
+                        <div class="flex-none ml-auto relative">
+                            <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
+                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0"
+                                id="achOB"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
+                <div class="box p-5 zoom-in">
+                    <div class="flex items-center">
+                        <div class="w-2/4 flex-none">
+                            <div class="text-lg font-medium truncate">Total Coal</div>
+                            <div class="text-slate-500 mt-1" id="actualCoal">Actual: BCM</div>
+                            <div class="text-slate-500 mt-1" id="planCoal">Plan: BCM</div>
+                        </div>
+                        <div class="flex-none ml-auto relative">
+                            <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
+                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0"
+                                id="achCoal">%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
 
         <!-- Table -->
-        <div class="w-full mb-8 overflow-hidden rounded-lg shadow-xs">
-            <div class="w-full overflow-x-auto">
-                <table class="w-full table table-striped table-sm">
-                    <thead class="table-dark">
+        <div class="w-full mb-8 col-span-12 overflow-hidden rounded-lg shadow-xs">
+            <div class="w-full overflow-auto h-[45rem]">
+                <table class="w-full table table-sm">
+                    <thead class="table-dark sticky left-0 top-0 z-50">
                         <tr class="">
                             <th rowspan="2" class="whitespace-nowrap text-center">Tanggal</th>
                             <th colspan="2" class="whitespace-nowrap text-center">Overburden</th>
@@ -57,8 +121,6 @@
                         </tr>
                     </thead>
                     <tbody>
-
-
                         @foreach ($period as $key => $dt)
                             <tr class="text-center bg-white">
                                 <td class="whitespace-nowrap text-center">
@@ -77,8 +139,6 @@
                                 </td>
                             </tr>
                         @endforeach
-                        
-
                     </tbody>
                 </table>
             </div>
@@ -87,51 +147,79 @@
 
     {{-- Filter --}}
     <script>
-        var $i = jQuery.noConflict();
+        var $j = jQuery.noConflict();
 
-        $i('#pilihBulan').on('change', function() {
-        $i = jQuery.noConflict();
-        $i.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $i('meta[name="csrf-token"]').attr('content')
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+
+        // Overburden Range
+        $j('#filterTanggal').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Hari Ini': [moment(), moment()],
+                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month')
+                    .endOf('month')
+                ]
+            }
+        }, function(start, end, label) {
+            var $j = jQuery.noConflict();
+            var awal = start.format("YYYY-MM-DD");
+            var akhir = end.format("YYYY-MM-DD");
+            $j("#loading").toggleClass('hidden');
+
+            var url = $j("#urlFilter").val();
+            console.log(url);
+
+            if (awal !== null && akhir !== null) {
+                $j.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        start: awal,
+                        end: akhir,
+                    },
+                    success: function(response) {
+                        console.log(response.period[0]);
+
+                    $j("#loading").toggleClass('hidden');
+
+
+                        $j("table tbody").empty();
+                        fullText = "";
+                        if (response) {
+                            $j.each(response.data, function(index) {
+                                text = '<tr class="text-center bg-white">' +
+                                    '<td class="">' + response.period[index] + '</td>' +
+                                    '<td class="">' + number_format(response.data[index].ob_s1,
+                                    0) + '</td>' +
+                                    '<td class="">' + number_format(response.data[index].ob_s2,
+                                    0) + '</td>' +
+                                    '<td class="">' + number_format(response.data[index].coal_s1,
+                                        0) + '</td>' +
+                                    '<td class="">' + number_format(response.data[index].coal_s2,
+                                        0) + '</td>' +
+                                    '<td class="">' +
+                                    '<a href="http://127.0.0.1:8000/data-prod/' +
+                                    response.periodInput[index] +
+                                    '/edit" class="btn btn-warning text-white"><i class="fa-solid fa-pencil"></i></a>' +
+                                    '</td>' +
+                                    '</tr>';
+                                fullText += text
+                            });
+                            $j("table tbody").html(fullText);
+                            show_data()
+                        }
+                    },
+                })
             }
         });
 
-        const pilihBulan = $i(this).val();
-        var url = $("#route").val()
-
-        $i.ajax({
-            type: "POST",
-            url: url,
-            data: {
-                'pilihBulan': pilihBulan,
-            },
-            success: function(result) {
-                console.log(result.period[0]);
-
-                $i("table tbody").empty();
-                fullText = "";
-                if (result) {
-                    $i.each(result.data, function(index) {
-                        text = '<tr class="text-center bg-white">' +
-                            '<td class="">' + result.period[index] + '</td>' +
-                            '<td class="">' + number_format(result.data[index].ob_s1,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].ob_s2,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].coal_s1,0) + '</td>' +
-                            '<td class="">' + number_format(result.data[index].coal_s2,0) + '</td>' +
-                            '<td class="">' + '<a href="http://ptrci.co.id/datacenter/public/data-prod/' + result.periodInput[index] +'/edit" class="btn btn-warning text-white"><i class="fa-solid fa-pencil"></i></a>' + '</td>' +
-                            '</tr>';
-                        fullText += text
-                    });
-                    $i("table tbody").html(fullText);
-                    show_data()
-                }
-            },
-            error: function(result) {
-                console.log("error", result);
-            },
-        });
-    })
         function show_data() {
             Toastify({
                 node: $("#success-notification-content")

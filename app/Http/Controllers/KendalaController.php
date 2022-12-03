@@ -21,32 +21,35 @@ class KendalaController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has('pilihBulan')) {
-            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
-            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+
+        $where = '';
+
+        if (count($request->all()) > 1) {              
+            // Where 1
+            $where .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
         } else {
-            $bulan = Carbon::now();
-            $tanggal =  "tgl=CURDATE()";
+            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->now() . "'";
         }
 
-        if ($request->has('kodesite') && $request->kodesite !== 'all') {
-            $subquery = "SELECT DATE_FORMAT(tgl, \"%d-%m-%Y\") tgl, shift, awal, akhir, unit, ket
+            $subquery = "SELECT DATE_FORMAT(tgl, \"%d-%m-%Y\") tgl, 
+            unit, 
+            shift,             
+            awal, 
+            akhir, 
+            ket,
+            (SELECT namasite FROM site WHERE kodesite=pma_dailyprod_kendala.kodesite) namasite
             FROM pma_dailyprod_kendala
-            WHERE ".$tanggal." AND kodesite='".$request->kodesite."' 
+            WHERE ".$where."
             ORDER BY tgl DESC";
-        } else {
-            $subquery = "SELECT DATE_FORMAT(tgl, \"%d-%m-%Y\") tgl, shift, awal, akhir, unit, ket
-            FROM pma_dailyprod_kendala
-            WHERE ".$tanggal."
-            ORDER BY tgl DESC";
-        }
 
         $data = collect(DB::select($subquery));
 
         $site = Site::where('status_website', 1)->get();
         $waktu = Carbon::now();
 
-        if  ($request->has('kodesite') || $request->has('pilihBulan')) {
+        if  (count($request->all()) > 1) {
             $response['data'] = $data;
             return response()->json($response);
         } else {

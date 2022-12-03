@@ -22,19 +22,16 @@ class dataProdController extends Controller
      */
     public function index(Request $request)
     {
-        $where = "";
+        
+        $where = '';
 
-        if ($request->has('pilihBulan')) {                         
-            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
-            $bulanAwal = date('Y-m-d', strtotime($bulan->startOfMonth()->copy()));
-            $bulanAkhir = date('Y-m-d', strtotime($bulan->endOfMonth()->copy()));
-            $where =  "TGL BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
-        } else {    
-            $bulan = Carbon::now();
-            $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";
-            $where = $tanggal; 
+        if (count($request->all()) > 1) {              
+            // Where
+            $where .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+        } else {
+            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            // $where .= "tgl BETWEEN '2022-01-01' AND '2022-01-31'";
         }
-
 
         if(Auth::user()->kodesite == 'X'){
             $subquery = "SELECT id,
@@ -64,8 +61,8 @@ class dataProdController extends Controller
             $site = DB::table('site')->select('namasite', 'kodesite')->where('kodesite', '=', Auth::user()->kodesite)->get();
         }
 
-        $begin = $request->has('pilihBulan') ? new DateTime($bulanAwal) : new DateTime( Carbon::now()->startOfMonth() );
-        $end   = $request->has('pilihBulan') ? new DateTime($bulanAkhir) : new DateTime( Carbon::now()->endOfMonth() );
+        $begin = $request->has('start') ? new DateTime($request->start) : new DateTime( Carbon::now()->startOfMonth() );
+        $end   = $request->has('end') ? new DateTime($request->end) : new DateTime( Carbon::now()->endOfMonth() );
         $period = [];
         $periodInput = [];
 
@@ -74,7 +71,7 @@ class dataProdController extends Controller
             $periodInput[] = $i->format('Y-m-d');
         }
 
-        if ($request->has('pilihBulan')) {
+        if ($request->has('start')) {
             $response['data'] = $data;
             $response['period'] = $period;
             $response['periodInput'] = $periodInput;
@@ -349,12 +346,15 @@ class dataProdController extends Controller
 
     public function report(Request $request)
     {
-        
-        if($request->has('start')){
-            $tanggal =  "tgl BETWEEN '" . $request->start . "' AND '" . $request->end . "'";
+        $where = '';
+
+        if (count($request->all()) > 1) {              
+            // Where 1
+            $where .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where .= ($request->has('kodesite') && !empty($request->kodesite)) ? " AND " : "";
+            $where .= ($request->has('kodesite') && !empty($request->kodesite)) ? "kodesite='" . $request->kodesite . "'" : "";
         } else {
-            $bulan = Carbon::now();
-            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";        
+            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
         }
 
         if($request->has('kodesite') && $request->kodesite !== 'all'){
@@ -370,7 +370,7 @@ class dataProdController extends Controller
             ROUND(SUM(ob)/(SELECT SUM(ob) FROM pma_dailyprod_plan WHERE tgl=tgl_data AND kodesite='".$request->kodesite."' GROUP BY tgl) * 100,1) ach_ob,
             ROUND(SUM(coal)/(SELECT SUM(coal) FROM pma_dailyprod_plan WHERE tgl=tgl_data AND kodesite='".$request->kodesite."' GROUP BY tgl) * 100,1)  ach_coal
             FROM pma_dailyprod_tc
-            WHERE ".$tanggal." and kodesite='".$request->kodesite."'
+            WHERE ".$where."
             GROUP BY tgl";
         } else {
             $subquery = "SELECT tgl tgl_data,
@@ -385,7 +385,7 @@ class dataProdController extends Controller
             ROUND(SUM(ob)/(SELECT SUM(ob) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1) ach_ob,
             ROUND(SUM(coal)/(SELECT SUM(coal) FROM pma_dailyprod_plan WHERE tgl=tgl_data GROUP BY tgl) * 100,1)  ach_coal
             FROM pma_dailyprod_tc
-            WHERE ".$tanggal."
+            WHERE ".$where."
             GROUP BY tgl";
         }
 
@@ -393,12 +393,12 @@ class dataProdController extends Controller
 
         $totalProduksi = [
             'ob' => [
-                'act' => number_format($data->sum('sum_ob'),1),
-                'plan' => number_format($data->sum('plan_ob'),1),
+                'act' => $data->sum('sum_ob'),
+                'plan' => $data->sum('plan_ob'),
             ],
             'coal' => [
-                'act' => number_format($data->sum('sum_coal'),1),
-                'plan' => number_format($data->sum('plan_coal'),1),
+                'act' => $data->sum('sum_coal'),
+                'plan' => $data->sum('plan_coal'),
             ]
         ];
 

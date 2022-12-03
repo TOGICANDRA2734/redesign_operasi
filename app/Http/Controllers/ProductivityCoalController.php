@@ -21,19 +21,23 @@ class ProductivityCoalController extends Controller
      */
     public function index(Request $request)
     {
+        $where = '';
 
-        if ($request->has('pilihBulan')) {
-            $bulan = Carbon::createFromFormat('Y-m', request()->pilihBulan);
-            $tanggal =  "tgl BETWEEN '" . date('Y-m-d', strtotime($bulan->startOfMonth()->copy())) . "' AND '" . date('Y-m-d', strtotime($bulan->endOfMonth()->copy())) . "'";
+        if (count($request->all()) > 1) {              
+            // Where 1
+            $where .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "a.kodesite='" . $request->pilihSite . "'" : "";
+            $where .= " AND DEL=0 ";
+
         } else {
-            $bulan = Carbon::now();
-            $tanggal =  "tgl=CURDATE()";
+            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
         }
 
         if ($request->has('kodesite') && $request->kodesite !== 'all') {
             $subquery = "SELECT A.id,
             DATE_FORMAT(tgl, \"%d-%m-%Y\") tanggal,    
-            b.namasite,
+            b.namasite namasite,
             pit,
             ROUND(AVG(rit), 1) avg_rit,                                                        
             IFNULL(SUM(CASE WHEN jam = 0 THEN rit END),'-') j1,                    
@@ -64,7 +68,7 @@ class ProductivityCoalController extends Controller
             FROM pma_dailyprod_pty_coal A 
             JOIN site B
             ON A.kodesite = B.kodesite              
-            WHERE " . $tanggal . " AND del=0  AND A.kodesite='" . $request->kodesite . "'
+            WHERE " . $where . " 
             GROUP BY a.kodesite
             ORDER BY b.id";
         } else {
@@ -101,7 +105,7 @@ class ProductivityCoalController extends Controller
             FROM pma_dailyprod_pty_coal A 
             JOIN site B
             ON A.kodesite = B.kodesite                                             
-            WHERE " . $tanggal . " AND del=0
+            WHERE " . $where . " 
             GROUP BY a.pit
             ORDER BY b.id";
         }
@@ -109,7 +113,7 @@ class ProductivityCoalController extends Controller
         $data = collect(DB::select($subquery));
         $site = Site::where('status_website', 1)->get();
 
-        if ($request->has('kodesite') || $request->has('pilihBulan')) {
+        if (count($request->all()) > 1) {
             $response['data'] = $data;
             return response()->json($response);
         } else {

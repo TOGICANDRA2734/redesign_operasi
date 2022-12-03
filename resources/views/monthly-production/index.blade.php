@@ -66,7 +66,7 @@
         </div>
         <hr class="col-span-12">
 
-        <div class="col-span-12 grid grid-cols-12 gap-5">
+        {{-- <div class="col-span-12 grid grid-cols-12 gap-5">
             <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
                 <div class="box p-5 zoom-in">
                     <div class="flex items-center">
@@ -98,7 +98,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         
         <!-- Table -->
         <div class="w-full mb-8 col-span-12 overflow-hidden rounded-lg shadow-xs">
@@ -109,15 +109,19 @@
                             <th rowspan="2" class="whitespace-nowrap text-center">#</th>
                             <th rowspan="2" class="whitespace-nowrap text-center">Site</th>
                             <th rowspan="2" class="whitespace-nowrap text-center">Bulan</th>
-                            <th colspan="3" class="whitespace-nowrap text-center">Overburden</th>
-                            <th colspan="3" class="whitespace-nowrap text-center">Coal</th>
+                            <th colspan="5" class="whitespace-nowrap text-center">Overburden</th>
+                            <th colspan="5" class="whitespace-nowrap text-center">Coal</th>
                         </tr>
                         <tr>
-                            <th class="whitespace-nowrap text-center">Plan</th>
-                            <th class="whitespace-nowrap text-center">Actual</th>
+                            <th class="whitespace-nowrap text-center">Budget</th>
+                            <th class="whitespace-nowrap text-center">Joint Survey</th>
                             <th class="whitespace-nowrap text-center">ACH (%)</th>
-                            <th class="whitespace-nowrap text-center">Plan</th>
-                            <th class="whitespace-nowrap text-center">Actual</th>
+                            <th class="whitespace-nowrap text-center">Invoice</th>
+                            <th class="whitespace-nowrap text-center">ACH (%)</th>
+                            <th class="whitespace-nowrap text-center">Budget</th>
+                            <th class="whitespace-nowrap text-center">Joint Survey</th>
+                            <th class="whitespace-nowrap text-center">ACH (%)</th>
+                            <th class="whitespace-nowrap text-center">Invoice</th>
                             <th class="whitespace-nowrap text-center">ACH (%)</th>
 
 
@@ -130,9 +134,15 @@
                                     {{ $key + 1 }}
                                 </td>
                                 @foreach ($dt as $d)
-                                    <td class="whitespace-nowrap text-center">
-                                        {{ $d }}
-                                    </td>
+                                @if (gettype($d) === 'double' or gettype($d) === 'int')
+                                <td class="whitespace-nowrap text-center">
+                                    {{ number_format($d,0) }}
+                                </td>
+                                @else
+                                <td class="whitespace-nowrap text-center">
+                                    {{ $d }}
+                                </td>
+                                @endif
                                 @endforeach
                             </tr>
                         @endforeach
@@ -204,12 +214,10 @@
                             i++;
                             
                             $j.each(data, function(i, d){
-                                if(i === 'tgl_format' || i === 'hari'){
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
-                                } else if(i === 'ob_ach' || i === 'coal_ach'){
+                                if(typeof d === 'number'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
                                 } else {
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
+                                    text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
                                 }
                             })
 

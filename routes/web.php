@@ -163,6 +163,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
 
         Route::resource('productivity', ProductivityController::class);
         Route::post('productivity_filter', [ProductivityController::class, 'index'])->name('productivity.filter');
+        Route::get('productivity_filter', [ProductivityController::class, 'index'])->name('productivity.filter');
 
 
         Route::post('productivity_check', [ProductivityController::class, 'check'])->name('productivity.check');
