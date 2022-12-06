@@ -69,80 +69,80 @@ class DailyProduksiController extends Controller
         // TODO collect all the data for total OB, coal, ach
         $total = ['ob_plan' => $data->sum('ob_plan'), 'ob_act' => $data->sum('ob_act'), 'ob_ach' => $data->sum('ob_plan') === 0 ? 0 : $data->sum('ob_act') / $data->sum('ob_plan') * 100, 'coal_plan' => $data->sum('coal_plan'), 'coal_act' => $data->sum('coal_act'), 'coal_ach' => $data->sum('coal_plan') === 0 ? 0: $data->sum('coal_act')/$data->sum('coal_plan') * 100];
 
-        // TODO: MASIH STATIS
-        $subquery = "SELECT SUM(summ.jumlah) jml
-        FROM (SELECT COUNT(DISTINCT nom_unit) jumlah,	
-        LEFT(nom_Unit,4), 
-        IF(SUM(jam) > 0, 1,0) 
-        FROM pma_a2b
-        WHERE tgl BETWEEN '2022-09-01' AND '2022-09-31' AND kodesite='g' AND LEFT(nom_unit,2)='ke'
-        GROUP BY nom_unit) summ";
-        $jumlahUnit = collect(DB::select($subquery));
+        // // TODO: MASIH STATIS
+        // $subquery = "SELECT SUM(summ.jumlah) jml
+        // FROM (SELECT COUNT(DISTINCT nom_unit) jumlah,	
+        // LEFT(nom_Unit,4), 
+        // IF(SUM(jam) > 0, 1,0) 
+        // FROM pma_a2b
+        // WHERE tgl BETWEEN '2022-09-01' AND '2022-09-31' AND kodesite='g' AND LEFT(nom_unit,2)='ke'
+        // GROUP BY nom_unit) summ";
+        // $jumlahUnit = collect(DB::select($subquery));
         
-        // Downfall
-        // Total Schedule Hours
-        dd($wh, $jumlahUnit);
-        $totalScheduleHours = ((($wh[0]->sun + $wh[0]->mon + $wh[0]->fri + $wh[0]->days) * 24) * $jumlahUnit[0]->jml);
-        // dd($wh[0]->sun, $wh[0]->mon, $wh[0]->fri, $wh[0]->days, ($wh[0]->sun + $wh[0]->mon + $wh[0]->fri + $wh[0]->days), $jumlahUnit[0]->jml, $totalScheduleHours);
+        // // Downfall
+        // // Total Schedule Hours
+        // dd($wh, $jumlahUnit);
+        // $totalScheduleHours = ((($wh[0]->sun + $wh[0]->mon + $wh[0]->fri + $wh[0]->days) * 24) * $jumlahUnit[0]->jml);
+        // // dd($wh[0]->sun, $wh[0]->mon, $wh[0]->fri, $wh[0]->days, ($wh[0]->sun + $wh[0]->mon + $wh[0]->fri + $wh[0]->days), $jumlahUnit[0]->jml, $totalScheduleHours);
 
-        // Conversion To BCM
-        // Total to Difference
-        $diff_ma = ($totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_act)) - ($totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_plan));
-        $diff_rain = $wh[0]->rain_plan - $wh[0]->rain_act;
-        $diff_slip = $wh[0]->slip_plan - $wh[0]->slip_act;
-        $diff_fix_stb = $wh[0]->fix_stb_plan - $wh[0]->fix_stb_act;
+        // // Conversion To BCM
+        // // Total to Difference
+        // $diff_ma = ($totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_act)) - ($totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_plan));
+        // $diff_rain = $wh[0]->rain_plan - $wh[0]->rain_act;
+        // $diff_slip = $wh[0]->slip_plan - $wh[0]->slip_act;
+        // $diff_fix_stb = $wh[0]->fix_stb_plan - $wh[0]->fix_stb_act;
 
-        $totalDiff = $diff_ma + $diff_rain + $diff_slip + $diff_fix_stb; 
+        // $totalDiff = $diff_ma + $diff_rain + $diff_slip + $diff_fix_stb; 
 
-        $downfall =  [
-            'ob' => [
-                'plan' => $total['ob_plan'],
-                'act' => $total['ob_act'],
-                'ach' => $total['ob_ach'],
-                'diff' => $total['ob_act'] - $total['ob_plan'],
-            ],
-            'wh' => [
-                'plan' => $wh[0]->wh_eff_plan,
-                'act' => $wh[0]->wh_eff_act,
-                'ach' => $wh[0]->wh_eff_act / $wh[0]->wh_eff_plan * 100,
-                'diff' => $wh[0]->wh_eff_act - $wh[0]->wh_eff_plan,
-            ],
-            'productivity' => [
-                'plan' => $total['ob_plan'] / $wh[0]->wh_eff_plan,
-                'act' => $total['ob_act'] / $wh[0]->wh_eff_act,
-                'ach' => ($total['ob_act'] / $wh[0]->wh_eff_act) / ($total['ob_plan'] / $wh[0]->wh_eff_plan) * 100,
-                'diff' => ($total['ob_act'] / $wh[0]->wh_eff_act) - ($total['ob_plan'] / $wh[0]->wh_eff_plan),
-                'bcm' => (($total['ob_act'] / $wh[0]->wh_eff_act) - ($total['ob_plan'] / $wh[0]->wh_eff_plan)) * $wh[0]->wh_eff_plan
-            ],
-            'ma' => [
-                'plan' => $totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_plan),
-                'act' => $totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_act),
-                'ach' => ($totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_act)) / ($totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_plan)) * 100,
-                'diff' => $diff_ma,
+        // $downfall =  [
+        //     'ob' => [
+        //         'plan' => $total['ob_plan'],
+        //         'act' => $total['ob_act'],
+        //         'ach' => $total['ob_ach'],
+        //         'diff' => $total['ob_act'] - $total['ob_plan'],
+        //     ],
+        //     'wh' => [
+        //         'plan' => $wh[0]->wh_eff_plan,
+        //         'act' => $wh[0]->wh_eff_act,
+        //         'ach' => $wh[0]->wh_eff_act / $wh[0]->wh_eff_plan * 100,
+        //         'diff' => $wh[0]->wh_eff_act - $wh[0]->wh_eff_plan,
+        //     ],
+        //     'productivity' => [
+        //         'plan' => $total['ob_plan'] / $wh[0]->wh_eff_plan,
+        //         'act' => $total['ob_act'] / $wh[0]->wh_eff_act,
+        //         'ach' => ($total['ob_act'] / $wh[0]->wh_eff_act) / ($total['ob_plan'] / $wh[0]->wh_eff_plan) * 100,
+        //         'diff' => ($total['ob_act'] / $wh[0]->wh_eff_act) - ($total['ob_plan'] / $wh[0]->wh_eff_plan),
+        //         'bcm' => (($total['ob_act'] / $wh[0]->wh_eff_act) - ($total['ob_plan'] / $wh[0]->wh_eff_plan)) * $wh[0]->wh_eff_plan
+        //     ],
+        //     'ma' => [
+        //         'plan' => $totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_plan),
+        //         'act' => $totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_act),
+        //         'ach' => ($totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_act)) / ($totalScheduleHours - ($totalScheduleHours * $wh[0]->ma_a2b_plan)) * 100,
+        //         'diff' => $diff_ma,
                 
-            ],
-            'rain' => [
-                'plan' => $total['ob_act'],
-                'act' => $total['ob_act'],
-                'ach' => $total['ob_act'] / $total['ob_act'] * 100,
-                'diff' => $diff_rain,
+        //     ],
+        //     'rain' => [
+        //         'plan' => $total['ob_act'],
+        //         'act' => $total['ob_act'],
+        //         'ach' => $total['ob_act'] / $total['ob_act'] * 100,
+        //         'diff' => $diff_rain,
                 
-            ],
-            'slip' => [
-                'plan' => $wh[0]->wh_eff_plan,
-                'act' => $wh[0]->wh_eff_act,
-                'ach' => $wh[0]->wh_eff_act / $wh[0]->wh_eff_plan * 100,
-                'diff' => $diff_slip,
-                'bcm' => '',
-            ],
-            'standby' => [
-                'plan' => $wh[0]->wh_eff_plan,
-                'act' => $wh[0]->wh_eff_act,
-                'ach' => $wh[0]->wh_eff_act / $wh[0]->wh_eff_plan * 100,
-                'diff' => $diff_fix_stb,
-                'bcm' => '',
-            ],
-        ];
+        //     ],
+        //     'slip' => [
+        //         'plan' => $wh[0]->wh_eff_plan,
+        //         'act' => $wh[0]->wh_eff_act,
+        //         'ach' => $wh[0]->wh_eff_act / $wh[0]->wh_eff_plan * 100,
+        //         'diff' => $diff_slip,
+        //         'bcm' => '',
+        //     ],
+        //     'standby' => [
+        //         'plan' => $wh[0]->wh_eff_plan,
+        //         'act' => $wh[0]->wh_eff_act,
+        //         'ach' => $wh[0]->wh_eff_act / $wh[0]->wh_eff_plan * 100,
+        //         'diff' => $diff_fix_stb,
+        //         'bcm' => '',
+        //     ],
+        // ];
 
         if (count($request->all()) > 1) {
             $response['data'] = $data;

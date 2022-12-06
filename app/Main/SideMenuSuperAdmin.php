@@ -109,7 +109,7 @@ class SideMenuSuperAdmin
                                 'params' => [
                                     'layout' => 'side-menu'
                                 ],
-                                'route_name' => 'mohh.index',
+                                'route_name' => 'mohh-harian.index',
                             ],
                             'rep-harian' => [
                                 'icon' => 'box',
@@ -159,6 +159,14 @@ class SideMenuSuperAdmin
                                 ],
                                 'route_name' => 'cost-part.index',
                             ],
+                            'cost-part-tipe' => [
+                                'icon' => 'box',
+                                'title' => 'Cost Part Per Tipe Unit',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'cost-part-tipe.index',
+                            ],
                             'laporan-bulanan-budget' => [
                                 'icon' => 'box',
                                 'title' => 'Produksi Bulanan',
@@ -198,6 +206,14 @@ class SideMenuSuperAdmin
                                     'layout' => 'side-menu'
                                 ],
                                 'route_name' => 'distance-harian.index',
+                            ],
+                            'distance-bulanan' => [
+                                'icon' => 'box',
+                                'title' => 'Distance Bulanan',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'distance-bulanan.index',
                             ],
                         ],
                     ],

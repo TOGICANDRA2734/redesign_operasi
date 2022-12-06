@@ -19,7 +19,7 @@
         <div class="flex justify-between items-center col-span-12 mt-5">
             <!-- Title -->
             <h2 class="text-lg font-medium truncate mr-5 ">
-                Cost Part Per Nomor Unit
+                Cost Part Per Tipe Unit
             </h2>
 
             <div class="ml-auto flex justify-center items-center">
@@ -28,7 +28,7 @@
                 </div>
 
                 {{-- Url Rujukan --}}
-                <input type="hidden" name="url" value="{{ route('cost-part.index') }}" id="urlFilter">
+                <input type="hidden" name="url" value="{{ route('cost-part-tipe.index') }}" id="urlFilter">
 
                 {{-- Pilih Site --}}
                 <select id="pilihSite"
@@ -110,7 +110,7 @@
                         <tr class="">
                             <th rowspan="2" class="whitespace-nowrap text-center">#</th>
                             {{-- <th class="whitespace-nowrap text-center" style="width: 7rem">Tanggal</th> --}}
-                            <th rowspan="2" class="whitespace-nowrap text-center">Nom Unit</th>
+                            <th rowspan="2" class="whitespace-nowrap text-center">Tipe Unit</th>
                             <th colspan="2" class="whitespace-nowrap text-center">Spare Part</th>
                             <th colspan="2" class="whitespace-nowrap text-center">Solar</th>
                             <th colspan="2" class="whitespace-nowrap text-center">Oli</th>

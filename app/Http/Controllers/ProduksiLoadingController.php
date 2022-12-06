@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DistanceHarianController extends Controller
+class ProduksiLoadingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,27 +24,28 @@ class DistanceHarianController extends Controller
             $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
             $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
         } else {
-            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            $where .= "TGL BETWEEN '" . Carbon::now()->startOfYear() . "' AND '" . Carbon::now()->endOfYear() . "'";
+            // $where .= "tgl BETWEEN '2022-01-01' AND '2022-01-31'";
         }
 
         $site = Site::where('status_website', 1)->get();
 
-        $subquery = "SELECT DATE_FORMAT(tgl, \"%d-%m-%Y\") tgl, 
+        $subquery = "SELECT DATE_FORMAT(tgl, \"%M %Y\") tgl, 
         SUM(distbcm) jarak,
         SUM(bcm) ob,
         (SUM(distbcm) / SUM(bcm)) dist_bcm,
         (SELECT namasite FROM site WHERE kodesite=pma_tp.kodesite) site
         FROM pma_tp
         WHERE ".$where."
-        GROUP BY tgl, kodesite
-        ORDER BY kodesite, tgl
+        GROUP BY MONTH(tgl), kodesite
+        ORDER BY kodesite, MONTH(tgl)
         ";
         $data = collect(DB::select(DB::raw($subquery)));
 
         $total = [
-            'dist' => number_format($data->sum('jarak'),0),
-            'prod' => number_format($data->sum('ob'),0),
-            'dist_prod' => number_format($data->sum('jarak') / $data->sum('ob'),0),
+            'dist' => $data->sum('jarak') ? number_format($data->sum('jarak'),0) : 0,
+            'prod' => $data->sum('ob') ? number_format($data->sum('ob'),0) : 0,
+            'dist_prod' => $data->sum('ob') ? number_format($data->sum('jarak') / $data->sum('ob'),0) : 0,
         ];
 
         if (count($request->all()) > 1) {
@@ -52,7 +53,7 @@ class DistanceHarianController extends Controller
             $response['total'] = $total;
             return response()->json($response);
         } else {
-            return view('distance-harian.index', compact('data', 'site', 'total'));
+            return view('distance-bulanan.index', compact('data', 'site', 'total'));
         }
     }
 

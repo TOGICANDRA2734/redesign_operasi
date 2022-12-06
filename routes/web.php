@@ -19,12 +19,12 @@ use App\Http\Controllers\AdminTransaksiPmaController;
 
 // Admin
 use App\Http\Controllers\Admin\dataProdController as Admin_dataProdController;
-use App\Http\Controllers\Admin\KendalaController as Admin_KendalaController;
-use App\Http\Controllers\Admin\ProductivityController as Admin_ProductivityController;
 use App\Http\Controllers\BDDokController;
 use App\Http\Controllers\BDHarianController;
 use App\Http\Controllers\CostPartController;
+use App\Http\Controllers\CostPartTipeController;
 use App\Http\Controllers\DailyProduksiController;
+use App\Http\Controllers\DistanceBulananController;
 use App\Http\Controllers\DistanceHarianController;
 use App\Http\Controllers\DokumenGrController;
 use App\Http\Controllers\FuelDailyController;
@@ -212,8 +212,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function() {
         Route::post('po-transaksi-harian/delete/{id}', [POTransaksiController::class, 'deleteData'])->name('po-transaksi-harian.delete');
 
         // Mohh harian
-        Route::get('mohh-harian', [MohhController::class, 'index'])->name('mohh.index');
-        Route::post('mohh-harian', [MohhController::class, 'index'])->name('mohh.post');
+        Route::resource('mohh-harian', MohhController::class);
 
         // Report Harian
         Route::get('rep-harian', [RepHarController::class, 'index'])->name('rep.index');
@@ -316,8 +315,7 @@ Route::middleware('auth')->group(function() {
         Route::post('po-transaksi-harian/delete/{id}', [POTransaksiController::class, 'deleteData'])->name('po-transaksi-harian.delete');
 
         // Mohh harian
-        Route::get('mohh-harian', [MohhController::class, 'index'])->name('mohh.index');
-        Route::post('mohh-harian', [MohhController::class, 'index'])->name('mohh.post');
+        Route::resource('mohh-harian', MohhController::class);
 
         // Report Harian
         Route::get('rep-harian', [RepHarController::class, 'index'])->name('rep.index');
@@ -390,6 +388,9 @@ Route::middleware('auth')->group(function() {
         // Cost Part Controller
         Route::resource('cost-part', CostPartController::class);
 
+        // Cost Part Controller
+        Route::resource('cost-part-tipe', CostPartTipeController::class);
+
         // Laporan Bulanan Controller
         Route::resource('laporan-bulanan', LaporanBulananController::class);
 
@@ -405,4 +406,6 @@ Route::middleware('auth')->group(function() {
         // Distance Harian Controller
         Route::resource('distance-harian', DistanceHarianController::class);
 
+        // Distance Bulanan Controller
+        Route::resource('distance-bulanan', DistanceBulananController::class);
 });

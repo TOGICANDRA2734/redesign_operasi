@@ -19,7 +19,7 @@
         <div class="flex justify-between items-center col-span-12 mt-5">
             <!-- Title -->
             <h2 class="text-lg font-medium truncate mr-5 ">
-                Cost Part Per Nomor Unit
+                Distance Bulanan
             </h2>
 
             <div class="ml-auto flex justify-center items-center">
@@ -28,7 +28,7 @@
                 </div>
 
                 {{-- Url Rujukan --}}
-                <input type="hidden" name="url" value="{{ route('cost-part.index') }}" id="urlFilter">
+                <input type="hidden" name="url" value="{{ route('distance-bulanan.index') }}" id="urlFilter">
 
                 {{-- Pilih Site --}}
                 <select id="pilihSite"
@@ -108,21 +108,12 @@
                 <table class="w-full table table-sm">
                     <thead class="table-dark sticky left-0 top-0 z-50">
                         <tr class="">
-                            <th rowspan="2" class="whitespace-nowrap text-center">#</th>
-                            {{-- <th class="whitespace-nowrap text-center" style="width: 7rem">Tanggal</th> --}}
-                            <th rowspan="2" class="whitespace-nowrap text-center">Nom Unit</th>
-                            <th colspan="2" class="whitespace-nowrap text-center">Spare Part</th>
-                            <th colspan="2" class="whitespace-nowrap text-center">Solar</th>
-                            <th colspan="2" class="whitespace-nowrap text-center">Oli</th>
-                            <th rowspan="2" class="whitespace-nowrap text-center">WH</th>
-                        </tr>
-                        <tr>
-                            <th class="whitespace-nowrap text-center">Item</th>
-                            <th class="whitespace-nowrap text-center">Harga</th>
-                            <th class="whitespace-nowrap text-center">Qty (L)</th>
-                            <th class="whitespace-nowrap text-center">Harga</th>
-                            <th class="whitespace-nowrap text-center">Qty (L)</th>
-                            <th class="whitespace-nowrap text-center">Harga (L)</th>
+                            <th class="whitespace-nowrap text-center">#</th>
+                            <th class="whitespace-nowrap text-center" style="width: 7rem">Bulan</th>
+                            <th class="whitespace-nowrap text-center">Distance</th>
+                            <th class="whitespace-nowrap text-center">OB</th>
+                            <th class="whitespace-nowrap text-center">Distance/BCM</th>
+                            <th class="whitespace-nowrap text-center">Site</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -146,6 +137,9 @@
                 </table>
             </div>
         </div>
+    </div>
+    <div class="w-full flex text-slate-500 text-xs sm:text-sm">
+        Total Distance: <span id="totalDist">{{$total['dist']}}</span>  | Total Produksi: <span id="totalProd">{{$total['prod']}}</span> BCM | Total Distance/BCM: <span id="totalDistProd">{{$total['dist_prod']}}</span>
     </div>
 
     {{-- Filter --}}
@@ -191,45 +185,10 @@
                         pilihSite: pilihSite,
                     },
                     success: function(response) {
-                        console.log(response)
-
-                        $j("#loading").toggleClass('hidden');
-                        // JANGAN LUPA COPY KE SEBELAH
-                        // OB CARD
-                        console.log(response)
-                        
-                        $j("table tbody").empty();
-                        fullText = ""
-                        if (response) {
-
-                            var i = 1;
-                            $j.each(response.data, function(index, data) {
-                                text = "<tr class=\"text-center bg-white\">"
-
-                                // Add Index
-                                text += "<td class=\"whitespace-nowrap text-center\"> " + i +
-                                    "</td>"
-
-                                i++;
-
-                                $j.each(data, function(i, d) {
-                                    if(typeof(d) === 'number'){
-                                        text +=
-                                        "<td class=\"whitespace-nowrap text-center\"> " +
-                                        number_format(d,0) + "</td>"
-                                    } else {
-                                        text +=
-                                        "<td class=\"whitespace-nowrap text-center\"> " +
-                                        d + "</td>"
-                                    }
-                                })
-
-                                text += "</tr>"
-                                fullText += text
-                            });
-                            $j("table tbody").html(fullText);
-                            show_data();
-                        }
+                        update_data(response)
+                    },
+                    error: function(result) {
+                        console.log("error", result);
                     },
                 })
             }
@@ -263,42 +222,58 @@
                     'pilihSite': pilihSite,
                 },
                 success: function(response) {
-                    console.log(response)
-
-                    $j("#loading").toggleClass('hidden');
-
-                    $j("table tbody").empty();
-                    fullText = ""
-                    if (response) {
-
-                        var i = 1;
-                        $j.each(response.data, function(index, data) {
-                            text = "<tr class=\"text-center bg-white\">"
-
-                            // Add Index
-                            text += "<td class=\"whitespace-nowrap text-center\"> " + i +
-                                "</td>"
-
-                            i++;
-
-                            $j.each(data, function(i, d) {
-                                text +=
-                                    "<td class=\"whitespace-nowrap text-center\"> " +
-                                    d + "</td>"
-                            })
-
-                            text += "</tr>"
-                            fullText += text
-                        });
-                        $j("table tbody").html(fullText);
-                        show_data();
-                    }
+                    update_data(response)
                 },
                 error: function(result) {
                     console.log("error", result);
                 },
             });
         });
+
+        function update_data(response) {
+            console.log(response)
+
+            $j("#loading").toggleClass('hidden');
+
+            $j("#totalDist").empty();
+            $j("#totalProd").empty();
+            $j("#totalDistProd").empty();
+
+            
+            $j("#totalDist").append(response.total.dist);
+            $j("#totalProd").append(response.total.prod);
+            $j("#totalDistProd").append(response.total.dist_prod);
+
+
+            $j("table tbody").empty();
+            fullText = ""
+            if (response) {
+
+                var i = 1;
+                $j.each(response.data, function(index, data) {
+                    text = "<tr class=\"text-center bg-white\">"
+
+                    // Add Index
+                    text += "<td class=\"whitespace-nowrap text-center\"> " + i +
+                        "</td>"
+
+                    i++;
+
+                    $j.each(data, function(i, d) {
+                        if (typeof d == 'number') {
+                            text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"                            
+                        } else {
+                            text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                            
+                        }
+                    })
+
+                    text += "</tr>"
+                    fullText += text
+                });
+                $j("table tbody").html(fullText);
+                show_data();
+            }
+        }
 
         function show_data() {
             Toastify({

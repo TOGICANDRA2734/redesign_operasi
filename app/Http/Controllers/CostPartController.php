@@ -25,8 +25,7 @@ class CostPartController extends Controller
             $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
             $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
         } else {
-            // $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
-            $where .= "tgl BETWEEN '2022-01-01' AND '2022-01-31'";
+            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
         }
 
         $site = Site::where('status_website', 1)->get();

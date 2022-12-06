@@ -4,109 +4,77 @@ namespace App\Http\Controllers;
 
 use App\Models\Site;
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class MohhController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         $where = '';
+        
         if (count($request->all()) > 1) {              
-            $bulan = $request->has('bulan') ? Carbon::createFromFormat('Y-m', $request->bulan) : Carbon::now();
-
-            // Where
-            $where .= ($request->has('cari_1')) ? "nom_unit LIKE '%".$request->cari_1."%' " : "";
-            $where .= ($request->has('cari_2') & $request->has('cari_1')) ? " AND " : "";
-            $where .= ($request->has('cari_2') & !empty($request->cari_2)) ? "Nom_unit LIKE '%".$request->cari_2."%' " : "";
-            $where .= ($request->has('bulan') & $request->has('cari_2') & !empty($request->cari_2)) ? " AND " : "";
-            $where .= ($request->has('bulan')) ? "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'" : "";
-            $where .= ($request->has('kodesite')) ? " AND " : "";
-            $where .= ($request->has('kodesite')) ? "tp.nom_unit LIKE '%" . $request->kodesite . "%'" : "";
-            $where .= (count($request->except('_token'))) > 0 ? "AND " : "";
+            // Where 
+            $where .= ($request->has('cari_1') && !empty($request->cari_1)) ? "nom_unit LIKE '%".$request->cari_1."%' " : "";
+            $where .= ($request->has('cari_1') && $request->has('cari_2')) ? " AND " : "";
+            $where .= ($request->has('cari_2') && !empty($request->cari_2)) ? "nom_unit LIKE '%".$request->cari_2."%' " : "";
+            $where .= ($request->has('cari_2') && !empty($request->cari_2) && $request->has('bulan')) ? " AND " : "";
+            $where .= ($request->has('cari_2') && $request->has('start')) ? " AND " : "";
+            $where .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
+            $where .= ($request->has('start') && $request->has('end')) ? " AND " : "";
             $where .= "DEL=0";
-
         } else {
             $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND DEL=0";
+            // $where .= " tgl BETWEEN '2022-11-01' AND '2022-11-31' AND del=0 AND kodesite='i'";
         }
 
-
-        // if($request && $request->has('cari_1') || $request->has('cari_2')){
-        //     if($request->has('cari_1')){
-        //         $cari = "nom_unit LIKE '%".$request->cari_1."%' and";                
-        //     } else if($request->has('cari_2')){
-        //         $cari = "nom_unit LIKE '%".$request->cari_2."%' and";                
-        //     }
-        // } else{
-        //     $cari = "";
-        // }
-
-        // if($request && $request->has('bulan')){
-        //     $bulan = Carbon::parse($request->bulan);
-        //     $awal = $bulan->startOfMonth()->copy();
-        //     $akhir = $bulan->endOfMonth()->copy();
-
-        //     if(!$request->has('kodesite')){
-        //         $tanggal =  "TGL BETWEEN '" . $awal . "' AND '" . $akhir . "'";              
-        //     } else {
-        //         $tanggal =  "TGL BETWEEN '" . $awal . "' AND '" . $akhir . "' and";              
-        //     }
-        // } else{
-        //     $bulan = Carbon::now();
-        //     if(!$request->has('kodesite')){
-        //         $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "'";    
-        //     } else {
-        //         $tanggal =  "TGL BETWEEN '" . $bulan->startOfMonth()->copy() . "' AND '" . $bulan->endOfMonth()->copy() . "' and";    
-        //     }
-        // }
-
-        // if($request && $request->has('kodesite')){
-        //     $site = "kodesite='".$request->kodesite."'";                
-        // } else{
-        //     $site = "";
-        // }
 
         $subquery = "WITH summ AS                                                     
         (                                                               
         SELECT                                                           
         nom_unit,                                                        
         COUNT(nom_unit) jum,                                             
-        round(SUM(CASE WHEN DAY(tgl) = 1 THEN jam END),0) t1,                     
-        round(SUM(CASE WHEN DAY(tgl) = 2 THEN jam END),0) t2,                     
-        round(SUM(CASE WHEN DAY(tgl) = 3 THEN jam END),0) t3,                     
-        round(SUM(CASE WHEN DAY(tgl) = 4 THEN jam END),0) t4,                     
-        round(SUM(CASE WHEN DAY(tgl) = 5 THEN jam END),0) t5,                     
-        round(SUM(CASE WHEN DAY(tgl) = 6 THEN jam END),0) t6,                     
-        round(SUM(CASE WHEN DAY(tgl) = 7 THEN jam END),0) t7,                     
-        round(SUM(CASE WHEN DAY(tgl) = 8 THEN jam END),0) t8,                     
-        round(SUM(CASE WHEN DAY(tgl) = 9 THEN jam END),0) t9,                     
-        round(SUM(CASE WHEN DAY(tgl) = 10 THEN jam END),0) t10,                   
-        round(SUM(CASE WHEN DAY(tgl) = 11 THEN jam END),0) t11,                   
-        round(SUM(CASE WHEN DAY(tgl) = 12 THEN jam END),0) t12,                   
-        round(SUM(CASE WHEN DAY(tgl) = 13 THEN jam END),0) t13,                   
-        round(SUM(CASE WHEN DAY(tgl) = 14 THEN jam END),0) t14,                   
-        round(SUM(CASE WHEN DAY(tgl) = 15 THEN jam END),0) t15,                   
-        round(SUM(CASE WHEN DAY(tgl) = 16 THEN jam END),0) t16,                   
-        round(SUM(CASE WHEN DAY(tgl) = 17 THEN jam END),0) t17,                   
-        round(SUM(CASE WHEN DAY(tgl) = 18 THEN jam END),0) t18,                   
-        round(SUM(CASE WHEN DAY(tgl) = 19 THEN jam END),0) t19,                   
-        round(SUM(CASE WHEN DAY(tgl) = 20 THEN jam END),0) t20,                   
-        round(SUM(CASE WHEN DAY(tgl) = 21 THEN jam END),0) t21,                   
-        round(SUM(CASE WHEN DAY(tgl) = 22 THEN jam END),0) t22,                   
-        round(SUM(CASE WHEN DAY(tgl) = 23 THEN jam END),0) t23,                   
-        round(SUM(CASE WHEN DAY(tgl) = 24 THEN jam END),0) t24,                   
-        round(SUM(CASE WHEN DAY(tgl) = 25 THEN jam END),0) t25,                   
-        round(SUM(CASE WHEN DAY(tgl) = 26 THEN jam END),0) t26,                   
-        round(SUM(CASE WHEN DAY(tgl) = 27 THEN jam END),0) t27,                   
-        round(SUM(CASE WHEN DAY(tgl) = 28 THEN jam END),0) t28,                   
-        round(SUM(CASE WHEN DAY(tgl) = 29 THEN jam END),0) t29,                   
-        round(SUM(CASE WHEN DAY(tgl) = 30 THEN jam END),0) t30,                   
-        round(SUM(CASE WHEN DAY(tgl) = 31 THEN jam END),0) t31,                   
-        round(SUM(jam),0) x_total,                                                   
-        '2' urut                                                         
+        ROUND(SUM(CASE WHEN DAY(tgl) = 1 THEN jam END),0) t1,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 2 THEN jam END),0) t2,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 3 THEN jam END),0) t3,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 4 THEN jam END),0) t4,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 5 THEN jam END),0) t5,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 6 THEN jam END),0) t6,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 7 THEN jam END),0) t7,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 8 THEN jam END),0) t8,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 9 THEN jam END),0) t9,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 10 THEN jam END),0) t10,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 11 THEN jam END),0) t11,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 12 THEN jam END),0) t12,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 13 THEN jam END),0) t13,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 14 THEN jam END),0) t14,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 15 THEN jam END),0) t15,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 16 THEN jam END),0) t16,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 17 THEN jam END),0) t17,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 18 THEN jam END),0) t18,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 19 THEN jam END),0) t19,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 20 THEN jam END),0) t20,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 21 THEN jam END),0) t21,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 22 THEN jam END),0) t22,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 23 THEN jam END),0) t23,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 24 THEN jam END),0) t24,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 25 THEN jam END),0) t25,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 26 THEN jam END),0) t26,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 27 THEN jam END),0) t27,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 28 THEN jam END),0) t28,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 29 THEN jam END),0) t29,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 30 THEN jam END),0) t30,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 31 THEN jam END),0) t31,                   
+        ROUND(SUM(jam),0) x_total                                                   
         FROM pma_tp                                                       
-        WHERE ".$where." 
+        WHERE ".$where."
         GROUP BY nom_unit                                                
                                                                          
         UNION ALL                                                        
@@ -114,41 +82,40 @@ class MohhController extends Controller
         SELECT                                                           
         nom_unit,                                                        
         COUNT(nom_unit) jum,                                            
-        round(SUM(CASE WHEN DAY(tgl) = 1 THEN jam END),0) t1,                     
-        round(SUM(CASE WHEN DAY(tgl) = 2 THEN jam END),0) t2,                     
-        round(SUM(CASE WHEN DAY(tgl) = 3 THEN jam END),0) t3,                     
-        round(SUM(CASE WHEN DAY(tgl) = 4 THEN jam END),0) t4,                     
-        round(SUM(CASE WHEN DAY(tgl) = 5 THEN jam END),0) t5,                     
-        round(SUM(CASE WHEN DAY(tgl) = 6 THEN jam END),0) t6,                     
-        round(SUM(CASE WHEN DAY(tgl) = 7 THEN jam END),0) t7,                     
-        round(SUM(CASE WHEN DAY(tgl) = 8 THEN jam END),0) t8,                     
-        round(SUM(CASE WHEN DAY(tgl) = 9 THEN jam END),0) t9,                     
-        round(SUM(CASE WHEN DAY(tgl) = 10 THEN jam END),0) t10,                   
-        round(SUM(CASE WHEN DAY(tgl) = 11 THEN jam END),0) t11,                   
-        round(SUM(CASE WHEN DAY(tgl) = 12 THEN jam END),0) t12,                   
-        round(SUM(CASE WHEN DAY(tgl) = 13 THEN jam END),0) t13,                   
-        round(SUM(CASE WHEN DAY(tgl) = 14 THEN jam END),0) t14,                   
-        round(SUM(CASE WHEN DAY(tgl) = 15 THEN jam END),0) t15,                   
-        round(SUM(CASE WHEN DAY(tgl) = 16 THEN jam END),0) t16,                   
-        round(SUM(CASE WHEN DAY(tgl) = 17 THEN jam END),0) t17,                   
-        round(SUM(CASE WHEN DAY(tgl) = 18 THEN jam END),0) t18,                   
-        round(SUM(CASE WHEN DAY(tgl) = 19 THEN jam END),0) t19,                   
-        round(SUM(CASE WHEN DAY(tgl) = 20 THEN jam END),0) t20,                   
-        round(SUM(CASE WHEN DAY(tgl) = 21 THEN jam END),0) t21,                   
-        round(SUM(CASE WHEN DAY(tgl) = 22 THEN jam END),0) t22,                   
-        round(SUM(CASE WHEN DAY(tgl) = 23 THEN jam END),0) t23,                   
-        round(SUM(CASE WHEN DAY(tgl) = 24 THEN jam END),0) t24,                   
-        round(SUM(CASE WHEN DAY(tgl) = 25 THEN jam END),0) t25,                   
-        round(SUM(CASE WHEN DAY(tgl) = 26 THEN jam END),0) t26,                   
-        round(SUM(CASE WHEN DAY(tgl) = 27 THEN jam END),0) t27,                   
-        round(SUM(CASE WHEN DAY(tgl) = 28 THEN jam END),0) t28,                   
-        round(SUM(CASE WHEN DAY(tgl) = 29 THEN jam END),0) t29,                   
-        round(SUM(CASE WHEN DAY(tgl) = 30 THEN jam END),0) t30,                   
-        round(SUM(CASE WHEN DAY(tgl) = 31 THEN jam END),0) t31,                   
-        round(SUM(jam),0) x_total,                                                       
-        '1' urut                                                         
+        ROUND(SUM(CASE WHEN DAY(tgl) = 1 THEN jam END),0) t1,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 2 THEN jam END),0) t2,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 3 THEN jam END),0) t3,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 4 THEN jam END),0) t4,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 5 THEN jam END),0) t5,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 6 THEN jam END),0) t6,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 7 THEN jam END),0) t7,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 8 THEN jam END),0) t8,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 9 THEN jam END),0) t9,                     
+        ROUND(SUM(CASE WHEN DAY(tgl) = 10 THEN jam END),0) t10,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 11 THEN jam END),0) t11,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 12 THEN jam END),0) t12,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 13 THEN jam END),0) t13,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 14 THEN jam END),0) t14,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 15 THEN jam END),0) t15,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 16 THEN jam END),0) t16,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 17 THEN jam END),0) t17,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 18 THEN jam END),0) t18,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 19 THEN jam END),0) t19,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 20 THEN jam END),0) t20,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 21 THEN jam END),0) t21,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 22 THEN jam END),0) t22,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 23 THEN jam END),0) t23,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 24 THEN jam END),0) t24,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 25 THEN jam END),0) t25,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 26 THEN jam END),0) t26,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 27 THEN jam END),0) t27,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 28 THEN jam END),0) t28,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 29 THEN jam END),0) t29,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 30 THEN jam END),0) t30,                   
+        ROUND(SUM(CASE WHEN DAY(tgl) = 31 THEN jam END),0) t31,                   
+        ROUND(SUM(jam),0) x_total                                                       
         FROM pma_a2b                                                      
-        WHERE ".$where." 
+        WHERE ".$where."
         GROUP BY nom_unit                                                
         )                                                                
         SELECT                                                           
@@ -185,14 +152,85 @@ class MohhController extends Controller
         IFNULL(t29,0) t29,                                               
         IFNULL(t30,0) t30,                                               
         IFNULL(t31,0) t31,                                               
-        x_total,                                                           
-        urut                                                             
-        FROM summ                                                        
-        ORDER BY urut,nom_unit";
+        x_total                                                      
+        FROM summ   
+                                                     
+        ORDER BY nom_unit";
         $data = collect(DB::select($subquery));
 
         $site = Site::where('status_website', 1)->get();
 
-        return view('mohh.index', compact('data', 'site'));
+        if (count($request->all()) > 1) {              
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('mohh.index', compact('site', 'data'));
+        }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }

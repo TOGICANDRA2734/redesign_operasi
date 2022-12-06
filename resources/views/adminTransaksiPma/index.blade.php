@@ -32,6 +32,7 @@
                         <th class="text-center whitespace-nowrap">Site</th>
                         <th class="text-center whitespace-nowrap">Tanggal</th>
                         <th class="text-center whitespace-nowrap">Waktu</th>
+                        <th class="text-center whitespace-nowrap">Periode</th>
                         <th class="text-center whitespace-nowrap">Status</th>
                         <th class="text-center whitespace-nowrap">Aksi</th>
                     </tr>
