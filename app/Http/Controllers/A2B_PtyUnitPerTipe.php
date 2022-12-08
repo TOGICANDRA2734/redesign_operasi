@@ -29,8 +29,7 @@ class A2B_PtyUnitPerTipe extends Controller
 
         $site = Site::where('status_website', 1)->get();
 
-        $subquery = "-- PMA A2B
-        WITH summ AS
+        $subquery = "WITH summ AS
         (
             SELECT LEFT(A.nom_unit,4) nom_unit,
                 SUM(IF((A.kode=\"008\"), jam, 0)) wh_8,
@@ -58,7 +57,7 @@ class A2B_PtyUnitPerTipe extends Controller
             FROM pma_a2b A
             JOIN (SELECT unit_load, SUM(bcm) AS prod, SUM(distbcm) distbcm, SUM(ritasi) rit FROM pma_tp WHERE '2022-01-01' AND '2022-01-31' GROUP BY unit_load) B
             ON LEFT(A.nom_unit,4) = LEFT(B.unit_load,4)
-            WHERE ".$where."
+            WHERE tgl BETWEEN '2022-01-01' AND '2022-01-31'
             GROUP BY LEFT(nom_unit,4)
         )
         SELECT nom_unit, 
@@ -90,7 +89,7 @@ class A2B_PtyUnitPerTipe extends Controller
             $response['data'] = $data;
             return response()->json($response);
         } else {
-            return view('cost-part.index', compact('data', 'site'));
+            return view('A2B_PtyUnitPerTipe.index', compact('data', 'site'));
         }
     }
 

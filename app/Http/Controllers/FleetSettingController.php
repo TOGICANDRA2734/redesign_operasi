@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class TP_PtyUnitPerTipe extends Controller
+class FleetSettingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,37 +29,39 @@ class TP_PtyUnitPerTipe extends Controller
 
         $site = Site::where('status_website', 1)->get();
 
-        $subquery = "WITH summ AS
-        (
-            SELECT tgl,
-            kode,
-            gol_1,
-            SUM(IF(aktivitas='001',jam,0)) wh,
-            SUM(bcm) bcm,
-            SUM(ritasi) rit,
-            SUM(distbcm) distbcm
-            FROM pma_tp a
-            JOIN plant_tipe_unit b
-            ON LEFT(a.nom_unit,4) = b.kode
-            WHERE /* WHERE */
-            GROUP BY LEFT(a.nom_unit, 4), MONTH(tgl)
-        )
-        SELECT kode,
-        SUM(CASE WHEN MONTH(tgl) = 1 THEN IFNULL((bcm/wh),0) END) jan,
-        SUM(CASE WHEN MONTH(tgl) = 2 THEN IFNULL((bcm/wh),0) END) feb,
-        SUM(CASE WHEN MONTH(tgl) = 3 THEN IFNULL((bcm/wh),0) END) mar,
-        SUM(CASE WHEN MONTH(tgl) = 4 THEN IFNULL((bcm/wh),0) END) apr,
-        SUM(CASE WHEN MONTH(tgl) = 5 THEN IFNULL((bcm/wh),0) END) may,
-        SUM(CASE WHEN MONTH(tgl) = 6 THEN IFNULL((bcm/wh),0) END) jun,
-        SUM(CASE WHEN MONTH(tgl) = 7 THEN IFNULL((bcm/wh),0) END) jul,
-        SUM(CASE WHEN MONTH(tgl) = 8 THEN IFNULL((bcm/wh),0) END) aug,
-        SUM(CASE WHEN MONTH(tgl) = 9 THEN IFNULL((bcm/wh),0) END) sept,
-        SUM(CASE WHEN MONTH(tgl) = 10 THEN IFNULL((bcm/wh),0) END) okt,
-        SUM(CASE WHEN MONTH(tgl) = 11 THEN IFNULL((bcm/wh),0) END) nov,
-        SUM(CASE WHEN MONTH(tgl) = 12 THEN IFNULL((bcm/wh),0) END) des
-        FROM summ 
-        WHERE bcm !=0 
-        GROUP BY kode        
+        $subquery = "SELECT nom_unit,
+        tgl,
+        unit_load, 
+        SUM(bcm) prod,
+        (SELECT SUM(IF((kode=\"008\") OR
+                  (kode=\"009\") OR
+                      (kode=\"010\") OR
+                      (kode=\"011\") OR
+                      (kode=\"012\"),jam,0)) AS wh 
+        FROM pma_a2b 
+        WHERE tgl BETWEEN '2022-01-01' AND '2022-01-31' 
+        AND nom_unit=pma_tp.unit_load
+        AND kodesite=pma_tp.kodesite
+        GROUP BY nom_unit
+        ) wh,
+        SUM(bcm) / (SELECT SUM(IF((kode=\"008\") OR
+                  (kode=\"009\") OR
+                      (kode=\"010\") OR
+                      (kode=\"011\") OR
+                      (kode=\"012\"),jam,0)) AS wh 
+                FROM pma_a2b 
+                WHERE tgl BETWEEN '2022-01-01' AND '2022-01-31' 
+                AND nom_unit=pma_tp.unit_load
+                AND kodesite=pma_tp.kodesite
+                GROUP BY nom_unit
+        ) pty_loading
+        FROM pma_tp 
+        WHERE tgl BETWEEN '2022-01-01' AND '2022-01-31' 
+        AND unit_load <> \"\"
+        AND akt_load <> \"\"
+        AND kodesite = 'q'
+        AND bcm!=0
+        GROUP BY nom_unit     
         ";
         $data = collect(DB::select(DB::raw($subquery)));
 
@@ -67,7 +69,7 @@ class TP_PtyUnitPerTipe extends Controller
             $response['data'] = $data;
             return response()->json($response);
         } else {
-            return view('TP_PtyUnitPerTipe.index', compact('data', 'site'));
+            return view('fleet-setting.index', compact('data', 'site'));
         }
     }
 

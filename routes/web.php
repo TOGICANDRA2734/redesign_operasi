@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\A2B_PtyUnitPerTipe;
+use App\Http\Controllers\A2B_PtyUnitPerUnit;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChangePasswordController;
@@ -27,6 +29,7 @@ use App\Http\Controllers\DailyProduksiController;
 use App\Http\Controllers\DistanceBulananController;
 use App\Http\Controllers\DistanceHarianController;
 use App\Http\Controllers\DokumenGrController;
+use App\Http\Controllers\FleetSettingController;
 use App\Http\Controllers\FuelDailyController;
 use App\Http\Controllers\FuelUnitController;
 use App\Http\Controllers\HistoricalOvhController;
@@ -46,6 +49,8 @@ use App\Http\Controllers\PopulasiUnitController;
 use App\Http\Controllers\POTransaksiController;
 use App\Http\Controllers\ProductivityCoalController;
 use App\Http\Controllers\RepHarController;
+use App\Http\Controllers\TP_PtyUnitPerTipe;
+use App\Http\Controllers\TP_PtyUnitPerUnit;
 // User
 use App\Http\Controllers\User\dataProdController as User_dataProdController;
 use App\Http\Controllers\User\KendalaController as User_KendalaController;
@@ -408,4 +413,19 @@ Route::middleware('auth')->group(function() {
 
         // Distance Bulanan Controller
         Route::resource('distance-bulanan', DistanceBulananController::class);
+
+        // PTY TP per Nomor Unit Controller
+        Route::resource('tp-pty-nom', TP_PtyUnitPerUnit::class);
+
+        // PTY TP per Tipe Unit Controller
+        Route::resource('tp-pty-tipe', TP_PtyUnitPerTipe::class);
+        
+        // PTY A2B per Nomor Unit Controller
+        Route::resource('a2b-pty-nom', A2B_PtyUnitPerUnit::class);
+        
+        // PTY A2B per Tipe Unit Controller
+        Route::resource('a2b-pty-tipe', A2B_PtyUnitPerTipe::class);
+
+        // Fleet Setting Controller
+        Route::resource('fleet-setting', FleetSettingController::class);
 });

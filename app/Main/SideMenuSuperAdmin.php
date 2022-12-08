@@ -215,6 +215,46 @@ class SideMenuSuperAdmin
                                 ],
                                 'route_name' => 'distance-bulanan.index',
                             ],
+                            'tp-pty-nom' => [
+                                'icon' => 'box',
+                                'title' => 'PTY Per Nomor Unit (TP)',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'tp-pty-nom.index',
+                            ],
+                            'tp-pty-tipe' => [
+                                'icon' => 'box',
+                                'title' => 'PTY per Tipe Unit (TP)',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'tp-pty-tipe.index',
+                            ],
+                            'a2b-pty-nom' => [
+                                'icon' => 'box',
+                                'title' => 'PTY per Nomor Unit (A2B)',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'a2b-pty-nom.index',
+                            ],
+                            'a2b-pty-tipe' => [
+                                'icon' => 'box',
+                                'title' => 'PTY per Tipe Unit (A2B)',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'a2b-pty-tipe.index',
+                            ],
+                            'fleet-setting' => [
+                                'icon' => 'box',
+                                'title' => 'Fleet Setting',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'fleet-setting.index',
+                            ]
                         ],
                     ],
                 ],
