@@ -47,13 +47,13 @@ class MonthlyProductionController extends Controller
         DATE_FORMAT(a.tgl, '%b, %Y') periode, 
         SUM(a.ob) budget_ob, 
         b.ob joint_survey_ob,
-        FORMAT(b.ob/SUM(a.ob) * 100,1) ach_js_ob,
-        SUM(c.ob) invoice_ob,
-        FORMAT(c.ob/SUM(a.ob) * 100,1) ach_inv_ob,
+        FORMAT((b.ob/SUM(a.ob)) * 100,1) ach_js_ob,
+        c.ob invoice_ob,
+        FORMAT((c.ob/SUM(a.ob)) * 100,1) ach_inv_ob,
         SUM(a.coal) budget_coal, 
         b.coal joint_survey_coal,
         FORMAT(b.coal/SUM(a.coal) * 100,1) ach_js_coal,
-        SUM(c.coal) invoice_coal,
+        c.coal invoice_coal,
         FORMAT(c.coal/SUM(a.coal) * 100,1) ach_inv_coal
         FROM pma_budget a
         JOIN (SELECT tgl, kodesite, SUM(ob) ob, SUM(coal) coal FROM pma_joint_survey WHERE del=0 GROUP BY tgl, kodesite) b 

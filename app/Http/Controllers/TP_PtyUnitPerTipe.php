@@ -24,7 +24,7 @@ class TP_PtyUnitPerTipe extends Controller
             $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
             $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
         } else {
-            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            $where .= "TGL BETWEEN '" . Carbon::now()->startOfYear() . "' AND '" . Carbon::now()->endOfYear() . "'";
         }
 
         $site = Site::where('status_website', 1)->get();
@@ -41,7 +41,7 @@ class TP_PtyUnitPerTipe extends Controller
             FROM pma_tp a
             JOIN plant_tipe_unit b
             ON LEFT(a.nom_unit,4) = b.kode
-            WHERE /* WHERE */
+            WHERE ".$where."
             GROUP BY LEFT(a.nom_unit, 4), MONTH(tgl)
         )
         SELECT kode,

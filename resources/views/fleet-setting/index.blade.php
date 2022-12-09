@@ -19,7 +19,7 @@
         <div class="flex justify-between items-center col-span-12 mt-5">
             <!-- Title -->
             <h2 class="text-lg font-medium truncate mr-5 ">
-                Cost Part Per Tipe Unit
+                Fleet Setting
             </h2>
 
             <div class="ml-auto flex justify-center items-center">
@@ -108,21 +108,13 @@
                 <table class="w-full table table-sm">
                     <thead class="table-dark sticky left-0 top-0 z-50">
                         <tr class="">
-                            <th rowspan="2" class="whitespace-nowrap text-center">#</th>
-                            {{-- <th class="whitespace-nowrap text-center" style="width: 7rem">Tanggal</th> --}}
-                            <th rowspan="2" class="whitespace-nowrap text-center">Tipe Unit</th>
-                            <th colspan="2" class="whitespace-nowrap text-center">Spare Part</th>
-                            <th colspan="2" class="whitespace-nowrap text-center">Solar</th>
-                            <th colspan="2" class="whitespace-nowrap text-center">Oli</th>
-                            <th rowspan="2" class="whitespace-nowrap text-center">WH</th>
-                        </tr>
-                        <tr>
-                            <th class="whitespace-nowrap text-center">Item</th>
-                            <th class="whitespace-nowrap text-center">Harga</th>
-                            <th class="whitespace-nowrap text-center">Qty (L)</th>
-                            <th class="whitespace-nowrap text-center">Harga</th>
-                            <th class="whitespace-nowrap text-center">Qty (L)</th>
-                            <th class="whitespace-nowrap text-center">Harga (L)</th>
+                            <th class="whitespace-nowrap text-center">#</th>
+                            <th class="whitespace-nowrap text-center" style="width: 7rem">Tanggal</th>
+                            <th class="whitespace-nowrap text-center">Unit Loading</th>
+                            <th class="whitespace-nowrap text-center">Unit Hauling</th>
+                            <th class="whitespace-nowrap text-center">Produksi</th>
+                            <th class="whitespace-nowrap text-center">WH</th>
+                            <th class="whitespace-nowrap text-center">PTY</th>
                         </tr>
                     </thead>
                     <tbody>

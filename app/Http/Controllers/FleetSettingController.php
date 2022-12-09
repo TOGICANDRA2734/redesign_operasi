@@ -29,9 +29,9 @@ class FleetSettingController extends Controller
 
         $site = Site::where('status_website', 1)->get();
 
-        $subquery = "SELECT nom_unit,
-        tgl,
+        $subquery = "SELECT DATE_FORMAT(tgl, \"%d-%m-%Y\") tgl, 
         unit_load, 
+        nom_unit,
         SUM(bcm) prod,
         (SELECT SUM(IF((kode=\"008\") OR
                   (kode=\"009\") OR
@@ -62,6 +62,7 @@ class FleetSettingController extends Controller
         AND kodesite = 'q'
         AND bcm!=0
         GROUP BY nom_unit     
+        ORDER BY tgl, unit_load, nom_unit
         ";
         $data = collect(DB::select(DB::raw($subquery)));
 

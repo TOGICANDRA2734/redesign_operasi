@@ -19,7 +19,7 @@
         <div class="flex justify-between items-center col-span-12 mt-5">
             <!-- Title -->
             <h2 class="text-lg font-medium truncate mr-5 ">
-                Cost Part Per Tipe Unit
+                Productivity TP per Tipe Unit
             </h2>
 
             <div class="ml-auto flex justify-center items-center">
@@ -110,19 +110,22 @@
                         <tr class="">
                             <th rowspan="2" class="whitespace-nowrap text-center">#</th>
                             {{-- <th class="whitespace-nowrap text-center" style="width: 7rem">Tanggal</th> --}}
-                            <th rowspan="2" class="whitespace-nowrap text-center">Tipe Unit</th>
-                            <th colspan="2" class="whitespace-nowrap text-center">Spare Part</th>
-                            <th colspan="2" class="whitespace-nowrap text-center">Solar</th>
-                            <th colspan="2" class="whitespace-nowrap text-center">Oli</th>
-                            <th rowspan="2" class="whitespace-nowrap text-center">WH</th>
+                            <th rowspan="2" class="whitespace-nowrap text-center">Kode</th>
+                            <th colspan="12" class="whitespace-nowrap text-center">Bulan</th>
                         </tr>
                         <tr>
-                            <th class="whitespace-nowrap text-center">Item</th>
-                            <th class="whitespace-nowrap text-center">Harga</th>
-                            <th class="whitespace-nowrap text-center">Qty (L)</th>
-                            <th class="whitespace-nowrap text-center">Harga</th>
-                            <th class="whitespace-nowrap text-center">Qty (L)</th>
-                            <th class="whitespace-nowrap text-center">Harga (L)</th>
+                            <th class="whitespace-nowrap text-center">Januari</th>
+                            <th class="whitespace-nowrap text-center">Februari</th>
+                            <th class="whitespace-nowrap text-center">Maret</th>
+                            <th class="whitespace-nowrap text-center">April</th>
+                            <th class="whitespace-nowrap text-center">Mei</th>
+                            <th class="whitespace-nowrap text-center">Juni</th>
+                            <th class="whitespace-nowrap text-center">Juli</th>
+                            <th class="whitespace-nowrap text-center">Agustus</th>
+                            <th class="whitespace-nowrap text-center">September</th>
+                            <th class="whitespace-nowrap text-center">Oktober</th>
+                            <th class="whitespace-nowrap text-center">November</th>
+                            <th class="whitespace-nowrap text-center">Desember</th>
                         </tr>
                     </thead>
                     <tbody>

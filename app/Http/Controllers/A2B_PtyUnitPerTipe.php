@@ -85,11 +85,14 @@ class A2B_PtyUnitPerTipe extends Controller
         ";
         $data = collect(DB::select(DB::raw($subquery)));
 
+        $judul = ['Loading Ripping', 'Loading Langsung', 'Loading Stock', 'Loading Blasting', 'Loading Mud', 'Total'];
+
+
         if (count($request->all()) > 1) {
             $response['data'] = $data;
             return response()->json($response);
         } else {
-            return view('A2B_PtyUnitPerTipe.index', compact('data', 'site'));
+            return view('A2B_PtyUnitPerTipe.index', compact('data', 'site', 'judul'));
         }
     }
 
