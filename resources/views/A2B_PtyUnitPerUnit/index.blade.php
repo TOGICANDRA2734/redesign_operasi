@@ -28,7 +28,7 @@
                 </div>
 
                 {{-- Url Rujukan --}}
-                <input type="hidden" name="url" value="{{ route('cost-part-tipe.index') }}" id="urlFilter">
+                <input type="hidden" name="url" value="{{ route('a2b-pty-nom.index') }}" id="urlFilter">
 
                 {{-- Pilih Site --}}
                 <select id="pilihSite"
@@ -66,41 +66,6 @@
         </div>
         <hr class="col-span-12">
 
-        {{-- <div class="col-span-12 grid grid-cols-12 gap-5">
-            <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
-                <div class="box p-5 zoom-in">
-                    <div class="flex items-center">
-                        <div class="w-2/4 flex-none">
-                            <div class="text-lg font-medium truncate">Akumulasi Distance/OB</div>
-                            <div class="text-slate-500 mt-1" id="actualOB">Distance:M</div>
-                            <div class="text-slate-500 mt-1" id="planOB">Produksi:BCM</div>
-                        </div>
-                        <div class="flex-none ml-auto relative">
-                            <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
-                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0"
-                                id="achOB"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-span-12 sm:col-span-6 2xl:col-span-6 intro-y">
-                <div class="box p-5 zoom-in">
-                    <div class="flex items-center">
-                        <div class="w-2/4 flex-none">
-                            <div class="text-lg font-medium truncate">Total Coal</div>
-                            <div class="text-slate-500 mt-1" id="actualCoal">Actual: BCM</div>
-                            <div class="text-slate-500 mt-1" id="planCoal">Plan: BCM</div>
-                        </div>
-                        <div class="flex-none ml-auto relative">
-                            <canvas id="report-donut-chart-1" width="90" height="90"></canvas>
-                            <div class="font-medium absolute w-full h-full flex items-center justify-center top-0 left-0"
-                                id="achCoal">%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
 
         <!-- Table -->
         <div class="w-full mb-8 col-span-12 overflow-hidden rounded-lg shadow-xs">
@@ -161,13 +126,12 @@
             startDate: start,
             endDate: end,
             ranges: {
-                'Hari Ini': [moment(), moment()],
-                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
-                '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
-                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
-                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month')
-                    .endOf('month')
+                'Bulan Ini': [moment().subtract(29, 'days'), moment()],
+                'Bulan Kemarin': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'Quarter Ini': [moment().subtract(3, 'month').startOf('month'), moment()],
+                'Semester Ini': [moment().subtract(6, 'month').startOf('month'), moment()],
+                'Tahun Ini': [moment().startOf('year'), moment().endOf('year')],
+                'Tahun Kemarin': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')
                 ]
             }
         }, function(start, end, label) {

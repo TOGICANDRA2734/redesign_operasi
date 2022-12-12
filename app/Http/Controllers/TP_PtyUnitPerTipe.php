@@ -45,18 +45,18 @@ class TP_PtyUnitPerTipe extends Controller
             GROUP BY LEFT(a.nom_unit, 4), MONTH(tgl)
         )
         SELECT kode,
-        SUM(CASE WHEN MONTH(tgl) = 1 THEN IFNULL((bcm/wh),0) END) jan,
-        SUM(CASE WHEN MONTH(tgl) = 2 THEN IFNULL((bcm/wh),0) END) feb,
-        SUM(CASE WHEN MONTH(tgl) = 3 THEN IFNULL((bcm/wh),0) END) mar,
-        SUM(CASE WHEN MONTH(tgl) = 4 THEN IFNULL((bcm/wh),0) END) apr,
-        SUM(CASE WHEN MONTH(tgl) = 5 THEN IFNULL((bcm/wh),0) END) may,
-        SUM(CASE WHEN MONTH(tgl) = 6 THEN IFNULL((bcm/wh),0) END) jun,
-        SUM(CASE WHEN MONTH(tgl) = 7 THEN IFNULL((bcm/wh),0) END) jul,
-        SUM(CASE WHEN MONTH(tgl) = 8 THEN IFNULL((bcm/wh),0) END) aug,
-        SUM(CASE WHEN MONTH(tgl) = 9 THEN IFNULL((bcm/wh),0) END) sept,
-        SUM(CASE WHEN MONTH(tgl) = 10 THEN IFNULL((bcm/wh),0) END) okt,
-        SUM(CASE WHEN MONTH(tgl) = 11 THEN IFNULL((bcm/wh),0) END) nov,
-        SUM(CASE WHEN MONTH(tgl) = 12 THEN IFNULL((bcm/wh),0) END) des
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 1 THEN IFNULL((bcm/wh),0) END),1),0) jan,
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 2 THEN IFNULL((bcm/wh),0) END),1),0) feb,
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 3 THEN IFNULL((bcm/wh),0) END),1),0) mar,
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 4 THEN IFNULL((bcm/wh),0) END),1),0) apr,
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 5 THEN IFNULL((bcm/wh),0) END),1),0) may,
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 6 THEN IFNULL((bcm/wh),0) END),1),0) jun,
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 7 THEN IFNULL((bcm/wh),0) END),1),0) jul,
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 8 THEN IFNULL((bcm/wh),0) END),1),0) aug,
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 9 THEN IFNULL((bcm/wh),0) END),1),0) sept,
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 10 THEN IFNULL((bcm/wh),0) END),1),0) okt,
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 11 THEN IFNULL((bcm/wh),0) END),1),0) nov,
+        IFNULL(FORMAT(SUM(CASE WHEN MONTH(tgl) = 12 THEN IFNULL((bcm/wh),0) END),1),0) des
         FROM summ 
         WHERE bcm !=0 
         GROUP BY kode        

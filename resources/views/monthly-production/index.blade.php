@@ -275,7 +275,7 @@
                             i++;
 
                             $j.each(data, function(i, d){
-                                if(i === 'tgl_format' || i === 'hari'){
+                                if(i === 'namasite' || i === 'periode'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
                                 } else if(i === 'ob_ach' || i === 'coal_ach'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"

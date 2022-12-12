@@ -24,7 +24,7 @@ class TP_PtyUnitPerUnit extends Controller
             $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
             $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
         } else {
-            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            $where .= "TGL BETWEEN '" . Carbon::now()->startOfYear() . "' AND '" . Carbon::now()->endOfYear() . "'";
         }
 
         $site = Site::where('status_website', 1)->get();
@@ -38,22 +38,22 @@ class TP_PtyUnitPerUnit extends Controller
         SUM(ritasi) rit,
         SUM(distbcm) distbcm
         FROM pma_tp
-        WHERE tgl BETWEEN '2022-01-01' AND '2022-12-31' AND kodesite='i'
+        WHERE ".$where."
         GROUP BY nom_unit, MONTH(tgl)
         )
         SELECT nom_unit,
-        SUM(CASE WHEN MONTH(tgl) = 1 THEN IFNULL((bcm/wh),0) END) jan,
-        SUM(CASE WHEN MONTH(tgl) = 2 THEN IFNULL((bcm/wh),0) END) feb,
-        SUM(CASE WHEN MONTH(tgl) = 3 THEN IFNULL((bcm/wh),0) END) mar,
-        SUM(CASE WHEN MONTH(tgl) = 4 THEN IFNULL((bcm/wh),0) END) apr,
-        SUM(CASE WHEN MONTH(tgl) = 5 THEN IFNULL((bcm/wh),0) END) may,
-        SUM(CASE WHEN MONTH(tgl) = 6 THEN IFNULL((bcm/wh),0) END) jun,
-        SUM(CASE WHEN MONTH(tgl) = 7 THEN IFNULL((bcm/wh),0) END) jul,
-        SUM(CASE WHEN MONTH(tgl) = 8 THEN IFNULL((bcm/wh),0) END) aug,
-        SUM(CASE WHEN MONTH(tgl) = 9 THEN IFNULL((bcm/wh),0) END) sept,
-        SUM(CASE WHEN MONTH(tgl) = 10 THEN IFNULL((bcm/wh),0) END) okt,
-        SUM(CASE WHEN MONTH(tgl) = 11 THEN IFNULL((bcm/wh),0) END) nov,
-        SUM(CASE WHEN MONTH(tgl) = 12 THEN IFNULL((bcm/wh),0) END) des
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 1 THEN IFNULL((bcm/wh),0) END), 1), \"\") jan,
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 2 THEN IFNULL((bcm/wh),0) END), 1), \"\") feb,
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 3 THEN IFNULL((bcm/wh),0) END), 1), \"\") mar,
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 4 THEN IFNULL((bcm/wh),0) END), 1), \"\") apr,
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 5 THEN IFNULL((bcm/wh),0) END), 1), \"\") may,
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 6 THEN IFNULL((bcm/wh),0) END), 1), \"\") jun,
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 7 THEN IFNULL((bcm/wh),0) END), 1), \"\") jul,
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 8 THEN IFNULL((bcm/wh),0) END), 1), \"\") aug,
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 9 THEN IFNULL((bcm/wh),0) END), 1), \"\") sept,
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 10 THEN IFNULL((bcm/wh),0) END), 1), \"\") okt,
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 11 THEN IFNULL((bcm/wh),0) END), 1), \"\") nov,
+        ifnull(format(SUM(CASE WHEN MONTH(tgl) = 12 THEN IFNULL((bcm/wh),0) END), 1), \"\") des
         FROM summ 
         WHERE bcm !=0 
         GROUP BY nom_unit       

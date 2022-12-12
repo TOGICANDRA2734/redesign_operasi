@@ -39,7 +39,7 @@ class FleetSettingController extends Controller
                       (kode=\"011\") OR
                       (kode=\"012\"),jam,0)) AS wh 
         FROM pma_a2b 
-        WHERE tgl BETWEEN '2022-01-01' AND '2022-01-31' 
+        WHERE ".$where."
         AND nom_unit=pma_tp.unit_load
         AND kodesite=pma_tp.kodesite
         GROUP BY nom_unit
@@ -50,13 +50,13 @@ class FleetSettingController extends Controller
                       (kode=\"011\") OR
                       (kode=\"012\"),jam,0)) AS wh 
                 FROM pma_a2b 
-                WHERE tgl BETWEEN '2022-01-01' AND '2022-01-31' 
+                WHERE ".$where."
                 AND nom_unit=pma_tp.unit_load
                 AND kodesite=pma_tp.kodesite
                 GROUP BY nom_unit
         ) pty_loading
         FROM pma_tp 
-        WHERE tgl BETWEEN '2022-01-01' AND '2022-01-31' 
+        WHERE ".$where."
         AND unit_load <> \"\"
         AND akt_load <> \"\"
         AND kodesite = 'q'

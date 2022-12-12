@@ -55,27 +55,27 @@ class A2B_PtyUnitPerUnit extends Controller
                 IF((A.kode=\"012\"), B.distbcm, 0) dist_12,
                 (B.distbcm) AS dist
             FROM pma_a2b A
-            JOIN (SELECT unit_load, SUM(bcm) AS prod, SUM(distbcm) distbcm, SUM(ritasi) rit FROM pma_tp WHERE '2022-01-01' AND '2022-01-31' GROUP BY unit_load) B
+            JOIN (SELECT unit_load, SUM(bcm) AS prod, SUM(distbcm) distbcm, SUM(ritasi) rit FROM pma_tp WHERE ".$where." GROUP BY unit_load) B
             ON A.nom_unit = B.unit_load
-            WHERE tgl BETWEEN '2022-01-01' AND '2022-01-31'
+            WHERE ".$where."
             GROUP BY nom_unit
         )
         SELECT nom_unit, 
         IFNULL(bcm_8,0) bcm_8,
         IFNULL((bcm_8/wh_8),0) pty_8,
-        (dist_8/bcm_8) jarak_8,
+        ifnull((dist_8/bcm_8),0) jarak_8,
         IFNULL(bcm_9,0) bcm_9,
         IFNULL((bcm_9/wh_9),0) pty_9,
-        (dist_9/bcm_9) jarak_9,
+        ifnull((dist_9/bcm_9),0) jarak_9,
         IFNULL(bcm_10,0) bcm_10,
         IFNULL((bcm_10/wh_10),0) pty_10,
-        (dist_10/bcm_10) jarak_10,
+        ifnull((dist_10/bcm_10),0) jarak_10,
         IFNULL(bcm_11,0) bcm_11,
         IFNULL((bcm_11/wh_11),0) pty_11,
-        (dist_11/bcm_11) jarak_11,
+        ifnull((dist_11/bcm_11),0) jarak_11,
         IFNULL(bcm_12,0) bcm_12,
         IFNULL((bcm_12/wh_12),0) pty_12,
-        (dist_12/bcm_12) jarak_12,
+        ifnull((dist_12/bcm_12),0) jarak_12,
         IFNULL(bcm,0) bcm,
         IFNULL((bcm/wh),0) pty,
         (dist/bcm) jarak

@@ -45,25 +45,25 @@ class MonthlyProductionController extends Controller
         // Data OB 
         $subquery = "SELECT d.namasite namasite,
         DATE_FORMAT(a.tgl, '%b, %Y') periode, 
-        SUM(a.ob) budget_ob, 
-        b.ob joint_survey_ob,
-        FORMAT((b.ob/SUM(a.ob)) * 100,1) ach_js_ob,
-        c.ob invoice_ob,
-        FORMAT((c.ob/SUM(a.ob)) * 100,1) ach_inv_ob,
-        SUM(a.coal) budget_coal, 
-        b.coal joint_survey_coal,
-        FORMAT(b.coal/SUM(a.coal) * 100,1) ach_js_coal,
-        c.coal invoice_coal,
-        FORMAT(c.coal/SUM(a.coal) * 100,1) ach_inv_coal
+        ifnull(SUM(a.ob),0) budget_ob, 
+        ifnull(b.ob,0) joint_survey_ob,
+        ifnull(FORMAT((b.ob/SUM(a.ob)) * 100,1),0) ach_js_ob,
+        ifnull(c.ob,0) invoice_ob,
+        ifnull(FORMAT((c.ob/SUM(a.ob)) * 100,1),0) ach_inv_ob,
+        ifnull(SUM(a.coal),0) budget_coal, 
+        ifnull(b.coal,0) joint_survey_coal,
+        ifnull(FORMAT(b.coal/SUM(a.coal) * 100,1),0) ach_js_coal,
+        ifnull(c.coal,0) invoice_coal,
+        ifnull(FORMAT(c.coal/SUM(a.coal) * 100,1),0) ach_inv_coal
         FROM pma_budget a
-        JOIN (SELECT tgl, kodesite, SUM(ob) ob, SUM(coal) coal FROM pma_joint_survey WHERE del=0 GROUP BY tgl, kodesite) b 
+        JOIN (SELECT tgl, kodesite, SUM(ob) ob, SUM(coal) coal FROM pma_joint_survey WHERE ".$where1." GROUP BY tgl, kodesite) b 
         ON a.kodesite=b.kodesite AND a.tgl=b.tgl
-        JOIN (SELECT tgl, kodesite, SUM(ob) ob, SUM(coal) coal FROM pma_invoice WHERE del=0 GROUP BY tgl, kodesite) c 
+        JOIN (SELECT tgl, kodesite, SUM(ob) ob, SUM(coal) coal FROM pma_invoice WHERE ".$where1." GROUP BY tgl, kodesite) c 
         ON a.kodesite=c.kodesite AND a.tgl=c.tgl
         JOIN (SELECT namasite, kodesite FROM site) d
         ON a.kodesite=d.kodesite
-        WHERE a.del=0
-        GROUP BY a.tgl, a.kodesite";
+        WHERE ".$where2."
+        GROUP BY a.kodesite, a.tgl";
         $data = collect(DB::select($subquery));
 
         // Data WH Efektif
