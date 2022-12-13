@@ -23,6 +23,7 @@ use App\Http\Controllers\AdminTransaksiPmaController;
 use App\Http\Controllers\Admin\dataProdController as Admin_dataProdController;
 use App\Http\Controllers\BDDokController;
 use App\Http\Controllers\BDHarianController;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CostPartController;
 use App\Http\Controllers\CostPartTipeController;
 use App\Http\Controllers\DailyProduksiController;
@@ -35,6 +36,8 @@ use App\Http\Controllers\FuelUnitController;
 use App\Http\Controllers\HistoricalOvhController;
 use App\Http\Controllers\HistoricalUnitController;
 use App\Http\Controllers\HMController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\JointSurveyController;
 use App\Http\Controllers\LaporanBulananController;
 use App\Http\Controllers\LaporanTargetCustomer;
 use App\Http\Controllers\MohhController;
@@ -428,4 +431,13 @@ Route::middleware('auth')->group(function() {
 
         // Fleet Setting Controller
         Route::resource('fleet-setting', FleetSettingController::class);
+
+        // Invoice Controller
+        Route::resource('invoice', InvoiceController::class);
+
+        // Fleet Setting Controller
+        Route::resource('joint-survey', JointSurveyController::class);
+
+        // Fleet Setting Controller
+        Route::resource('budget', BudgetController::class);
 });

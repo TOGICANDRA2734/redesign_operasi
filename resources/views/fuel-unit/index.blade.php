@@ -31,7 +31,7 @@
                 <input type="hidden" name="url" value="{{route('fuel-unit.index')}}" id="urlFilter">
 
                 {{-- Pilih Site --}}
-                <select id="pilihSite"
+                <select id="kodesite"
                     class="block shadow-sm p-2 mr-2 rounded-md w-20  text-sm dark:text-gray-300 dark-gray-600 dark:bg-gray-700 form-multiselect focus-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray"
                     name="kodesite" id="kodesite">
                     <option value="">All Site</option>
@@ -110,10 +110,9 @@
                             <th class="whitespace-nowrap text-center">Nom Unit</th>
                             <th class="whitespace-nowrap text-center">Bulan</th>
                             <th class="whitespace-nowrap text-center">Fuel</th>
-                            <th class="whitespace-nowrap text-center">Price</th>
                             <th class="whitespace-nowrap text-center">WH</th>
                             <th class="whitespace-nowrap text-center">Liter/Hours</th>
-                            <th class="whitespace-nowrap text-center">Price/Hours</th>
+                            <th class="whitespace-nowrap text-center">Liter/BCM</th>
                             <th class="whitespace-nowrap text-center">Site</th>
                         </tr>
                     </thead>
@@ -161,7 +160,7 @@
             var $j = jQuery.noConflict();
             var awal = start.format("YYYY-MM-DD");
             var akhir = end.format("YYYY-MM-DD");
-            var pilihSite = $j("#pilihSite").val() ? $j("#pilihSite").val() : "";
+            var kodesite = $j("#kodesite").val() ? $j("#kodesite").val() : "";
             var cariNama = $j("#cariNama").val() ? $j("#cariNama").val() : "";
             $j("#loading").toggleClass('hidden');
 
@@ -176,10 +175,52 @@
                     data: {
                         start: awal,
                         end: akhir,
-                        pilihSite: pilihSite,
+                        kodesite: kodesite,
                     },
                     success: function(response) {
-                        console.log(response)
+                        update_data(response)
+                    },
+                })
+            }
+        });
+        
+        // Pilih Site
+        $j("#kodesite").on('change', function() {
+            $j.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $j('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var kodesite = $j("#kodesite").val() ? $j("#kodesite").val() : "";
+            var awal = moment($j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") ? moment($j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") : "";
+            var akhir = moment($j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") ? moment($j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") : "";
+            console.log(awal,akhir)
+
+            var url = $j("#urlFilter").val();
+
+            $j("#loading").toggleClass('hidden');
+
+            $j.ajax({
+                type: "GET",
+                url: url,
+                data: {
+                    'start': awal,
+                    'end': akhir,
+                    'kodesite': kodesite,
+                },
+                success: function(response) {
+                    update_data(response)
+                },
+                error: function(result) {
+                    console.log("error", result);
+                },
+            });
+        });
+
+
+        function update_data(response){
+            console.log(response)
 
                         $j("#loading").toggleClass('hidden');
                         // JANGAN LUPA COPY KE SEBELAH
@@ -200,10 +241,10 @@
                             i++;
                             
                             $j.each(data, function(i, d){
-                                if(i === 'tgl' || i === 'nom_unit'){
+                                if(i === 'namasite' || i === 'tgl' || i === 'nom_unit'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
-                                } else if(i === 'liter_hour' || i === 'price_hour'){
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
+                                } else if(i === 'ltr_hour' || i === 'ltr_bcm'){
+                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,2) + "</td>"
                                 } else {
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
                                 }
@@ -215,78 +256,7 @@
                         $j("table tbody").html(fullText);
                         show_data();
                     }
-                    },
-                })
-            }
-        });
-        
-        // Pilih Site
-        $j("#pilihSite").on('change', function() {
-            $j.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $j('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            var pilihSite = $j("#pilihSite").val() ? $j("#pilihSite").val() : "";
-            var awal = moment($j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") ? moment($j('#filterTanggal').data('daterangepicker').startDate).format("YYYY-MM-DD") : "";
-            var akhir = moment($j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") ? moment($j('#filterTanggal').data('daterangepicker').endDate).format("YYYY-MM-DD") : "";
-            console.log(awal,akhir)
-
-            var url = $j("#urlFilter").val();
-
-            $j("#loading").toggleClass('hidden');
-
-            $j.ajax({
-                type: "GET",
-                url: url,
-                data: {
-                    'start': awal,
-                    'end': akhir,
-                    'pilihSite': pilihSite,
-                },
-                success: function(response) {
-                    $j("#loading").toggleClass('hidden');
-
-                    // JANGAN LUPA COPY KE SEBELAH
-                        // OB CARD
-
-                    $j("table tbody").empty();
-                    fullText = ""
-                    i=1
-                    if (response) {
-                        $j.each(response.data, function(index, data) {
-                            text = "<tr class=\"text-center bg-white\">"
-
-                            // Add Index
-                            text += "<td class=\"whitespace-nowrap text-center\"> " + i + "</td>"
-
-                            i++;
-
-                            $j.each(data, function(i, d){
-                                if(i === 'tgl' || i === 'nom_unit'){
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
-                                } else if(i === 'liter_hour' || i === 'price_hour'){
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,1) + "</td>"
-                                } else {
-                                    text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,0) + "</td>"
-                                }
-                            })
-
-
-                            text += "</tr>"
-                            
-                            fullText += text
-                        });
-                        $j("table tbody").html(fullText);
-                        show_data();
-                    }
-                },
-                error: function(result) {
-                    console.log("error", result);
-                },
-            });
-        });
+        }
 
         function show_data() {
             Toastify({

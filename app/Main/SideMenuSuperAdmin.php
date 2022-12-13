@@ -59,6 +59,30 @@ class SideMenuSuperAdmin
                         ],
                         'title' => 'Kendala'
                     ],
+                    'transaksi-invoice' => [
+                        'icon' => 'inbox',
+                        'route_name' => 'invoice.create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Invoice'
+                    ],
+                    'transaksi-joint-survey' => [
+                        'icon' => 'inbox',
+                        'route_name' => 'joint-survey.create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Joint Survey'
+                    ],
+                    'transaksi-budget' => [
+                        'icon' => 'inbox',
+                        'route_name' => 'budget.create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Budget'
+                    ],
                 ],
             ],
             'devider',

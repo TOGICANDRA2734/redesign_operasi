@@ -23,22 +23,25 @@ class FuelUnitController extends Controller
         if (count($request->all()) > 1) {              
             // Where 1
             $where1 .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
-            $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $where1 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
+            // $where1 .= ($request->has('kodesite') && !empty($request->kodesite)) ? " AND " : "";
+            // $where1 .= ($request->has('kodesite') && !empty($request->kodesite)) ? "kodesite='" . $request->kodesite . "'" : "";
+            $where1 .= " AND del=0";
 
             // Where 2
             $where2 .= ($request->has('start') && $request->has('end')) ? "a.TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
-            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "a.kodesite='" . $request->pilihSite . "'" : "";
+            $where2 .= ($request->has('kodesite') && !empty($request->kodesite)) ? " AND " : "";
+            $where2 .= ($request->has('kodesite') && !empty($request->kodesite)) ? "a.kodesite='" . $request->kodesite . "'" : "";
+            $where2 .= " AND a.del=0";
             
             // Where 3
             $where3 .= ($request->has('start') && $request->has('end')) ? "e.TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
-            $where3 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $where3 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "e.kodesite='" . $request->pilihSite . "'" : "";
+            $where3 .= ($request->has('kodesite') && !empty($request->kodesite)) ? " AND " : "";
+            $where3 .= ($request->has('kodesite') && !empty($request->kodesite)) ? "e.kodesite='" . $request->kodesite . "'" : "";
+            $where3 .= " AND e.del=0";
         } else {
-            $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
-            $where2 .= "a.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
-            $where3 .= "e.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            $where1 .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND del=0";
+            $where2 .= "a.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND a.del=0";
+            $where3 .= "e.TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND e.del=0";
         }
 
         $site = Site::where('status_website', 1)->get();
@@ -47,16 +50,15 @@ class FuelUnitController extends Controller
         (
         SELECT a.nom_unit, 
         DATE_FORMAT(a.tgl, '%b') tgl, 
-        FORMAT(SUM(ltr),0) liter, 
-        FORMAT(SUM(price),0) price, 
-        FORMAT(b.jam, 0) jam,
-        FORMAT(SUM(ltr)/b.jam, 1) ltr_hour,
-        FORMAT(SUM(price)/b.jam,1) price_hour,
+        FORMAT(SUM(qty),0) liter, 
+        FORMAT(jam, 0) jam,
+        FORMAT(SUM(qty)/ (jam), 2) ltr_hour,
+        0 ltr_bcm,
         namasite
-        FROM fuel_monthly a
+        FROM pma_fuel a
         JOIN (SELECT nom_unit, 
         MONTH(tgl) tgl, 
-        SUM(jam) jam 
+        SUM(IF(LEFT(kode,1)='0',jam,0)) jam
         FROM pma_a2b 
         WHERE ".$where1."
         GROUP BY MONTH(tgl), 
@@ -77,16 +79,17 @@ class FuelUnitController extends Controller
         -- PMA_TP
         SELECT e.nom_unit, 
         DATE_FORMAT(e.tgl, '%b') tgl, 
-        FORMAT(SUM(ltr),0) liter, 
-        FORMAT(SUM(price),0) price, 
-        FORMAT(f.jam, 0) jam,
-        FORMAT(SUM(ltr)/f.jam, 1) ltr_hour,
-        FORMAT(SUM(price)/f.jam,1) price_hour,
+        FORMAT(SUM(qty),0) liter, 
+        FORMAT(jam, 0) jam,
+        FORMAT(SUM(qty)/jam, 2) ltr_hour,
+        FORMAT(SUM(qty)/bcm, 2) ltr_bcm,
         namasite
-        FROM (SELECT * FROM fuel_monthly) e
+        FROM (SELECT * FROM pma_fuel) e
         JOIN (SELECT nom_unit, 
         MONTH(tgl) tgl, 
-        SUM(jam) jam 
+        SUM(IF(LEFT(aktivitas,1)='0', jam, 0)) jam,
+        SUM(bcm) bcm,
+        aktivitas
         FROM pma_tp
         WHERE ".$where1."
         GROUP BY MONTH(tgl), 

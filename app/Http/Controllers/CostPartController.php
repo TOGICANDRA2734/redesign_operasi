@@ -18,14 +18,21 @@ class CostPartController extends Controller
     public function index(Request $request)
     {
         $where = '';
+        $where2 = '';
 
         if (count($request->all()) > 1) {              
             // Where
-            $where .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where .= ($request->has('start') && $request->has('end')) ? "voucher_date BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
             $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
-            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
+            $where .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "wh_code='" . $request->pilihSite . "'" : "";
+
+            // Where
+            $where2 .= ($request->has('start') && $request->has('end')) ? "tgl BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? " AND " : "";
+            $where2 .= ($request->has('pilihSite') && !empty($request->pilihSite)) ? "kodesite='" . $request->pilihSite . "'" : "";
         } else {
-            $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            $where .= "voucher_date BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
+            $where2 .= "tgl BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
         }
 
         $site = Site::where('status_website', 1)->get();
@@ -33,28 +40,27 @@ class CostPartController extends Controller
         $subquery = "WITH summ AS
         (
         SELECT
-        nom_unit,
-        partdesc,
+        car_no,
         (SUM(IF(
-        (LEFT(catno,1)='1')OR
-        (LEFT(catno,1)='2')OR
-        (catno='901')OR
-        (catno='902')OR
-        (catno='90V')OR
-        (LEFT(catno,2)='98')
+        (LEFT(cat_code,1)='1')OR
+        (LEFT(cat_code,1)='2')OR
+        (cat_code='901')OR
+        (cat_code='902')OR
+        (cat_code='90V')OR
+        (LEFT(cat_code,2)='98')
         ,price_amt,0))) part_rp,
         
-        SUM(IF(catno=904,qtyord,0)) solar_ltr,
-        SUM(IF(catno=904,price_amt,0)) solar_rp,
-        SUM(IF(catno=903,qtyord,0)) oli_ltr,
-        SUM(IF(catno=903,price_amt,0)) oli_rp
+        SUM(IF(cat_code=904,item_qty,0)) solar_ltr,
+        SUM(IF(cat_code=904,price_amt,0)) solar_rp,
+        SUM(IF(cat_code=903,item_qty,0)) oli_ltr,
+        SUM(IF(cat_code=903,price_amt,0)) oli_rp
         
-        FROM cost
+        FROM unit_in_trans
         
         WHERE ".$where."
         
-        GROUP BY nom_unit 
-        ORDER BY nom_unit
+        GROUP BY car_no 
+        ORDER BY car_no
         )
         SELECT a.*,IFNULL(b.wh,0) wh
         FROM summ a
@@ -62,18 +68,18 @@ class CostPartController extends Controller
         LEFT JOIN
         (
         SELECT nom_unit,SUM(IF(LEFT(aktivitas,1)=\"0\",jam,0))wh FROM pma_tp
-        WHERE ".$where."
+        WHERE ".$where2."
         GROUP BY nom_unit
         
         UNION ALL
         
         SELECT nom_unit,SUM(IF(LEFT(kode,1)=\"0\",jam,0))wh FROM pma_a2b
-        WHERE ".$where."
+        WHERE ".$where2."
         GROUP BY nom_unit
         ) b
-        ON a.nom_unit = b.nom_unit
+        ON a.car_no = b.nom_unit
         
-        ORDER BY nom_unit
+        ORDER BY car_no
         ";
         $data = collect(DB::select(DB::raw($subquery)));
 
