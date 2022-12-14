@@ -50,10 +50,10 @@ class CostPartController extends Controller
         (LEFT(cat_code,2)='98')
         ,price_amt,0))) part_rp,
         
-        SUM(IF(cat_code=904,item_qty,0)) solar_ltr,
-        SUM(IF(cat_code=904,price_amt,0)) solar_rp,
-        SUM(IF(cat_code=903,item_qty,0)) oli_ltr,
-        SUM(IF(cat_code=903,price_amt,0)) oli_rp
+        SUM(IF(cat_code='904',item_qty,0)) solar_ltr,
+        SUM(IF(cat_code='904',price_amt,0)) solar_rp,
+        SUM(IF(cat_code='903',item_qty,0)) oli_ltr,
+        SUM(IF(cat_code='903',price_amt,0)) oli_rp
         
         FROM unit_in_trans
         

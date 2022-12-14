@@ -9,7 +9,7 @@
     <!-- Title -->
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8 col-span-12">
         <h2 class="text-lg font-medium mr-auto">
-            Transaksi Budget
+            Transaksi Fuel
         </h2>
         <div class="dropdown">
             <button class="dropdown-toggle btn btn-primary shadow-md mr-2" aria-expanded="false" data-tw-toggle="dropdown">
@@ -31,7 +31,7 @@
     <div class="intro-y col-span-12">
         <div class="grid grid-cols-1 gap-3">
             <!-- Start Form -->
-            <form action="{{route('budget.store')}}" method="POST" id="storeDok" class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg  dark:bg-gray-800">
+            <form action="{{route('fuel-unit.create')}}" method="POST" id="storeDok" class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg  dark:bg-gray-800">
                 @csrf
                 <div>
                     <label class="block mt-1 text-sm">

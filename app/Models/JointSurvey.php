@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class JointSurvey extends Model
 {
     use HasFactory;
+
+    const CREATED_AT = 'create_time';
+    const UPDATED_AT = 'update_time';
+    protected $table = 'pma_joint_survey';
+    protected $guarded = [];    
 }

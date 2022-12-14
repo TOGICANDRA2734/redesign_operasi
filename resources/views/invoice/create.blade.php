@@ -50,8 +50,8 @@
                         <span class="font-semibold text-gray-700 dark:text-gray-400">PIT</span>
                         <select data-placeholder="Pilih Pit" name="pit" class="tom-select w-full @error('pit') border-danger @enderror">
                             <option value="" selected disabled>Pilih Pit</option>
-                            @foreach($pit as $p)
-                                foreacf
+                            @foreach ($pit as $p)
+                                <option value="{{$p->ket}}">{{$p->ket}}</option>
                             @endforeach
                         </select> 
                         @error('pit')

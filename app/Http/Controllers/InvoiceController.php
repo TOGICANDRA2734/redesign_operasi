@@ -31,7 +31,7 @@ class InvoiceController extends Controller
         $site = DB::table('site')->select('kodesite', 'namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
         $unit = DB::table('plant_hm')->select('nom_unit')->where('kodesite', '=', Auth::user()->kodesite)->orderBy('nom_unit')->get();
         $waktu = Carbon::now()->format('Y-m-d');
-        $pit = DB::table('pma_dailyprod_pit')->select('ket')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        $pit = Auth::user()->kodesite === 'X' ? DB::table('pma_dailyprod_pit')->select('ket')->get() : DB::table('pma_dailyprod_pit')->select('ket')->where('kodesite', '=', Auth::user()->kodesite)->get();
         
         return view('invoice.create', compact('site', 'unit', 'waktu', 'data', 'pit'));
     }
@@ -57,9 +57,9 @@ class InvoiceController extends Controller
             'kodesite' => Auth::user()->kodesite,
             'pit' => $request->pit,
             'ob' => $request->ob,
-            'coal' => $request->coal,
-            'dist' => $request->jarak,
-            'bulan' => Carbon::createFromDate($request->tgl)->format('M'),
+            'coal' => $request->coal,                                                                                                                                                                                                                                                 
+            'dist' => $request->dist,
+            'bulan' => Carbon::createFromDate($request->tgl)->format('m'),
             'tahun' => Carbon::createFromDate($request->tgl)->format('Y'),
         ]);
 
@@ -70,7 +70,6 @@ class InvoiceController extends Controller
             return redirect()->route('invoice.create')->with(['error' => 'Data Gagal Ditambah!']);
         }
     }
-
 
     /**
      * Display the specified resource.

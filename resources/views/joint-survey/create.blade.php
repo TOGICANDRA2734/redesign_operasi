@@ -9,7 +9,7 @@
     <!-- Title -->
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8 col-span-12">
         <h2 class="text-lg font-medium mr-auto">
-            Laporan Kendala  - {{App\Models\Site::select('namasite')->where('kodesite', Auth::user()->kodesite)->pluck('namasite')->first()}}
+            Transaksi Joint Survey
         </h2>
         <div class="dropdown">
             <button class="dropdown-toggle btn btn-primary shadow-md mr-2" aria-expanded="false" data-tw-toggle="dropdown">
@@ -24,14 +24,14 @@
             </div>
         </div>
     </div>
-    <hr class="mb-10 col-span-12">
+    <hr class="col-span-12">
 
 
-    <!-- Input Form -->
+    <!-- Input Form -->     
     <div class="intro-y col-span-12">
         <div class="grid grid-cols-1 gap-3">
             <!-- Start Form -->
-            <form action="{{route('kendala.store')}}" method="POST" id="storeDok" class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg  dark:bg-gray-800">
+            <form action="{{route('joint-survey.store')}}" method="POST" id="storeDok" class="px-4 py-3 mb-8 grid grid-cols-2 gap-5 bg-white rounded-lg  dark:bg-gray-800">
                 @csrf
                 <div>
                     <label class="block mt-1 text-sm">
@@ -47,29 +47,14 @@
 
                 <div>
                     <label class="block mt-1 text-sm">
-                        <span class="font-semibold text-gray-700 dark:text-gray-400">Site</span>
-                        <select data-placeholder="Pilih site" name="kodesite" class="tom-select w-full @error('kodesite') border-danger @enderror">
-                            <option value="" selected disabled>Pilih Site</option>
-                            @foreach($site as $st)
-                            <option value="{{$st->kodesite}}">{{$st->namasite}}</option>
+                        <span class="font-semibold text-gray-700 dark:text-gray-400">PIT</span>
+                        <select data-placeholder="Pilih Pit" name="pit" class="tom-select w-full @error('pit') border-danger @enderror">
+                            <option value="" selected disabled>Pilih Pit</option>
+                            @foreach ($pit as $p)
+                                <option value="{{$p->ket}}">{{$p->ket}}</option>
                             @endforeach
                         </select> 
-                        @error('kodesite')
-                            <div class="text-danger mt-2">{{$message}}</div>
-                        @endif
-                    </label>
-                </div>
-                
-                <div class="col-span-2">
-                    <label class="block mt-1 text-sm">
-                        <span class="font-semibold text-gray-700 dark:text-gray-400">Nom Unit</span>
-                        <select data-placeholder="Pilih unit" name="unit" class="tom-select w-full @error('unit') border-danger @enderror">
-                            <option value="" selected disabled>Pilih Unit</option>
-                            @foreach($unit as $ut)
-                                <option value="{{$ut->nom_unit}}">{{$ut->nom_unit}}</option>
-                            @endforeach
-                        </select> 
-                        @error('unit')
+                        @error('pit')
                             <div class="text-danger mt-2">{{$message}}</div>
                         @endif
                     </label>
@@ -78,14 +63,14 @@
                 <div>
                     <label class="block mt-1 text-sm">
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
-                            Awal
+                            OB
                         </span>
                         <!-- <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="awal" id="awal"> -->
                         <div class="input-group">
-                            <div id="input-group-email" class="input-group-text">Jam</div> 
-                            <input class="form-control" type="text" name="awal" id="awal">
+                            <div id="input-group-email" class="input-group-text">BCM</div> 
+                            <input class="form-control" type="number" step="0.1" min="0" name="ob" id="ob">
                         </div>
-                        @error('awal')
+                        @error('ob')
                             <div class="text-danger mt-2">{{$message}}</div>
                         @endif
                     </label>
@@ -94,14 +79,14 @@
                 <div>
                     <label class="block mt-1 text-sm">
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
-                            Akhir
+                            Coal
                         </span>
                         <!-- <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="akhir" id="akhir"> -->
                         <div class="input-group">
-                            <div id="input-group-email" class="input-group-text">Jam</div> 
-                            <input class="form-control" type="text" name="akhir" id="akhir">
+                            <div id="input-group-email" class="input-group-text">Coal</div> 
+                            <input class="form-control" type="number" step="0.1" min="0" name="coal" id="coal">
                         </div>
-                        @error('akhir')
+                        @error('coal')
                             <div class="text-danger mt-2">{{$message}}</div>
                         @endif
                     </label>
@@ -110,32 +95,14 @@
                 <div>
                     <label class="block mt-1 text-sm">
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
-                            Shift
+                            Jarak
                         </span>
-                        <select class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" name="shift" id="shift">
-                            <option disabled selected value="">Pilih</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                        </select>
-                        @error('shift')
-                            <div class="text-danger mt-2">{{$message}}</div>
-                        @endif
-                    </label>
-                </div>
-
-                <div>
-                    <label class="block mt-1 text-sm">
-                        <span class="font-semibold text-gray-700 dark:text-gray-400">
-                            Keterangan
-                        </span>
-            
-                        <select data-placeholder="Pilih Keterangan" name="ket" class="tom-select w-full @error('ket') border-danger @enderror">
-                            <option value="" selected disabled>Pilih Site</option>
-                            @foreach($kendala_code as $st)
-                            <option value="{{$st->kode}}">{{$st->kode}} - {{$st->status}}</option>
-                            @endforeach
-                        </select> 
-                        @error('ket')
+                        <!-- <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="akhir" id="akhir"> -->
+                        <div class="input-group">
+                            <div id="input-group-email" class="input-group-text">M</div> 
+                            <input class="form-control" type="number" step="0.1" min="0" name="dist" id="dist">
+                        </div>
+                        @error('dist')
                             <div class="text-danger mt-2">{{$message}}</div>
                         @endif
                     </label>
@@ -149,58 +116,37 @@
     </div>
     <!-- end Overburden Overview -->
 
-    
-
-
-    <!-- Start Kendala -->
+    <!-- Start invoice -->
     <div class="col-span-12 w-full mb-8 overflow-hidden rounded-lg shadow-xs">
         <div class="w-full overflow-x-auto">
             <table class="w-full table table-striped">
                 <thead class="table-dark">
                     <tr class="">
-                        <th rowspan="2" class="whitespace-nowrap text-center">#</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Tanggal</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Nom Unit</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Shift</th>
-                        <th colspan="2" class="whitespace-nowrap text-center">Waktu</th>
-                        <th rowspan="2" class="whitespace-nowrap text-center">Keterangan</th>
-                    </tr>
-                    <tr class="">
-                        <th class="whitespace-nowrap text-center">Awal</th>
-                        <th class="whitespace-nowrap text-center">Akhir</th>
+                        <th class="whitespace-nowrap text-center">#</th>
+                        <th class="whitespace-nowrap text-center">Tanggal</th>
+                        <th class="whitespace-nowrap text-center">Site</th>
+                        <th class="whitespace-nowrap text-center">Pit</th>
+                        <th class="whitespace-nowrap text-center">OB</th>
+                        <th class="whitespace-nowrap text-center">Coal</th>
+                        <th class="whitespace-nowrap text-center">Jarak</th>
                     </tr>
                 </thead>
                 <tbody class="">
                     @foreach($data as $key => $dt)
-                    <tr class="text-center bg-white">
-                        <td class="">
-                            {{$key + 1}}
-                        </td>
-                        <td class="">
-                            {{$dt->tgl}}
-                        </td>
-                        <td class="">
-                            {{$dt->unit}}
-                        </td>
-                        <td class="">
-                            {{$dt->shift}}
-                        </td>
-                        <td class="">
-                            {{$dt->awal}}
-                        </td>
-                        <td class="">
-                            {{$dt->akhir}}
-                        </td>
-                        <td class="">
-                            {{$dt->ket}}
-                        </td>
-                    </tr>
+                        <tr class="text-center bg-white">
+                            <td>{{$key + 1}} </td>
+                            @foreach ($dt as $k => $d)
+                                @if ($k !='id')
+                                    <td>{{$d}}</td>                                
+                                @endif
+                            @endforeach
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
     </div>
-    <!-- End Kendala -->
+    <!-- End invoice -->
 
     <!-- BEGIN: Modal Content -->
     <div id="input2" class="modal" tabindex="-1" aria-hidden="true">
@@ -208,8 +154,8 @@
             <div class="modal-content">
                 <!-- BEGIN: Modal Header -->
                 <div class="modal-header">
-                    <h2 class="font-medium text-base mr-auto">Import Excel Kendala</h2>
-                    <form action="{{route('kendala.import')}}" method="POST" enctype="multipart/form-data">
+                    <h2 class="font-medium text-base mr-auto">Import Excel invoice</h2>
+                    {{-- <form action="{{route('invoice.import')}}" method="POST" enctype="multipart/form-data"> --}}
                     @csrf
                 </div> 
                 <!-- END: Modal Header -->

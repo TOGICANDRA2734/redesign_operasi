@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class FuelUnitController extends Controller
@@ -120,7 +121,13 @@ class FuelUnitController extends Controller
      */
     public function create()
     {
-        //
+        $data = collect(DB::select(DB::raw("Select id, tgl, (select namasite from site where kodesite=pma_invoice.kodesite), pit, ob, coal, dist from pma_invoice order by id desc limit 15")));
+        $site = DB::table('site')->select('kodesite', 'namasite')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        $unit = DB::table('plant_hm')->select('nom_unit')->where('kodesite', '=', Auth::user()->kodesite)->orderBy('nom_unit')->get();
+        $waktu = Carbon::now()->format('Y-m-d');
+        $pit = Auth::user()->kodesite === 'X' ? DB::table('pma_dailyprod_pit')->select('ket')->get() : DB::table('pma_dailyprod_pit')->select('ket')->where('kodesite', '=', Auth::user()->kodesite)->get();
+        
+        return view('fuel-unit.create', compact('site', 'unit', 'waktu', 'data', 'pit'));
     }
 
     /**
