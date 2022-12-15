@@ -65,7 +65,6 @@
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
                             OB
                         </span>
-                        <!-- <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="awal" id="awal"> -->
                         <div class="input-group">
                             <div id="input-group-email" class="input-group-text">BCM</div> 
                             <input class="form-control" type="number" step="0.1" min="0" name="ob" id="ob">
@@ -81,7 +80,6 @@
                         <span class="font-semibold text-gray-700 dark:text-gray-400">
                             Coal
                         </span>
-                        <!-- <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="akhir" id="akhir"> -->
                         <div class="input-group">
                             <div id="input-group-email" class="input-group-text">Coal</div> 
                             <input class="form-control" type="number" step="0.1" min="0" name="coal" id="coal">
@@ -123,12 +121,13 @@
                 <thead class="table-dark">
                     <tr class="">
                         <th class="whitespace-nowrap text-center">#</th>
-                        <th class="whitespace-nowrap text-center">Tanggal</th>
+                        <th class="whitespace-nowrap text-center">Bulan</th>
                         <th class="whitespace-nowrap text-center">Site</th>
                         <th class="whitespace-nowrap text-center">Pit</th>
                         <th class="whitespace-nowrap text-center">OB</th>
                         <th class="whitespace-nowrap text-center">Coal</th>
                         <th class="whitespace-nowrap text-center">Jarak</th>
+                        <th class="whitespace-nowrap text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="">
@@ -140,6 +139,12 @@
                                     <td>{{$d}}</td>                                
                                 @endif
                             @endforeach
+                            <td class="whitespace-nowrap text-center">
+                                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#input1"  type="button"  class="btn btn-warning text-white"><i
+                                        class="fa-solid fa-pencil"></i></a>
+                                <a href="{{ route('invoice.edit', $dt->id) }}" class="btn btn-danger text-white"><i
+                                        class="fa-solid fa-trash"></i></a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -149,7 +154,7 @@
     <!-- End invoice -->
 
     <!-- BEGIN: Modal Content -->
-    <div id="input2" class="modal" tabindex="-1" aria-hidden="true">
+    <div id="input1" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- BEGIN: Modal Header -->
@@ -161,10 +166,62 @@
                 <!-- END: Modal Header -->
                 <!-- BEGIN: Modal Body -->
                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                    <div class="col-span-12"> 
-                        <label for="modal-form-4" class="form-label">Data Excel (XLS)</label> 
-                        <input id="modal-form-4" type="file" class="form-control" name="excel">
-                        @error('excel')
+                    <div class="col-span-12 md:col-span-6"> 
+                        <label class="block mt-1 text-sm">
+                            <span class="font-semibold text-gray-700 dark:text-gray-400">
+                                Tanggal <span class="text-xs text-gray-500">(Bulan-Hari-Tahun)</span>
+                            </span>
+                            <input value="{{$waktu}}" class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="date" name="tgl" id="tgl" >
+                            @error('tgl')
+                                <div class="text-danger mt-2">{{$message}}</div>
+                            @endif
+                        </label>
+                    </div>
+                    <div class="col-span-12 md:col-span-6"> 
+                        <label class="block mt-1 text-sm">
+                            <span class="font-semibold text-gray-700 dark:text-gray-400">
+                                OB
+                            </span>
+                            <select data-placeholder="Pilih Pit" name="pit" class="tom-select w-full @error('pit') border-danger @enderror">
+                                <option value="" selected disabled>Pilih Pit</option>
+                                @foreach ($pit as $p)
+                                    <option value="{{$p->ket}}">{{$p->ket}}</option>
+                                @endforeach
+                            </select> 
+                            @error('pit')
+                                <div class="text-danger mt-2">{{$message}}</div>
+                            @endif
+                        </label>
+                    </div>
+                    
+                    <div class="col-span-12 md:col-span-6"> 
+                        <label class="block mt-1 text-sm">
+                            <span class="font-semibold text-gray-700 dark:text-gray-400">
+                                OB
+                            </span>
+                            <!-- <input class="block shadow-sm border p-2 rounded-md w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-multiselect focus:border-stone-400 focus:outline-none focus:shadow-outline-stone dark:focus:shadow-outline-gray" type="text" name="awal" id="awal"> -->
+                            <div class="input-group">
+                                <div id="input-group-email" class="input-group-text">BCM</div> 
+                                <input class="form-control" type="number" step="0.1" min="0" name="ob" id="ob">
+                            </div>
+                            @error('ob')
+                                <div class="text-danger mt-2">{{$message}}</div>
+                            @endif
+                        </label>
+                    </div>
+                    
+                    <div class="col-span-12 md:col-span-6"> 
+                        <label for="modal-form-4" class="form-label">Coal</label> 
+                        <input id="modal-form-4" type="file" class="form-control" name="coal">
+                        @error('coal')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
+                    </div>
+
+                    <div class="col-span-12 md:col-span-6"> 
+                        <label for="modal-form-4" class="form-label">Jarak</label> 
+                        <input id="modal-form-4" type="file" class="form-control" name="jarak">
+                        @error('jarak')
                             <div class="text-danger mt-2">{{$message}}</div>
                         @endif
                     </div>
