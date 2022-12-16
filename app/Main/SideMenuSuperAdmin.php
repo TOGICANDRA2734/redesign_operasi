@@ -278,7 +278,23 @@ class SideMenuSuperAdmin
                                     'layout' => 'side-menu'
                                 ],
                                 'route_name' => 'fleet-setting.index',
-                            ]
+                            ],
+                            'solar-in-trans' => [
+                                'icon' => 'box',
+                                'title' => 'Solar versi In Trans',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'solar-in-trans.index',
+                            ],
+                            'solar-opname' => [
+                                'icon' => 'box',
+                                'title' => 'Solar Stock (Solar Opname)',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'solar-opname.index',
+                            ],
                         ],
                     ],
                 ],

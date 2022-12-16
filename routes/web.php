@@ -52,6 +52,8 @@ use App\Http\Controllers\PopulasiUnitController;
 use App\Http\Controllers\POTransaksiController;
 use App\Http\Controllers\ProductivityCoalController;
 use App\Http\Controllers\RepHarController;
+use App\Http\Controllers\SolarInTransController;
+use App\Http\Controllers\SolarOpnameController;
 use App\Http\Controllers\TP_PtyUnitPerTipe;
 use App\Http\Controllers\TP_PtyUnitPerUnit;
 // User
@@ -440,4 +442,10 @@ Route::middleware('auth')->group(function() {
 
         // Fleet Setting Controller
         Route::resource('budget', BudgetController::class);
+
+        // Fleet Setting Controller
+        Route::resource('solar-in-trans', SolarInTransController::class);
+
+        // Fleet Setting Controller
+        Route::resource('solar-opname', SolarOpnameController::class);
 });
