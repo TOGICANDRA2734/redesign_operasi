@@ -19,7 +19,7 @@
         <div class="flex justify-between items-center col-span-12 mt-5">
             <!-- Title -->
             <h2 class="text-lg font-medium truncate mr-5 ">
-                Solar Unit Versi In Trans
+                Solar Opname
             </h2>
 
             <div class="ml-auto flex justify-center items-center">
@@ -28,7 +28,7 @@
                 </div>
 
                 {{-- Url Rujukan --}}
-                <input type="hidden" name="url" value="{{route('solar-in-trans.index')}}" id="urlFilter">
+                <input type="hidden" name="url" value="{{route('solar-opname.index')}}" id="urlFilter">
 
                 {{-- Pilih Site --}}
                 <select id="kodesite"
@@ -69,11 +69,14 @@
         <div class="col-span-12 grid grid-cols-12 gap-5">
             <div class="col-span-12 intro-y">
                 <div class="box p-5 zoom-in">
-                    <div class="flex items-center">
-                        <div class="w-2/4 flex-none">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-none">
                             <div class="text-lg font-medium truncate">Total Solar</div>
-                            <div class="text-slate-500 mt-1" id="actualOB">Actual: {{ number_format($total,0) }} L</div>
-                            {{-- <div class="text-slate-500 mt-1" id="planOB">Plan:CM</div> --}}
+                            <div class="text-slate-500 mt-1" id="stock_in">Stock: {{number_format($total["total_stock"],0)}} L</div>
+                            <div class="text-slate-500 mt-1" id="stock_out">Pemakaian: {{number_format($total["total_non_stock"],0)}} L</div>
+                        </div>
+                        <div class="flex-none relative">
+                            <div class="font-medium w-full h-full justify-center" id="stock_total">{{number_format($total["stock"],0)}}</div>
                         </div>
                     </div>
                 </div>
@@ -87,11 +90,13 @@
                 <table class="w-full table table-sm">
                     <thead class="table-dark sticky left-0 top-0 z-50">
                         <tr class="">
-                            <th class="whitespace-nowrap text-center">#</th>
-                            <th class="whitespace-nowrap text-center">Tanggal</th>
-                            <th class="whitespace-nowrap text-center">Fuel</th>
-                            {{-- <th class="whitespace-nowrap text-center">Liter/BCM</th> --}}
-                            <th class="whitespace-nowrap text-center">Site</th>
+                            <th rowspan="2" class="whitespace-nowrap text-center">#</th>
+                            <th rowspan="2" class="whitespace-nowrap text-center">Nom Unit</th>
+                            <th colspan="2" class="whitespace-nowrap text-center">Solar</th>
+                        </tr>
+                        <tr>
+                            <th class="whitespace-nowrap text-center">IN</th>
+                            <th class="whitespace-nowrap text-center">OUT</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,7 +106,7 @@
                                     {{ $key + 1 }}
                                 </td>
                                 @foreach ($dt as $k => $d)
-                                    @if ($k === 'item_qty')
+                                    @if ($k === 'solar_stock' || $k === 'solar_non_stock')
                                         <td class="whitespace-nowrap text-center">
                                             {{ number_format($d,0) }}
                                         </td>
@@ -214,6 +219,11 @@
                         $j("table tbody").empty();
                         fullText = ""
                         if (response) {
+                        console.log(response)
+
+                        $j("#stock_in").html("Stock: " + number_format(response.total["total_stock"],0) + " L");
+                        $j("#stock_out").html("Pemakaian: " + number_format(response.total["total_non_stock"],0) + " L");
+                        $j("#stock_total").html(number_format(response.total["stock"],0));
 
                         var i=1;
                         $j.each(response.data, function(index, data) {
@@ -225,7 +235,7 @@
                             i++;
                             
                             $j.each(data, function(i, d){
-                                if(i === 'voucher_date' || i === 'wh_code' || i === 'nom_unit'){
+                                if(i === 'voucher_date' || i === 'wh_code' || i === 'car_no'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
                                 } else if(i === 'ltr_hour' || i === 'ltr_bcm'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,2) + "</td>"

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Site;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SolarOpnameController extends Controller
 {
@@ -11,9 +14,44 @@ class SolarOpnameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $where = '';
+
+        if (count($request->all()) > 1) {              
+            // Where 1
+            $where .= ($request->has('start') && $request->has('end')) ? "voucher_date BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where .= ($request->has('kodesite') && !empty($request->kodesite)) ? " AND " : "";
+            $where .= ($request->has('kodesite') && !empty($request->kodesite)) ? "wh_code='" . $request->kodesite . "'" : "";
+            $where .= " AND cat_code=\"904\" AND del=0";
+        } else {
+            $where .= "voucher_date BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND cat_code=\"904\" AND del=0";
+        }
+
+        $site = Site::where('status_website', 1)->get();
+
+        $subquery = "SELECT car_no,
+        SUM(IF((cat_code=\"904\" AND car_no=\"STOCK\"), item_qty,0)) solar_stock, 
+        SUM(IF((cat_code=\"904\" AND car_no<>\"STOCK\"), item_qty,0)) solar_non_stock
+        FROM unit_in_trans
+        WHERE ".$where."
+        GROUP BY LEFT(car_no,4)
+        ORDER BY car_no
+        ";
+        $data = collect(DB::select(DB::raw($subquery)));
+        $total = [
+            'total_stock' => $data->sum('solar_stock'),
+            'total_non_stock' => $data->sum('solar_non_stock'),
+            'stock' => $data->sum('solar_stock') - $data->sum('solar_non_stock'),
+        ];
+
+        if (count($request->all()) > 1) {
+            $response['data'] = $data;
+            $response['total'] = $total;
+            return response()->json($response);
+        } else {
+            return view('fuel-opname.index', compact('data', 'site', 'total'));
+        }
     }
 
     /**
