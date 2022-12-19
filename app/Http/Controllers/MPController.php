@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Manpower;
+use App\Models\Site;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
+use function PHPUnit\Framework\isEmpty;
+use function PHPUnit\Framework\isNull;
 
 class MPController extends Controller
 {
@@ -13,8 +18,25 @@ class MPController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $where = '';
+        
+        if (count($request->all()) > 1) {              
+            // Where 1
+            $where .= ($request->has('status_karyawan') && !empty($request->status_karyawan) && isNull($request->status_karyawan)) ? "statuskary LIKE '" . $request->status_karyawan . "' " : "";
+            $where .= ($request->has('kodesite') && $request->has('status_karyawan')) ? " AND " : "";
+            $where .= ($request->has('kodesite') && !empty($request->kodesite)) ? "kodesite='" . $request->kodesite . "'" : "";
+            $where .= ($request->has('field_cari') && !empty($request->kodesite)) ? " AND " : "";
+            $where .= ($request->has('field_cari') && !empty($request->field_cari) || $request->has('cariNama') && !empty($request->cariNama) ) ? $request->field_cari ."='" . $request->cariNama . "'" : "";
+            $where .= ((!isNull($request->kodesite) || !isNull($request->field_cari) || isNull($request->status_karyawan)) && (!empty($request->status_karyawan) || !empty($request->kodesite) || !empty($request->field_cari))) ? " AND " : "";
+            $where .= "  del=1";
+        } else {
+            $where .= "del=1";
+        }
+
+        $site = Site::where('status_website', 1)->get();
+
         $subquery = "SELECT id,site, nik, nama, dept, jabatan, hpkary, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), '%Y') + 0 tgllahir, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),mulaikerja)), '%Y') + 0 mulaikerja, 
         FORMAT(((
             (IF(nik<>'',1,0)) +
@@ -89,9 +111,18 @@ class MPController extends Controller
             (IF(faskes<>'',1,0))
         ) / (SELECT count(*) AS NUMBEROFCOLUMNS FROM information_schema.columns where table_name='mp_biodata') * 100 ), 1) lengkap        
         FROM mp_biodata
-        LIMIT 100";
-        $data = DB::select(DB::raw($subquery));
-        return view('mp.index', compact('data'));
+        WHERE ".$where."";
+        $data = collect(DB::select(DB::raw($subquery)));
+
+        $status_karyawan = DB::select(DB::raw("SELECT DISTINCT statuskary FROM mp_biodata where statuskary<>\"\""));
+        $field_cari = ['Nama', 'Nik', 'Departemen', 'Jabatan', 'Alamat'];
+
+        if (count($request->all()) > 1) {
+            $response['data'] = $data;
+            return response()->json($response);
+        } else {
+            return view('mp.index', compact('data', 'site', 'status_karyawan', 'field_cari'));
+        }
     }
 
     /**

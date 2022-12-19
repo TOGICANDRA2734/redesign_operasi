@@ -31,8 +31,8 @@ class SolarOpnameController extends Controller
         $site = Site::where('status_website', 1)->get();
 
         $subquery = "SELECT car_no,
-        SUM(IF((cat_code=\"904\" AND car_no=\"STOCK\"), item_qty,0)) solar_stock, 
-        SUM(IF((cat_code=\"904\" AND car_no<>\"STOCK\"), item_qty,0)) solar_non_stock
+        SUM(IF((cat_code=\"904\" AND car_no=\"STOCK\"), item_qty,'')) solar_stock, 
+        SUM(IF((cat_code=\"904\" AND car_no<>\"STOCK\"), item_qty,'')) solar_non_stock
         FROM unit_in_trans
         WHERE ".$where."
         GROUP BY LEFT(car_no,4)
