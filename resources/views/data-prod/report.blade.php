@@ -17,6 +17,7 @@
             
             {{-- Url Rujukan --}}
             <input type="hidden" name="url" value="{{route('data-prod.report')}}" id="urlFilter">
+            <input type="hidden" name="urlExport" value="{{route('data-prod.export')}}" id="urlFilter">
 
             {{-- Filter Tanggal --}}
             <div id="filterTanggal" class="form-control box p-2 ml-auto w-10 flex mr-2">
@@ -40,6 +41,27 @@
 
         </div>
         {{-- @endif --}}
+
+        <div class="dropdown mr-2">
+            <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
+                <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
+            </button>
+            <div class="dropdown-menu w-40">
+                <ul class="dropdown-content">
+                    <li>
+                        <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#input1"  type="button" class="dropdown-item"> 
+                            <i data-lucide="settings" class="w-4 h-4 mr-2"></i> Excel TC 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#input2"  type="button" class="dropdown-item"> 
+                            <i data-lucide="settings" class="w-4 h-4 mr-2"></i> Excel Plan TC 
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <div class="dropdown">
             <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
                 <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="download"></i> </span>
@@ -47,9 +69,12 @@
             <div class="dropdown-menu w-40">
                 <ul class="dropdown-content">
                     <li>
-                        <form action="{{route('super_admin.export_data.index')}}" method="POST">
-
-                            <button type="submit" class="dropdown-item"> Excel </button>
+                        <form action="{{route('data-prod.export')}}" method="GET">
+                            @csrf
+                            <input type="hidden" name="start" class="eStart" value="">
+                            <input type="hidden" name="end" class="eEnd" value="">
+                            <input type="hidden" name="kodesite" class="eKodesite" value="">
+                            <button type="submit" class="dropdown-item "> Excel </button>
                         </form>
                     </li>
                     <li>
@@ -71,7 +96,7 @@
                             <div class="text-slate-500 mt-1" id="planOB">Plan: {{number_format($totalProduksi["ob"]["plan"],0)}} BCM</div>
                         </div>
                         <div>
-                            <div class="relative text-2xl 2xl:text-3xl font-medium leading-6 pl-3 2xl:pl-4" id="achOB">{{number_format($totalProduksi["ob"]["act"] / $totalProduksi["ob"]["plan"] * 100,0)}}%</div>
+                            <div class="relative text-2xl 2xl:text-3xl font-medium leading-6 pl-3 2xl:pl-4" id="achOB">{{ $totalProduksi["ob"]["plan"] == 0 ? 0 : number_format($totalProduksi["ob"]["act"] / $totalProduksi["ob"]["plan"] * 100,0)}}%</div>
                         </div>
                     </div>
                 </div>
@@ -86,7 +111,7 @@
                             <div class="text-slate-500 mt-1" id="planCoal">Plan: {{number_format($totalProduksi["coal"]["plan"],0)}} MT</div>
                         </div>
                         <div>
-                            <div class="relative text-2xl 2xl:text-3xl font-medium leading-6 pl-3 2xl:pl-4" id="achCoal">{{number_format($totalProduksi["coal"]["act"] / $totalProduksi["coal"]["plan"] * 100,0)}}%</div>
+                            <div class="relative text-2xl 2xl:text-3xl font-medium leading-6 pl-3 2xl:pl-4" id="achCoal">{{$totalProduksi["coal"]["plan"] == 0 ? 0 : number_format($totalProduksi["coal"]["act"] / $totalProduksi["coal"]["plan"] * 100,0)}}%</div>
                         </div>
                     </div>
                 </div>
@@ -138,6 +163,114 @@
             </table>
         </div>
     </div>
+
+    <!-- BEGIN: Modal Content -->
+    <div id="input1" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" action="{{route('generateTc.store')}}" method="POST">
+                @csrf
+                <!-- BEGIN: Modal Header -->
+                <div class="modal-header">
+                    <h2 class="font-medium text-base mr-auto">Buat Data TC</h2>
+                    <div class="dropdown sm:hidden"> <a class="dropdown-toggle w-5 h-5 block" href="javascript:;" aria-expanded="false"> <i data-lucide="more-horizontal" class="w-5 h-5 text-slate-500"></i> </a>
+                        <div class="dropdown-menu w-40">
+                            <ul class="dropdown-content">
+                                <li> <a href="javascript:;" class="dropdown-content"> <i data-lucide="file" class="w-4 h-4 mr-2"></i> Download Docs </a> </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> <!-- END: Modal Header -->
+                <!-- BEGIN: Modal Body -->
+                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                    <div class="col-span-12 sm:col-span-6"> <label for="modal-datepicker-1" class="form-label">Dari</label> 
+                        <input type="text" id="modal-datepicker-1" class="datepicker form-control" data-single-mode="true" name="start"> 
+                    </div>
+                    <div class="col-span-12 sm:col-span-6"> 
+                        <label for="modal-datepicker-2" class="form-label">Sampai</label> 
+                        <input type="text" id="modal-datepicker-2" class="datepicker form-control" data-single-mode="true" name="end"> 
+                    </div>
+                </div> <!-- END: Modal Body -->
+                <!-- BEGIN: Modal Footer -->
+                <div class="modal-footer flex justify-between items-center"> 
+                    <div>
+                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Batalkan</button> 
+                        <button type="submit" class="btn btn-primary w-20">Kirim</button> 
+                    </div>
+                </div> 
+                <!-- END: Modal Footer -->
+            </form>
+        </div>
+    </div>
+    <!-- END: Modal Content -->
+
+    <!-- BEGIN: Modal Content -->
+    <div id="input2" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" action="{{route('generatePlan.store')}}" method="POST">
+                @csrf
+                <!-- BEGIN: Modal Header -->
+                <div class="modal-header">
+                    <h2 class="font-medium text-base mr-auto">Buat Data Plan TC</h2>
+                    <div class="dropdown sm:hidden"> <a class="dropdown-toggle w-5 h-5 block" href="javascript:;" aria-expanded="false"> <i data-lucide="more-horizontal" class="w-5 h-5 text-slate-500"></i> </a>
+                        <div class="dropdown-menu w-40">
+                            <ul class="dropdown-content">
+                                <li> <a href="javascript:;" class="dropdown-content"> <i data-lucide="file" class="w-4 h-4 mr-2"></i> Download Docs </a> </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> <!-- END: Modal Header -->
+                <!-- BEGIN: Modal Body -->
+                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                    <div class="col-span-12 sm:col-span-6"> <label for="modal-datepicker-1" class="form-label">Dari</label> 
+                        <input type="text" id="modal-datepicker-1" class="datepicker form-control" data-single-mode="true" name="start"> 
+                    </div>
+                    <div class="col-span-12 sm:col-span-6"> 
+                        <label for="modal-datepicker-2" class="form-label">Sampai</label> 
+                        <input type="text" id="modal-datepicker-2" class="datepicker form-control" data-single-mode="true" name="end"> 
+                    </div>
+                </div> <!-- END: Modal Body -->
+                <!-- BEGIN: Modal Footer -->
+                <div class="modal-footer flex justify-between items-center"> 
+                    <div>
+                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Batalkan</button> 
+                        <button type="submit" class="btn btn-primary w-20">Kirim</button> 
+                    </div>
+                </div> 
+                <!-- END: Modal Footer -->
+            </form>
+        </div>
+    </div>
+    <!-- END: Modal Content -->
+
+
+    <!-- BEGIN: Modal Content -->
+    {{-- <div id="input1" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- BEGIN: Modal Header -->
+                <div class="modal-header">
+                    <h2 class="font-medium text-base mr-auto">Generate Data TC</h2>
+                    <form action="{{route('generateTc.store')}}" method="POST">
+                    @csrf
+
+                    date
+                </div> <!-- END: Modal Header -->
+                <!-- BEGIN: Modal Body -->
+                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                    <div class="col-span-12 sm:col-span-6"> 
+                        <label for="modal-form-2" class="form-label">Periode</label> 
+                        <input id="modal-form-2" type="text" class="form-control" placeholder="" name="periode">
+                        @error('periode')
+                            <div class="text-danger mt-2">{{$message}}</div>
+                        @endif
+                    </div>
+                </div> <!-- END: Modal Body -->
+
+                </form>
+            </div>
+        </div>
+    </div>  --}}
+    <!-- END: Modal Content -->
 </div>
 
 <!-- Filtering -->
@@ -171,6 +304,11 @@
         var awal = start.format("YYYY-MM-DD");
         var akhir = end.format("YYYY-MM-DD");
         var kodesite = $j("#kodesite").val() ? $j("#kodesite").val() : "";
+
+        $j(".eStart").attr("value", awal);
+        $j(".eEnd").attr("value", akhir);
+        $j(".eKodesite").attr("value", kodesite);
+
         console.log(kodesite)
         $j("#loading").toggleClass('hidden');
 
@@ -209,6 +347,10 @@
         var url = $j("#urlFilter").val();
 
         $j("#loading").toggleClass('hidden');
+
+        $j(".eStart").attr("value", awal);
+        $j(".eEnd").attr("value", akhir);
+        $j(".eKodesite").attr("value", kodesite);
 
         $j.ajax({
             type: "GET",
@@ -315,8 +457,6 @@
             return s.join(dec);
         }
 </script>
-
-
 
 <script>
     /*!

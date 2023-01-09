@@ -28,7 +28,7 @@
                 </div>
 
                 {{-- Url Rujukan --}}
-                <input type="hidden" name="url" value="{{ route('data-prod.index') }}" id="urlFilter">
+                <input type="hidden" name="url" value="{{ route('data-prod.report') }}" id="urlFilter">
 
                 {{-- Pilih Site --}}
                 <select id="pilihSite"

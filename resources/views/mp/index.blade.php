@@ -114,9 +114,7 @@
                                 @endif
                             @endforeach
                             <td class="cekTbModal">
-                                <a href="javascript:;" data-tw-toggle="modal"
-                                    data-tw-target="#superlarge-modal-size-preview" data-id="{{ $dt->id }}"
-                                    data-url="{{ route('mp.show', $dt->id) }}" class="btn btn-dark mr-1 mb-2 p-1 detailBtn">
+                                <a href="{{ route('mp.show', $dt->id) }}" class="btn btn-dark mr-1 mb-2 p-1 detailBtn">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                 </a>
                                 {{-- <a href="{{ route('super_admin.pap.edit', $data[$key]->id) }}"
@@ -144,10 +142,10 @@
                 }
             });
 
-            var kodesite = $j("#kodesite").val() ? $j("#kodesite").val() : null;
-            var status_karyawan = $j("#status_karyawan").val() ? $j("#status_karyawan").val() : null;
-            var cariNama = $j("#cariNama").val() ? $j("#cariNama").val() : null;
-            var field_cari = $j("#field_cari").val() ? $j("#field_cari").val() : null;
+            var kodesite = $j("#kodesite").val() ? $j("#kodesite").val() : '';
+            var status_karyawan = $j("#status_karyawan").val() ? $j("#status_karyawan").val() : '';
+            var cariNama = $j("#cariNama").val() ? $j("#cariNama").val() : '';
+            var field_cari = $j("#field_cari").val() ? $j("#field_cari").val() : '';
 
             var url = $j("#urlFilter").val();
 
@@ -160,7 +158,7 @@
                     'kodesite': kodesite,
                     'status_karyawan': status_karyawan,
                     'cariNama': cariNama,
-                    'fieldCari': fieldCari,
+                    'fieldCari': field_cari,
                 },
                 success: function(response) {
                     update_data(response)
@@ -198,13 +196,13 @@
                                 }
                             })
 
+                            id = response.data[index]['id'] 
                             text += "<td class=\"cekTbModal\">" +
-                                "<a href=\"javascript:;\" data-tw-toggle=\"modal\"" +
-                                    "data-tw-target=\"#superlarge-modal-size-preview\" data-id=\"{{ $dt->id }}\"" + 
-                                    "data-url=\"{{ route('mp.show', $dt->id) }}\" class=\"btn btn-dark mr-1 mb-2 p-1 detailBtn\">" +
+                                "<a href=\"{{ route('mp.show', ':id')}}\" class=\"btn btn-dark mr-1 mb-2 p-1 detailBtn\">" +
                                     "<i data-lucide=\"eye\" class=\"w-4 h-4\"></i>" +
                                 "</a>" + 
                             "</td>"
+                            text = text.replace(':id', id);
                             text += "</tr>"
                             fullText += text
                         });
@@ -321,7 +319,7 @@
                     // Creating the options object
                     this.options = {};
 
-                    this.toastElement = null;
+                    this.toastElement = '';
 
                     // Validating the options
                     this.options.text = options.text || Toastify.defaults.text; // Display message

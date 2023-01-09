@@ -8,9 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use function PHPUnit\Framework\isEmpty;
-use function PHPUnit\Framework\isNull;
-
 class MPController extends Controller
 {
     /**
@@ -24,13 +21,12 @@ class MPController extends Controller
         
         if (count($request->all()) > 1) {              
             // Where 1
-            $where .= ($request->has('status_karyawan') && !empty($request->status_karyawan) && isNull($request->status_karyawan)) ? "statuskary LIKE '" . $request->status_karyawan . "' " : "";
-            $where .= ($request->has('kodesite') && $request->has('status_karyawan')) ? " AND " : "";
-            $where .= ($request->has('kodesite') && !empty($request->kodesite)) ? "kodesite='" . $request->kodesite . "'" : "";
-            $where .= ($request->has('field_cari') && !empty($request->kodesite)) ? " AND " : "";
-            $where .= ($request->has('field_cari') && !empty($request->field_cari) || $request->has('cariNama') && !empty($request->cariNama) ) ? $request->field_cari ."='" . $request->cariNama . "'" : "";
-            $where .= ((!isNull($request->kodesite) || !isNull($request->field_cari) || isNull($request->status_karyawan)) && (!empty($request->status_karyawan) || !empty($request->kodesite) || !empty($request->field_cari))) ? " AND " : "";
-            $where .= "  del=1";
+            $where .= ($request->has('kodesite') && !is_null($request->kodesite)) ? "kodesite='" . $request->kodesite . "'" : "";
+            $where .= (($request->has('kodesite') && !is_null($request->kodesite))) ? " AND " : "";
+            $where .= ($request->has('status_karyawan') && !empty($request->status_karyawan) && !is_null($request->status_karyawan)) ? "statuskary LIKE '%" . $request->status_karyawan . "%' " : "";
+            $where .= ( $request->has('status_karyawan') && !is_null($request->status_karyawan) ) ? " AND " : "";
+            $where .= ($request->has('fieldCari') && !is_null($request->fieldCari) || $request->has('cariNama') && !is_null($request->cariNama) ) ? $request->fieldCari ." LIKE '%" . $request->cariNama . "%'" : "";
+            $where .= " AND del=1";
         } else {
             $where .= "del=1";
         }
@@ -154,24 +150,24 @@ class MPController extends Controller
      */
     public function show($id)
     {
-        $record1 = Manpower::select(DB::raw('nama, tempatlahir, tgllahir, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), \'%Y\') + 0 Umur, agama, warganegara, pendidikan, gol, statusnikah, sttkeluarga, kelamin, rhesus, nobpjstk, nobpjskes, norek, faskes, alamatktp, provktp, kabktp, kecktp, kelktp, alamat, prov, kab, kec, kel'))->where('id', $id)->get();
-        $record2 = Manpower::select(DB::raw('dept, sttpegawai, jabatan,  vaksin1, gol, grade, statuskary, mulaikerja, akhirpkwt, tglpensiun, emailkary, keterangan'))->where('id', $id)->get();
-        $record3 = Manpower::select(DB::raw('foto1, foto2'))->where('id', $id)->get();
-        $recordDataProfil = Manpower::select(DB::raw('nama, dept, jabatan'))->where('id', $id)->get();
-        $metadata = Manpower::select(DB::raw('user, time'))->where('id', $id)->get();
+        $record1 = (Manpower::select(DB::raw('nama, tempatlahir, tgllahir, DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),tgllahir)), \'%Y\') + 0 Umur, agama, warganegara, pendidikan, gol, statusnikah, sttkeluarga, kelamin, rhesus, nobpjstk, nobpjskes, norek, faskes, alamatktp, provktp, kabktp, kecktp, kelktp, alamat, prov, kab, kec, kel'))->where('id', $id)->get());
+        $record2 = (Manpower::select(DB::raw('dept, sttpegawai, jabatan,  vaksin1, gol, grade, statuskary, mulaikerja, akhirpkwt, tglpensiun, emailkary, keterangan'))->where('id', $id)->get());
+        $record3 = (Manpower::select(DB::raw('foto1, foto2'))->where('id', $id)->get());
+        $recordDataProfil = (Manpower::select(DB::raw('nama, dept, jabatan'))->where('id', $id)->get());
+        $metadata = (Manpower::select(DB::raw('user, time'))->where('id', $id)->get());
         
         $data['record1'] = $record1;
         $data['record2'] = $record2;
         $data['record3'] = $record3;
         $data['recordDataProfil'] = $recordDataProfil;
-        $data['foto1'] = $record3[0]->foto1; 
-        $data['metadata'] = $metadata; 
+        $data['foto1'] = $record3[0]->foto1;
+        $data['metadata'] = $metadata;
         
 
         $data['judulrecord1'] = ['Nama', 'Tempat Lahir', 'Tanggal Lahir', 'Umur', 'Agama', 'Warga Negara', 'Pendidikan', 'Gol. Darah',  'Status', 'Status Keluarga', 'Jenis Kelamin', 'Rhesus', 'No. BPJSTK', 'No. BPJSKES', 'No. Rek', 'Faskes', 'Alamat KTP', 'Provinsi KTP', 'Kabupaten KTP', 'Kecamatan KTP', 'Kelurahan KTP', 'Alamat', 'Provinsi', 'Kabupaten ', 'Kecamatan', 'Kelurahan'];
         $data['judulrecord2'] = ['Departemen', 'Status Pegawai', 'Jabatan',  'Vaksin 1', 'Golongan Karyawan', 'Grade', 'Status Karyawan', 'Mulai Kerja', 'Akhir PKWT', 'Tanggal Pensiun', 'Email Karyawan', 'Keterangan'];
         $data['judulrecord3'] = ['foto1', 'foto2'];
-        return response()->json($data);
+        return view('mp.show', compact('data'));
     }
 
     /**

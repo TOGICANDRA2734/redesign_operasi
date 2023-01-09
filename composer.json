@@ -9,6 +9,7 @@
         "enyo/dropzone": "^5.9",
         "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.2",
+        "hisamu/php-xbase": "^2.1",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",

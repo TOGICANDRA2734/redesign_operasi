@@ -47,8 +47,8 @@ class FuelDailyController extends Controller
         FORMAT(SUM(IF(aktivitas='001', jam, 0)),2) jam_ob,
         FORMAT(SUM(IF(aktivitas='003' OR aktivitas='004', jam, 0)),2) jam_coal,
         FORMAT(fuel.qty,2) solar,
-        FORMAT(fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0)),2) liter_per_jam,
-        FORMAT(SUM(IF(aktivitas='001', jam, 0))  * (fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0))) / SUM(bcm),2) liter_bcm,
+        fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0)) liter_per_jam,
+        SUM(IF(aktivitas='001', jam, 0))  * (fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0))) / SUM(bcm) liter_bcm,
         FORMAT(SUM(IF(aktivitas='003' OR aktivitas='004', jam, 0))  * (fuel.qty/SUM(IF(LEFT(aktivitas,1)='0', jam, 0)))/c.coal,2) liter_coal
         FROM pma_tp tp
         JOIN (SELECT SUM(qty) qty, tgl

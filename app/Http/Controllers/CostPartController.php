@@ -40,7 +40,7 @@ class CostPartController extends Controller
         $subquery = "WITH summ AS
         (
         SELECT
-        car_no,
+        nom_unit,
         (SUM(IF(
         (LEFT(cat_code,1)='1')OR
         (LEFT(cat_code,1)='2')OR
@@ -56,7 +56,9 @@ class CostPartController extends Controller
         SUM(IF(cat_code='903',price_amt,0)) oli_rp
         
         FROM unit_in_trans
-        
+        JOIN plant_populasi
+        on unit_in_trans.car_no=plant_populasi.nom_unit
+
         WHERE ".$where."
         
         GROUP BY car_no 
@@ -77,9 +79,9 @@ class CostPartController extends Controller
         WHERE ".$where2."
         GROUP BY nom_unit
         ) b
-        ON a.car_no = b.nom_unit
+        ON a.nom_unit = b.nom_unit
         
-        ORDER BY car_no
+        ORDER BY nom_unit
         ";
         $data = collect(DB::select(DB::raw($subquery)));
 

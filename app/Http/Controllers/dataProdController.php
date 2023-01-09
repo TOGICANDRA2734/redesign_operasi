@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\DataProdExport;
+use App\Exports\LaporanProduksiExport;
 use App\Models\dataProd;
 use App\Models\Site;
 use Carbon\Carbon;
@@ -15,6 +16,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class dataProdController extends Controller
 {
+    private $filter;
+
     /**
      * Display a listing of the resource.
      *
@@ -71,13 +74,14 @@ class dataProdController extends Controller
             $periodInput[] = $i->format('Y-m-d');
         }
 
+
         if ($request->has('start')) {
             $response['data'] = $data;
             $response['period'] = $period;
             $response['periodInput'] = $periodInput;
             return response()->json($response);
         } else {
-            return view('data-prod.index', compact('data', 'site', 'period'));
+            return view('data-prod.index', compact('data', 'site', 'period', 'request'));
         }
     }
 
@@ -346,6 +350,7 @@ class dataProdController extends Controller
 
     public function report(Request $request)
     {
+
         $where = '';
 
         if (count($request->all()) > 1) {              
@@ -438,4 +443,17 @@ class dataProdController extends Controller
 
         return Excel::download(new DataProdExport($data), 'file.xls');
     }
+
+    public function export(Request $request)
+    {
+        $data = Excel::download(new LaporanProduksiExport($request), 'Laporan Produksi.xlsx');
+
+        if($data){
+            return $data;
+        }
+        else{
+            return redirect()->route('data-prod.report')->with(['error' => 'Data Gagal Diexport!']);
+        }
+    }   
+
 }

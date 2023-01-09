@@ -262,7 +262,7 @@
                             i++;
                             
                             $j.each(data, function(i, d){
-                                if(i === 'tgl'){
+                                if(i === 'tgl' || i === 'liter_per_jam' || i ==='liter_bcm'){
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + d + "</td>"                                    
                                 } else {
                                     text += "<td class=\"whitespace-nowrap text-center\"> " + number_format(d,2) + "</td>"

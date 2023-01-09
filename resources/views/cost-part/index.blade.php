@@ -93,9 +93,9 @@
                                 <td class="whitespace-nowrap text-center">
                                     {{ $key + 1 }}
                                 </td>
-                                @foreach ($dt as $d)
+                                @foreach ($dt as $k => $d)
                                     <td class="whitespace-nowrap text-center">
-                                        @if (gettype($d) === 'double')
+                                        @if ($k !== 'nom_unit')
                                             {{number_format($d,0)}}
                                         @else
                                             {{$d}}
@@ -155,43 +155,7 @@
                     success: function(response) {
                         console.log(response)
 
-                        $j("#loading").toggleClass('hidden');
-                        // JANGAN LUPA COPY KE SEBELAH
-                        // OB CARD
-                        console.log(response)
-                        
-                        $j("table tbody").empty();
-                        fullText = ""
-                        if (response) {
-
-                            var i = 1;
-                            $j.each(response.data, function(index, data) {
-                                text = "<tr class=\"text-center bg-white\">"
-
-                                // Add Index
-                                text += "<td class=\"whitespace-nowrap text-center\"> " + i +
-                                    "</td>"
-
-                                i++;
-
-                                $j.each(data, function(i, d) {
-                                    if(typeof(d) === 'number'){
-                                        text +=
-                                        "<td class=\"whitespace-nowrap text-center\"> " +
-                                        number_format(d,0) + "</td>"
-                                    } else {
-                                        text +=
-                                        "<td class=\"whitespace-nowrap text-center\"> " +
-                                        d + "</td>"
-                                    }
-                                })
-
-                                text += "</tr>"
-                                fullText += text
-                            });
-                            $j("table tbody").html(fullText);
-                            show_data();
-                        }
+                        update_data(response)
                     },
                 })
             }
@@ -226,41 +190,54 @@
                 },
                 success: function(response) {
                     console.log(response)
-
-                    $j("#loading").toggleClass('hidden');
-
-                    $j("table tbody").empty();
-                    fullText = ""
-                    if (response) {
-
-                        var i = 1;
-                        $j.each(response.data, function(index, data) {
-                            text = "<tr class=\"text-center bg-white\">"
-
-                            // Add Index
-                            text += "<td class=\"whitespace-nowrap text-center\"> " + i +
-                                "</td>"
-
-                            i++;
-
-                            $j.each(data, function(i, d) {
-                                text +=
-                                    "<td class=\"whitespace-nowrap text-center\"> " +
-                                    d + "</td>"
-                            })
-
-                            text += "</tr>"
-                            fullText += text
-                        });
-                        $j("table tbody").html(fullText);
-                        show_data();
-                    }
+                    update_data(response)
                 },
                 error: function(result) {
                     console.log("error", result);
                 },
             });
         });
+
+        function update_data(response){
+            $j("#loading").toggleClass('hidden');
+            // JANGAN LUPA COPY KE SEBELAH
+            // OB CARD
+            console.log(response)
+            
+            $j("table tbody").empty();
+            fullText = ""
+            if (response) {
+
+                var i = 1;
+                $j.each(response.data, function(index, data) {
+                    text = "<tr class=\"text-center bg-white\">"
+
+                    // Add Index
+                    text += "<td class=\"whitespace-nowrap text-center\"> " + i +
+                        "</td>"
+
+                    i++;
+
+                    $j.each(data, function(i, d) {
+                        console.log(i);
+                        if(i !== 'nom_unit'){
+                            text +=
+                            "<td class=\"whitespace-nowrap text-center\"> " +
+                            number_format(d,0) + "</td>"
+                        } else {
+                            text +=
+                            "<td class=\"whitespace-nowrap text-center\"> " +
+                            d + "</td>"
+                        }
+                    })
+
+                    text += "</tr>"
+                    fullText += text
+                });
+                $j("table tbody").html(fullText);
+                show_data();
+            }
+        }
 
         function show_data() {
             Toastify({

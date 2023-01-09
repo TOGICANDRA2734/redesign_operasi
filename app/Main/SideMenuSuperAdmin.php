@@ -295,6 +295,167 @@ class SideMenuSuperAdmin
                                 ],
                                 'route_name' => 'solar-opname.index',
                             ],
+                            'solar-intrans-vs-rssp' => [
+                                'icon' => 'box',
+                                'title' => 'Solar In Trans VS RS',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'solar-in-trans-rssp.index',
+                            ],
+                        ],
+                    ],
+                    'Testing' => [
+                        'icon' => 'sidebar',
+                        'title' => 'Testing',
+                        'sub_menu' => [
+                            'distribusi-tp' => [
+                                'icon' => 'box',
+                                'title' => 'Distribusi Jam TP',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'hours-distribution-tp.index',
+                            ],
+                            'distribusi-a2b' => [
+                                'icon' => 'box',
+                                'title' => 'Distribusi Jam A2B',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'hours-distribution-a2b.index',
+                            ],
+                            'ma-bulanan' => [
+                                'icon' => 'box',
+                                'title' => 'MA Bulanan',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'ma-bulanan.index',
+                            ],
+                            'ma-harian' => [
+                                'icon' => 'box',
+                                'title' => 'MA Harian',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'ma-harian.index',
+                            ],
+                            'pty-tp' => [
+                                'icon' => 'box',
+                                'title' => 'Productivity TP',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'pty-tp.index',
+                            ],
+                            'pty-a2b' => [
+                                'icon' => 'box',
+                                'title' => 'Productivity A2B',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'pty-a2b.index',
+                            ],
+
+                            
+                            'invoice-joint-survey' => [
+                                'icon' => 'box',
+                                'title' => 'Produksi Invoice Joint Survey',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'invoice-joint-survey.index',
+                            ],
+                            'customer-joint-survey' => [
+                                'icon' => 'box',
+                                'title' => 'Produksi Target Customer Joint Survey',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'customer-joint-survey.index',
+                            ],
+                            'tc-pma' => [
+                                'icon' => 'box',
+                                'title' => 'Produksi Truck Count PMA',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'tc-pma.index',
+                            ],
+                            'produksi-ob-per-pit-pma' => [
+                                'icon' => 'box',
+                                'title' => 'Produksi OB Per Pit PMA',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'produksi-ob-per-pit-pma.index',
+                            ],
+                            'produksi-ob-tc-pma' => [
+                                'icon' => 'box',
+                                'title' => 'Produksi OB Truck Count PMA',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'produksi-ob-tc-pma.index',
+                            ],
+                            'Fuel-unit-bulanan' => [
+                                'icon' => 'box',
+                                'title' => 'Fuel Unit Bulanan',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'Fuel-unit-bulanan.index',
+                            ],
+                            'Fuel-unit-harian' => [
+                                'icon' => 'box',
+                                'title' => 'Fuel Unit Harian',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'Fuel-unit-harian.index',
+                            ],
+                            'Fuel-unit-per-bulanan' => [
+                                'icon' => 'box',
+                                'title' => 'Fuel Unit Per Bulan',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'Fuel-unit-per-bulanan.index',
+                            ],
+                            'Fuel-unit-periode' => [
+                                'icon' => 'box',
+                                'title' => 'Fuel Unit Periode',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'Fuel-unit-periode.index',
+                            ],
+
+                            'cost-unit' => [
+                                'icon' => 'box',
+                                'title' => 'Cost Unit',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'cost-unit.index',
+                            ],
+                            'mohh' => [
+                                'icon' => 'box',
+                                'title' => 'MOHH',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'mohh.index',
+                            ],
+                            'rain-slip' => [
+                                'icon' => 'box',
+                                'title' => 'Rain Slip',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'rain-slip.index',
+                            ],
                         ],
                     ],
                 ],
@@ -407,7 +568,7 @@ class SideMenuSuperAdmin
                         ],
                     ],
                     'historical-overhaul' => [
-                        'icon' => 'box',
+                        'icon' => 'box',            
                         'title' => 'Historical Overhaul',
                         'route_name' => 'super_admin.historical-overhaul.index',
                         'params' => [
@@ -418,6 +579,24 @@ class SideMenuSuperAdmin
                         'icon' => 'box',
                         'title' => 'Program Analisa Pelumas (PAP)',
                         'route_name' => 'super_admin.pap.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    
+                    'spare-part-rssp' => [
+                        'icon' => 'box',
+                        'title' => 'Spare Part RSSP',
+                        'route_name' => 'spare-part-rssp.index',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    
+                    'spare-part-in-trans' => [
+                        'icon' => 'box',
+                        'title' => 'Spare Part In Trans',
+                        'route_name' => 'spare-part-in-trans.index',
                         'params' => [
                             'layout' => 'side-menu'
                         ],

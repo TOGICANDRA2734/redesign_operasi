@@ -26,13 +26,23 @@ use App\Http\Controllers\BDHarianController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CostPartController;
 use App\Http\Controllers\CostPartTipeController;
+use App\Http\Controllers\CostUnitController;
 use App\Http\Controllers\DailyProduksiController;
 use App\Http\Controllers\DistanceBulananController;
 use App\Http\Controllers\DistanceHarianController;
+use App\Http\Controllers\DistributionA2BController;
+use App\Http\Controllers\DistributionTpController;
 use App\Http\Controllers\DokumenGrController;
 use App\Http\Controllers\FleetSettingController;
 use App\Http\Controllers\FuelDailyController;
+use App\Http\Controllers\FuelUnitBulananController;
+use App\Http\Controllers\FuelUnitBulananInTransController;
 use App\Http\Controllers\FuelUnitController;
+use App\Http\Controllers\FuelUnitHarianController;
+use App\Http\Controllers\FuelUnitPerBulanController;
+use App\Http\Controllers\FuelUnitPerPeriodeController;
+use App\Http\Controllers\generatePlanController;
+use App\Http\Controllers\generateTCController;
 use App\Http\Controllers\HistoricalOvhController;
 use App\Http\Controllers\HistoricalUnitController;
 use App\Http\Controllers\HMController;
@@ -40,6 +50,8 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\JointSurveyController;
 use App\Http\Controllers\LaporanBulananController;
 use App\Http\Controllers\LaporanTargetCustomer;
+use App\Http\Controllers\MABulananController;
+use App\Http\Controllers\MaHarianController;
 use App\Http\Controllers\MohhController;
 use App\Http\Controllers\MonthlyProductionController;
 use App\Http\Controllers\MPController;
@@ -51,9 +63,21 @@ use App\Http\Controllers\PopulasiDOController;
 use App\Http\Controllers\PopulasiUnitController;
 use App\Http\Controllers\POTransaksiController;
 use App\Http\Controllers\ProductivityCoalController;
+use App\Http\Controllers\ProduksiCustomerJointSurveyController;
+use App\Http\Controllers\ProduksiInvoiceJointSurveyController;
+use App\Http\Controllers\ProduksiOBPerPitPMAController;
+use App\Http\Controllers\ProduksiOBTCPMAController;
+use App\Http\Controllers\ProduksiTruckCountPMAController;
+use App\Http\Controllers\PtyA2BController;
+use App\Http\Controllers\PtyTpController;
+use App\Http\Controllers\RainSlipController;
+use App\Http\Controllers\readDBFController;
 use App\Http\Controllers\RepHarController;
 use App\Http\Controllers\SolarInTransController;
 use App\Http\Controllers\SolarOpnameController;
+use App\Http\Controllers\SolarRsspIntransController;
+use App\Http\Controllers\SparePartInTransController;
+use App\Http\Controllers\SparePartRsspController;
 use App\Http\Controllers\TP_PtyUnitPerTipe;
 use App\Http\Controllers\TP_PtyUnitPerUnit;
 // User
@@ -273,6 +297,7 @@ Route::middleware('auth')->group(function() {
         Route::post('data-prod-report', [dataProdController::class, 'report'])->name('data-prod.report.post');
         Route::post('detail-pit', [dataProdController::class, 'getPit'])->name('data-prod.getPit');
         Route::get('data-prod-filter', [dataProdController::class, 'index'])->name('data-prod.filter');
+        Route::get('data-prod-export', [dataProdController::class, 'export'])->name('data-prod.export');
 
         Route::resource('productivity', ProductivityController::class);
         Route::post('productivity_filter', [ProductivityController::class, 'index'])->name('productivity.filter');
@@ -437,15 +462,92 @@ Route::middleware('auth')->group(function() {
         // Invoice Controller
         Route::resource('invoice', InvoiceController::class);
 
-        // Fleet Setting Controller
+        // Joint Survey Setting Controller
         Route::resource('joint-survey', JointSurveyController::class);
 
-        // Fleet Setting Controller
+        // Budget Controller Setting Controller
         Route::resource('budget', BudgetController::class);
 
-        // Fleet Setting Controller
+        // Solar In Trans Setting Controller
         Route::resource('solar-in-trans', SolarInTransController::class);
 
-        // Fleet Setting Controller
+        // Solar Opname Controller
         Route::resource('solar-opname', SolarOpnameController::class);
+        
+        // Spare Part In Trans Controller
+        Route::resource('spare-part-in-trans', SparePartInTransController::class);
+
+        // Spare Part Po Controller
+        Route::resource('spare-part-rssp', SparePartRsspController::class);
+
+        // Solar Part Rssp In Trans Controller
+        Route::resource('solar-in-trans-rssp', SolarRsspIntransController::class);
+
+        // Generate TC
+        Route::get('generate-tc', [generateTCController::class, 'index'])->name('generateTc.index');
+        Route::post('generate-tc', [generateTCController::class, 'store'])->name('generateTc.store');
+        
+        // Generate Plan
+        Route::get('generate-plan', [generatePlanController::class, 'index'])->name('generatePlan.index');
+        Route::post('generate-plan', [generatePlanController::class, 'store'])->name('generatePlan.store');
+
+        // Read DBF
+        Route::get('read-dbf', [readDBFController::class, 'index'])->name('dbf.index');
+
+        // Hours Distribution TP
+        Route::resource('hours-distribution-tp', DistributionTpController::class);
+        
+        // Hours Distribution A2B
+        Route::resource('hours-distribution-a2b', DistributionA2BController::class);
+
+        // MA Bulanan 
+        Route::resource('ma-bulanan', MABulananController::class);
+
+        // MA Bulanan 
+        Route::resource('ma-harian', MaHarianController::class);
+
+        // PTY TP 
+        Route::resource('pty-tp', PtyTpController::class);
+        
+        // PTY TP 
+        Route::resource('pty-a2b', PtyA2BController::class);
+
+        // Produksi Invoice Joint Survey
+        Route::resource('invoice-joint-survey', ProduksiInvoiceJointSurveyController::class);
+
+        // Produksi Customer Target
+        Route::resource('customer-joint-survey', ProduksiCustomerJointSurveyController::class);
+
+        // Produksi Truck Count PMA
+        Route::resource('tc-pma', ProduksiTruckCountPMAController::class);
+
+        // Produksi OB Per Pit
+        Route::resource('produksi-ob-per-pit-pma', ProduksiOBPerPitPMAController::class);
+
+        // Produksi OB TC PMA
+        Route::resource('produksi-ob-tc-pma', ProduksiOBTCPMAController::class);
+
+        // Fuel Unit Per Bulan
+        Route::resource('Fuel-unit-per-bulanan', FuelUnitPerBulanController::class);
+
+        // Fuel Unit Per Harian
+        Route::resource('Fuel-unit-harian', FuelUnitHarianController::class);
+        
+        // Fuel Unit Bulanan
+        Route::resource('Fuel-unit-bulanan', FuelUnitBulananController::class);
+
+        // Fuel Unit Per Periode
+        Route::resource('Fuel-unit-periode', FuelUnitPerPeriodeController::class);
+
+        // Fuel Unit Per In Trans
+        Route::resource('Fuel-unit-in-trans', FuelUnitBulananInTransController::class);
+        
+        // Cost Unit
+        Route::resource('cost-unit', CostUnitController::class);
+        
+        // MOHH 
+        Route::resource('mohh', MohhController::class);
+
+        // Rain Slip
+        Route::resource('rain-slip', RainSlipController::class);        
 });
