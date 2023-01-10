@@ -17,7 +17,6 @@
             
             {{-- Url Rujukan --}}
             <input type="hidden" name="url" value="{{route('data-prod.report')}}" id="urlFilter">
-            <input type="hidden" name="urlExport" value="{{route('data-prod.export')}}" id="urlFilter">
 
             {{-- Filter Tanggal --}}
             <div id="filterTanggal" class="form-control box p-2 ml-auto w-10 flex mr-2">
@@ -74,7 +73,16 @@
                             <input type="hidden" name="start" class="eStart" value="">
                             <input type="hidden" name="end" class="eEnd" value="">
                             <input type="hidden" name="kodesite" class="eKodesite" value="">
-                            <button type="submit" class="dropdown-item "> Excel </button>
+                            <button type="submit" class="dropdown-item "> Excel (Per Site) </button>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="{{route('data-prod.all.export')}}" method="GET">
+                            @csrf
+                            <input type="hidden" name="start" class="eStart" value="">
+                            <input type="hidden" name="end" class="eEnd" value="">
+                            <input type="hidden" name="kodesite" class="eKodesite" value="">
+                            <button type="submit" class="dropdown-item "> Excel (All Site) </button>
                         </form>
                     </li>
                     <li>

@@ -298,6 +298,7 @@ Route::middleware('auth')->group(function() {
         Route::post('detail-pit', [dataProdController::class, 'getPit'])->name('data-prod.getPit');
         Route::get('data-prod-filter', [dataProdController::class, 'index'])->name('data-prod.filter');
         Route::get('data-prod-export', [dataProdController::class, 'export'])->name('data-prod.export');
+        Route::get('data-prod-export-all', [dataProdController::class, 'export_all'])->name('data-prod.all.export');
 
         Route::resource('productivity', ProductivityController::class);
         Route::post('productivity_filter', [ProductivityController::class, 'index'])->name('productivity.filter');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\DataProdExport;
+use App\Exports\LaporanProduksiAllExport;
 use App\Exports\LaporanProduksiExport;
 use App\Models\dataProd;
 use App\Models\Site;
@@ -362,16 +363,16 @@ class dataProdController extends Controller
             $where .= "TGL BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "'";
         }
 
-        if($request->has('kodesite') && $request->kodesite !== 'all'){
+        if($request->has('kodesite') && $request->kodesite !== 'all' && $request->kodesite == "" && !is_null($request->kodesite)){
             $subquery = "SELECT tgl tgl_data,
             IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN ob END),1),'-') AS ob_1,
             IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN ob END),1),'-') AS ob_2,
             IFNULL(ROUND(SUM(OB),1),'-') AS sum_ob,
-            (SELECT SUM(OB) FROM PMA_DAILYPROD_PLAN WHERE TGL=TGL_DATA AND kodesite='".$request->kodesite."' GROUP BY TGL) plan_ob,
+            (SELECT round(SUM(OB),1) FROM PMA_DAILYPROD_PLAN WHERE TGL=TGL_DATA AND kodesite='".$request->kodesite."' GROUP BY TGL) plan_ob,
             IFNULL(ROUND(SUM(CASE WHEN shift = 1 THEN coal END),1),'-') AS coal_1,
             IFNULL(ROUND(SUM(CASE WHEN shift = 2 THEN coal END),1),'-') AS coal_2,
             IFNULL(ROUND(SUM(coal),1),'-') AS sum_coal,
-            (SELECT SUM(coal) FROM PMA_DAILYPROD_PLAN WHERE TGL=TGL_DATA AND kodesite='".$request->kodesite."' GROUP BY TGL) plan_coal,
+            (SELECT round(SUM(coal),1) FROM PMA_DAILYPROD_PLAN WHERE TGL=TGL_DATA AND kodesite='".$request->kodesite."' GROUP BY TGL) plan_coal,
             ROUND(SUM(ob)/(SELECT SUM(ob) FROM pma_dailyprod_plan WHERE tgl=tgl_data AND kodesite='".$request->kodesite."' GROUP BY tgl) * 100,1) ach_ob,
             ROUND(SUM(coal)/(SELECT SUM(coal) FROM pma_dailyprod_plan WHERE tgl=tgl_data AND kodesite='".$request->kodesite."' GROUP BY tgl) * 100,1)  ach_coal
             FROM pma_dailyprod_tc
@@ -456,4 +457,15 @@ class dataProdController extends Controller
         }
     }   
 
+    public function export_all(Request $request)
+    {
+        $data = Excel::download(new LaporanProduksiAllExport($request), 'Laporan Produksi All Site.xlsx');
+
+        if($data){
+            return $data;
+        }
+        else{
+            return redirect()->route('data-prod.report')->with(['error' => 'Data Gagal Diexport!']);
+        }
+    }
 }
