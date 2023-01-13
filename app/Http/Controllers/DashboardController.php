@@ -104,16 +104,21 @@ class DashboardController extends Controller
             ->get();
 
 
-        $subquery = "SELECT A.tgl, D.icon_cuaca icon,  sum(A.ob) ob_act, sum(A.coal) coal_act, sum(B.ob) ob_plan, sum(B.coal) coal_plan, ((sum(A.ob)/sum(B.ob))*100)ob_ach,((sum(A.coal)/sum(B.coal))*100)coal_ach, C.kodesite, C.namasite, C.gambar
+        $subquery = "SELECT A.tgl, D.icon_cuaca icon,  sum(A.ob) ob_act, sum(A.coal) coal_act, B.ob ob_plan, B.coal coal_plan, ((sum(A.ob)/B.ob)*100)ob_ach ,((sum(A.coal)/B.coal)*100)coal_ach , C.kodesite, C.namasite, C.gambar
         FROM pma_dailyprod_tc A
-        JOIN (SELECT * FROM pma_dailyprod_plan WHERE tgl=DATE_SUB(CURDATE(), INTERVAL 1 DAY) GROUP BY tgl, kodesite) B
-        ON a.kodesite = b.kodesite
+        JOIN (SELECT sum(ob) ob, sum(coal) coal, kodesite, tgl 
+        FROM pma_dailyprod_plan 
+        WHERE tgl=DATE_SUB(CURDATE(), INTERVAL 1 DAY) 
+        and del=0 
+        GROUP BY kodesite, tgl) B
+        ON (a.kodesite = b.kodesite and A.tgl=b.tgl)
         JOIN (SELECT * FROM site GROUP BY kodesite) c
         ON a.kodesite = c.kodesite
         JOIN pma_dailyprod_cuacaicon D
         ON A.cuaca = D.kode_cuaca
-        WHERE A.TGL=DATE_SUB(CURDATE(), INTERVAL 1 DAY)
-        GROUP BY A.tgl, A.kodesite
+        WHERE A.TGL=DATE_SUB(CURDATE(), INTERVAL 1 DAY) 
+        and A.del=0
+        GROUP BY A.kodesite, A.tgl
         ORDER BY C.id";
 
         $data = collect(DB::select($subquery));

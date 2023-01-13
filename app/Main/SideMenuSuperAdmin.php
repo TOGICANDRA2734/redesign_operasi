@@ -456,6 +456,24 @@ class SideMenuSuperAdmin
                                 ],
                                 'route_name' => 'rain-slip.index',
                             ],
+                            
+                            'pma-budget-unit' => [
+                                'icon' => 'box',
+                                'title' => 'Budget Pty Unit',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'pma-budget-unit.index',
+                            ],
+                            
+                            'pma-issues' => [
+                                'icon' => 'box',
+                                'title' => 'Issues',
+                                'params' => [
+                                    'layout' => 'side-menu'
+                                ],
+                                'route_name' => 'pma-issues.index',
+                            ],
                         ],
                     ],
                 ],

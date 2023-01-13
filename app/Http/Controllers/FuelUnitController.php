@@ -24,8 +24,8 @@ class FuelUnitController extends Controller
         if (count($request->all()) > 1) {              
             // Where 1
             $where1 .= ($request->has('start') && $request->has('end')) ? "TGL BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
-            // $where1 .= ($request->has('kodesite') && !empty($request->kodesite)) ? " AND " : "";
-            // $where1 .= ($request->has('kodesite') && !empty($request->kodesite)) ? "kodesite='" . $request->kodesite . "'" : "";
+            $where1 .= ($request->has('kodesite') && !empty($request->kodesite)) ? " AND " : "";
+            $where1 .= ($request->has('kodesite') && !empty($request->kodesite)) ? "kodesite='" . $request->kodesite . "'" : "";
             $where1 .= " AND del=0";
 
             // Where 2

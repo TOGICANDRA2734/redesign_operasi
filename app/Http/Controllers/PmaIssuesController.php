@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Site;
 use Carbon\Carbon;
+use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
-class SolarOpnameController extends Controller
+class PmaIssuesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,37 +21,27 @@ class SolarOpnameController extends Controller
 
         if (count($request->all()) > 1) {              
             // Where 1
-            $where .= ($request->has('start') && $request->has('end')) ? "voucher_date BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
+            $where .= ($request->has('start') && $request->has('end')) ? "tgl BETWEEN '" . $request->start . "' AND '" . $request->end . "' " : "";
             $where .= ($request->has('kodesite') && !empty($request->kodesite)) ? " AND " : "";
-            $where .= ($request->has('kodesite') && !empty($request->kodesite)) ? "wh_code='" . $request->kodesite . "'" : "";
-            $where .= " AND cat_code=\"904\" AND voucher_doc=\"MIS\"";
+            $where .= ($request->has('kodesite') && !empty($request->kodesite)) ? "kodesite='" . $request->kodesite . "'" : "";
+            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? " AND " : "";
+            $where .= ($request->has('cariNama') && !empty($request->cariNama)) ? "unit_load LIKE '%" . $request->cariNama . "%'" : "";
+            $where .= " AND del=0";
+
         } else {
-            $where .= "voucher_date BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND cat_code=\"904\" AND voucher_doc=\"MIS\"";
+            $where .= "tgl BETWEEN '" . Carbon::now()->startOfMonth() . "' AND '" . Carbon::now()->endOfMonth() . "' AND del=0";
         }
 
         $site = Site::where('status_website', 1)->get();
 
-        $subquery = "SELECT car_no,
-        SUM(IF((cat_code=\"904\" AND car_no=\"STOCK\"), item_qty,0)) solar_stock, 
-        SUM(IF((cat_code=\"904\" AND car_no<>\"STOCK\"), item_qty,0)) solar_non_stock
-        FROM unit_in_trans
-        WHERE ".$where."
-        GROUP BY car_no
-        ORDER BY car_no
-        ";
+        $subquery = "";
         $data = collect(DB::select(DB::raw($subquery)));
-        $total = [
-            'total_stock' => $data->sum('solar_stock'),
-            'total_non_stock' => $data->sum('solar_non_stock'),
-            'stock' => $data->sum('solar_stock') - $data->sum('solar_non_stock'),
-        ];
-
+      
         if (count($request->all()) > 1) {
             $response['data'] = $data;
-            $response['total'] = $total;
             return response()->json($response);
         } else {
-            return view('fuel-opname.index', compact('data', 'site', 'total'));
+            return view('pmaIssues.index', compact('data', 'site'));
         }
     }
 

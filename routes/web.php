@@ -58,6 +58,7 @@ use App\Http\Controllers\MPController;
 use App\Http\Controllers\MPKontrakController;
 use App\Http\Controllers\MPStatistikController;
 use App\Http\Controllers\PapController;
+use App\Http\Controllers\PmaBudgetProduksiUnitController;
 use App\Http\Controllers\POController;
 use App\Http\Controllers\PopulasiDOController;
 use App\Http\Controllers\PopulasiUnitController;
@@ -85,6 +86,7 @@ use App\Http\Controllers\User\dataProdController as User_dataProdController;
 use App\Http\Controllers\User\KendalaController as User_KendalaController;
 use App\Http\Controllers\User\ProductivityController as User_ProductivityController;
 use App\Http\Controllers\VersatilityController;
+use App\Models\PmaIssues;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -551,4 +553,10 @@ Route::middleware('auth')->group(function() {
 
         // Rain Slip
         Route::resource('rain-slip', RainSlipController::class);        
+
+        // Pma Budget Unit
+        Route::resource('pma-budget-unit', PmaBudgetProduksiUnitController::class);
+
+        // Pma Issues
+        Route::resource('pma-issues', PmaIssues::class);
 });
